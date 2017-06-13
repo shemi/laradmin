@@ -1,0 +1,23 @@
+{
+  "name": "shemi/laradmin",
+  "description": "A Laravel Admin Package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "shemi perez",
+      "email": "shemi.perez@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "illuminate/support": "~5.3.0|~5.4.0"
+  },
+  "require-dev": {
+    "laravel/framework": "~5.3.29|5.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Shemi\\Laradmin\\": "src/"
+    }
+  }
+}
