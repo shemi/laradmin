@@ -15,7 +15,6 @@ class Laradmin
     public function __construct()
     {
         $this->filesystem = app(Filesystem::class);
-        dd($this->filesystem);
     }
 
     protected function install()
