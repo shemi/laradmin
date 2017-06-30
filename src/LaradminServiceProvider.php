@@ -32,8 +32,8 @@ class LaradminServiceProvider extends ServiceProvider
 
     public function boot(Router $router, Dispatcher $event)
     {
-
-        $this->loadViewsFrom(__DIR__.'../resources/views', 'laradmin');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laradmin');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laradmin');
 
     }
 

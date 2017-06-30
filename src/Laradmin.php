@@ -2,7 +2,7 @@
 
 namespace Shemi\Laradmin;
 
-use League\Flysystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Route;
 
 class Laradmin
@@ -17,15 +17,10 @@ class Laradmin
         $this->filesystem = app(Filesystem::class);
     }
 
-    protected function install()
-    {
-
-    }
-
     public function routes()
     {
         Route::group(['as' => 'laradmin.'], function() {
-            require __DIR__.'../routes/laradmin.php';
+            require __DIR__.'/../routes/laradmin.php';
         });
     }
 
