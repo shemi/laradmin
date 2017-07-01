@@ -1,3 +1,13 @@
-body {
-  background-color: black;
-}
+//variables
+@import "~bulma/sass/utilities/_all";
+@import "0-base/variables";
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+//layouts
+@import "1-layouts/auth";
+
+//views
+@import "3-views/login";

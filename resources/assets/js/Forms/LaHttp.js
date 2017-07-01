@@ -3,15 +3,15 @@ class LaHttp {
 
     constructor() {
         this.axios = window.axios;
-        this.apiBaseUri = window.laradmin.api_base.replace(/^\/|\/$/g, '');
+        this.apiBaseUri = window.laradmin.api_base.replace(/\/$/g, '');
     }
 
     uri(path) {
-        path = path.replace(/^\/|\/$/g, '');
-
         if(/^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(path)) {
             return path;
         }
+
+        path = path.replace(/^\/|\/$/g, '');
 
         return `${this.apiBaseUri}/${path}`;
     }
@@ -61,10 +61,12 @@ class LaHttp {
      * This function will clear old errors, update "busy" status, etc.
      */
     sendForm(method, uri, form) {
+        let self = this;
+
         return new Promise((resolve, reject) => {
             form.startProcessing();
 
-            this.axios[method](this.uri(uri), JSON.parse(JSON.stringify(form)))
+            this.axios[method](self.uri(uri), JSON.parse(JSON.stringify(form)))
                 .then(response => {
                     form.finishProcessing();
 

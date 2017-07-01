@@ -1,4 +1,5 @@
 import LaFormErrors from './LaFormErrors';
+import LaHttp from './LaHttp';
 
 class LaForm {
 
@@ -16,9 +17,12 @@ class LaForm {
 
     extend(data) {
         const keys = Object.keys(data);
+        let keyIndex,
+            key;
 
-        for (let key in keys) {
-            this[key] = keys[key];
+        for (keyIndex in keys) {
+            key = keys[keyIndex];
+            this[key] = data[key];
         }
     }
 
@@ -46,4 +50,21 @@ class LaForm {
         this.errors.set(errors);
     }
 
+    post(uri) {
+        return LaHttp.post(uri, this);
+    }
+
+    put(uri) {
+        return LaHttp.put(uri, this);
+    }
+
+    path(uri) {
+        return LaHttp.patch(uri, this);
+    }
+
+    delete(uri) {
+        return LaHttp.delete(uri, this);
+    }
 }
+
+export default LaForm;

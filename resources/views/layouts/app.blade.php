@@ -21,6 +21,8 @@
         }
     </script>
 
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{{ laradmin_asset('app.css') }}">
     @yield('styles')
 
 </head>
@@ -34,7 +36,7 @@
     </div>
 
     @yield('scripts')
-
+    <script src="{{ laradmin_asset('app.js') }}"></script>
 </body>
 
 </html>

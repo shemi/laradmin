@@ -14,6 +14,13 @@ $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
 
         <div class="auth-content">
             @yield('content')
+
+            <div class="credit">
+                Photo by
+                <a target="_blank" href="https://unsplash.com/@andy_brunner">Andy Brunner</a>
+                on
+                <a target="_blank" href="https://unsplash.com">Unsplash</a>
+            </div>
         </div>
 
     </div>

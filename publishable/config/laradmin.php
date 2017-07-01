@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'assets_path' => '/vendor/shemi/laradmin/assets',
+    'assets_path' => '/vendor/laradmin/assets',
 
     /*
     |--------------------------------------------------------------------------

@@ -2,17 +2,25 @@
 
 $namespacePrefix = '\\'.config('laradmin.controllers.namespace').'\\';
 
-Route::get('login', ["uses" => "{$namespacePrefix}AuthController@showLoginForm", "as" => "login"]);
-Route::post('login', ["uses" => "{$namespacePrefix}AuthController@login", "as" => "post.login"]);
+Route::get('login', [
+    "uses" => "{$namespacePrefix}AuthController@showLoginForm",
+    "as" => "login",
+    "middleware" => "laradmin.gust"
+]);
 
 Route::get('/', ["uses" => "{$namespacePrefix}DashboardController@index", "as" => "dashboard"]);
 
 Route::group([
     "as" => "api.",
-    "namespace" => "{$namespacePrefix}Api\\",
     "prefix" => "api/v1"],
-    function() {
+    function() use ($namespacePrefix) {
 
-    Route::get("/", ['uses' => 'ApiController@base', 'as' => 'base']);
+    Route::get("/", ["uses" => "{$namespacePrefix}ApiController@health", "as" => "base"]);
+
+    Route::post("/login", [
+        "uses" => "{$namespacePrefix}AuthController@login",
+        "as" => "post.login",
+        "middleware" => "laradmin.gust"
+    ]);
 
 });

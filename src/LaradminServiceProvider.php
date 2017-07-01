@@ -7,6 +7,8 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Shemi\Laradmin\Facades\Laradmin as LaradminFacade;
+use Shemi\Laradmin\Http\Middleware\RedirectIfAuthenticated;
+use Shemi\Laradmin\Http\Middleware\RedirectIfCantAdmin;
 
 class LaradminServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,8 @@ class LaradminServiceProvider extends ServiceProvider
             return new Laradmin();
         });
 
+        $this->loadHelpers();
+
         $this->registerConfigs();
 
         if ($this->app->runningInConsole()) {
@@ -35,6 +39,23 @@ class LaradminServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'laradmin');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laradmin');
 
+        if (app()->version() >= 5.4) {
+            $router->aliasMiddleware('laradmin.gust', RedirectIfAuthenticated::class);
+            $router->aliasMiddleware('laradmin.user.admin', RedirectIfCantAdmin::class);
+        } else {
+            $router->middleware('laradmin.gust', RedirectIfAuthenticated::class);
+            $router->middleware('laradmin.user.admin', RedirectIfCantAdmin::class);
+        }
+    }
+
+    /**
+     * Load helpers.
+     */
+    protected function loadHelpers()
+    {
+        foreach (glob(__DIR__.'/Helpers/*.php') as $filename) {
+            require_once $filename;
+        }
     }
 
     public function registerConfigs()
@@ -53,7 +74,7 @@ class LaradminServiceProvider extends ServiceProvider
 
         $publishable = [
             'laradmin_assets' => [
-                "{$publishablePath}/assets/" => public_path(config('laradmin.assets_path')),
+                "{$publishablePath}/public/" => public_path(config('laradmin.assets_path')),
             ],
             'config' => [
                 "{$publishablePath}/config/laradmin.php" => config_path('laradmin.php'),
