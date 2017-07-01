@@ -8,7 +8,11 @@ Route::get('login', [
     "middleware" => "laradmin.gust"
 ]);
 
-Route::get('/', ["uses" => "{$namespacePrefix}DashboardController@index", "as" => "dashboard"]);
+Route::get('/', [
+    "uses" => "{$namespacePrefix}DashboardController@index",
+    "as" => "dashboard",
+    "middleware" => "laradmin.user.admin"
+]);
 
 Route::group([
     "as" => "api.",

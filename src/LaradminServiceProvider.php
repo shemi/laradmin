@@ -46,6 +46,8 @@ class LaradminServiceProvider extends ServiceProvider
             $router->middleware('laradmin.gust', RedirectIfAuthenticated::class);
             $router->middleware('laradmin.user.admin', RedirectIfCantAdmin::class);
         }
+
+        LaradminFacade::registerPolicies();
     }
 
     /**

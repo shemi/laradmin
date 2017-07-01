@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Http\Middleware;
 
 use Auth;
 use Closure;
+use Shemi\Laradmin\Facades\Laradmin;
 
 class RedirectIfCantAdmin
 {
@@ -19,9 +20,9 @@ class RedirectIfCantAdmin
     public function handle($request, Closure $next)
     {
         if (! Auth::guest()) {
-            $user = Auth::user();
+            $user = Laradmin::model('User')->find(Auth::id());
 
-            return $user->can('laradmin.admin.brows') ? $next($request) : redirect('/');
+            return $user->can('laradmin.admin.browse') ? $next($request) : redirect('/');
         }
 
         $urlLogin = route('laradmin.login');

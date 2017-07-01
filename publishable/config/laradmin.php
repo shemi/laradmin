@@ -12,11 +12,16 @@ return [
     */
 
     'user' => [
-        'add_default_role_on_register' => true,
         'default_role' => 'user',
         'model' => App\User::class,
         'default_avatar' => 'users/default.png'
     ],
+
+    'roles' => [
+        'system' => 'simple',
+    ],
+
+    'superusers' => ['shemi.perez@gmail.com'],
 
     /*
     |--------------------------------------------------------------------------

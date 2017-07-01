@@ -16,7 +16,15 @@ mix.js('resources/assets/js/app.js', './publishable/public')
     .sourceMaps(false)
     .setPublicPath('./')
     .webpackConfig({devtool: "inline-source-map"})
-    .browserSync('administrator.dev')
+    .browserSync({
+        proxy: 'laradmin.dev',
+        files: [
+            'src/**/*.php',
+            'resources/views/**/*.php',
+            'publishable/public/**/*.js',
+            'publishable/public/**/*.css'
+        ]
+    })
     .options({
         extractVueStyles: false, // Extract .vue component styling to file, rather than inline.
         processCssUrls: false, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
