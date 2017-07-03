@@ -1,0 +1,26 @@
+.page {
+
+  .content-area {
+    position: relative;
+    min-height: calc(100vh - #{$nav-height});
+  }
+
+  .side-menu-holder {
+    position: absolute;
+    width: $side-menu-width;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    @include scrollbars(0.3rem, $grey-lighter);
+  }
+
+  .main-content {
+    padding-left: $side-menu-width;
+  }
+
+  .main-content-container {
+    padding: 0 3rem;
+  }
+
+}

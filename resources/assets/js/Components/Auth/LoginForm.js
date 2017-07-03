@@ -23,7 +23,8 @@ export default {
         login() {
             LaHttp.post('/login', this.loginForm)
                 .then(res => {
-
+                    console.log(res);
+                    window.location.href = res.data.redirect;
                 })
                 .catch(err => {
                     console.log(err);

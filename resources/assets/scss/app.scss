@@ -6,8 +6,16 @@
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 
+//mixins
+@import "0-base/mixins";
+
 //layouts
 @import "1-layouts/auth";
+@import "1-layouts/page";
 
 //views
 @import "3-views/login";
+
+//components
+@import "4-components/top-bar";
+@import "4-components/side-menu";

@@ -35,9 +35,22 @@ class AuthController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+        $path = $request->session()->pull('url.intended', route('laradmin.dashboard'));
+
         return $this->response([
-            'redirect' => route('laradmin.dashboard')
+            'redirect' => $path
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/');
     }
 
 }

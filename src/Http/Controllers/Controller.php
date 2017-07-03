@@ -6,12 +6,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Shemi\Laradmin\Facades\Laradmin;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $status_code = 200;
+
+    public function __construct()
+    {
+        $user = null;
+
+        if(Auth::check()) {
+            $user = Laradmin::model('User')->find(Auth::id());
+        }
+
+        view()->share('user', $user);
+    }
 
     /**
      * @return int

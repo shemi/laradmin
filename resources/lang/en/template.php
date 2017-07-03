@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'name' => 'Laradmin'
+    'name' => 'Laradmin',
+    'profile' => 'Profile',
+    'logout' => 'Log out'
 ];

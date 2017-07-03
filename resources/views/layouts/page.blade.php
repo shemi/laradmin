@@ -6,13 +6,13 @@
 
 @section('main-content')
 
-    <div id="page" class="page">
+    <div id="app" class="page">
 
         <header class="top-bar">
             @include('laradmin::layouts.blade.top-bar')
         </header>
 
-        <div class="page-container">
+        <div class="content-area">
             <div class="side-menu-holder">
                 @include('laradmin::layouts.blade.side-menu')
             </div>

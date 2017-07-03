@@ -8,6 +8,11 @@ Route::get('login', [
     "middleware" => "laradmin.gust"
 ]);
 
+Route::post('logout', [
+    "uses" => "{$namespacePrefix}AuthController@logout",
+    "as" => "logout"
+]);
+
 Route::get('/', [
     "uses" => "{$namespacePrefix}DashboardController@index",
     "as" => "dashboard",

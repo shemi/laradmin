@@ -1,0 +1,10 @@
+<li class="menu-item" :class="{'has-items': hasItems}">
+
+    <a @click="linkClicked($event)" :href="item.href" :class="{'is-active': isActive}">
+        <b-icon v-if="item.icon" :icon="item.icon"></b-icon>
+        <span class="item-label">{{ item.label }}</span>
+        <b-icon v-if="hasItems" class="collapsible-icon" icon="keyboard_arrow_down"></b-icon>
+    </a>
+
+    <collapsible-menu-group v-if="hasItems" v-show="isActive" :items="items"></collapsible-menu-group>
+</li>
