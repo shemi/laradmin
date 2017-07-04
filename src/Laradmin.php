@@ -4,6 +4,7 @@ namespace Shemi\Laradmin;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Route;
+use Shemi\Laradmin\Data\DataManager;
 use Shemi\Laradmin\Models\User;
 
 class Laradmin
@@ -23,12 +24,19 @@ class Laradmin
      */
     protected $roleSystem;
 
+    /**
+     * @var DataManager
+     */
+    protected $dataManager;
+
     public function __construct()
     {
         $this->filesystem = app(Filesystem::class);
 
         $roleSystem = "\\Shemi\\Laradmin\\RoleSystems\\" . studly_case(config('laradmin.roles.system', 'simple'));
         $this->roleSystem = new $roleSystem();
+
+        $this->dataManager = new DataManager($this->filesystem);
     }
 
     public function routes()
@@ -36,6 +44,14 @@ class Laradmin
         Route::group(['as' => 'laradmin.'], function() {
             require __DIR__.'/../routes/laradmin.php';
         });
+    }
+
+    /**
+     * @return DataManager
+     */
+    public function data()
+    {
+        return $this->dataManager;
     }
 
     public function model($name)

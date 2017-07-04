@@ -78,9 +78,12 @@ class LaradminServiceProvider extends ServiceProvider
             'laradmin_assets' => [
                 "{$publishablePath}/public/" => public_path(config('laradmin.assets_path')),
             ],
-            'config' => [
+            'laradmin_config' => [
                 "{$publishablePath}/config/laradmin.php" => config_path('laradmin.php'),
             ],
+            'laradmin_data' => [
+                "{$publishablePath}/data/" => storage_path('app/laradmin'),
+            ]
         ];
 
         foreach ($publishable as $group => $paths) {

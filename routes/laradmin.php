@@ -19,6 +19,12 @@ Route::get('/', [
     "middleware" => "laradmin.user.admin"
 ]);
 
+Route::get('/menu', [
+    "uses" => "{$namespacePrefix}MenusController@index",
+    "as" => "menus",
+    "middleware" => "laradmin.user.admin"
+]);
+
 Route::group([
     "as" => "api.",
     "prefix" => "api/v1"],
