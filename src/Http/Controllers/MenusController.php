@@ -2,29 +2,42 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
-
+use Illuminate\Http\Request;
 use Shemi\Laradmin\Data\Data;
+use Shemi\Laradmin\Data\DataManager;
 use Shemi\Laradmin\Facades\Laradmin;
+use Shemi\Laradmin\Models\Menu;
 
 class MenusController extends Controller
 {
+    protected $menu;
+
+    public function __construct()
+    {
+        $this->menu = Menu::where('location', 'admin');
+
+        dd($this->menu);
+
+        parent::__construct();
+    }
 
     public function index()
     {
-        /** @var Data $icons */
-        $icons = Laradmin::data()->load('md-icons2', 'defaults');
 
-//        $icons->filter(function($icon) {
-//            $inName = str_contains(strtolower($icon['name']), strtolower('gps'));
-//            $inKeywords = array_filter($icon['keywords'], function($keyword) {
-//                return str_contains(strtolower($keyword), strtolower('gps'));
-//            });
-//
-//            return $inName || count($inKeywords) > 0;
-//        })->save();
+    }
 
-        dd($icons);
+    public function getAllIcons()
+    {
+        $icons = Laradmin::data()->load('md-icons', 'defaults');
 
+        return $this->response(['icons' => $icons->all()]);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+
+        ]);
     }
 
 }

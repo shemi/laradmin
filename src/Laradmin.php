@@ -24,19 +24,12 @@ class Laradmin
      */
     protected $roleSystem;
 
-    /**
-     * @var DataManager
-     */
-    protected $dataManager;
-
     public function __construct()
     {
         $this->filesystem = app(Filesystem::class);
 
         $roleSystem = "\\Shemi\\Laradmin\\RoleSystems\\" . studly_case(config('laradmin.roles.system', 'simple'));
         $this->roleSystem = new $roleSystem();
-
-        $this->dataManager = new DataManager($this->filesystem);
     }
 
     public function routes()
@@ -46,12 +39,9 @@ class Laradmin
         });
     }
 
-    /**
-     * @return DataManager
-     */
-    public function data()
+    public function filesystem()
     {
-        return $this->dataManager;
+        return $this->filesystem;
     }
 
     public function model($name)

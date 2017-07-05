@@ -2,9 +2,12 @@
 
 namespace Shemi\Laradmin\Models;
 
-class Menu
+class Menu extends Model
 {
+    protected $fillable = [
 
+    ];
 
+    protected $dates = [];
 
 }

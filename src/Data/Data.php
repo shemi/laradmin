@@ -2,72 +2,29 @@
 
 namespace Shemi\Laradmin\Data;
 
-use Illuminate\Support\Collection;
-use Shemi\Laradmin\Facades\Laradmin;
-
-
 class Data
 {
-    protected $name;
-
-    protected $location;
-
-    protected $data;
-
-    public function __construct($name, $location, $data = [])
+    public static function location($name)
     {
-        $this->name = $name;
-        $this->location = $location;
-
-        $this->setData($data);
+        return (new static)->newManger()->location($name);
     }
 
-    public function setData($data = [])
+    /**
+     * @return DataManager
+     */
+    public function newManger()
     {
-        $this->data = new Collection($data);
-
-        return $this;
-    }
-
-    public function save()
-    {
-        return Laradmin::data()->save($this);
-    }
-
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function __get($key)
-    {
-        if($this->data->has($key)) {
-            return $this->data->get($key);
-        }
-
-        return $this->{$key};
+        return new DataManager;
     }
 
     public function __call($name, $arguments)
     {
-        if(method_exists($this->data, $name)) {
-            $return = $this->data->{$name}(...$arguments);
+        return $this->newManger()->{$name}(...$arguments);
+    }
 
-            if($return instanceof Collection) {
-                $this->data = $return;
-
-                return $this;
-            }
-
-            return $return;
-        }
-
-        return $this->{$name}(...$arguments);
+    public static function __callStatic($name, $arguments)
+    {
+        return (new static)->$name(...$arguments);
     }
 
 }
