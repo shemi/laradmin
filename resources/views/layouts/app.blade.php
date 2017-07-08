@@ -16,7 +16,10 @@
 
     <script>
         window.laradmin = {
-            api_base: '{{ route('laradmin.api.base') }}',
+            api_base: '/admin',
+            routs: {
+                icons: '{{ route('laradmin.icons') }}'
+            },
             mixins: []
         }
     </script>

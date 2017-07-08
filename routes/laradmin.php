@@ -19,9 +19,14 @@ Route::get('/', [
     "middleware" => "laradmin.user.admin"
 ]);
 
-Route::get('/menu', [
-    "uses" => "{$namespacePrefix}MenusController@index",
+Route::resource('menus', "{$namespacePrefix}MenusController", [
     "as" => "menus",
+    "middleware" => "laradmin.user.admin"
+]);
+
+Route::get('/icons', [
+    "uses" => "{$namespacePrefix}IconsController@index",
+    "as" => "icons",
     "middleware" => "laradmin.user.admin"
 ]);
 
@@ -30,7 +35,7 @@ Route::group([
     "prefix" => "api/v1"],
     function() use ($namespacePrefix) {
 
-    Route::get("/", ["uses" => "{$namespacePrefix}ApiController@health", "as" => "base"]);
+    Route::get("/", ["uses" => "{$namespacePrefix}ApiBaseController@health", "as" => "base"]);
 
     Route::post("/login", [
         "uses" => "{$namespacePrefix}AuthController@login",

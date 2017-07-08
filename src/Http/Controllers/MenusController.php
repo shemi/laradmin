@@ -14,23 +14,47 @@ class MenusController extends Controller
 
     public function __construct()
     {
-        $this->menu = Menu::where('location', 'admin');
-
-        dd($this->menu);
-
         parent::__construct();
     }
 
     public function index()
     {
+        $menus = Menu::all();
 
+        return view('laradmin::menus.browse', compact('menus'));
+    }
+
+    public function create()
+    {
+        $menu = new Menu;
+        $routes = $this->getAllRoutes();
+
+        return view('laradmin::menus.createEdit', compact('menu', 'routes'));
+    }
+
+    protected function getAllRoutes()
+    {
+        $routes = collect(\Route::getRoutes()->getRoutes());
+
+        $routes = $routes->reject(function ($route) {
+            return (! isset($route->action['as']) ||
+                   (! in_array('GET', $route->methods)));
+        })->transform(function ($route) {
+            return [
+                'name' => $route->action['as'],
+                'action' => $route->action['controller'],
+                'uri' => url($route->uri),
+            ];
+        })->values();
+
+        return $routes;
     }
 
     public function getAllIcons()
     {
-        $icons = Laradmin::data()->load('md-icons', 'defaults');
+        $icons = DataManager::location('defaults')->load('md-icons');
 
-        return $this->response(['icons' => $icons->all()]);
+        return $this->response(['icons' => $icons->icons->all()]);
     }
 
     public function store(Request $request)

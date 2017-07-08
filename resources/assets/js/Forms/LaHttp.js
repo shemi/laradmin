@@ -20,7 +20,7 @@ class LaHttp {
      * Helper method for making GET HTTP requests.
      */
     get(uri, params) {
-        return this.axios('post', this.uri(uri), form);
+        return this.axios.get(this.uri(uri), params);
     }
 
 
@@ -66,7 +66,9 @@ class LaHttp {
         return new Promise((resolve, reject) => {
             form.startProcessing();
 
-            this.axios[method](self.uri(uri), JSON.parse(JSON.stringify(form)))
+            console.log(self.uri(uri));
+
+            this.axios[method](self.uri(uri), form.toJson())
                 .then(response => {
                     form.finishProcessing();
 

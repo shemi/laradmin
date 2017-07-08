@@ -3,8 +3,9 @@
 namespace Shemi\Laradmin\Data;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 use Shemi\Laradmin\Facades\Laradmin;
-use Shemi\Laradmin\Models\Model;
 
 class DataManager
 {
@@ -22,18 +23,33 @@ class DataManager
 
     protected $location;
 
-    protected $files = [];
+    /**
+     * @var Collection
+     */
+    protected $files;
+
+    /**
+     * @var Schema
+     */
+    protected static $schema;
 
     public function __construct()
     {
         $this->filesystem = Laradmin::filesystem();
+        $this->loadSchema();
     }
 
-    public function location($location)
+    /**
+     * @param $location
+     * @return static
+     */
+    public static function location($location)
     {
-        $this->location = $location;
+        $inst = new static();
 
-        return $this;
+        $inst->location = $location;
+
+        return $inst;
     }
 
     public function setModel(Model $model)
@@ -50,6 +66,26 @@ class DataManager
             static::BASE_DIR . DIRECTORY_SEPARATOR
             . $this->location . DIRECTORY_SEPARATOR
             . trim($name, DIRECTORY_SEPARATOR);
+    }
+
+    public function all()
+    {
+        return $this->dir();
+    }
+
+    public function firstOrCreate($attributes)
+    {
+        $files = $this->dir();
+
+        foreach ($attributes as $key => $value) {
+            $files = $files->where($key, $value);
+        }
+
+        if($files->isEmpty()) {
+            return $this->create($attributes);
+        }
+
+        return $files->first();
     }
 
     public function findOrCreate($name)
@@ -70,16 +106,19 @@ class DataManager
         return $data;
     }
 
-    public function find($name)
+    public function find($id)
     {
-        $data = $this->maybeNewModel($this->load($name));
+        if($this->files) {
+            $file = $this->files
+                ->where($this->model->getKeyName(), $id)
+                ->first();
 
-        return $data;
-    }
+            if($file) {
+                return $file;
+            }
+        }
 
-    public function get()
-    {
-
+        return $this->maybeNewModel($this->load($id));
     }
 
     protected function maybeNewModel(array $data)
@@ -91,14 +130,24 @@ class DataManager
         return $data;
     }
 
+    public function newModelInstance($attributes = [])
+    {
+        return $this->model->newInstance($attributes);
+    }
+
     protected function newModel(array $data)
     {
         return $this->model->newFromManager($data);
     }
 
-    public function load($name)
+    public function getModel()
     {
-        $path = $this->path($name) . '.json';
+        return $this->model;
+    }
+
+    public function load($name, $ext = 'json')
+    {
+        $path = $this->path($name.($ext ? '.'.$ext : ''));
 
         if (! $this->filesystem->exists($path)) {
             return false;
@@ -107,21 +156,22 @@ class DataManager
         return json_decode($this->filesystem->get($path), true);
     }
 
+
     public function dir($path = null)
     {
         $path = $this->path($path);
 
         if(! $this->filesystem->exists($path)) {
-            return collect([]);
+            return $this->model->newCollection([]);
         }
 
         $names = $this->filesystem->allFiles($path);
 
         if(count($names) === 0) {
-            return collect([]);
+            return $this->model->newCollection([]);
         }
 
-        $files = collect([]);
+        $this->files = $this->model->newCollection([]);
 
         foreach ($names as $name) {
             $name = explode('.', basename($name));
@@ -130,28 +180,72 @@ class DataManager
 
             $file = $this->load($name);
 
-
             if($file) {
                 $file = $this->maybeNewModel($file);
             }
 
-            $files->push($file ?: []);
+            $this->files->add($file ?: []);
         }
 
-        return $files;
+        return $this->files;
     }
 
-    public function create($name, $location = '', $data = [])
+    public function create(array $attributes = [])
     {
-        return new Data($name, $location, $data);
+        return tap($this->newModelInstance($attributes), function ($instance) {
+            $instance->save();
+        });
     }
 
-    public function save(Model $data)
+    public function forceCreate(array $attributes)
     {
-        $json = $data->toJson(JSON_UNESCAPED_UNICODE);
-        $path = $this->path($data->getName(), $data->getLocation()) . '.json';
+        return $this->model->unguarded(function () use ($attributes) {
+            return $this->newModelInstance()->create($attributes);
+        });
+    }
 
-        return $this->filesystem->put($path, $json);
+    public function save(Model $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        if($model->getIncrementing() && ! $model->exists) {
+            $model->setAttribute(
+                $model->getKeyName(),
+                $this->schema()->getAndIncrementNextId($this->location)
+            );
+        }
+
+        $id = $model->{$model->getKeyName()};
+
+        $json = $model->toJson(JSON_UNESCAPED_UNICODE);
+        $path = $this->path($id . '.json');
+
+        $this->filesystem->put($path, $json);
+
+        return $id;
+    }
+
+    protected function loadSchema()
+    {
+        if(is_array(static::$schema)) {
+            return static::$schema;
+        }
+
+        static::$schema = Schema::load($this->filesystem);
+
+        return static::$schema;
+    }
+
+    /**
+     * @return Schema
+     */
+    protected function schema()
+    {
+        if(! static::$schema) {
+            $this->loadSchema();
+        }
+
+        return static::$schema;
     }
 
     public function __call($name, $arguments)

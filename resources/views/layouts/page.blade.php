@@ -23,7 +23,9 @@
                 </header>
 
                 <div class="content-container">
-                    @yield('content')
+                    <div class="container is-fluid">
+                        @yield('content')
+                    </div>
                 </div>
             </main>
         </div>
