@@ -1,6 +1,8 @@
+import Vue from 'vue';
 import LaForm from '../../Forms/LaForm';
 import Helpers from '../../Helpers/Helpers';
 import IconSelectModal from '../IconSelectModal/IconSelectModal.vue';
+import MenuBuilderItem from './MenuBuilderItem/MenuBuilderItem.vue';
 
 export default {
 
@@ -23,8 +25,43 @@ export default {
                 'css_class': '',
                 'in_new_window': false,
             }),
-            'isIconSelectModalActive': false
+            'isIconSelectModalActive': false,
+            'items': []
         }
+    },
+
+    created() {
+        let dragula = this.$dragula;
+
+        let service = dragula.createService({
+            name: 'menus',
+            drakes: {
+                menus: {
+                    copy: false,
+                    revertOnSpill: false,
+                    removeOnSpill: false,
+                    accepts: (el, target, source, sibling) => {
+                        // console.log(target);
+                        //
+                        // if(! target) {
+                        //     return false;
+                        // }
+                        //
+                        // if(! el.contains || el === target || el.contains(target)) {
+                        //     return false;
+                        // }
+                        //
+                        // return true;
+
+                        return ! function (a, b) {
+                            return a.contains ?
+                                a != b && a.contains(b) :
+                                !!(a.compareDocumentPosition(b) & 16);
+                        }(el, target);
+                    }
+                }
+            }
+        });
     },
 
     mounted() {
@@ -51,8 +88,11 @@ export default {
         },
 
         createOrUpdateMenuItem() {
-
-            this.closeNewEditModal();
+            this.itemForm.post('menus/item/validation')
+                .then(res => {
+                    this.items.push(res.data);
+                    this.closeNewEditModal();
+                });
         }
 
     },
@@ -69,7 +109,8 @@ export default {
     },
 
     components: {
-        IconSelectModal
+        IconSelectModal,
+        MenuBuilderItem
     }
 
 }

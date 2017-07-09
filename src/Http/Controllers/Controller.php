@@ -58,7 +58,16 @@ class Controller extends BaseController
         return $this->setStatusCode(401)->responseWithError($message);
     }
 
+    public function responseValidationError($messages = 'Check all your fields.')
+    {
+        if(is_string($messages)) {
+            $messages = [
+                'form' => [$messages]
+            ];
+        }
 
+        return response()->json($messages, 422);
+    }
 
     public function responseInternalError($message = 'Internal error.')
     {

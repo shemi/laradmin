@@ -3,6 +3,8 @@
 namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
+use InvalidArgumentException;
 use Shemi\Laradmin\Data\Data;
 use Shemi\Laradmin\Data\DataManager;
 use Shemi\Laradmin\Facades\Laradmin;
@@ -61,6 +63,55 @@ class MenusController extends Controller
     {
         $this->validate($request, [
 
+        ]);
+    }
+
+    public function validateItem(Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'type' => 'in:route,url',
+            'route_name' => 'required_if:type,route',
+            'url' => 'required_if:type,url',
+        ]);
+
+        $route_url = "";
+
+        if($request->input('type') === 'route') {
+            $routeParts = explode('|', $request->input('route_name'));
+            $routeName = array_shift($routeParts);
+            $parameters = [];
+
+            foreach ($routeParts as $part) {
+                $part = explode(':', $part);
+
+                if(count($part) != 2) {
+                    continue;
+                }
+
+                $parameters[$part[0]] = $part[1];
+            }
+
+            try {
+                $route_url = route($routeName, $parameters);
+            } catch (UrlGenerationException | InvalidArgumentException $e) {
+                return $this->responseValidationError([
+                    'route_name' => [$e->getMessage()]
+                ]);
+            }
+        }
+
+        return $this->response([
+            'id' => random_int(1, 10000),
+            'title' => e($request->input('title')),
+            'type' => $request->input('type'),
+            'route_name' => $request->input('route_name'),
+            'url' => $request->input('url'),
+            'in_new_window' => $request->input('in_new_window'),
+            'icon' => $request->input('icon'),
+            'css_class' => e($request->input('css_class')),
+            'route_url' => $route_url,
+            'items' => []
         ]);
     }
 

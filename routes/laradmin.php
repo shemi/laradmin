@@ -24,6 +24,12 @@ Route::resource('menus', "{$namespacePrefix}MenusController", [
     "middleware" => "laradmin.user.admin"
 ]);
 
+Route::post('menus/item/validation', [
+    "uses" => "{$namespacePrefix}MenusController@validateItem",
+    "as" => "menus.item.validation",
+    "middleware" => "laradmin.user.admin"
+]);
+
 Route::get('/icons', [
     "uses" => "{$namespacePrefix}IconsController@index",
     "as" => "icons",

@@ -1,0 +1,14 @@
+.menu-builder-item {
+  padding: 0;
+
+  .item {
+    background-color: $grey-lighter;
+    padding: 0.5rem;
+    border-radius: $radius;
+  }
+
+  > .sub-items {
+    padding: 0.5rem 0 0.5rem 1rem;
+  }
+
+}

@@ -31,10 +31,23 @@
 
             <button class="button is-primary is-medium" @click="openNewEditModal()">Launch card modal</button>
 
+            <div class="menu-items" v-dragula="items" drake="menus" service="menus">
+                <menu-builder-item v-for="item in items"
+                                   :key="item.id"
+                                   @item-clicked="openNewEditModal($event)"
+                                   :item="item">
+                </menu-builder-item>
+            </div>
+
+            <pre>
+                @{{ items }}
+            </pre>
+
             @include('laradmin::menus.blade.createEditModal')
 
             <icon-select-modal :active.sync="isIconSelectModalActive"
-                               :selected.sync="itemForm.icon"></icon-select-modal>
+                               :selected-icon.sync="itemForm.icon"
+            ></icon-select-modal>
 
         </div>
 

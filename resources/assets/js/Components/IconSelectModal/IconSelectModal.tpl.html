@@ -1,8 +1,39 @@
-<b-modal :active.sync="isActive" :width="900" @close="onModalClosed">
-    <div class="card">
-        <div class="card-content">
+<b-modal :active.sync="isActive" :width="900" @close="onModalClosed" class="icon-select-modal">
+    <div class="modal-card">
 
+        <header class="modal-card-head">
+            <p class="modal-card-title">Select Icon</p>
+        </header>
 
+        <div class="modal-card-search">
+            <b-field>
+                <b-input placeholder="Search..."
+                         type="search"
+                         icon="search"
+                         v-model="search">
+                </b-input>
+            </b-field>
+        </div>
+
+        <div class="modal-card-body">
+
+            <div class="columns is-multiline">
+
+                <div class="column is-3" v-for="icon in filteredIconsArray">
+                    <div class="select-box"
+                         :class="{'is-active': selectedIcon == icon.ligature}"
+                         @click="select(icon)">
+                        <b-icon :icon="icon.ligature"
+                                size="is-large">
+                        </b-icon>
+
+                        <span class="title is-6">
+                            {{ icon.name }}
+                        </span>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
     </div>

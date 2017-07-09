@@ -1,0 +1,15 @@
+<div class="menu-builder-item">
+    <div class="item" @click="$event => $emit('itemClicked', item)">
+        <div class="title is-4">
+            {{ item.title }}<br>
+            <small>{{ item.type === 'route' ? item.route_name : item.url }}</small>
+        </div>
+    </div>
+
+    <div class="sub-items" v-dragula="item.items" drake="menus" service="menus">
+        <menu-builder-item v-for="childItem in item.items"
+                           :key="childItem.id"
+                           :item.sync="childItem">
+        </menu-builder-item>
+    </div>
+</div>

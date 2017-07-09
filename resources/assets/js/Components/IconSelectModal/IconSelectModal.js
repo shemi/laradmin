@@ -14,7 +14,8 @@ export default {
         return {
             icons: [],
             selected: null,
-            isActive: false
+            isActive: false,
+            search: ""
         }
     },
 
@@ -35,7 +36,7 @@ export default {
     methods: {
 
         select(icon) {
-            this.$emit('update:selectedIcon', icon);
+            this.$emit('update:selectedIcon', icon.ligature);
             this.close();
         },
 
@@ -54,13 +55,33 @@ export default {
 
             LaHttp.get('/icons')
                 .then(res => {
-                    let icons = res.data.data.icons;
-
-                    console.log(icons);
+                    this.icons = res.data.data.icons;
                 });
 
         }
 
+    },
+
+    computed: {
+        filteredIconsArray() {
+            let search = this.search.toLowerCase();
+
+            if(! search) {
+                return this.icons;
+            }
+
+            return this.icons.filter((icon) => {
+                for(let i in icon.keywords) {
+                    let word = icon.keywords[i].toString().toLowerCase();
+
+                    if(word.indexOf(search) >= 0) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
     }
 
 }

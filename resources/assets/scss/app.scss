@@ -15,7 +15,11 @@
 
 //views
 @import "3-views/login";
+@import "3-views/menus-create-edit";
 
 //components
 @import "4-components/top-bar";
 @import "4-components/side-menu";
+@import "4-components/icon-select-modal";
+@import "4-components/dragula";
+@import "4-components/menu-builder-item";

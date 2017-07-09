@@ -1,0 +1,51 @@
+.icon-select-modal {
+  z-index: 30;
+
+  .modal-card {
+    @include tablet {
+      width: auto;
+    }
+  }
+
+  .modal-card-head {
+    border-bottom: 0;
+  }
+
+  .modal-card-search {
+    border-bottom: 1px solid $border;
+    color: $text-strong;
+    background-color: $background;
+    padding: 0 20px 20px;
+  }
+
+  .select-box {
+    text-align: center;
+    padding: 15px;
+    overflow: hidden;
+    height: 100%;
+    cursor: pointer;
+
+    > * {
+      display: block;
+    }
+
+    .icon {
+      margin: 0 auto 32px auto;
+    }
+
+    &:hover {
+      background-color: $grey-lighter;
+    }
+
+    &.is-active {
+      background-color: $primary;
+      color: findColorInvert($primary);
+
+      .title {
+        color: findColorInvert($primary);
+      }
+    }
+
+  }
+
+}

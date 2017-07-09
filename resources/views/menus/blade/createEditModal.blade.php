@@ -1,5 +1,6 @@
 <b-modal :active.sync="isNewEditItemModalActive"
          :can-cancel="false"
+         class="new-edit-item-modal"
          @close="closeNewEditModal()">
 
     <form @submit.prevent="createOrUpdateMenuItem()">
@@ -45,13 +46,20 @@
                                 </option>
                             </b-select>
 
+                        <b-field v-if="itemForm.type == 'url'"
+                                 :type="itemForm.errors.has('url') ? 'is-danger' : ''"
+                                 :message="itemForm.errors.has('url') ? itemForm.errors.get('url') : ''"
+                                 expanded>
                             <b-input placeholder="@lang('laradmin::menus.builder.url_placeholder')"
                                      v-model="itemForm.url"
-                                     v-if="itemForm.type == 'url'"
                                      expanded></b-input>
+                        </b-field>
 
-                            <b-autocomplete v-if="itemForm.type == 'route'"
-                                            v-model="itemForm.route_name"
+                        <b-field v-if="itemForm.type == 'route'"
+                                 :type="itemForm.errors.has('route_name') ? 'is-danger' : ''"
+                                 :message="itemForm.errors.has('route_name') ? itemForm.errors.get('route_name') : ''"
+                                 expanded>
+                            <b-autocomplete v-model="itemForm.route_name"
                                             placeholder="e.g. laradmin.dashboard"
                                             keep-first
                                             has-custom-template
@@ -73,6 +81,7 @@
 
                             </b-autocomplete>
                         </b-field>
+                        </b-field>
                     </b-field>
                 </b-field>
 
@@ -92,13 +101,26 @@
                 <b-field :type="itemForm.errors.has('icon') ? 'is-danger' : ''"
                          label="@lang('laradmin::menus.builder.item_icon')"
                          :message="itemForm.errors.has('icon') ? itemForm.errors.get('icon') : ''">
-                    <b-input type="text"
-                             v-model="itemForm.icon">
-                    </b-input>
+
+                    <b-field>
+                        <p class="control icon-only-addon">
+                            <b-icon :icon="itemForm.icon"></b-icon>
+                        </p>
+                        <b-input type="text"
+                                 expanded
+                                 v-model="itemForm.icon">
+                        </b-input>
+                        <p class="control">
+                            <button type="button"
+                                    @click="openIconSelectModal"
+                                    class="button is-primary">
+                                <b-icon icon="location_searching"></b-icon>
+                            </button>
+                        </p>
+                    </b-field>
+
                 </b-field>
 
-                <button type="button" @click="openIconSelectModal">Open Icon finder</button>
-                
                 <b-field :type="itemForm.errors.has('css_class') ? 'is-danger' : ''"
                          label="@lang('laradmin::menus.builder.item_css_class')"
                          :message="itemForm.errors.has('css_class') ? itemForm.errors.get('css_class') : ''">
@@ -110,7 +132,9 @@
             </section>
 
             <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">
+                <button type="submit"
+                        :class="{'is-loading': itemForm.busy}"
+                        class="button is-success">
                     <span v-if="itemForm.id">
                         @lang('laradmin::menus.builder.save_changes')
                     </span>
