@@ -102,7 +102,7 @@ class MenusController extends Controller
         }
 
         return $this->response([
-            'id' => random_int(1, 10000),
+            'id' => $request->input('id', random_int(1, 10000)),
             'title' => e($request->input('title')),
             'type' => $request->input('type'),
             'route_name' => $request->input('route_name'),

@@ -1,14 +1,63 @@
 .menu-builder-item {
   padding: 0;
 
-  .item {
-    background-color: $grey-lighter;
+  .level {
+    background-color: $white-ter;
     padding: 0.5rem;
     border-radius: $radius;
+    margin: 0;
+    cursor: move;
+    transition: background-color 0.3s $easing;
+
+    .title {
+      margin: 0;
+
+      small {
+        opacity: 0.6;
+      }
+    }
+
+    .icon {
+      margin-right: 0.2rem;
+
+      &.is-dim {
+        background-color: $twitter;
+        opacity: 0.4;
+        border-radius: 100%;
+      }
+
+    }
+
+    &:hover {
+      opacity: 1;
+      background-color: $grey-lighter;
+    }
+
+  }
+
+  &.gu-mirror .level {
+    opacity: 1;
+    background-color: $grey-lighter;
   }
 
   > .sub-items {
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 0.5rem 0;
+    min-height: 1rem;
+    margin: 0 0 0 2rem;
+
+    .menu-builder-item {
+      &:first-child {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  &.not-empty {
+    border-left: 1px dashed #dbdbdb;
+
+    > .sub-items {
+      padding: 0;
+    }
   }
 
 }

@@ -3,7 +3,7 @@
          class="new-edit-item-modal"
          @close="closeNewEditModal()">
 
-    <form @submit.prevent="createOrUpdateMenuItem()">
+    <form @submit.prevent="createOrUpdateMenuItem()" tabindex="-1">
 
         <div class="modal-card">
 

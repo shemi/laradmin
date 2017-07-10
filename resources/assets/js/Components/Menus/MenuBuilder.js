@@ -15,6 +15,7 @@ export default {
                 'items': []
             }),
             isNewEditItemModalActive: false,
+            currentItemLocation: '',
             itemForm: new LaForm({
                 'id': null,
                 'title': '',
@@ -26,7 +27,51 @@ export default {
                 'in_new_window': false,
             }),
             'isIconSelectModalActive': false,
-            'items': []
+            'items': [{
+                "id": 204,
+                "title": "Dashboard",
+                "type": "route",
+                "route_name": "laradmin.dashboard",
+                "url": null,
+                "in_new_window": false,
+                "icon": "dashboard",
+                "css_class": "",
+                "route_url": "http://laradmin.dev/admin",
+                "items": []
+            }, {
+                "id": 5711,
+                "title": "Test1",
+                "type": "url",
+                "route_name": null,
+                "url": "dsdsd",
+                "in_new_window": false,
+                "icon": "view_list",
+                "css_class": "",
+                "route_url": "",
+                "items": []
+            }, {
+                "id": 7865,
+                "title": "Test2",
+                "type": "url",
+                "route_name": null,
+                "url": "sdsdsdsd",
+                "in_new_window": false,
+                "icon": null,
+                "css_class": "",
+                "route_url": "",
+                "items": []
+            }, {
+                "id": 5033,
+                "title": "Test33",
+                "type": "url",
+                "route_name": null,
+                "url": "sdsd",
+                "in_new_window": false,
+                "icon": null,
+                "css_class": "",
+                "route_url": "",
+                "items": []
+            }]
         }
     },
 
@@ -41,19 +86,7 @@ export default {
                     revertOnSpill: false,
                     removeOnSpill: false,
                     accepts: (el, target, source, sibling) => {
-                        // console.log(target);
-                        //
-                        // if(! target) {
-                        //     return false;
-                        // }
-                        //
-                        // if(! el.contains || el === target || el.contains(target)) {
-                        //     return false;
-                        // }
-                        //
-                        // return true;
-
-                        return ! function (a, b) {
+                        return !function (a, b) {
                             return a.contains ?
                                 a != b && a.contains(b) :
                                 !!(a.compareDocumentPosition(b) & 16);
@@ -73,8 +106,9 @@ export default {
 
     methods: {
 
-        openNewEditModal(item = {}) {
+        openNewEditModal(item = {}, location = '') {
             this.isNewEditItemModalActive = true;
+            this.currentItemLocation = location + '';
             this.itemForm.rebuild(item);
         },
 
@@ -84,15 +118,80 @@ export default {
 
         closeNewEditModal() {
             this.isNewEditItemModalActive = false;
+            this.currentItemLocation = '';
             this.itemForm.reset();
         },
 
+        getItemObjectByLocation(location) {
+            let targetPath,
+                target;
+
+            if(! location) {
+                return this.items;
+            }
+
+            targetPath = location.split('.');
+            targetPath = Array.isArray(targetPath) ? targetPath : [targetPath];
+            target = this.items;
+
+            while (targetPath.length) {
+                target = target[targetPath.shift()];
+            }
+
+            return target;
+        },
+
         createOrUpdateMenuItem() {
+            let isExists = !! this.itemForm.id,
+                formInfo,
+                formInfoKeys,
+                formInfoKey,
+                formInfoKeyIndex,
+                target;
+
             this.itemForm.post('menus/item/validation')
                 .then(res => {
-                    this.items.push(res.data);
+
+                    if(isExists && this.currentItemLocation) {
+                        formInfo = this.itemForm.toJson();
+                        formInfoKeys = Object.keys(formInfo);
+                        target = this.getItemObjectByLocation(this.currentItemLocation);
+
+                        for (formInfoKeyIndex in formInfoKeys) {
+                            formInfoKey = formInfoKeys[formInfoKeyIndex];
+
+                            if(formInfoKey === 'items') {
+                                continue;
+                            }
+
+                            this.$set(
+                                target,
+                                formInfoKey,
+                                formInfo[formInfoKey]
+                            );
+                        }
+                    } else if(! isExists) {
+                        this.items.push(res.data);
+                    }
+
                     this.closeNewEditModal();
                 });
+        },
+
+        deleteMenuItem(location) {
+            let target,
+                key,
+                locationPath = location.toString().split('.');
+
+            if(locationPath.length === 1) {
+                target = this.items;
+                key = locationPath[0];
+            } else {
+                key = locationPath.pop();
+                target = this.getItemObjectByLocation(locationPath.join('.'));
+            }
+
+            this.$delete(target, parseInt(key));
         }
 
     },

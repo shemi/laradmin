@@ -31,17 +31,21 @@
 
             <button class="button is-primary is-medium" @click="openNewEditModal()">Launch card modal</button>
 
-            <div class="menu-items" v-dragula="items" drake="menus" service="menus">
-                <menu-builder-item v-for="item in items"
-                                   :key="item.id"
-                                   @item-clicked="openNewEditModal($event)"
-                                   :item="item">
-                </menu-builder-item>
-            </div>
+            <section class="section menu-structure">
+                <p class="title is-4">Menu Structure</p>
+                <p class="subtitle">Drag each item into the order you prefer.</p>
+                <hr>
 
-            <pre>
-                @{{ items }}
-            </pre>
+                <div class="menu-items" v-dragula="items" drake="menus" service="menus">
+                    <menu-builder-item v-for="(item, index) in items"
+                                       :key="item.id"
+                                       :position="index"
+                                       v-on:edit="openNewEditModal($event.item, $event.position)"
+                                       v-on:delete="deleteMenuItem($event)"
+                                       :item="item">
+                    </menu-builder-item>
+                </div>
+            </section>
 
             @include('laradmin::menus.blade.createEditModal')
 
