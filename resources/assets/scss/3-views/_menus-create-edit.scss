@@ -13,4 +13,37 @@
     padding: 0;
   }
 
+  .section-header {
+    .level-item .title,
+    .level-item .subtitle {
+      margin-bottom: 0;
+    }
+  }
+
+  .column > section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .meta-box {
+    .card-content {
+      font-size: 0.9rem;
+
+      hr {
+        margin: 0.2rem 0;
+      }
+    }
+
+    .card-footer {
+      padding: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+
+      .is-danger {
+        text-transform: uppercase;
+      }
+    }
+
+  }
+
 }
