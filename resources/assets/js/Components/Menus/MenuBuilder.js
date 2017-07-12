@@ -11,13 +11,17 @@ export default {
     data() {
         return {
             form: new LaForm({
+                'id': 0,
                 'name': '',
+                'slug': '',
+                'created_at': '',
+                'updated_at': '',
                 'items': []
             }),
             isNewEditItemModalActive: false,
             currentItemLocation: '',
             itemForm: new LaForm({
-                'id': null,
+                'id': 0,
                 'title': '',
                 'type': 'route',
                 'route_name': '',
@@ -25,60 +29,26 @@ export default {
                 'icon': '',
                 'css_class': '',
                 'in_new_window': false,
+                'route_url': ''
             }),
             'isIconSelectModalActive': false,
-            'items': [{
-                "id": 204,
-                "title": "Dashboard",
-                "type": "route",
-                "route_name": "laradmin.dashboard",
-                "url": null,
-                "in_new_window": false,
-                "icon": "dashboard",
-                "css_class": "",
-                "route_url": "http://laradmin.dev/admin",
-                "items": []
-            }, {
-                "id": 5711,
-                "title": "Test1",
-                "type": "url",
-                "route_name": null,
-                "url": "dsdsd",
-                "in_new_window": false,
-                "icon": "view_list",
-                "css_class": "",
-                "route_url": "",
-                "items": []
-            }, {
-                "id": 7865,
-                "title": "Test2",
-                "type": "url",
-                "route_name": null,
-                "url": "sdsdsdsd",
-                "in_new_window": false,
-                "icon": null,
-                "css_class": "",
-                "route_url": "",
-                "items": []
-            }, {
-                "id": 5033,
-                "title": "Test33",
-                "type": "url",
-                "route_name": null,
-                "url": "sdsd",
-                "in_new_window": false,
-                "icon": null,
-                "css_class": "",
-                "route_url": "",
-                "items": []
-            }]
+            'items': []
+        }
+    },
+
+    watch: {
+        items: {
+            handler: function(val, oldVal) {
+                this.$set(this.form, 'items', val);
+            },
+            deep: true
         }
     },
 
     created() {
         let dragula = this.$dragula;
 
-        let service = dragula.createService({
+        dragula.createService({
             name: 'menus',
             drakes: {
                 menus: {
@@ -95,16 +65,30 @@ export default {
                 }
             }
         });
-    },
 
-    mounted() {
-        this.form.rebuild({
-            'name': Helpers.value(this.menu.name, ''),
-            'items': Helpers.value(this.menu.items, [])
-        });
+        this.syncFormWithMenu();
     },
 
     methods: {
+
+        syncFormWithMenu() {
+            let rebuildObject = {};
+
+
+            for(let key in this.menu) {
+                if (! this.menu.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                rebuildObject[key] = Helpers.value(
+                    this.menu[key],
+                    this.form[key]
+                );
+            }
+
+            this.form.rebuild(rebuildObject);
+            this.items = this.form.items;
+        },
 
         openNewEditModal(item = {}, location = '') {
             this.isNewEditItemModalActive = true;
@@ -134,6 +118,7 @@ export default {
             targetPath = Array.isArray(targetPath) ? targetPath : [targetPath];
             target = this.items;
 
+
             while (targetPath.length) {
                 target = target[targetPath.shift()];
             }
@@ -153,6 +138,7 @@ export default {
                 .then(res => {
 
                     if(isExists && this.currentItemLocation) {
+                        this.itemForm.rebuild(res.data);
                         formInfo = this.itemForm.toJson();
                         formInfoKeys = Object.keys(formInfo);
                         target = this.getItemObjectByLocation(this.currentItemLocation);
@@ -170,6 +156,7 @@ export default {
                                 formInfo[formInfoKey]
                             );
                         }
+
                     } else if(! isExists) {
                         this.items.push(res.data);
                     }
@@ -192,6 +179,32 @@ export default {
             }
 
             this.$delete(target, parseInt(key));
+        },
+
+        save() {
+            let method = this.form.id ? 'put' : 'post';
+
+            this.form.rebuild({
+                'items': this.items
+            });
+
+            this.form[method]('/menus/' + (this.form.id || ''))
+                .then((res) => {
+                    if(res.data.redirect) {
+                        window.location.href = res.data.redirect;
+                    } else {
+                        this.$toast.open({
+                            message: 'All Changes Saved!',
+                            type: 'is-success'
+                        });
+                    }
+                })
+                .catch((err) => {
+                    this.$toast.open({
+                        message: 'Whoops.. Something went wrong!',
+                        type: 'is-danger'
+                    });
+                });
         }
 
     },

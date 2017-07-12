@@ -1,16 +1,14 @@
 {
-  "tables": {
-    "menus": {
-      "last_primary": 1,
-      "rows": [
-        "1.json"
-      ]
-    },
-    "options": {
-      "last_primary": 0
-    },
-    "types": {
-      "last_primary": 0
+    "tables": {
+        "menus": {
+            "last_primary": 1,
+            "rows": []
+        },
+        "options": {
+            "last_primary": 0
+        },
+        "types": {
+            "last_primary": 0
+        }
     }
-  }
 }

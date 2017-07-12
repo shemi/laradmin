@@ -6,3 +6,10 @@ if (! function_exists('laradmin_asset')) {
         return asset(config('laradmin.assets_path').'/'.$path, $secure);
     }
 }
+
+if (! function_exists('menu')) {
+    function menu($slug)
+    {
+        return \Shemi\Laradmin\Models\Menu::whereSlug($slug);
+    }
+}

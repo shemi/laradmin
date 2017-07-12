@@ -14,7 +14,12 @@ return [
         'page_title' => 'Edit :Name Menu'
     ],
 
+    'how_to_use_description' => 'You can get this menu object by calling',
+
     'builder' => [
+        'title' => 'Menu Structure',
+        'subtitle' => 'Drag each item into the order you prefer.',
+        'new_item_button' => 'New Item',
         'name' => 'Menu Name',
         'new_item' => 'New Menu Item',
         'edit_item' => 'Edit Menu Item',

@@ -6,16 +6,14 @@ import TopBar from './Components/TopBar/TopBar';
 import CollapsibleMenu from './Components/CollapsibleMenu/CollapsibleMenu.vue';
 import BrowseMenus from './Components/Menus/BrowseMenus';
 import MenuBuilder from './Components/Menus/MenuBuilder';
-import { Vue2Dragula } from 'vue2-dragula'
+import { Vue2Dragula } from 'vue2-dragula';
+
+import './Filters/Slugify';
 
 
 Vue.use(Buefy);
 
-Vue.use(Vue2Dragula, {
-    // logging: {
-    //     service: true
-    // }
-});
+Vue.use(Vue2Dragula, {});
 
 const app = new Vue({
     el: '#app',

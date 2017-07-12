@@ -1,0 +1,22 @@
+.meta-box {
+  margin-bottom: 2rem;
+
+  .card-content {
+    font-size: 0.9rem;
+
+    hr {
+      margin: 0.2rem 0;
+    }
+  }
+
+  .card-footer {
+    padding: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+
+    .is-danger {
+      text-transform: uppercase;
+    }
+  }
+
+}

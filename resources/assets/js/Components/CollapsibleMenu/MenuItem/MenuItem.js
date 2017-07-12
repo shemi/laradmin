@@ -28,18 +28,22 @@ export default {
         },
 
         cancel () {
-            this.anime.pause()
+            this.anime.pause();
         },
 
         before (targets) {
-            if (!this.targets) this.targets = targets
-            targets.removeAttribute('style')
+            if (!this.targets) {
+                this.targets = targets;
+            }
+
+            targets.removeAttribute('style');
         },
 
         enter (targets, done) {
-            const height = targets.scrollHeight
-            targets.style.height = 0
-            targets.style.opacity = 0
+            const height = targets.scrollHeight;
+            targets.style.height = 0;
+            targets.style.opacity = 0;
+
             this.getAnime(targets).play({
                 targets,
                 duration: 377,
@@ -47,11 +51,12 @@ export default {
                 opacity: [0, 1],
                 height,
                 complete () {
-                    targets.removeAttribute('style')
-                    done()
+                    targets.removeAttribute('style');
+                    done();
                 }
-            })
+            });
         },
+
         leave (targets, complete) {
             this.getAnime(targets).play({
                 targets,
@@ -60,7 +65,7 @@ export default {
                 opacity: [1, 0],
                 height: 0,
                 complete
-            })
+            });
         }
 
     },
@@ -72,6 +77,12 @@ export default {
 
         items() {
             return this.item.items;
+        },
+
+        href() {
+            return this.item.type === 'route' ?
+                this.item.route_url :
+                this.item.url;
         }
     }
 

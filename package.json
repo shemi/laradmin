@@ -18,9 +18,10 @@
   "dependencies": {
     "axios": "^0.16.2",
     "buefy": "^0.4.2",
+    "bulma": "^0.4.2",
     "laravel-mix": "^1.0.7",
-    "vue": "^2.3.4",
-    "bulma": "^0.4.2"
+    "moment": "^2.18.1",
+    "vue": "^2.3.4"
   },
   "devDependencies": {
     "browser-sync": "^2.18.12",

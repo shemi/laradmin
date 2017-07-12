@@ -7,36 +7,11 @@ Vue.component('CollapsibleMenuItem', MenuItem);
 
 export default {
 
-    props: [],
+    props: ['menu'],
 
     data() {
         return {
-            items: [
-                {
-                    'id': 1,
-                    'label': 'Dashboard',
-                    'icon': 'dashboard',
-                    'href': '/admin'
-                },
-                {
-                    'id': 2,
-                    'label': 'Customers',
-                    'href': '/customers',
-                    'icon': 'person',
-                    'items': [
-                        {
-                            'id': 3,
-                            'label': 'All customers',
-                            'href': '/customers'
-                        },
-                        {
-                            'id': 4,
-                            'label': 'New Customer',
-                            'href': '/customers/new'
-                        }
-                    ]
-                }
-            ]
+
         }
     }
 

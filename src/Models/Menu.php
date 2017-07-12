@@ -8,13 +8,13 @@ class Menu extends Model
 {
     protected $fillable = [
         'items',
-        'location'
+        'name',
+        'slug'
     ];
 
-    protected $casts = [
-        'items' => 'array'
-    ];
-
-
+    public static function whereSlug($slug)
+    {
+        return static::where('slug', $slug)->first();
+    }
 
 }

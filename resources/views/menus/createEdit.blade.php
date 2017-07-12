@@ -41,17 +41,23 @@
                                 <div class="level-left">
                                     <div class="level-item">
                                         <div>
-                                            <p class="title is-3 is-spaced">Menu Structure</p>
-                                            <p class="subtitle">Drag each item into the order you prefer.</p>
+                                            <p class="title is-3 is-spaced">
+                                                @lang('laradmin::menus.builder.title')
+                                            </p>
+                                            <p class="subtitle">
+                                                @lang('laradmin::menus.builder.subtitle')
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="level-right">
                                     <div class="level-item">
-                                        <button class="button is-primary is-medium" @click="openNewEditModal()">
+                                        <button class="button is-primary is-medium"
+                                                type="button"
+                                                @click="openNewEditModal()">
                                             <b-icon icon="add"></b-icon>
-                                            <span>New Item</span>
+                                            <span>@lang('laradmin::menus.builder.new_item_button')</span>
                                         </button>
                                     </div>
                                 </div>
@@ -78,24 +84,47 @@
 
                         <section class="section">
 
-                            <div class="card meta-box">
-                                <header class="card-header">
-                                    <p class="card-header-title">Publish</p>
-                                </header>
-                                <div class="card-content">
-                                    <div class="content">
+                            @component('laradmin::components.meta-box')
 
-                                        <div>Created At: <b>Not available</b></div>
-                                        <hr>
-                                        <div>Updated At: <b>Not available</b></div>
+                                @slot('title')
+                                    @lang('laradmin::template.publish')
+                                @endslot
 
-                                    </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <a class="button is-primary">Save</a>
-                                    <a class="button is-link is-small is-danger is-outlined">Delete</a>
-                                </footer>
-                            </div>
+                                @slot('footer')
+                                    <button type="submit"
+                                            :class="{'is-loading': form.busy}"
+                                            class="button is-primary">
+                                        @lang('laradmin::template.save')
+                                    </button>
+                                    @if($menu->exists)
+                                        <a class="button is-link is-small is-danger is-outlined">
+                                            @lang('laradmin::template.delete')
+                                        </a>
+                                    @endif
+                                @endslot
+
+                                @component('laradmin::components.meta-line', ['langKey' => 'laradmin::template.created_at'])
+                                    form.created_at
+                                @endcomponent
+
+                                @component('laradmin::components.meta-line', ['langKey' => 'laradmin::template.updated_at'])
+                                    form.updated_at
+                                @endcomponent
+
+                                @component('laradmin::components.meta-line', [
+                                    'langKey' => 'laradmin::template.slug',
+                                    'filter' => 'slugify',
+                                    'hr' => false
+                                ])
+                                    form.name
+                                @endcomponent
+
+                            @endcomponent
+
+                            <b-message title="@lang('laradmin::template.how_to_use')" type="is-info">
+                                @lang('laradmin::menus.how_to_use_description')
+                                <code>menu('@{{ form.name || 'menu name' | slugify }}')</code>
+                            </b-message>
 
                         </section>
 

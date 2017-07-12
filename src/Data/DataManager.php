@@ -217,7 +217,7 @@ class DataManager
 
         $id = $model->{$model->getKeyName()};
 
-        $json = $model->toJson(JSON_UNESCAPED_UNICODE);
+        $json = $model->toJson(JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         $path = $this->path($id . '.json');
 
         $this->filesystem->put($path, $json);

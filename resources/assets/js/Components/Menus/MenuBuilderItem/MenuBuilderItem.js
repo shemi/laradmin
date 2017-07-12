@@ -11,6 +11,7 @@ export default {
 
     methods: {
         edit() {
+
             this.$emit('edit', {
                 item: this.item,
                 position: this.position

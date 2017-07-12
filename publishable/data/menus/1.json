@@ -1,10 +1,58 @@
 {
-  "protected": true,
-  "filename": "laradmin.json",
-  "id": 1,
-  "created_at": "",
-  "updated_at": "",
-  "items": [
-
-  ]
+    "name": "Admin",
+    "items": [
+        {
+            "id": 2879,
+            "title": "Dahsboard",
+            "type": "route",
+            "route_name": "laradmin.dashboard",
+            "url": null,
+            "in_new_window": false,
+            "icon": "dashboard",
+            "css_class": null,
+            "route_url": "http:\/\/localhost:3000\/admin",
+            "items": []
+        },
+        {
+            "id": 944,
+            "title": "Menus",
+            "type": "route",
+            "route_name": "laradmin.menus.menus.index",
+            "url": null,
+            "in_new_window": false,
+            "icon": "view_list",
+            "css_class": null,
+            "route_url": "http:\/\/localhost:3000\/admin\/menus",
+            "items": [
+                {
+                    "id": 52,
+                    "title": "All Menus",
+                    "type": "route",
+                    "route_name": "laradmin.menus.menus.index",
+                    "url": null,
+                    "in_new_window": false,
+                    "icon": null,
+                    "css_class": null,
+                    "route_url": "http:\/\/localhost:3000\/admin\/menus",
+                    "items": []
+                },
+                {
+                    "id": 9116,
+                    "title": "New Menu",
+                    "type": "route",
+                    "route_name": "laradmin.menus.menus.create",
+                    "url": null,
+                    "in_new_window": false,
+                    "icon": null,
+                    "css_class": null,
+                    "route_url": "http:\/\/localhost:3000\/admin\/menus\/create",
+                    "items": []
+                }
+            ]
+        }
+    ],
+    "slug": "admin",
+    "updated_at": "2017-07-12 23:50:53.191670",
+    "created_at": "2017-07-12 21:59:20.380834",
+    "id": 1
 }

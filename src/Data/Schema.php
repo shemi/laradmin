@@ -73,7 +73,7 @@ class Schema extends Collection
     {
         return static::$filesystem->put(
             static::getSchemaPath(),
-            $this->toJson()
+            $this->toJson(JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
         );
     }
 
