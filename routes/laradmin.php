@@ -40,6 +40,12 @@ Route::get('/icons', [
     "middleware" => "laradmin.user.admin"
 ]);
 
+foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
+    Route::resource($type->slug, $type->controller, [
+        "middleware" => "laradmin.user.admin"
+    ]);
+}
+
 Route::group([
     "as" => "api.",
     "prefix" => "api/v1"],

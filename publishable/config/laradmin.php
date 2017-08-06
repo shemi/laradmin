@@ -21,9 +21,7 @@ return [
         'system' => 'simple',
     ],
 
-    'superusers' => [
-        'shemi.perez@gmail.com'
-    ],
+    'developers' => [],
 
     /*
     |--------------------------------------------------------------------------

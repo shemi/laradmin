@@ -10,7 +10,7 @@ class Policy
 
     public function __construct()
     {
-        $this->superusers = config('laradmin.superusers');
+        $this->superusers = config('laradmin.developers');
     }
 
     /**

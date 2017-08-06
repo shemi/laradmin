@@ -5,15 +5,20 @@ namespace Shemi\Laradmin\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Shemi\Laradmin\Data\DataNotFoundException;
 use Shemi\Laradmin\Facades\Laradmin;
+use Shemi\Laradmin\Models\Type;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $status_code = 200;
+
+    protected $slug = null;
 
     public function __construct()
     {
@@ -24,6 +29,36 @@ class Controller extends BaseController
         }
 
         view()->share('user', $user);
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function getSlug(Request $request)
+    {
+        if ($this->slug) {
+            return $this->slug;
+        }
+
+        return explode('.', $request->route()->getName())[1];
+    }
+
+    /**
+     * @param Request $request
+     * @return Type
+     */
+    public function getTypeBySlug(Request $request)
+    {
+        $typeSlug = $this->getSlug($request);
+
+        $type = Type::where('slug', $typeSlug)->first();
+
+        if(! $type) {
+            throw new DataNotFoundException($typeSlug);
+        }
+
+        return $type;
     }
 
     /**

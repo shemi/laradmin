@@ -12,12 +12,18 @@ class Type extends Model
         'slug',
         'public',
         'controller',
-        'fields',
+        'panels',
+        'records_per_page',
     ];
 
     public static function whereSlug($slug)
     {
         return static::where('slug', $slug)->first();
+    }
+
+    public function hasModel()
+    {
+        return ! empty($this->model);
     }
 
 }
