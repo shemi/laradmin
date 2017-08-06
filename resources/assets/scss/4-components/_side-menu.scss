@@ -45,6 +45,12 @@
     .item-label {
       flex-grow: 1;
     }
+
+    li ul {
+      margin-right: 0;
+      padding-left: 0;
+    }
+
   }
 
 }

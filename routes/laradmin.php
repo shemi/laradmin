@@ -30,6 +30,10 @@ Route::post('menus/item/validation', [
     "middleware" => "laradmin.user.admin"
 ]);
 
+Route::resource('types', "{$namespacePrefix}TypesBuilderController", [
+    "middleware" => "laradmin.user.admin"
+]);
+
 Route::get('/icons', [
     "uses" => "{$namespacePrefix}IconsController@index",
     "as" => "icons",

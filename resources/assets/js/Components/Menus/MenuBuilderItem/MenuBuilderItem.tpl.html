@@ -5,7 +5,7 @@
                 <b-icon :icon="item.icon" class="is-twitter" :class="{'is-dim': ! item.icon}"></b-icon>
                 <p class="title is-5">
                     <b>{{ item.title }}</b>
-                    <small>{{ item.type === 'route' ? item.route_url : item.url }}</small>
+                    <small>{{ item.url }}</small>
                 </p>
             </div>
         </div>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="sub-items" v-dragula="item.items" drake="menus" service="menus">
+    <draggable v-model="item.items" :options="{group:'menu'}" class="sub-items">
         <menu-builder-item v-for="(childItem, index) in item.items"
                            :key="childItem.id"
                            :position="position+'.items.'+ index"
@@ -32,5 +32,5 @@
                            @delete="onDelete($event)"
                            :item.sync="childItem">
         </menu-builder-item>
-    </div>
+    </draggable>
 </div>

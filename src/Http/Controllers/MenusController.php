@@ -121,43 +121,33 @@ class MenusController extends Controller
             'url' => 'required_if:type,url',
         ]);
 
-        $route_url = "";
-
-        if ($request->input('type') === 'route') {
-            $routeParts = explode('|', $request->input('route_name'));
-            $routeName = array_shift($routeParts);
-            $parameters = [];
-
-            foreach ($routeParts as $part) {
-                $part = explode(':', $part);
-
-                if (count($part) != 2) {
-                    continue;
-                }
-
-                $parameters[$part[0]] = $part[1];
-            }
-
-            try {
-                $route_url = route($routeName, $parameters);
-            } catch (UrlGenerationException | InvalidArgumentException $e) {
-                return $this->responseValidationError([
-                    'route_name' => [$e->getMessage()]
-                ]);
-            }
+        try {
+            $item = (new Menu)->transformItem(
+                $request->only([
+                    'id', 'type', 'title',
+                    'route_name', 'url',
+                    'in_new_window', 'icon',
+                    'css_class', 'items',
+                ]),
+                true
+            );
+        } catch (UrlGenerationException | InvalidArgumentException $e) {
+            return $this->responseValidationError([
+                'route_name' => [$e->getMessage()]
+            ]);
         }
 
+        return $this->response($item);
+    }
+
+    public function destroy($menuId, Request $request)
+    {
+        $menu = Menu::findOrFail($menuId);
+        $action = $menu->delete();
+
         return $this->response([
-            'id' => $request->input('id') ?: random_int(1, 10000),
-            'title' => e($request->input('title')),
-            'type' => $request->input('type'),
-            'route_name' => $request->input('route_name'),
-            'url' => $request->input('url'),
-            'in_new_window' => $request->input('in_new_window'),
-            'icon' => $request->input('icon'),
-            'css_class' => e($request->input('css_class')),
-            'route_url' => $route_url,
-            'items' => []
+            'action' => $action,
+            'redirect' => route('laradmin.menus.menus.index', [], false)
         ]);
     }
 

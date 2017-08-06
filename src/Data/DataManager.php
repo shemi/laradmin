@@ -156,8 +156,18 @@ class DataManager
         return json_decode($this->filesystem->get($path), true);
     }
 
+    public function delete($name, $ext = 'json')
+    {
+        $path = $this->path($name.($ext ? '.'.$ext : ''));
 
-    public function dir($path = null)
+        if (! $this->filesystem->delete($path)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function dir($path = null, $ext = 'json')
     {
         $path = $this->path($path);
 
@@ -174,11 +184,13 @@ class DataManager
         $this->files = $this->model->newCollection([]);
 
         foreach ($names as $name) {
-            $name = explode('.', basename($name));
-            array_pop($name);
-            $name = implode('.', $name);
+            $name = basename($name);
 
-            $file = $this->load($name);
+            if(! ends_with($name, '.'.$ext)) {
+                continue;
+            }
+
+            $file = $this->load($name, null);
 
             if($file) {
                 $file = $this->maybeNewModel($file);

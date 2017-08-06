@@ -6,6 +6,8 @@ import TopBar from './Components/TopBar/TopBar';
 import CollapsibleMenu from './Components/CollapsibleMenu/CollapsibleMenu.vue';
 import BrowseMenus from './Components/Menus/BrowseMenus';
 import MenuBuilder from './Components/Menus/MenuBuilder';
+import BrowseTypes from './Components/Types/BrowseTypes';
+import TypeCreateEdit from './Components/Types/TypeCreateEdit';
 import { Vue2Dragula } from 'vue2-dragula';
 
 import './Filters/Slugify';
@@ -23,6 +25,8 @@ const app = new Vue({
         TopBar,
         CollapsibleMenu,
         BrowseMenus,
-        MenuBuilder
+        MenuBuilder,
+        BrowseTypes,
+        TypeCreateEdit
     }
 });

@@ -1,5 +1,6 @@
 <ul class="menu-list">
 
-    <collapsible-menu-item v-for="item in items" :item="item" :key="item.id"></collapsible-menu-item>
+    <collapsible-menu-item v-for="item in items" :item="item" :key="item.id"
+                           @is-active="markActive()"></collapsible-menu-item>
 
 </ul>

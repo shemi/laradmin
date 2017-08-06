@@ -66,15 +66,15 @@
 
                             <hr>
 
-                            <div class="menu-items" v-dragula="items" drake="menus" service="menus">
-                                <menu-builder-item v-for="(item, index) in items"
+                            <draggable v-model="form.items" :options="{group:'menu'}" class="menu-items">
+                                <menu-builder-item v-for="(item, index) in form.items"
                                                    :key="item.id"
                                                    :position="index"
                                                    v-on:edit="openNewEditModal($event.item, $event.position)"
                                                    v-on:delete="deleteMenuItem($event)"
                                                    :item="item">
                                 </menu-builder-item>
-                            </div>
+                            </draggable>
 
                         </section>
 

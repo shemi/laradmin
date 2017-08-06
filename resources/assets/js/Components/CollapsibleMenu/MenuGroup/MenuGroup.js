@@ -6,7 +6,13 @@ export default {
 
     data() {
         return {
+            hasActive: false
+        }
+    },
 
+    methods: {
+        markActive() {
+            this.hasActive = true;
         }
     },
 

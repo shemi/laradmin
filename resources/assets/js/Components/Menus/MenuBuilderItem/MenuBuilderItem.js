@@ -1,3 +1,5 @@
+import draggable from 'vuedraggable';
+
 export default {
     name: 'menu-builder-item',
 
@@ -32,6 +34,10 @@ export default {
         onDelete(event) {
             this.$emit('delete', event);
         }
+    },
+
+    components: {
+        draggable
     }
 
 }

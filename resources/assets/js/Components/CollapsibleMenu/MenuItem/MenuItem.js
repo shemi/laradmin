@@ -1,11 +1,25 @@
 
 export default {
 
+    name: 'collapsible-menu-item',
+
     props: ['item'],
 
     data() {
         return {
             isActive: false
+        }
+    },
+
+    mounted() {
+        this.isActive = this.item.is_active;
+
+        if(this.isActive) {
+            this.$emit('is-active');
+        }
+
+        if(this.$refs.group && ! this.isActive) {
+            this.isActive = this.$refs.group.hasActive;
         }
     },
 
@@ -17,55 +31,6 @@ export default {
 
             $event.preventDefault();
             this.isActive = ! this.isActive;
-        },
-
-        getAnime (targets) {
-            if (this.anime) {
-                return this.anime;
-            }
-
-            return this.anime = anime({ targets });
-        },
-
-        cancel () {
-            this.anime.pause();
-        },
-
-        before (targets) {
-            if (!this.targets) {
-                this.targets = targets;
-            }
-
-            targets.removeAttribute('style');
-        },
-
-        enter (targets, done) {
-            const height = targets.scrollHeight;
-            targets.style.height = 0;
-            targets.style.opacity = 0;
-
-            this.getAnime(targets).play({
-                targets,
-                duration: 377,
-                easing: 'easeOutExpo',
-                opacity: [0, 1],
-                height,
-                complete () {
-                    targets.removeAttribute('style');
-                    done();
-                }
-            });
-        },
-
-        leave (targets, complete) {
-            this.getAnime(targets).play({
-                targets,
-                duration: 377,
-                easing: 'easeOutExpo',
-                opacity: [1, 0],
-                height: 0,
-                complete
-            });
         }
 
     },
@@ -79,10 +44,18 @@ export default {
             return this.item.items;
         },
 
-        href() {
-            return this.item.type === 'route' ?
-                this.item.route_url :
-                this.item.url;
+        cssClasses() {
+            let classes = [];
+
+            if(this.item.css_class) {
+               classes.push(this.item.css_class);
+            }
+
+            if(this.hasItems) {
+                classes.push('has-items');
+            }
+
+            return classes;
         }
     }
 

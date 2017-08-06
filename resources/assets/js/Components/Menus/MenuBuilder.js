@@ -4,6 +4,8 @@ import Helpers from '../../Helpers/Helpers';
 import IconSelectModal from '../IconSelectModal/IconSelectModal.vue';
 import MenuBuilderItem from './MenuBuilderItem/MenuBuilderItem.vue';
 
+import draggable from 'vuedraggable';
+
 export default {
 
     props: ['menu', 'routes'],
@@ -37,12 +39,12 @@ export default {
     },
 
     watch: {
-        items: {
-            handler: function(val, oldVal) {
-                this.$set(this.form, 'items', val);
-            },
-            deep: true
-        }
+        // items: {
+        //     handler: function(val, oldVal) {
+        //         this.$set(this.form, 'items', val);
+        //     },
+        //     deep: true
+        // }
     },
 
     created() {
@@ -87,7 +89,7 @@ export default {
             }
 
             this.form.rebuild(rebuildObject);
-            this.items = this.form.items;
+            // this.items = this.form.items;
         },
 
         openNewEditModal(item = {}, location = '') {
@@ -111,12 +113,12 @@ export default {
                 target;
 
             if(! location) {
-                return this.items;
+                return this.form.items;
             }
 
             targetPath = location.split('.');
             targetPath = Array.isArray(targetPath) ? targetPath : [targetPath];
-            target = this.items;
+            target = this.form.items;
 
 
             while (targetPath.length) {
@@ -158,7 +160,10 @@ export default {
                         }
 
                     } else if(! isExists) {
-                        this.items.push(res.data);
+                        let item = res.data;
+                        item.items = [];
+
+                        this.form.items.push(item);
                     }
 
                     this.closeNewEditModal();
@@ -171,7 +176,7 @@ export default {
                 locationPath = location.toString().split('.');
 
             if(locationPath.length === 1) {
-                target = this.items;
+                target = this.form.items;
                 key = locationPath[0];
             } else {
                 key = locationPath.pop();
@@ -184,9 +189,9 @@ export default {
         save() {
             let method = this.form.id ? 'put' : 'post';
 
-            this.form.rebuild({
-                'items': this.items
-            });
+            // this.form.rebuild({
+            //     'items': this.items
+            // });
 
             this.form[method]('/menus/' + (this.form.id || ''))
                 .then((res) => {
@@ -222,7 +227,8 @@ export default {
 
     components: {
         IconSelectModal,
-        MenuBuilderItem
+        MenuBuilderItem,
+        draggable
     }
 
 }
