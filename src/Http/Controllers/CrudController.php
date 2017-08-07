@@ -16,16 +16,13 @@ class CrudController extends Controller
     public function index(Request $request)
     {
         $type = $this->getTypeBySlug($request);
+        $model = null;
 
         if($type->hasModel()) {
             $model = app($type->model);
-            $query = $model::select('*');
-
-
-
         }
 
-        dd($type);
+        return view('laradmin::crud.browse', compact('type', 'model'));
     }
 
     /**
