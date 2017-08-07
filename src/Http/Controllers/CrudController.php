@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Shemi\Laradmin\Models\Type;
 
 class CrudController extends Controller
@@ -17,12 +18,13 @@ class CrudController extends Controller
     {
         $type = $this->getTypeBySlug($request);
         $model = null;
+        $columns = $type->browse_columns;
 
         if($type->hasModel()) {
             $model = app($type->model);
         }
 
-        return view('laradmin::crud.browse', compact('type', 'model'));
+        return view('laradmin::crud.browse', compact('type', 'model', 'columns'));
     }
 
     /**
@@ -38,8 +40,17 @@ class CrudController extends Controller
         if($type->hasModel()) {
             $model = app($type->model);
             $query = $model::select('*');
+
+            if ($model->timestamps) {
+                $results = $query->latest()->paginate($type->records_per_page);
+            } else {
+                $results = $query->orderBy('id', 'DESC')->paginate($type->records_per_page);
+            }
+        } else {
+            $results = DB::table($type->table_name)->paginate($type->records_per_page);
         }
 
+        return $this->response($results);
     }
 
     /**

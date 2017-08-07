@@ -8,6 +8,7 @@ import BrowseMenus from './Components/Menus/BrowseMenus';
 import MenuBuilder from './Components/Menus/MenuBuilder';
 import BrowseTypes from './Components/Types/BrowseTypes';
 import TypeCreateEdit from './Components/Types/TypeCreateEdit';
+import Crud from './Components/Crud/Crud';
 import { Vue2Dragula } from 'vue2-dragula';
 
 import './Filters/Slugify';
@@ -27,6 +28,7 @@ const app = new Vue({
         BrowseMenus,
         MenuBuilder,
         BrowseTypes,
-        TypeCreateEdit
+        TypeCreateEdit,
+        Crud
     }
 });

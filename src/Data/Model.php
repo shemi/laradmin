@@ -24,6 +24,8 @@ class Model implements Arrayable, Jsonable, JsonSerializable
 
     protected $fileExt;
 
+    protected $dataable = true;
+
     public $exists = false;
 
     public $wasRecentlyCreated = false;
@@ -274,7 +276,9 @@ class Model implements Arrayable, Jsonable, JsonSerializable
 
     public function __call($method, $parameters)
     {
-        return $this->newManager()->$method(...$parameters);
+        if($this->dataable) {
+            return $this->newManager()->$method(...$parameters);
+        }
     }
 
     public static function __callStatic($method, $parameters)

@@ -8,6 +8,11 @@ Route::get('login', [
     "middleware" => "laradmin.gust"
 ]);
 
+Route::post("login", [
+    "uses" => "{$namespacePrefix}AuthController@login",
+    "middleware" => "laradmin.gust"
+]);
+
 Route::post('logout', [
     "uses" => "{$namespacePrefix}AuthController@logout",
     "as" => "logout"
@@ -41,6 +46,12 @@ Route::get('/icons', [
 ]);
 
 foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
+    Route::get("/{$type->slug}/query", [
+        "uses" => "{$type->controller}@query",
+        "as" => "{$type->slug}.query",
+        "middleware" => "laradmin.user.admin"
+    ]);
+
     Route::resource($type->slug, $type->controller, [
         "middleware" => "laradmin.user.admin"
     ]);
@@ -52,11 +63,5 @@ Route::group([
     function() use ($namespacePrefix) {
 
     Route::get("/", ["uses" => "{$namespacePrefix}ApiBaseController@health", "as" => "base"]);
-
-    Route::post("/login", [
-        "uses" => "{$namespacePrefix}AuthController@login",
-        "as" => "post.login",
-        "middleware" => "laradmin.gust"
-    ]);
 
 });

@@ -1,5 +1,6 @@
 @php
     $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
+    $mainComponent = isset($mainComponent) ? " is={$mainComponent} inline-template" : '';
 @endphp
 
 @extends('laradmin::layouts.app', ['bodyClass' => 'page-template' . $bodyClass])
@@ -18,13 +19,17 @@
             </div>
 
             <main class="main-content">
-                <header class="page-header">
-                    @include('laradmin::layouts.blade.page-header')
-                </header>
+                <div{{ $mainComponent }}>
+                    <div>
+                        <header class="page-header">
+                            @include('laradmin::layouts.blade.page-header')
+                        </header>
 
-                <div class="content-container">
-                    <div class="container is-fluid">
-                        @yield('content')
+                        <div class="content-container">
+                            <div class="container is-fluid">
+                                @yield('content')
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
