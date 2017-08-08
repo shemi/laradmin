@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\Models;
 
 use Shemi\Laradmin\Data\Model;
 
+use \Illuminate\Database\Eloquent\Model as EloquentModel;
+
 class Type extends Model
 {
     protected $_fields;
@@ -58,7 +60,7 @@ class Type extends Model
                 continue;
             }
 
-            if(static::isValidField($field)) {
+            if(Field::isValidField($field)) {
                 $newFields->push(Field::fromArray($field));
             }
         }
@@ -104,6 +106,17 @@ class Type extends Model
     public function getRecordsPerPageAttribute($key)
     {
         return $key ?: 15;
+    }
+
+    public function getModelArray(EloquentModel $model)
+    {
+        $array = [];
+
+        foreach ($this->fields as $field) {
+            $array[$field->key] = $field->getModelValue($model);
+        }
+
+        return $array;
     }
 
 }

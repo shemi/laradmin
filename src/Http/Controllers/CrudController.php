@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Models\Type;
 
 class CrudController extends Controller
@@ -93,7 +94,10 @@ class CrudController extends Controller
             $model = app($type->model);
         }
 
-        return view('laradmin::crud.createEdit', compact('type', 'model'));
+        $form = $type->getModelArray($model);
+        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
+
+        return view('laradmin::crud.createEdit', compact('type', 'model', 'form'));
     }
 
     /**
@@ -121,12 +125,18 @@ class CrudController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        //
+        $type = $this->getTypeBySlug($request);
+        $model = app($type->model)->findOrFail($id);
+        $form = $type->getModelArray($model);
+        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
+
+        return view('laradmin::crud.createEdit', compact('type', 'model', 'form'));
     }
 
     /**

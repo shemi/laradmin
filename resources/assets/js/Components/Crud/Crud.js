@@ -1,4 +1,5 @@
 import CrudBrowse from './Browse';
+import CrudCreateEdit from './CreateEdit';
 
 export default {
 
@@ -15,7 +16,9 @@ export default {
     },
 
     components: {
-        CrudBrowse
+        CrudBrowse,
+        CrudCreateEdit
     }
+
 
 }

@@ -1,5 +1,5 @@
 @php
-    if($menu->exist) {
+    if($menu->exists) {
         $pageTitle = trans('laradmin::menus.edit.page_title', ['name' => $menu->name]);
     } else {
         $pageTitle = trans('laradmin::menus.create.page_title');
