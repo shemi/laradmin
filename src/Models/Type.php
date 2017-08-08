@@ -6,6 +6,8 @@ use Shemi\Laradmin\Data\Model;
 
 class Type extends Model
 {
+    protected $_fields;
+
     protected $fillable = [
         'name',
         'model',
@@ -40,9 +42,8 @@ class Type extends Model
             ! empty($field['key']);
     }
 
-    public function getOnlyFields($fields = null)
+    public function getOnlyFields($fields)
     {
-        $fields = $fields === null ? $this->panels : $fields;
         $fields = collect($fields);
         $newFields = collect([]);
 
@@ -65,12 +66,34 @@ class Type extends Model
         return $newFields;
     }
 
+    public function getFieldsAttribute()
+    {
+        if($this->_fields) {
+            return $this->_fields;
+        }
+
+        $this->_fields = $this->getOnlyFields($this->panels);
+
+        return $this->_fields;
+    }
+
     public function getBrowseColumnsAttribute()
     {
-        $fields = $this
-            ->getOnlyFields()
+        $fields = $this->fields
             ->reject(function($field) {
                 return ! $field->isVisibleOn('browse');
+            })
+            ->sortBy('browse_order')
+            ->values();
+
+        return $fields;
+    }
+
+    public function getSearchableFieldsAttribute()
+    {
+        $fields = $this->fields
+            ->reject(function($field) {
+                return ! $field->searchable;
             })
             ->sortBy('browse_order')
             ->values();

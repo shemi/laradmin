@@ -5,6 +5,11 @@ return [
         'browse' => 'All :name',
         'create' => 'New :name',
         'edit' => 'Edit :name'
+    ],
+
+    'actions' => [
+        'new' => 'New :Name',
+        'all' => ':Name'
     ]
 
 ];

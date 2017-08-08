@@ -15,14 +15,28 @@
 
     <div class="hero-foot">
 
-        <nav class="tabs is-small">
+        <nav class="tabs is-boxed">
             <div class="container is-fluid">
                 <ul>
-                    <li><a>Modifiers</a></li>
-                    <li><a>Grid</a></li>
-                    <li><a>Elements</a></li>
-                    <li><a>Components</a></li>
-                    <li><a>Layout</a></li>
+                    @if(isset($type))
+                        <li class="{{ route("laradmin.{$type->slug}.index") === url()->current() ? 'is-active' : '' }}">
+                            <a href="{{ route("laradmin.{$type->slug}.index") }}">
+                                <b-icon icon="view_list"></b-icon>
+                                <span>
+                                    @lang('laradmin::crud.actions.all', ['name' => str_plural($type->name)])
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="{{ route("laradmin.{$type->slug}.create") === url()->current() ? 'is-active' : '' }}">
+                            <a href="{{ route("laradmin.{$type->slug}.create") }}">
+                                <b-icon icon="add"></b-icon>
+                                <span>
+                                    @lang('laradmin::crud.actions.new', ['name' => str_singular($type->name)])
+                                </span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </nav>

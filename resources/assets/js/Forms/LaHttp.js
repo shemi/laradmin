@@ -20,7 +20,7 @@ class LaHttp {
      * Helper method for making GET HTTP requests.
      */
     get(uri, params) {
-        return this.axios.get(this.uri(uri), params);
+        return this.axios.get(this.uri(uri), {params});
     }
 
 

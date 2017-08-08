@@ -52,6 +52,16 @@ class Field extends Model
         return data_get($this->browse_settings, 'sortable', false);
     }
 
+    public function getSearchableAttribute()
+    {
+        return data_get($this->browse_settings, 'searchable', false);
+    }
+
+    public function getSearchComparisonAttribute()
+    {
+        return data_get($this->browse_settings, 'search_comparison', '=');
+    }
+
     public function getFieldTypeAttribute()
     {
         return data_get($this->template_options, 'type', 'text');

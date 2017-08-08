@@ -1,6 +1,7 @@
 import MixinsLoader from '../../Helpers/MixinsLoader';
 import FormatDate from '../../Mixins/FormatDate';
 import LaHttp from '../../Forms/LaHttp';
+import {LaTable, LaTableColumn} from '../Table';
 
 export default {
     mixins: MixinsLoader.load('crudBrowse', [FormatDate]),
@@ -12,7 +13,17 @@ export default {
             loading: true,
             checkedRows: [],
             selected: {},
-            data: []
+            search: "",
+            searchClock: null,
+            query: {
+                order_by: null,
+                order: null,
+                page: 1,
+                search: ""
+            },
+            data: {
+                data: []
+            }
         }
     },
 
@@ -23,19 +34,47 @@ export default {
     methods: {
 
         fetchData() {
-            let query = {};
+            this.loading = true;
 
-            LaHttp.get(`/${this.typeSlug}/query`, query)
+            LaHttp.get(`/${this.typeSlug}/query`, this.query)
                 .then(res => {
-                    this.data = res.data.data.data;
+                    this.data = res.data.data;
                     this.loading = false;
                 })
                 .catch(err => {
                     console.log(err);
                 });
 
+        },
+
+        onPageChange(page) {
+            this.query.page = page;
+            this.fetchData();
+        },
+
+        onSort(key, order) {
+            this.query.order_by = key;
+            this.query.order = order;
+            this.fetchData();
+        },
+
+        onSearch() {
+            if(this.searchClock) {
+                return;
+            }
+
+            this.searchClock = setTimeout(function() {
+                this.query.search = this.search;
+                this.fetchData();
+                this.searchClock = null;
+            }.bind(this), 300);
         }
 
     },
+
+    components: {
+        LaTable,
+        LaTableColumn
+    }
 
 }

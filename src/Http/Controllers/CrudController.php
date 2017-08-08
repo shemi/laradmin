@@ -19,12 +19,17 @@ class CrudController extends Controller
         $type = $this->getTypeBySlug($request);
         $model = null;
         $columns = $type->browse_columns;
+        $primaryKey = 'id';
 
         if($type->hasModel()) {
             $model = app($type->model);
+            $primaryKey = $model->getKeyName();
         }
 
-        return view('laradmin::crud.browse', compact('type', 'model', 'columns'));
+        $editRoute = route("laradmin.{$type->slug}.edit", ["{$type->slug}" => "__primaryKey__"]);
+        $editRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $editRoute);
+
+        return view('laradmin::crud.browse', compact('type', 'model', 'columns', 'primaryKey', 'editRoute'));
     }
 
     /**
@@ -36,19 +41,40 @@ class CrudController extends Controller
     public function query(Request $request)
     {
         $type = $this->getTypeBySlug($request);
+        $primaryKey = 'id';
+        $orderBy = $request->input('order_by');
+        $orderDirection = $request->input('order', 'desc');
+        $search = $request->input('search');
 
         if($type->hasModel()) {
             $model = app($type->model);
             $query = $model::select('*');
+            $primaryKey = $model->getKeyName();
 
-            if ($model->timestamps) {
-                $results = $query->latest()->paginate($type->records_per_page);
-            } else {
-                $results = $query->orderBy('id', 'DESC')->paginate($type->records_per_page);
+            if ($model->timestamps && ! $orderBy) {
+                $orderBy = 'created_at';
             }
+
         } else {
-            $results = DB::table($type->table_name)->paginate($type->records_per_page);
+            $query = DB::table($type->table_name);
         }
+
+        if($search && ! empty($search)) {
+            foreach ($type->searchable_fields as $index => $field) {
+                $s = $field->search_comparison === 'like' ? "%{$search}%" : $search;
+
+                if($index === 0) {
+                    $query->where($field->key, $field->search_comparison, $s);
+                } else {
+                    $query->orWhere($field->key, $field->search_comparison, $s);
+                }
+            }
+        }
+
+        $query->orderBy($orderBy ?: $primaryKey, $orderDirection);
+
+        $results = $query
+            ->paginate($type->records_per_page);
 
         return $this->response($results);
     }
@@ -58,9 +84,16 @@ class CrudController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $type = $this->getTypeBySlug($request);
+        $model = null;
+
+        if($type->hasModel()) {
+            $model = app($type->model);
+        }
+
+        return view('laradmin::crud.createEdit', compact('type', 'model'));
     }
 
     /**
