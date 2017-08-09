@@ -136,7 +136,13 @@ class CrudController extends Controller
         $form = $type->getModelArray($model);
         $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
 
-        return view('laradmin::crud.createEdit', compact('type', 'model', 'form'));
+        $view = 'laradmin::crud.createEdit';
+
+        if(view()->exists("laradmin::{$type->slug}.createEdit")) {
+            $view = "laradmin::{$type->slug}.createEdit";
+        }
+
+        return view($view, compact('type', 'model', 'form'));
     }
 
     /**
