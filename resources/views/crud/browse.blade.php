@@ -41,12 +41,12 @@
 
                 <template scope="props">
                     @foreach($columns as $column)
-                        <la-table-column field="{{ $column->browse_key }}"
-                                        label="{{ $column->browse_label }}"
+                        <la-table-column field="{{ $column->key }}"
+                                        label="{{ $column->label }}"
                                         {{ $column->sortable ? 'sortable' : '' }}
                                         {{--{{ $column->is_numeric ? 'numeric' : '' }}--}}
                         >
-                            <span v-text="props.row.{{ $column->browse_key }}"></span>
+                            <span v-text="props.row.{{ $column->key }}"></span>
                         </la-table-column>
                     @endforeach
 

@@ -23,21 +23,21 @@
 
                     <div class="column is-three-quarters">
                         <section class="section">
+                            @include('laradmin::components.forms.globalFormErrors', ['key' => 'form'])
+
+                            @yield('main-form')
 
                         </section>
                     </div>
 
+                    <div class="column">
+                        <section class="section">
 
+                            @yield('side-form')
 
+                        </section>
+                    </div>
                 </div>
-
-                @include('laradmin::components.forms.globalFormErrors', ['key' => 'form'])
-
-                @foreach($type->panels as $panel)
-
-
-
-                @endforeach
             </form>
         </div>
     </crud-create-edit>

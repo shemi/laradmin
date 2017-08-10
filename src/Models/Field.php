@@ -16,10 +16,10 @@ class Field extends Model
         'default_value',
         'nullable',
         'type',
-        'validation',
         'visibility',
-        'template_options',
-        'browse_settings',
+        'sortable',
+        'searchable',
+        'search_comparison',
     ];
 
     public static function fromArray($rawField)
@@ -34,41 +34,6 @@ class Field extends Model
         }
 
         return in_array($view, $this->visibility);
-    }
-
-    public function getBrowseOrderAttribute()
-    {
-        return data_get($this->browse_settings, 'order', 999);
-    }
-
-    public function getBrowseKeyAttribute()
-    {
-        return data_get($this->browse_settings, 'key', $this->key);
-    }
-
-    public function getBrowseLabelAttribute()
-    {
-        return data_get($this->browse_settings, 'label', $this->label);
-    }
-
-    public function getSortableAttribute()
-    {
-        return data_get($this->browse_settings, 'sortable', false);
-    }
-
-    public function getSearchableAttribute()
-    {
-        return data_get($this->browse_settings, 'searchable', false);
-    }
-
-    public function getSearchComparisonAttribute()
-    {
-        return data_get($this->browse_settings, 'search_comparison', '=');
-    }
-
-    public function getFieldTypeAttribute()
-    {
-        return data_get($this->template_options, 'type', 'text');
     }
 
     public function getIsNumericAttribute()
@@ -124,11 +89,60 @@ class Field extends Model
 
     public function getModelValue(EloquentModel $model)
     {
-        if(! $model->exists() || ! $model->offsetExists($this->key)) {
+        if(! $model->exists || ! $model->offsetExists($this->key)) {
             return $this->getDefaultValue($model);
         }
 
-        return $model->getAttribute($this->key);
+        $value = $model->getAttribute($this->key);
+
+        if(in_array($this->key, $model->getDates())) {
+            $type = "date";
+        } else {
+            $type = $model->hasCast($this->key) ? $this->getModelCastType($model) : $this->type;
+        }
+
+        switch ($type) {
+            case 'int':
+            case 'integer':
+                return (int) $value;
+            case 'real':
+            case 'float':
+            case 'double':
+                return (float) $value;
+            case 'bool':
+            case 'boolean':
+                return (boolean) $value;
+            case 'string':
+            case 'input':
+                return (string) $value;
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                return $this->getDateValue($value);
+            case 'object':
+            case 'group':
+                return (object) $value;
+            case 'array':
+            case 'json':
+            case 'collection':
+            case 'repeater':
+                return (array) $value;
+            default:
+                return $value;
+        }
+    }
+
+    public function getDateValue($value)
+    {
+        if(is_string($value)) {
+            return $value;
+        }
+
+        if($value instanceof \DateTime) {
+            return $value->format('c');
+        }
+
+        return (string) $value;
     }
 
     public static function isValidField($field)

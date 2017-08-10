@@ -3,11 +3,6 @@
 namespace Shemi\Laradmin\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Migrations\Migrator;
-use Shemi\Laradmin\Models\Type;
-use Shemi\Laradmin\Models\User;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class AdminCommand extends Command
 {

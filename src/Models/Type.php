@@ -16,8 +16,9 @@ class Type extends Model
         'slug',
         'public',
         'controller',
-        'panels',
+        'fields',
         'records_per_page',
+        'relationships'
     ];
 
     public static function whereSlug($slug)
@@ -30,51 +31,29 @@ class Type extends Model
         return ! empty($this->model);
     }
 
-    protected static function isGroup($field)
-    {
-        return is_array($field) &&
-            array_key_exists('fields', $field) &&
-            ! empty($field['fields']);
-    }
-
-    protected static function isValidField($field)
-    {
-        return is_array($field) &&
-            array_key_exists('key', $field) &&
-            ! empty($field['key']);
-    }
-
     public function getOnlyFields($fields)
     {
         $fields = collect($fields);
         $newFields = collect([]);
 
         foreach ($fields as $field) {
-            if(! is_array($field)) {
+            if(! is_array($field) || ! Field::isValidField($field)) {
                 continue;
             }
 
-            if(static::isGroup($field) && $groupFields = $this->getOnlyFields($field['fields'])) {
-                $newFields = $newFields->merge($groupFields);
-
-                continue;
-            }
-
-            if(Field::isValidField($field)) {
-                $newFields->push(Field::fromArray($field));
-            }
+            $newFields->push(Field::fromArray($field));
         }
 
         return $newFields;
     }
 
-    public function getFieldsAttribute()
+    public function getFieldsAttribute($value)
     {
         if($this->_fields) {
             return $this->_fields;
         }
 
-        $this->_fields = $this->getOnlyFields($this->panels);
+        $this->_fields = $this->getOnlyFields($value);
 
         return $this->_fields;
     }
@@ -85,7 +64,6 @@ class Type extends Model
             ->reject(function($field) {
                 return ! $field->isVisibleOn('browse');
             })
-            ->sortBy('browse_order')
             ->values();
 
         return $fields;
@@ -97,7 +75,6 @@ class Type extends Model
             ->reject(function($field) {
                 return ! $field->searchable;
             })
-            ->sortBy('browse_order')
             ->values();
 
         return $fields;
@@ -117,6 +94,11 @@ class Type extends Model
         }
 
         return $array;
+    }
+
+    public function getHasRelationshipsAttribute()
+    {
+        return $this->relationships && ! empty($this->relationships);
     }
 
 }

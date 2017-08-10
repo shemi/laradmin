@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -60,16 +61,58 @@ class CrudController extends Controller
             $query = DB::table($type->table_name);
         }
 
+        $relationships = $type->relationships;
+        $relationshipsSearch = [];
+
         if($search && ! empty($search)) {
             foreach ($type->searchable_fields as $index => $field) {
                 $s = $field->search_comparison === 'like' ? "%{$search}%" : $search;
 
-                if($index === 0) {
-                    $query->where($field->key, $field->search_comparison, $s);
+                if(count(explode('.', $field->key)) > 1) {
+                    $keyParts = explode('.', $field->key);
+                    $relationKey = array_shift($keyParts);
+
+                    if(! array_key_exists($relationKey, $relationshipsSearch)) {
+                        $relationshipsSearch[$relationKey] = [];
+                    }
+
+                    $relationshipsSearch[$relationKey][] = $field;
                 } else {
-                    $query->orWhere($field->key, $field->search_comparison, $s);
+                    if($index === 0) {
+                        $query->where($field->key, $field->search_comparison, $s);
+                    } else {
+                        $query->orWhere($field->key, $field->search_comparison, $s);
+                    }
                 }
             }
+
+            if($type->has_relationships) {
+                if(count($relationshipsSearch)) {
+                    foreach ($relationshipsSearch as $key => $fields) {
+                        if(in_array($key, $relationships)) {
+                            unset($relationships[array_search($key, $relationships)]);
+                        }
+
+                        $relationships[$key] = function($query) use ($fields, $search) {
+                            foreach ($fields as $index => $field) {
+                                $s = $field->search_comparison === 'like' ? "%{$search}%" : $search;
+                                $key = $field->key;//preg_replace("/([^\.]*)(\.)(\S*)/", "roles.$3", $field->key);
+
+                                if($index === 0) {
+                                    $query->where($key, $field->search_comparison, $s);
+                                } else {
+                                    $query->orWhere($key, $field->search_comparison, $s);
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+        }
+
+
+        if($type->has_relationships) {
+            $query->with((array) $relationships);
         }
 
         $query->orderBy($orderBy ?: $primaryKey, $orderDirection);
@@ -77,7 +120,19 @@ class CrudController extends Controller
         $results = $query
             ->paginate($type->records_per_page);
 
+        $results = $results->toArray();
+
         return $this->response($results);
+    }
+
+    protected function getCreateForm(Type $type, Model $model)
+    {
+        return $type->getModelArray($model);
+    }
+
+    protected function getCreateData(Type $type, Model $model)
+    {
+        return [];
     }
 
     /**
@@ -94,10 +149,18 @@ class CrudController extends Controller
             $model = app($type->model);
         }
 
-        $form = $type->getModelArray($model);
+        $form = $this->getCreateForm($type, $model);
         $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
 
-        return view('laradmin::crud.createEdit', compact('type', 'model', 'form'));
+        $data = $this->getCreateData($type, $model);
+
+        $view = 'laradmin::crud.createEdit';
+
+        if(view()->exists("laradmin::{$type->slug}.createEdit")) {
+            $view = "laradmin::{$type->slug}.createEdit";
+        }
+
+        return view($view, compact('type', 'model', 'form', 'data'));
     }
 
     /**
@@ -122,6 +185,16 @@ class CrudController extends Controller
         //
     }
 
+    protected function getEditForm(Type $type, Model $model)
+    {
+        return $type->getModelArray($model);
+    }
+
+    protected function getEditData(Type $type, Model $model)
+    {
+        return [];
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -133,8 +206,10 @@ class CrudController extends Controller
     {
         $type = $this->getTypeBySlug($request);
         $model = app($type->model)->findOrFail($id);
-        $form = $type->getModelArray($model);
+        $form = $this->getCreateForm($type, $model);
         $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
+
+        $data = $this->getEditData($type, $model);
 
         $view = 'laradmin::crud.createEdit';
 
@@ -142,7 +217,7 @@ class CrudController extends Controller
             $view = "laradmin::{$type->slug}.createEdit";
         }
 
-        return view($view, compact('type', 'model', 'form'));
+        return view($view, compact('type', 'model', 'form', 'data'));
     }
 
     /**
