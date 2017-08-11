@@ -157,7 +157,7 @@ class Type extends Model
                 foreach ($relation->all() as $relationInst) {
                     $data[$field->key][] = [
                         'key' => $relationInst->getAttribute($field->relationship['key']),
-                        'value' => $relationInst->getAttribute($field->relationship['label'])
+                        'label' => $relationInst->getAttribute($field->relationship['label'])
                     ];
                 }
             }

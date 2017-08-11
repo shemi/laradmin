@@ -23,7 +23,7 @@
             $properties[] = "maxlength=".$field->max_length;
         }
 
-        if ($field->field_type == 'password'){
+        if ($field->field_type === 'password'){
             $properties[] = 'password-reveal';
         }
     @endphp

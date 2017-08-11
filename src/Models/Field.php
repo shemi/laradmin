@@ -81,41 +81,46 @@ class Field extends Model
         return data_get($this->browse_settings, 'search_comparison', '=');
     }
 
-    public function getFieldTypeAttribute()
-    {
-        return data_get($this->template_options, 'type', 'text');
-    }
-
-    public function getPlaceholderAttribute()
-    {
-        return data_get($this->template_options, 'placeholder');
-    }
-
     public function getShowLabelAttribute($value)
     {
         return $value !== null ? $value : true;
     }
 
+    public function getFieldTypeAttribute()
+    {
+        return $this->getTemplateOption('type', 'text');
+    }
+
+    public function getPlaceholderAttribute()
+    {
+        return $this->getTemplateOption('placeholder');
+    }
+
     public function getIconAttribute()
     {
-        return data_get($this->template_options, 'icon', '');
+        return $this->getTemplateOption('icon', '');
     }
 
     public function getFieldSizeAttribute()
     {
-        return data_get($this->template_options, 'size', 'default');
+        return $this->getTemplateOption('size', 'default');
     }
 
     public function getIsGroupedAttribute() {
-        return data_get($this->template_options, 'grouped', false);
+        return $this->getTemplateOption('grouped', false);
     }
 
     public function getTemplatePositionAttribute() {
-        return data_get($this->template_options, 'position', 'is-left');
+        return $this->getTemplateOption('position', 'is-left');
     }
 
     public function getMaxLengthAttribute() {
-        return data_get($this->template_options, 'max_length', 0);
+        return $this->getTemplateOption('max_length', 0);
+    }
+
+    public function getTemplateOption($key, $default = null)
+    {
+        return data_get($this->template_options, $key, $default);
     }
 
     public function getOptionsAttribute($value)
@@ -134,7 +139,9 @@ class Field extends Model
 
     public function getIsRelationshipAttribute()
     {
-        return $this->relationship && is_array($this->relationship);
+        return $this->relationship &&
+               is_array($this->relationship) &&
+               ! empty($this->relationship);
     }
 
     public function getModelCastType(EloquentModel $model)
@@ -189,7 +196,12 @@ class Field extends Model
             $value = $model->getAttribute($this->key);
 
             if($value instanceof Collection) {
-                return $value->pluck($this->relationship['key']);
+                return $value->transform(function($model) {
+                    return [
+                        'key' => $model->getAttribute($this->relationship['key']),
+                        'label' => $model->getAttribute($this->relationship['label'])
+                    ];
+                });
             }
 
             if($value instanceof EloquentModel) {

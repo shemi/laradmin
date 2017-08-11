@@ -14,6 +14,8 @@ import { Vue2Dragula } from 'vue2-dragula';
 import './Filters/Slugify';
 import './Filters/Date';
 
+import Multiselect from 'vue-multiselect/src/index';
+Vue.component('multiselect', Multiselect);
 
 Vue.use(Buefy);
 
