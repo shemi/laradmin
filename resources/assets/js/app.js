@@ -12,6 +12,7 @@ import Crud from './Components/Crud/Crud';
 import { Vue2Dragula } from 'vue2-dragula';
 
 import './Filters/Slugify';
+import './Filters/Date';
 
 
 Vue.use(Buefy);

@@ -72,6 +72,10 @@ class Menu extends Model
 
         $isActive = url()->current() === url()->to($url);
 
+        if(! $isActive && ! empty($items)) {
+            $isActive = starts_with(url()->current(), url()->to($url));
+        }
+
         if(! empty($items)) {
             $items = $this->transformItems($items, $throw);
         }

@@ -2,6 +2,8 @@
 
 namespace Shemi\Laradmin\Models;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -13,13 +15,16 @@ class Field extends Model
     protected $fillable = [
         'label',
         'key',
+        'show_label',
         'default_value',
         'nullable',
         'type',
+        'validation',
         'visibility',
-        'sortable',
-        'searchable',
-        'search_comparison',
+        'options',
+        'template_options',
+        'browse_settings',
+        'relationship',
     ];
 
     public static function fromArray($rawField)
@@ -27,18 +32,109 @@ class Field extends Model
         return (new static)->newFromManager($rawField);
     }
 
-    public function isVisibleOn($view)
+    /**
+     * @param array|string $views
+     * @return bool
+     */
+    public function isVisibleOn($views)
     {
         if(! isset($this->visibility) || empty($this->visibility)) {
             return false;
         }
 
-        return in_array($view, $this->visibility);
+        foreach ((array) $views as $view) {
+            if(in_array($view, $this->visibility)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getBrowseOrderAttribute()
+    {
+        return data_get($this->browse_settings, 'order', 999);
+    }
+
+    public function getBrowseKeyAttribute()
+    {
+        return data_get($this->browse_settings, 'key', $this->key);
+    }
+
+    public function getBrowseLabelAttribute()
+    {
+        return data_get($this->browse_settings, 'label', $this->label);
+    }
+
+    public function getSortableAttribute()
+    {
+        return data_get($this->browse_settings, 'sortable', false) && ! $this->is_relationship;
+    }
+
+    public function getSearchableAttribute()
+    {
+        return data_get($this->browse_settings, 'searchable', false) && ! $this->is_relationship;
+    }
+
+    public function getSearchComparisonAttribute()
+    {
+        return data_get($this->browse_settings, 'search_comparison', '=');
+    }
+
+    public function getFieldTypeAttribute()
+    {
+        return data_get($this->template_options, 'type', 'text');
+    }
+
+    public function getPlaceholderAttribute()
+    {
+        return data_get($this->template_options, 'placeholder');
+    }
+
+    public function getShowLabelAttribute($value)
+    {
+        return $value !== null ? $value : true;
+    }
+
+    public function getIconAttribute()
+    {
+        return data_get($this->template_options, 'icon', '');
+    }
+
+    public function getFieldSizeAttribute()
+    {
+        return data_get($this->template_options, 'size', 'default');
+    }
+
+    public function getIsGroupedAttribute() {
+        return data_get($this->template_options, 'grouped', false);
+    }
+
+    public function getTemplatePositionAttribute() {
+        return data_get($this->template_options, 'position', 'is-left');
+    }
+
+    public function getMaxLengthAttribute() {
+        return data_get($this->template_options, 'max_length', 0);
+    }
+
+    public function getOptionsAttribute($value)
+    {
+        if(is_array($value)) {
+            return $value;
+        }
+
+        return [];
     }
 
     public function getIsNumericAttribute()
     {
-        return in_array($this->field_type, ['number']);
+        return in_array($this->field_type, ['number', 'float']);
+    }
+
+    public function getIsRelationshipAttribute()
+    {
+        return $this->relationship && is_array($this->relationship);
     }
 
     public function getModelCastType(EloquentModel $model)
@@ -48,39 +144,35 @@ class Field extends Model
 
     public function getDefaultValue(EloquentModel $model)
     {
-        if($this->default_value !== null || $this->nullable) {
+        if($this->default_value !== null) {
             return $this->default_value;
         }
 
-        if(in_array($this->key, $model->getDates())) {
-            return "";
+        if($this->nullable) {
+            return null;
         }
 
-        $type = $model->hasCast($this->key) ? $this->getModelCastType($model) : $this->type;
-
-        switch ($type) {
-            case 'int':
-            case 'integer':
-            case 'real':
-            case 'float':
-            case 'double':
-            case 'bool':
-            case 'boolean':
-                return null;
-            case 'string':
+        switch ($this->type) {
+            case 'number':
+            case 'text':
+            case 'text_area':
             case 'date':
             case 'datetime':
-            case 'timestamp':
-            case 'input':
                 return "";
+
+            case 'select':
+            case 'radio':
+                return null;
+
             case 'object':
             case 'group':
                 return (object) [];
-            case 'array':
-            case 'json':
-            case 'collection':
+
+            case 'select_multiple':
+            case 'checkboxes':
             case 'repeater':
                 return (array) [];
+
             default:
                 return null;
         }
@@ -89,60 +181,99 @@ class Field extends Model
 
     public function getModelValue(EloquentModel $model)
     {
-        if(! $model->exists || ! $model->offsetExists($this->key)) {
+        if(! $model->exists() || ! $model->offsetExists($this->key)) {
             return $this->getDefaultValue($model);
         }
 
-        $value = $model->getAttribute($this->key);
+        if($this->is_relationship) {
+            $value = $model->getAttribute($this->key);
 
-        if(in_array($this->key, $model->getDates())) {
-            $type = "date";
-        } else {
-            $type = $model->hasCast($this->key) ? $this->getModelCastType($model) : $this->type;
+            if($value instanceof Collection) {
+                return $value->pluck($this->relationship['key']);
+            }
+
+            if($value instanceof EloquentModel) {
+                return $value->getAttribute($this->relationship['key']);
+            }
         }
 
-        switch ($type) {
-            case 'int':
-            case 'integer':
-                return (int) $value;
-            case 'real':
-            case 'float':
-            case 'double':
-                return (float) $value;
-            case 'bool':
-            case 'boolean':
-                return (boolean) $value;
-            case 'string':
-            case 'input':
-                return (string) $value;
+        return $model->getAttribute($this->key);
+    }
+
+    public function isDate()
+    {
+        return in_array($this->type, ['date', 'datetime', 'time']);
+    }
+
+    public function getVueFilter()
+    {
+        if($this->isDate()) {
+            return "date()";
+        }
+
+        return null;
+    }
+
+    public function getBrowseValue(EloquentModel $model)
+    {
+        switch ($this->type) {
+
+            case 'text':
+            case 'text_area':
+            case 'number':
+                return $model->getAttribute($this->key);
+
+            case 'select':
+            case 'radio':
+                if($this->is_relationship && $rModel = $model->{$this->key}) {
+                    return $rModel->getAttribute($this->relationship['label']);
+                }
+
+                return $model->getAttribute($this->key);
+
             case 'date':
             case 'datetime':
-            case 'timestamp':
-                return $this->getDateValue($value);
-            case 'object':
-            case 'group':
-                return (object) $value;
-            case 'array':
-            case 'json':
-            case 'collection':
-            case 'repeater':
-                return (array) $value;
-            default:
+            case 'time':
+                $value = $model->getAttribute($this->key);
+
+                if(isset($this->browse_settings['date_format']) && $this->browse_settings['date_format']) {
+                    return \Carbon\Carbon::parse($value)->format(
+                        addslashes($this->browse_settings['date_format'])
+                    );
+                }
+
                 return $value;
+
+            case 'select_multiple':
+            case 'checkboxes':
+            case 'repeater':
+                if($this->is_relationship) {
+                    return $model->{$this->key}
+                        ->pluck($this->relationship['label'])
+                        ->implode(', ');
+                }
+
+                return $model->getAttribute($this->key);
+
+            default:
+                return $model->getAttribute($this->key);
+
         }
     }
 
-    public function getDateValue($value)
+    public function getRelationModelClass(EloquentModel $model)
     {
-        if(is_string($value)) {
-            return $value;
+        if(! $this->is_relationship || ! method_exists($model, $this->key)) {
+            return false;
         }
 
-        if($value instanceof \DateTime) {
-            return $value->format('c');
+        $relation = $model->{$this->key}();
+
+        if(! ($relation instanceof Relation)) {
+            return false;
         }
 
-        return (string) $value;
+        return $relation->getRelated();
     }
 
     public static function isValidField($field)
@@ -152,6 +283,15 @@ class Field extends Model
         return is_array($field) &&
             array_key_exists('key', $field) &&
             ! empty($field['key']);
+    }
+
+    public function render(Type $type, EloquentModel $model, $data)
+    {
+        if($this->is_relationship && array_key_exists($this->key, $data)) {
+            $this->options = $data[$this->key];
+        }
+
+        return app('laradmin')->formField($this, $type, $model, $data);
     }
 
 }

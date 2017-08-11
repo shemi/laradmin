@@ -1,7 +1,7 @@
 @php
 $hr = $hr ?? true;
 $langKey = $langKey ?? '';
-$filter = isset($filter) ? ' | ' . $filter : ' ';
+$filter = isset($filter) && $filter ? ' | ' . $filter : ' ';
 @endphp
 
 <div>

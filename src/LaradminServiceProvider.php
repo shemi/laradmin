@@ -29,10 +29,9 @@ class LaradminServiceProvider extends ServiceProvider
         });
 
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
-
         $this->loadHelpers();
-
         $this->registerConfigs();
+        $this->registerFormFields();
 
         if ($this->app->runningInConsole()) {
             $this->registerPublishableResources();
@@ -73,17 +72,33 @@ class LaradminServiceProvider extends ServiceProvider
         }
     }
 
-    public function registerConfigs()
+    protected function registerConfigs()
     {
         $this->mergeConfigFrom(
             dirname(__DIR__) . '/publishable/config/laradmin.php', 'laradmin'
         );
     }
 
+    protected function registerFormFields()
+    {
+        $formFields = [
+            'input',
+            'select_multiple'
+        ];
+
+        foreach ($formFields as $formField) {
+            $class = studly_case("{$formField}_Field");
+
+            LaradminFacade::addFormField("Shemi\\Laradmin\\FormFields\\{$class}");
+        }
+
+        event('laradmin::form-fields.registered');
+    }
+
     /**
      * Register the publishable files.
      */
-    private function registerPublishableResources()
+    protected function registerPublishableResources()
     {
         $publishablePath = dirname(__DIR__).'/publishable';
 

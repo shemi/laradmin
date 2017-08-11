@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models;
 
+use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -10,15 +11,16 @@ class Type extends Model
 {
     protected $_fields;
 
+    protected $_panels;
+
     protected $fillable = [
         'name',
         'model',
         'slug',
         'public',
         'controller',
-        'fields',
+        'panels',
         'records_per_page',
-        'relationships'
     ];
 
     public static function whereSlug($slug)
@@ -31,31 +33,34 @@ class Type extends Model
         return ! empty($this->model);
     }
 
-    public function getOnlyFields($fields)
+    public function getPanelsAttribute($value)
     {
-        $fields = collect($fields);
-        $newFields = collect([]);
-
-        foreach ($fields as $field) {
-            if(! is_array($field) || ! Field::isValidField($field)) {
-                continue;
-            }
-
-            $newFields->push(Field::fromArray($field));
+        if($this->_panels instanceof Collection) {
+            return $this->_panels;
         }
 
-        return $newFields;
+        $this->_panels = collect($value);
+
+        $this->_panels->transform(function($panelArray) {
+            return Panel::fromArray($panelArray);
+        });
+
+        return $this->_panels;
     }
 
-    public function getFieldsAttribute($value)
+    public function getFieldsAttribute()
     {
-        if($this->_fields) {
-            return $this->_fields;
+        if($this->_fields instanceof Collection) {
+            return collect($this->_fields);
         }
 
-        $this->_fields = $this->getOnlyFields($value);
+        $this->_fields = collect([]);
 
-        return $this->_fields;
+        foreach ($this->panels as $panel) {
+            $this->_fields = $this->_fields->merge($panel->flatFields());
+        }
+
+        return collect($this->_fields);
     }
 
     public function getBrowseColumnsAttribute()
@@ -63,6 +68,29 @@ class Type extends Model
         $fields = $this->fields
             ->reject(function($field) {
                 return ! $field->isVisibleOn('browse');
+            })
+            ->sortBy('browse_order')
+            ->values();
+
+        return $fields;
+    }
+
+    public function getEditFieldsAttribute()
+    {
+        $fields = $this->fields
+            ->reject(function($field) {
+                return ! $field->isVisibleOn('edit');
+            })
+            ->values();
+
+        return $fields;
+    }
+
+    public function getCreateFieldsAttribute()
+    {
+        $fields = $this->fields
+            ->reject(function($field) {
+                return ! $field->isVisibleOn('create');
             })
             ->values();
 
@@ -75,9 +103,28 @@ class Type extends Model
             ->reject(function($field) {
                 return ! $field->searchable;
             })
+            ->sortBy('browse_order')
             ->values();
 
         return $fields;
+    }
+
+    public function getSidePanelsAttribute()
+    {
+        return $this->panels
+            ->reject(function($field) {
+                return $field->position !== 'side';
+            })
+            ->values();
+    }
+
+    public function getMainPanelsAttribute()
+    {
+        return $this->panels
+            ->reject(function($field) {
+                return $field->position !== 'main';
+            })
+            ->values();
     }
 
     public function getRecordsPerPageAttribute($key)
@@ -96,9 +143,27 @@ class Type extends Model
         return $array;
     }
 
-    public function getHasRelationshipsAttribute()
+    public function getRelationData(EloquentModel $model)
     {
-        return $this->relationships && ! empty($this->relationships);
+        $data = [];
+
+        $fields = $model->exists ? $this->edit_fields : $this->create_fields;
+
+        foreach ($fields as $field) {
+            if($field->is_relationship) {
+                $data[$field->key] = [];
+                $relation = $field->getRelationModelClass($model);
+
+                foreach ($relation->all() as $relationInst) {
+                    $data[$field->key][] = [
+                        'key' => $relationInst->getAttribute($field->relationship['key']),
+                        'value' => $relationInst->getAttribute($field->relationship['label'])
+                    ];
+                }
+            }
+        }
+
+        return $data;
     }
 
 }

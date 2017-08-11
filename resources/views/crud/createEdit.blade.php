@@ -25,7 +25,15 @@
                         <section class="section">
                             @include('laradmin::components.forms.globalFormErrors', ['key' => 'form'])
 
-                            @yield('main-form')
+                            @foreach($type->main_panels as $panel)
+
+                                @foreach($panel->fields as $field)
+                                    @if($field->isVisibleOn($model->exists ? 'edit' : 'create'))
+                                        {{ $field->render($type, $model, $data) }}
+                                    @endif
+                                @endforeach
+
+                            @endforeach
 
                         </section>
                     </div>
@@ -33,7 +41,25 @@
                     <div class="column">
                         <section class="section">
 
-                            @yield('side-form')
+                            @foreach($type->side_panels as $panel)
+
+                                @if($panel->is_main_meta)
+                                    @component('laradmin::components.meta-box', ['model' => $model])
+
+                                        @foreach($panel->fields as $field)
+                                            @component('laradmin::components.meta-line', [
+                                                'langKey' => $field->label,
+                                                'filter' => $field->getVueFilter(),
+                                                'hr' => ! $loop->last
+                                            ])
+                                                form.{{ $field->key }}
+                                            @endcomponent
+                                        @endforeach
+
+                                    @endcomponent
+                                @endif
+
+                            @endforeach
 
                         </section>
                     </div>

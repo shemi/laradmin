@@ -3,16 +3,23 @@
 namespace Shemi\Laradmin;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Database\Eloquent\Model;
 use Route;
 use Shemi\Laradmin\Data\DataManager;
+use Shemi\Laradmin\FormFields\FieldContract;
+use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Models\User;
 
 class Laradmin
 {
 
+    protected $formFields = [];
+
     protected $models = [
         'User' => User::class
     ];
+
 
     /**
      * @var \Illuminate\Foundation\Application|mixed
@@ -64,6 +71,22 @@ class Laradmin
         return $this->roleSystem;
     }
 
+    public function formField(Field $field, Type $type, Model $model, $data)
+    {
+        $formField = $this->formFields[$field->type];
 
+        return $formField->handle($field, $type, $model, $data);
+    }
+
+    public function addFormField($fieldClass)
+    {
+        if(! ($fieldClass instanceof FieldContract)) {
+            $fieldClass = app($fieldClass);
+        }
+
+        $this->formFields[$fieldClass->getCodename()] = $fieldClass;
+
+        return $this;
+    }
 
 }

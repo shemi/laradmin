@@ -120,19 +120,58 @@ class CrudController extends Controller
         $results = $query
             ->paginate($type->records_per_page);
 
-        $results = $results->toArray();
+        $results->getCollection()
+            ->transform(function ($model) use ($type) {
+                $return = [];
 
-        return $this->response($results);
+                foreach ($type->browse_columns as $column) {
+                    $return[$column->key] = $column->getBrowseValue($model);
+                }
+
+                return $return;
+            });
+
+
+        return $this->response($results->toArray());
     }
 
-    protected function getCreateForm(Type $type, Model $model)
+    public function createEditResponse($id = null, Request $request)
     {
-        return $type->getModelArray($model);
-    }
+        $type = $this->getTypeBySlug($request);
+        $action = $id === null ? 'create' : 'edit';
+        $model = app($type->model);
 
-    protected function getCreateData(Type $type, Model $model)
-    {
-        return [];
+        if($id) {
+            $model = $model->findOrFail($id);
+        }
+
+        $getFormMethod = camel_case("get_{$action}_form_data");
+
+        if(method_exists($this, $getFormMethod)) {
+            $form = call_user_func_array([$this, $getFormMethod], [$type, $model]);
+        } else {
+            $form = $type->getModelArray($model);
+        }
+
+        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
+        $data = $type->getRelationData($model);
+        $getDataMethod = camel_case("get_{$action}_data");
+
+        if(method_exists($this, $getDataMethod)) {
+            $userData = call_user_func_array([$this, $getDataMethod], [$type, $model]);
+
+            if(is_array($data)) {
+                $data = array_merge($data, $userData);
+            }
+        }
+
+        $view = 'laradmin::crud.createEdit';
+
+        if(view()->exists("laradmin::{$type->slug}.createEdit")) {
+            $view = "laradmin::{$type->slug}.createEdit";
+        }
+
+        return view($view, compact('type', 'model', 'form', 'data'));
     }
 
     /**
@@ -142,25 +181,7 @@ class CrudController extends Controller
      */
     public function create(Request $request)
     {
-        $type = $this->getTypeBySlug($request);
-        $model = null;
-
-        if($type->hasModel()) {
-            $model = app($type->model);
-        }
-
-        $form = $this->getCreateForm($type, $model);
-        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
-
-        $data = $this->getCreateData($type, $model);
-
-        $view = 'laradmin::crud.createEdit';
-
-        if(view()->exists("laradmin::{$type->slug}.createEdit")) {
-            $view = "laradmin::{$type->slug}.createEdit";
-        }
-
-        return view($view, compact('type', 'model', 'form', 'data'));
+        return $this->createEditResponse(null, $request);
     }
 
     /**
@@ -185,16 +206,6 @@ class CrudController extends Controller
         //
     }
 
-    protected function getEditForm(Type $type, Model $model)
-    {
-        return $type->getModelArray($model);
-    }
-
-    protected function getEditData(Type $type, Model $model)
-    {
-        return [];
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -204,20 +215,7 @@ class CrudController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $type = $this->getTypeBySlug($request);
-        $model = app($type->model)->findOrFail($id);
-        $form = $this->getCreateForm($type, $model);
-        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
-
-        $data = $this->getEditData($type, $model);
-
-        $view = 'laradmin::crud.createEdit';
-
-        if(view()->exists("laradmin::{$type->slug}.createEdit")) {
-            $view = "laradmin::{$type->slug}.createEdit";
-        }
-
-        return view($view, compact('type', 'model', 'form', 'data'));
+        return $this->createEditResponse($id, $request);
     }
 
     /**
