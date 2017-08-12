@@ -83,7 +83,8 @@ class LaradminServiceProvider extends ServiceProvider
     {
         $formFields = [
             'input',
-            'select_multiple'
+            'select_multiple',
+            'checkboxes'
         ];
 
         foreach ($formFields as $formField) {

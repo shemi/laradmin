@@ -107,7 +107,19 @@ class Field extends Model
     }
 
     public function getIsGroupedAttribute() {
+        if(in_array($this->type, ['checkboxes'])) {
+            return true;
+        }
+
         return $this->getTemplateOption('grouped', false);
+    }
+
+    public function getIsGroupMultilineAttribute() {
+        if(in_array($this->type, ['checkboxes'])) {
+            return true;
+        }
+
+        return $this->getTemplateOption('group_multiline', false);
     }
 
     public function getTemplatePositionAttribute() {

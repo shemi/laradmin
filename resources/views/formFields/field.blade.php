@@ -1,12 +1,26 @@
 @php
-    $grouped = $field->is_grouped ? ' grouped' : '';
-    $position = ' '.$field->template_position;
+
+    $properties = [
+        ":type=\"form.errors.has('{$field->key}') ? 'is-danger' : ''\"",
+        ":message=\"form.errors.has('{$field->key}') ? form.errors.get('{$field->key}') : ''\"",
+        "position={$field->template_position}"
+    ];
+
+    if($field->show_label) {
+        $properties[] = 'label='. $field->label;
+    }
+
+    if($field->is_grouped) {
+        $properties[] = 'grouped';
+    }
+
+    if($field->is_group_multiline) {
+        $properties[] = 'class=is-grouped-multiline';
+    }
+
 @endphp
 
-<b-field {{ $field->show_label ? 'label='. $field->label : '' }}
-         :type="form.errors.has('{{ $field->key }}') ? 'is-danger' : ''"
-         :message="form.errors.has('{{ $field->key }}') ? form.errors.get('{{ $field->key }}') : ''"
-        {{ $grouped }}{{ $position }}>
+<b-field @foreach($properties as $property){!!  ' '.$property  !!}@endforeach>
 
     {{ $slot }}
 
