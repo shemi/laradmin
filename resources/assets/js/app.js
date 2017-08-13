@@ -35,3 +35,4 @@ const app = new Vue({
         Crud
     }
 });
+

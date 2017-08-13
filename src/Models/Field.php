@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\FormFields\FormField;
 
 class Field extends Model
 {
@@ -198,6 +199,20 @@ class Field extends Model
 
     }
 
+    protected function transformRelationCollection(Collection $collection, EloquentModel $model)
+    {
+        if(in_array($this->type, ['checkboxes'])) {
+            return $collection->pluck($this->relationship['key']);
+        }
+
+        return $collection->transform(function($model) {
+            return [
+                'key' => $model->getAttribute($this->relationship['key']),
+                'label' => $model->getAttribute($this->relationship['label'])
+            ];
+        });
+    }
+
     public function getModelValue(EloquentModel $model)
     {
         if(! $model->exists() || ! $model->offsetExists($this->key)) {
@@ -208,12 +223,7 @@ class Field extends Model
             $value = $model->getAttribute($this->key);
 
             if($value instanceof Collection) {
-                return $value->transform(function($model) {
-                    return [
-                        'key' => $model->getAttribute($this->relationship['key']),
-                        'label' => $model->getAttribute($this->relationship['label'])
-                    ];
-                });
+                return $this->transformRelationCollection($value, $model);
             }
 
             if($value instanceof EloquentModel) {
@@ -309,13 +319,37 @@ class Field extends Model
             ! empty($field['key']);
     }
 
+    /**
+     * @return FormField
+     */
+    public function formField()
+    {
+        return app('laradmin')->formField($this->type);
+    }
+
+    public function transformRequest($value)
+    {
+        return $this->formField()->transformRequest($this, $value);
+    }
+
+    public function transformResponse($value)
+    {
+        return $this->formField()->transformResponse($this, $value);
+    }
+
+    /**
+     * @param Type $type
+     * @param EloquentModel $model
+     * @param array $data
+     * @return string
+     */
     public function render(Type $type, EloquentModel $model, $data)
     {
         if($this->is_relationship && array_key_exists($this->key, $data)) {
             $this->options = $data[$this->key];
         }
 
-        return app('laradmin')->formField($this, $type, $model, $data);
+        return $this->formField()->handle($this, $type, $model, $data);
     }
 
 }

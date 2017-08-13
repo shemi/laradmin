@@ -2,9 +2,10 @@ import MixinsLoader from '../../Helpers/MixinsLoader';
 import FormatDate from '../../Mixins/FormatDate';
 import LaHttp from '../../Forms/LaHttp';
 import {LaTable, LaTableColumn} from '../Table';
+import deleteMixin from '../../Mixins/Delete';
 
 export default {
-    mixins: MixinsLoader.load('crudBrowse', [FormatDate]),
+    mixins: MixinsLoader.load('crudBrowse', [FormatDate, deleteMixin]),
 
     props: ['typeName', 'typeSlug'],
 
@@ -68,6 +69,11 @@ export default {
                 this.fetchData();
                 this.searchClock = null;
             }.bind(this), 300);
+        },
+
+        afterDelete(res, typeName) {
+            this.$toast.open(`${typeName} deleted!`);
+            this.fetchData();
         }
 
     },

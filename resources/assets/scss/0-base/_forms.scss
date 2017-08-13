@@ -1,0 +1,23 @@
+.field {
+
+  &.is-grouped {
+
+	&.is-grouped-multiline {
+
+	  .is-expanded {
+		width: 100%;
+	  }
+
+	}
+
+  }
+
+}
+
+.multiselect__tags-wrap {
+
+  .tag:not(:last-child) {
+	margin-right: 5px;
+  }
+
+}

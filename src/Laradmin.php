@@ -20,6 +20,7 @@ class Laradmin
         'User' => User::class
     ];
 
+    protected $jsObject = [];
 
     /**
      * @var \Illuminate\Foundation\Application|mixed
@@ -37,13 +38,6 @@ class Laradmin
 
         $roleSystem = "\\Shemi\\Laradmin\\RoleSystems\\" . studly_case(config('laradmin.roles.system', 'simple'));
         $this->roleSystem = new $roleSystem();
-    }
-
-    public function routes()
-    {
-        Route::group(['as' => 'laradmin.'], function() {
-            require __DIR__.'/../routes/laradmin.php';
-        });
     }
 
     public function filesystem()
@@ -71,11 +65,9 @@ class Laradmin
         return $this->roleSystem;
     }
 
-    public function formField(Field $field, Type $type, Model $model, $data)
+    public function formField($type)
     {
-        $formField = $this->formFields[$field->type];
-
-        return $formField->handle($field, $type, $model, $data);
+        return $this->formFields[$type];
     }
 
     public function addFormField($fieldClass)
@@ -87,6 +79,27 @@ class Laradmin
         $this->formFields[$fieldClass->getCodename()] = $fieldClass;
 
         return $this;
+    }
+
+    public function initJsObject()
+    {
+        $this->jsObject = [
+            'api_base' => route('laradmin.dashboard'),
+            'routs' => [
+                'icons' => route('laradmin.icons')
+            ],
+            'mixins' => []
+        ];
+    }
+
+    public function publishJs($key, $value)
+    {
+        array_set($this->jsObject, $key, $value);
+    }
+
+    public function jsObject()
+    {
+        return json_encode($this->jsObject, JSON_UNESCAPED_UNICODE);
     }
 
 }

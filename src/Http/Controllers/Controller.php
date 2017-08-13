@@ -7,9 +7,12 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Shemi\Laradmin\Data\DataNotFoundException;
+use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Facades\Laradmin;
+use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
 class Controller extends BaseController
@@ -35,7 +38,7 @@ class Controller extends BaseController
      * @param Request $request
      * @return string
      */
-    public function getSlug(Request $request)
+    protected function getSlug(Request $request)
     {
         if ($this->slug) {
             return $this->slug;
@@ -48,7 +51,7 @@ class Controller extends BaseController
      * @param Request $request
      * @return Type
      */
-    public function getTypeBySlug(Request $request)
+    protected function getTypeBySlug(Request $request)
     {
         $typeSlug = $this->getSlug($request);
 
@@ -61,10 +64,46 @@ class Controller extends BaseController
         return $type;
     }
 
+    protected function insertCreateUpdateData(Request $request, Model $model, Type $type)
+    {
+        /** @var Collection $fields */
+        $fields = $model->exists ? $type->edit_fields : $type->create_fields;
+        $relationsData = [];
+
+        /** @var Field $field */
+        foreach ($fields as $field)
+        {
+            if($field->read_only) {
+                continue;
+            }
+
+            $value = $field->transformRequest($request->input($field->key));
+
+            if($field->is_relationship) {
+                $relationsData[$field->key] = $value;
+            } else {
+                $model->{$field->key} = $value;
+            }
+        }
+
+        $model->save();
+
+        foreach ($relationsData as $key => $values) {
+            $model->{$key}()->sync($values);
+        }
+
+        return $model;
+    }
+
+    protected function validateTypeRequest(Request $request, Type $type)
+    {
+
+    }
+
     /**
      * @return int
      */
-    public function getStatusCode()
+    protected function getStatusCode()
     {
         return $this->status_code;
     }
@@ -73,7 +112,7 @@ class Controller extends BaseController
      * @param int $status_code
      * @return $this
      */
-    public function setStatusCode($status_code)
+    protected function setStatusCode($status_code)
     {
         $this->status_code = $status_code;
 
@@ -81,19 +120,19 @@ class Controller extends BaseController
     }
 
 
-    public function responseNotFound($message = 'Not found.')
+    protected function responseNotFound($message = 'Not found.')
     {
         return $this->setStatusCode(404)->responseWithError($message);
     }
 
 
 
-    public function responseNotAuthorized($message = 'not Authorized.')
+    protected function responseNotAuthorized($message = 'not Authorized.')
     {
         return $this->setStatusCode(401)->responseWithError($message);
     }
 
-    public function responseValidationError($messages = 'Check all your fields.')
+    protected function responseValidationError($messages = 'Check all your fields.')
     {
         if(is_string($messages)) {
             $messages = [
@@ -104,17 +143,17 @@ class Controller extends BaseController
         return response()->json($messages, 422);
     }
 
-    public function responseInternalError($message = 'Internal error.')
+    protected function responseInternalError($message = 'Internal error.')
     {
         return $this->setStatusCode(500)->responseWithError($message);
     }
 
-    public function responseBadRequest($message = 'Bad Request')
+    protected function responseBadRequest($message = 'Bad Request')
     {
         return $this->setStatusCode(400)->responseWithError($message);
     }
 
-    public function responseWithError($message, $resultCode = 'err')
+    protected function responseWithError($message, $resultCode = 'err')
     {
 
         return response()->json([
@@ -126,7 +165,7 @@ class Controller extends BaseController
 
 
 
-    public function response($data, $headers = [], $resultCode = 'ok')
+    protected function response($data, $headers = [], $resultCode = 'ok')
     {
         $data = [
             'data' => $data,

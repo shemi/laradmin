@@ -1,6 +1,6 @@
 @component('laradmin::formFields.field', ['field' => $field])
 
-    @foreach($field->options as $option)
+    @foreach($field->options as $index => $option)
         <div class="control is-expanded">
             <b-checkbox v-model="form.{{ $field->key }}"
                         name="{{ $field->key }}"

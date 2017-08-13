@@ -15,13 +15,7 @@
     <title>{{ config('app.name') }}{{ $pageTitle }} - @lang('laradmin::template.name')</title>
 
     <script>
-        window.laradmin = {
-            api_base: '/admin',
-            routs: {
-                icons: '{{ route('laradmin.icons') }}'
-            },
-            mixins: []
-        }
+        window.laradmin = {!! app('laradmin')->jsObject() !!}
     </script>
 
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">

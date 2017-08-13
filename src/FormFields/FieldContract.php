@@ -15,4 +15,8 @@ interface FieldContract
 
     public function getName();
 
+    public function transformRequest(Field $field, $data);
+
+    public function transformResponse(Field $field, $data);
+
 }

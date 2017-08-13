@@ -10,6 +10,8 @@ use Shemi\Laradmin\Models\Type;
 
 class CrudController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +33,13 @@ class CrudController extends Controller
         $editRoute = route("laradmin.{$type->slug}.edit", ["{$type->slug}" => "__primaryKey__"]);
         $editRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $editRoute);
 
-        return view('laradmin::crud.browse', compact('type', 'model', 'columns', 'primaryKey', 'editRoute'));
+        $deleteRoute = route("laradmin.{$type->slug}.destroy", ["{$type->slug}" => "__primaryKey__"]);
+        $deleteRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $deleteRoute);
+
+        return view(
+            'laradmin::crud.browse',
+            compact('type', 'model', 'columns', 'primaryKey', 'editRoute', 'deleteRoute')
+        );
     }
 
     /**
@@ -139,6 +147,8 @@ class CrudController extends Controller
     {
         $type = $this->getTypeBySlug($request);
         $action = $id === null ? 'create' : 'edit';
+
+        /** @var Model $model */
         $model = app($type->model);
 
         if($id) {
@@ -153,7 +163,6 @@ class CrudController extends Controller
             $form = $type->getModelArray($model);
         }
 
-        $form = new HtmlString(json_encode($form, JSON_UNESCAPED_UNICODE));
         $data = $type->getRelationData($model);
         $getDataMethod = camel_case("get_{$action}_data");
 
@@ -170,6 +179,31 @@ class CrudController extends Controller
         if(view()->exists("laradmin::{$type->slug}.createEdit")) {
             $view = "laradmin::{$type->slug}.createEdit";
         }
+
+        $saveRouteKey = $action === 'create' ?
+            "laradmin.{$type->slug}.store" :
+            "laradmin.{$type->slug}.update";
+
+        $saveRouteParameters = $action === 'create' ? [] : ['id' => $model->getKey()];
+
+        app('laradmin')->publishJs('model', $form);
+        app('laradmin')->publishJs('routs.save', route($saveRouteKey, $saveRouteParameters));
+
+        if($action === 'edit') {
+            app('laradmin')->publishJs(
+                'routs.delete',
+                route("laradmin.{$type->slug}.destroy", $saveRouteParameters)
+            );
+        }
+
+        app('laradmin')->publishJs('type', [
+            'action' => $action,
+            'name' => $type->name,
+            'singular_name' => str_singular($type->name),
+            'slug' => $type->slug,
+            'id' => $type->id,
+            'modelPrimaryKey' => $model->getKeyName()
+        ]);
 
         return view($view, compact('type', 'model', 'form', 'data'));
     }
@@ -192,7 +226,18 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $type = $this->getTypeBySlug($request);
+        $model = app($type->model);
+        $user = $request->user();
+
+        $this->validate($request, [], [], []);
+
+        $model = $this->insertCreateUpdateData($request, $model, $type);
+        $redirect = route("laradmin.{$type->slug}.edit", [
+            'id' => $model->getKey()
+        ]);
+
+        return $this->response(compact('model', 'redirect'));
     }
 
     /**
@@ -227,17 +272,34 @@ class CrudController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $type = $this->getTypeBySlug($request);
+        $model = app($type->model)->findOrFail($id);
+        $user = $request->user();
+
+        $this->validate($request, [], [], []);
+
+        $model = $this->insertCreateUpdateData($request, $model, $type);
+        $redirect = false;
+
+        return $this->response(compact('model', 'redirect'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        //
+        $type = $this->getTypeBySlug($request);
+        $model = app($type->model)->findOrFail($id);
+
+        $model->delete();
+
+        return $this->response([
+            'redirect' => route("laradmin.{$type->slug}.index")
+        ]);
     }
 }

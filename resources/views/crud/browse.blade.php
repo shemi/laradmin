@@ -57,7 +57,8 @@
                         <a :href="'{{ $editRoute }}'" class="button">
                             View
                         </a>
-                        <a :href="'{{ $editRoute }}'" class="button is-danger">
+                        <a class="button is-danger"
+                           @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
                             Delete
                         </a>
                     </la-table-column>

@@ -19,7 +19,8 @@
                 @lang('laradmin::template.save')
             </button>
             @if($model->exists)
-                <a class="button is-link is-small is-danger is-outlined">
+                <a class="button is-link is-small is-danger is-outlined"
+                   @click.prevent="deleteModel">
                     @lang('laradmin::template.delete')
                 </a>
             @endif

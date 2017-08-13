@@ -41,6 +41,7 @@ abstract class FormField implements FieldContract
 
         return $this->codename;
     }
+
     public function getName()
     {
         if (empty($this->name)) {
@@ -48,6 +49,20 @@ abstract class FormField implements FieldContract
         }
 
         return $this->name;
+    }
+
+    public function transformRequest(Field $field, $data)
+    {
+        if($field->nullable != false) {
+            return $data == $field->nullable ? null : $data;
+        }
+
+        return $data;
+    }
+
+    public function transformResponse(Field $field, $data)
+    {
+        return $data;
     }
 
 }

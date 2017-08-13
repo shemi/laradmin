@@ -53,6 +53,10 @@ class LaradminServiceProvider extends ServiceProvider
             $router->middleware('laradmin.user.admin', RedirectIfCantAdmin::class);
         }
 
+        $this->loadRoutesFrom(__DIR__ . '/../routes/laradmin.php');
+
+        LaradminFacade::initJsObject();
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,

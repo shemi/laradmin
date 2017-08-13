@@ -56,6 +56,13 @@ class LaHttp {
     }
 
     /**
+     * Helper method for making DELETE HTTP requests.
+     */
+    planeDelete(uri, params) {
+        return this.axios.delete(this.uri(uri), {params});
+    }
+
+    /**
      * Send the form to the back-end server.
      *
      * This function will clear old errors, update "busy" status, etc.

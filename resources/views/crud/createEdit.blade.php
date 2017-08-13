@@ -8,12 +8,6 @@
     'mainComponent' => 'crud'
 ])
 
-@section('scripts')
-    <script>
-        window.laradmin.model = {{ $form }}
-    </script>
-@endsection
-
 @section('content')
 
     <crud-create-edit inline-template>

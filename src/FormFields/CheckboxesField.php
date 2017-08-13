@@ -21,4 +21,9 @@ class CheckboxesField extends FormField
         ));
     }
 
+    public function transformRequest(Field $field, $data)
+    {
+        return (array) array_values($data);
+    }
+
 }
