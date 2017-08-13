@@ -29,6 +29,8 @@ class LaradminServiceProvider extends ServiceProvider
         });
 
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
+        $this->app->register(\Spatie\MediaLibrary\MediaLibraryServiceProvider::class);
+
         $this->loadHelpers();
         $this->registerConfigs();
         $this->registerFormFields();
@@ -42,6 +44,7 @@ class LaradminServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'laradmin');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laradmin');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         LaradminFacade::registerPolicies();
 
@@ -80,6 +83,10 @@ class LaradminServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             dirname(__DIR__) . '/publishable/config/laradmin.php', 'laradmin'
+        );
+
+        $this->mergeConfigFrom(
+            dirname(__DIR__) . '/publishable/config/medialibrary.php', 'laradmin-medialibrary'
         );
     }
 
