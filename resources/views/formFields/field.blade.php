@@ -7,7 +7,7 @@
     ];
 
     if($field->show_label) {
-        $properties[] = 'label='. $field->label;
+        $properties[] = 'label="'. $field->label .'"';
     }
 
     if($field->is_grouped) {

@@ -2,7 +2,7 @@
 
     @foreach($field->options as $index => $option)
         <div class="control is-expanded">
-            <b-checkbox v-model="form.{{ $field->key }}"
+            <b-checkbox v-model="{{ $field->form_prefix.$field->key }}"
                         name="{{ $field->key }}"
                         :native-value="{{ $option['key'] }}">
 

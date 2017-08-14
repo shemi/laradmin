@@ -26,6 +26,9 @@ class Field extends Model
         'template_options',
         'browse_settings',
         'relationship',
+        'is_repeater_field',
+        'fields',
+        'form_prefix'
     ];
 
     public static function fromArray($rawField)
@@ -84,7 +87,30 @@ class Field extends Model
 
     public function getShowLabelAttribute($value)
     {
+        if($this->is_repeater_field || in_array($this->type, ['switch', 'checkbox'])) {
+            return false;
+        }
+
         return $value !== null ? $value : true;
+    }
+
+    public function getFormPrefixAttribute($value)
+    {
+        return $value !== null ? $value : "form.";
+    }
+
+    public function getFieldsAttribute($value)
+    {
+        $fields = collect($value);
+
+        $fields = $fields->transform(function($rawField) {
+            $rawField['is_repeater_field'] = true;
+            $rawField['form_prefix'] = "props.row.";
+
+            return static::fromArray($rawField);
+        });
+
+        return $fields;
     }
 
     public function getFieldTypeAttribute()
@@ -179,6 +205,10 @@ class Field extends Model
             case 'date':
             case 'datetime':
                 return "";
+
+            case 'switch':
+            case 'checkbox':
+                return false;
 
             case 'select':
             case 'radio':
@@ -288,6 +318,11 @@ class Field extends Model
                 }
 
                 return $model->getAttribute($this->key);
+
+            case 'checkbox':
+            case 'switch':
+            return (bool) $model->getAttribute($this->key);
+                break;
 
             default:
                 return $model->getAttribute($this->key);

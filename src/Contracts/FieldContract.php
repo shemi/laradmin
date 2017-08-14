@@ -1,5 +1,5 @@
 <?php
-namespace Shemi\Laradmin\FormFields;
+namespace Shemi\Laradmin\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Models\Field;

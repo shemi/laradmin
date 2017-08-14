@@ -15,13 +15,35 @@ class Panel extends Model
         'title',
         'position',
         'is_main_meta',
+        'has_container',
+        'style',
         'fields'
     ];
+
+    public function getStyleAttribute($value)
+    {
+        $style = (object) $value ? $value : [];
+
+        return json_encode($style, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getHasContainerAttribute($value)
+    {
+        if($this->position === 'side') {
+            return true;
+        }
+
+        return $value === null ? true : $value;
+    }
 
     public static function isValidPanel($panel)
     {
         if($panel instanceof Panel) {
             return true;
+        }
+
+        if(is_array($panel) && array_get($panel, 'type') === 'repeater') {
+            return false;
         }
 
         return is_array($panel) &&
@@ -64,6 +86,16 @@ class Panel extends Model
         }
 
         return $fields;
+    }
+
+    public function fieldsFor($view)
+    {
+        return $this->fields
+            ->reject(function($field) use ($view) {
+                return ! $field->isVisibleOn($view);
+            })
+            ->sortBy('browse_order')
+            ->values();
     }
 
 }

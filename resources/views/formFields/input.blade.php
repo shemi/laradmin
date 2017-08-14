@@ -3,7 +3,7 @@
     @php
         $properties = [
             "type=".$field->field_type,
-            "v-model=form.".$field->key,
+            "v-model=".$field->form_prefix.$field->key,
             "expanded"
         ];
 

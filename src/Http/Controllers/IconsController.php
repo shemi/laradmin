@@ -13,9 +13,9 @@ class IconsController extends Controller
 
     public function index()
     {
-        $icons = DataManager::location('defaults')->load('md-icons');
+        $icons = DataManager::location('defaults')->load('fa-icons');
 
-        return $this->response(['icons' => $icons['icons']]);
+        return $this->response(['icons' => $icons]);
     }
 
 }

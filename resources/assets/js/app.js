@@ -17,7 +17,9 @@ import './Filters/Date';
 import Multiselect from 'vue-multiselect/src/index';
 Vue.component('multiselect', Multiselect);
 
-Vue.use(Buefy);
+Vue.use(Buefy, {
+    defaultIconPack: 'fa',
+});
 
 Vue.use(Vue2Dragula, {});
 

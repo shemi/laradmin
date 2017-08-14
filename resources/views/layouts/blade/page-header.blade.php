@@ -21,7 +21,7 @@
                     @if(isset($type))
                         <li class="{{ route("laradmin.{$type->slug}.index") === url()->current() ? 'is-active' : '' }}">
                             <a href="{{ route("laradmin.{$type->slug}.index") }}">
-                                <b-icon icon="view_list"></b-icon>
+                                <b-icon icon="list"></b-icon>
                                 <span>
                                     @lang('laradmin::crud.actions.all', ['name' => str_plural($type->name)])
                                 </span>
@@ -30,7 +30,7 @@
 
                         <li class="{{ route("laradmin.{$type->slug}.create") === url()->current() ? 'is-active' : '' }}">
                             <a href="{{ route("laradmin.{$type->slug}.create") }}">
-                                <b-icon icon="add"></b-icon>
+                                <b-icon icon="plus"></b-icon>
                                 <span>
                                     @lang('laradmin::crud.actions.new', ['name' => str_singular($type->name)])
                                 </span>

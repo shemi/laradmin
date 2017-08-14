@@ -18,7 +18,7 @@
         window.laradmin = {!! app('laradmin')->jsObject() !!}
     </script>
 
-    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://use.fontawesome.com/a89966cad4.js"></script>
     <link rel="stylesheet" href="{{ laradmin_asset('app.css') }}">
     @yield('styles')
 

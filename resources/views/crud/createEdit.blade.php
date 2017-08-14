@@ -21,11 +21,28 @@
 
                             @foreach($type->main_panels as $panel)
 
-                                @foreach($panel->fields as $field)
-                                    @if($field->isVisibleOn($model->exists ? 'edit' : 'create'))
+                                @if($panel->fieldsFor($viewType)->isEmpty())
+                                    @continue
+                                @endif
+
+                                @if($panel->has_container)
+                                    <b-panel :collapsible="true">
+                                        <span slot="header">{{ $panel->title }}</span>
+                                        <div class="content">
+                                            @foreach($panel->fieldsFor($viewType) as $field)
+                                                {{ $field->render($type, $model, $data) }}
+                                            @endforeach
+                                        </div>
+                                    </b-panel>
+
+                                    @continue
+                                @endif
+
+                                <div :style="{{ $panel->style }}">
+                                    @foreach($panel->fieldsFor($viewType) as $field)
                                         {{ $field->render($type, $model, $data) }}
-                                    @endif
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                             @endforeach
 
@@ -37,10 +54,14 @@
 
                             @foreach($type->side_panels as $panel)
 
+                                @if($panel->fieldsFor($viewType)->isEmpty())
+                                    @continue
+                                @endif
+
                                 @if($panel->is_main_meta)
                                     @component('laradmin::components.meta-box', ['model' => $model])
 
-                                        @foreach($panel->fields as $field)
+                                        @foreach($panel->fieldsFor($viewType) as $field)
                                             @component('laradmin::components.meta-line', [
                                                 'langKey' => $field->label,
                                                 'filter' => $field->getVueFilter(),
@@ -51,7 +72,19 @@
                                         @endforeach
 
                                     @endcomponent
+
+                                    @continue
+
                                 @endif
+
+                                <b-panel :collapsible="true">
+                                    <span slot="header">{{ $panel->title }}</span>
+                                    <div class="content">
+                                        @foreach($panel->fieldsFor($viewType) as $field)
+                                            {{ $field->render($type, $model, $data) }}
+                                        @endforeach
+                                    </div>
+                                </b-panel>
 
                             @endforeach
 

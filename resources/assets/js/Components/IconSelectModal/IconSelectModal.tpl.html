@@ -19,18 +19,29 @@
 
             <div class="columns is-multiline">
 
-                <div class="column is-3" v-for="icon in filteredIconsArray">
-                    <div class="select-box"
-                         :class="{'is-active': selectedIcon == icon.ligature}"
-                         @click="select(icon)">
-                        <b-icon :icon="icon.ligature"
-                                size="is-large">
-                        </b-icon>
+                <div class="column is-12" v-for="group in filteredIconsArray">
 
-                        <span class="title is-6">
-                            {{ icon.name }}
-                        </span>
+                    <p class="title is-3">
+                        {{ group.name }}
+                    </p>
+
+                    <hr>
+
+                    <div class="columns is-multiline">
+                        <div class="column is-4" v-for="icon in group.icons">
+                            <div class="select-box"
+                                 :class="{'is-active': selectedIcon == icon.name}"
+                                 @click="select(icon)">
+
+                                <b-icon :icon="icon.name" size="is-large"></b-icon>
+
+                                <span class="title is-6">
+                                    {{ icon.title }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
             </div>

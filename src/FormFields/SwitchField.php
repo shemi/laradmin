@@ -1,0 +1,33 @@
+<?php
+
+namespace Shemi\Laradmin\FormFields;
+
+use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Models\Type;
+
+class SwitchField extends FormField
+{
+
+    protected $codename = "switch";
+
+    public function createContent(Field $field, Type $type, Model $model, $data)
+    {
+        return view('laradmin::formFields.switch', compact(
+            'field',
+            'type',
+            'model',
+            'data'
+        ));
+    }
+
+    public function transformRequest(Field $field, $data)
+    {
+        if($field->nullable != false) {
+            return $data == $field->nullable ? null : $data;
+        }
+
+        return (bool) $data;
+    }
+
+}

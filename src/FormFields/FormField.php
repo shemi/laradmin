@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Contracts\FieldContract;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Traits\Renderable;

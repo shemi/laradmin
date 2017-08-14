@@ -114,7 +114,7 @@
                             <button type="button"
                                     @click="openIconSelectModal"
                                     class="button is-primary">
-                                <b-icon icon="location_searching"></b-icon>
+                                <b-icon icon="smile-o"></b-icon>
                             </button>
                         </p>
                     </b-field>

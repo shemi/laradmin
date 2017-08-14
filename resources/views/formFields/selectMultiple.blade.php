@@ -4,7 +4,7 @@
         $options = json_encode($field->options, JSON_UNESCAPED_UNICODE);
 
         $properties = [
-            "v-model=form.".$field->key,
+            "v-model=".$field->form_prefix.$field->key,
             ":multiple=true",
             ":options='".$options."'",
             ":close-on-select=".$field->getTemplateOption('multiselect.clearOnSelect', 'true'),

@@ -95,7 +95,9 @@ class LaradminServiceProvider extends ServiceProvider
         $formFields = [
             'input',
             'select_multiple',
-            'checkboxes'
+            'checkboxes',
+            'repeater',
+            'switch'
         ];
 
         foreach ($formFields as $formField) {

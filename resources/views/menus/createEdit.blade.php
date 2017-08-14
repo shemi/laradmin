@@ -56,7 +56,7 @@
                                         <button class="button is-primary is-medium"
                                                 type="button"
                                                 @click="openNewEditModal()">
-                                            <b-icon icon="add"></b-icon>
+                                            <b-icon icon="plus"></b-icon>
                                             <span>@lang('laradmin::menus.builder.new_item_button')</span>
                                         </button>
                                     </div>

@@ -36,7 +36,7 @@ export default {
     methods: {
 
         select(icon) {
-            this.$emit('update:selectedIcon', icon.ligature);
+            this.$emit('update:selectedIcon', icon.name);
             this.close();
         },
 
@@ -70,16 +70,12 @@ export default {
                 return this.icons;
             }
 
-            return this.icons.filter((icon) => {
-                for(let i in icon.keywords) {
-                    let word = icon.keywords[i].toString().toLowerCase();
+            return JSON.parse(JSON.stringify(this.icons)).filter((group) => {
+                group.icons = group.icons.filter((icon) => {
+                    return icon.title.toString().toLowerCase().indexOf(search) >= 0;
+                });
 
-                    if(word.indexOf(search) >= 0) {
-                        return true;
-                    }
-                }
-
-                return false;
+                return group.icons.length > 0;
             });
         }
     }
