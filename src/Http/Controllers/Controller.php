@@ -82,6 +82,11 @@ class Controller extends BaseController
             if($field->is_relationship) {
                 $relationsData[$field->key] = $value;
             } else {
+                $transform = explode(':', $field->getTemplateOption('transform', 'value:$value'));
+                $transformParam = count($transform) > 1 ? $transform[1] : '$value';
+                $transformParam = $transformParam === '$value' ? $value : $model->{$transformParam};
+                $value = call_user_func($transform[0], $transformParam);
+
                 $model->{$field->key} = $value;
             }
         }

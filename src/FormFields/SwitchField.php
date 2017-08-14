@@ -30,4 +30,9 @@ class SwitchField extends FormField
         return (bool) $data;
     }
 
+    public function transformResponse(Field $field, $data)
+    {
+        return (bool) $data;
+    }
+
 }

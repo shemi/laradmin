@@ -246,22 +246,24 @@ class Field extends Model
     public function getModelValue(EloquentModel $model)
     {
         if(! $model->exists() || ! $model->offsetExists($this->key)) {
-            return $this->getDefaultValue($model);
+            $value = $this->getDefaultValue($model);
+
+            return $this->transformResponse($value);
         }
 
         if($this->is_relationship) {
             $value = $model->getAttribute($this->key);
 
             if($value instanceof Collection) {
-                return $this->transformRelationCollection($value, $model);
+                $value = $this->transformRelationCollection($value, $model);
+            } elseif($value instanceof EloquentModel) {
+                $value = $value->getAttribute($this->relationship['key']);
             }
-
-            if($value instanceof EloquentModel) {
-                return $value->getAttribute($this->relationship['key']);
-            }
+        } else {
+            $value = $model->getAttribute($this->key);
         }
 
-        return $model->getAttribute($this->key);
+        return $this->transformResponse($value);
     }
 
     public function isDate()
@@ -369,6 +371,10 @@ class Field extends Model
 
     public function transformResponse($value)
     {
+        if(! app('laradmin')->formFieldExists($this->type)) {
+            return $value;
+        }
+
         return $this->formField()->transformResponse($this, $value);
     }
 

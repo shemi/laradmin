@@ -94,7 +94,6 @@ class Panel extends Model
             ->reject(function($field) use ($view) {
                 return ! $field->isVisibleOn($view);
             })
-            ->sortBy('browse_order')
             ->values();
     }
 

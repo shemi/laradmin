@@ -65,6 +65,11 @@ class Laradmin
         return $this->roleSystem;
     }
 
+    public function formFieldExists($type)
+    {
+        return isset($this->formFields[$type]);
+    }
+
     public function formField($type)
     {
         return $this->formFields[$type];
