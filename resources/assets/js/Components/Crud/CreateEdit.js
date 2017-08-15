@@ -3,6 +3,7 @@ import MixinsLoader from '../../Helpers/MixinsLoader';
 import LaForm from '../../Forms/LaForm';
 import deleteMixin from '../../Mixins/Delete';
 import {LaRepeater, LaRepeaterRow} from '../Repeater/index';
+import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
 
 export default {
 
@@ -64,7 +65,8 @@ export default {
 
     components: {
         LaRepeater,
-        LaRepeaterRow
+        LaRepeaterRow,
+        LaFilesUpload
     }
 
 }

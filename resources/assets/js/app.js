@@ -10,11 +10,12 @@ import BrowseTypes from './Components/Types/BrowseTypes';
 import TypeCreateEdit from './Components/Types/TypeCreateEdit';
 import Crud from './Components/Crud/Crud';
 import { Vue2Dragula } from 'vue2-dragula';
+import VueClip from 'vue-clip'
+import Multiselect from 'vue-multiselect/src/index';
 
 import './Filters/Slugify';
 import './Filters/Date';
 
-import Multiselect from 'vue-multiselect/src/index';
 Vue.component('multiselect', Multiselect);
 
 Vue.use(Buefy, {
@@ -22,6 +23,7 @@ Vue.use(Buefy, {
 });
 
 Vue.use(Vue2Dragula, {});
+Vue.use(VueClip);
 
 const app = new Vue({
     el: '#app',

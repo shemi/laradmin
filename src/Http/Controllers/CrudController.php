@@ -188,6 +188,10 @@ class CrudController extends Controller
 
         app('laradmin')->publishJs('model', $form);
         app('laradmin')->publishJs('routs.save', route($saveRouteKey, $saveRouteParameters));
+        app('laradmin')->publishJs(
+            'routs.upload',
+            route("laradmin.upload", ['type' => $type->slug])
+        );
 
         if($action === 'edit') {
             app('laradmin')->publishJs(

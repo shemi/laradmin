@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 if (! function_exists('laradmin_asset')) {
     function laradmin_asset($path, $secure = null)
     {
@@ -12,4 +14,11 @@ if (! function_exists('menu')) {
     {
         return \Shemi\Laradmin\Models\Menu::whereSlug($slug);
     }
+}
+
+function la_str_slug($title, $separator = '-')
+{
+    $slugger = new \Easybook\SeoUtf8Slugger($separator);
+
+    return $slugger->slugify($title);
 }

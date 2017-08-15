@@ -53,6 +53,12 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::post('{type}/uploads', [
+            "uses" => "{$namespacePrefix}UploadsController@upload",
+            "as" => "upload",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 
             Route::get("/{$type->slug}/query", [

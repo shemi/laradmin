@@ -54,7 +54,6 @@ class Controller extends BaseController
     protected function getTypeBySlug(Request $request)
     {
         $typeSlug = $this->getSlug($request);
-
         $type = Type::where('slug', $typeSlug)->first();
 
         if(! $type) {
@@ -82,10 +81,12 @@ class Controller extends BaseController
             if($field->is_relationship) {
                 $relationsData[$field->key] = $value;
             } else {
-                $transform = explode(':', $field->getTemplateOption('transform', 'value:$value'));
-                $transformParam = count($transform) > 1 ? $transform[1] : '$value';
-                $transformParam = $transformParam === '$value' ? $value : $model->{$transformParam};
-                $value = call_user_func($transform[0], $transformParam);
+                $transform = explode(':', $field->getTemplateOption('transform', 'value'));
+                if(! $value && count($transform) > 1) {
+                    $value = $model->{$transform[1]};
+                }
+
+                $value = call_user_func($transform[0], $value);
 
                 $model->{$field->key} = $value;
             }

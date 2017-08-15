@@ -15,7 +15,7 @@ mix.js('resources/assets/js/app.js', './publishable/public')
     .sass('resources/assets/scss/app.scss', 'publishable/public')
     .sourceMaps(false)
     .setPublicPath('./')
-    .webpackConfig({devtool: "inline-source-map"})
+    // .webpackConfig({devtool: "inline-source-map"})
     .browserSync({
         proxy: 'maytiv-app.dev',
         files: [
@@ -26,7 +26,7 @@ mix.js('resources/assets/js/app.js', './publishable/public')
         ]
     })
     .options({
-        extractVueStyles: false, // Extract .vue component styling to file, rather than inline.
+        extractVueStyles: true, // Extract .vue component styling to file, rather than inline.
         processCssUrls: false, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
         purifyCss: false, // Remove unused CSS selectors.
         uglify: {}, // Uglify-specific options. https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin

@@ -221,6 +221,7 @@ class Field extends Model
             case 'select_multiple':
             case 'checkboxes':
             case 'repeater':
+            case 'files':
                 return (array) [];
 
             default:

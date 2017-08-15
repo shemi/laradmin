@@ -1,0 +1,72 @@
+.file-card {
+  position: relative;
+  background-color: $file-cta-background-color;
+  padding: 10px;
+  color: $file-cta-color;
+  border-color: $file-border-color;
+  border-radius: $file-radius;
+  border-style: $file-name-border-style;
+  border-width: 1px;
+  height: 100%;
+
+  .file-original-name {
+	font-size: 0.9rem;
+	line-height: 1;
+	margin-top: 1rem;
+	text-align: center;
+  }
+
+  .name {
+	word-break: break-all;
+  }
+
+  .file-card-icon {
+	margin-bottom: 1rem;
+	text-align: center;
+  }
+
+  .file-actions {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(white, 0.9);
+	display: flex;
+	z-index: 10;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease;
+
+	> * {
+	  margin: auto;
+	}
+  }
+
+  .errors {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba($danger, 0.9);
+	color: white;
+	text-align: center;
+	padding: 1rem;
+	pointer-events: none;
+	overflow: hidden;
+  }
+
+  &:focus,
+  &:hover {
+	background-color: darken($file-cta-background-color, 2.5%);
+	color: $file-cta-hover-color;
+	border-color: darken($file-name-border-color, 2.5%);
+
+	.file-actions {
+	  opacity: 1;
+	  pointer-events: all;
+	}
+  }
+
+}
