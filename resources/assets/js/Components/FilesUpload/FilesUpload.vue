@@ -99,7 +99,11 @@
 
                     return;
                 }
-
+                
+                let data = JSON.parse(xhr.response);
+                file.customAttributes = data.data;
+                delete file.dataUrl;
+                this.value.push(file);
             },
 
             deleteFile(file) {
@@ -108,10 +112,6 @@
                         this.$delete(this.files, fileIndex);
                     }
                 }
-            },
-
-            filesToValue() {
-
             }
 
         },

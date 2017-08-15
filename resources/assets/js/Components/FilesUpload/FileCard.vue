@@ -4,15 +4,20 @@
             <b-icon :icon="icon" size="is-large"></b-icon>
         </div>
 
-        <div class="file-progress">
+        <div class="file-progress" v-if="showProgress">
             <progress class="progress" :value="file.progress" max="100">
                 {{ file.progress }}%
             </progress>
         </div>
 
+        <div class="file-info-block has-text-centered" v-else>
+            <span class="tag is-primary">
+                {{ size }}
+            </span>
+        </div>
+
         <div class="file-original-name">
             <span class="name">{{ file.name }}</span>
-
         </div>
 
         <div class="file-actions" v-if="showActions">
@@ -109,6 +114,10 @@
                 }
 
                 return message;
+            },
+
+            showProgress() {
+                return this.file.status === 'queued' || this.file.status === 'added';
             }
         }
 

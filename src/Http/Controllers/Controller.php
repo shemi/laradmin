@@ -68,6 +68,7 @@ class Controller extends BaseController
         /** @var Collection $fields */
         $fields = $model->exists ? $type->edit_fields : $type->create_fields;
         $relationsData = [];
+        $mediaData = [];
 
         /** @var Field $field */
         foreach ($fields as $field)
@@ -77,6 +78,12 @@ class Controller extends BaseController
             }
 
             $value = $field->transformRequest($request->input($field->key));
+
+            if(in_array($field->type, ['files'])) {
+                $mediaData[$field->key] = $value;
+
+                continue;
+            }
 
             if($field->is_relationship) {
                 $relationsData[$field->key] = $value;
@@ -96,6 +103,64 @@ class Controller extends BaseController
 
         foreach ($relationsData as $key => $values) {
             $model->{$key}()->sync($values);
+        }
+
+        /** @var Collection $newMedia */
+        foreach ($mediaData as $collection => $newMedia) {
+            /** @var Collection $currentCollectionMedia */
+            $currentCollectionMedia = $model->getMedia($collection);
+
+            if($newMedia->isEmpty() && $currentCollectionMedia->isNotEmpty()) {
+                $model->clearMediaCollection($collection);
+
+                continue;
+            }
+
+            $mediaToUpdate = $newMedia->reject(function($media) {
+                return $media->is_new;
+            });
+
+            $mediaToInsert = $newMedia->reject(function($media) {
+                return ! $media->is_new;
+            });
+
+            if($mediaToUpdate->isNotEmpty() && $currentCollectionMedia->isNotEmpty()) {
+                $currentCollectionMedia = $currentCollectionMedia->reject(function($media) use ($mediaToUpdate) {
+                    if(! $mediaToUpdate->pluck('id')->contains($media->id)) {
+                        $media->delete();
+
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
+
+            foreach ($mediaToUpdate as $media) {
+                $mediaModel = $currentCollectionMedia->first(function($model) use ($media) {
+                    return $media->id === $model->id;
+                });
+
+                if(! $mediaModel) {
+                    continue;
+                }
+
+                $mediaModel->name = $media->name;
+                $mediaModel->setCustomProperty('alt', $media->alt);
+                $mediaModel->setCustomProperty('caption', $media->caption);
+                $mediaModel->save();
+            }
+
+            foreach ($mediaToInsert as $media) {
+                $model->addMedia(storage_path('app/'.$media->temp_path))
+                    ->usingName($media->name)
+                    ->withCustomProperties([
+                        'alt' => $media->alt,
+                        'caption' => $media->caption
+                    ])
+                    ->toMediaCollection($collection);
+            }
+
         }
 
         return $model;
