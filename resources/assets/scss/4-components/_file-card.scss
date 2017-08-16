@@ -62,6 +62,7 @@
 	background-color: darken($file-cta-background-color, 2.5%);
 	color: $file-cta-hover-color;
 	border-color: darken($file-name-border-color, 2.5%);
+	cursor: move;
 
 	.file-actions {
 	  opacity: 1;
@@ -69,4 +70,26 @@
 	}
   }
 
+}
+
+.vddl-dragging:not(.vddl-dragging-source) {
+  opacity: 0.8;
+
+  .file-card {
+	.file-actions {
+	  opacity: 0;
+	  pointer-events: none;
+	}
+  }
+}
+
+.vddl-dragging-source {
+  .file-card {
+	opacity: 0.3;
+
+	.file-actions {
+	  opacity: 0;
+	  pointer-events: none;
+	}
+  }
 }

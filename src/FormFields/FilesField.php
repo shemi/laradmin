@@ -30,14 +30,15 @@ class FilesField extends FormField
             return $value;
         }
 
-        return $value->transform(function($file) {
+        return $value->transform(function($file, $index) {
             $id = array_get($file, 'customAttributes.id', 0);
 
             return (object) [
                 'is_new' => ! ((bool) $id),
                 'id' => $id,
+                'order' => $index,
                 'temp_path' => array_get($file, 'customAttributes.temp_path', ""),
-                'name' => array_get($file, 'customAttributes.name', ""),
+                'name' => array_get($file, 'name', ""),
                 'hash_name' => array_get($file, 'customAttributes.md5_name', ""),
                 'caption' => array_get($file, 'customAttributes.caption', ""),
                 'alt' => array_get($file, 'customAttributes.alt', ""),

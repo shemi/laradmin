@@ -176,6 +176,16 @@ class Field extends Model
         return in_array($this->field_type, ['number', 'float']);
     }
 
+    public function getIsMediaAttribute()
+    {
+        return in_array($this->type, ['images', 'files', 'file', 'image']);
+    }
+
+    public function getIsSingleMediaAttribute()
+    {
+        return in_array($this->type, ['file', 'image']);
+    }
+
     public function getIsRelationshipAttribute()
     {
         return $this->relationship &&
@@ -246,7 +256,7 @@ class Field extends Model
 
     public function getModelValue(EloquentModel $model)
     {
-        if(! $model->exists() || ! $model->offsetExists($this->key)) {
+        if(! $model->exists() || (! $model->offsetExists($this->key) && ! $this->is_media)) {
             $value = $this->getDefaultValue($model);
 
             return $this->transformResponse($value);
@@ -255,11 +265,21 @@ class Field extends Model
         if($this->is_relationship) {
             $value = $model->getAttribute($this->key);
 
-            if($value instanceof Collection) {
+            if ($value instanceof Collection) {
                 $value = $this->transformRelationCollection($value, $model);
-            } elseif($value instanceof EloquentModel) {
+            } elseif ($value instanceof EloquentModel) {
                 $value = $value->getAttribute($this->relationship['key']);
             }
+
+        } elseif($this->is_media) {
+            $value = $model->getMedia($this->key);
+
+            if($this->is_single_media) {
+                $value = $value->isEmpty() ? [] : $this->transformMediaModel($value->first());
+            } else {
+                $value = $this->transformMediaCollection($value);
+            }
+
         } else {
             $value = $model->getAttribute($this->key);
         }
@@ -270,6 +290,25 @@ class Field extends Model
     public function isDate()
     {
         return in_array($this->type, ['date', 'datetime', 'time']);
+    }
+
+    public function transformMediaCollection(Collection $collection)
+    {
+        return $collection->transform(function(Media $media) {
+            return $this->transformMediaModel($media);
+        })->toArray();
+    }
+
+    public function transformMediaModel(Media $media)
+    {
+        return [
+            'id' => $media->id,
+            'name' => $media->name,
+            'size' => $media->size,
+            'ext' => $media->extension,
+            'alt' => $media->getCustomProperty('alt'),
+            'caption' => $media->getCustomProperty('caption'),
+        ];
     }
 
     public function getVueFilter()

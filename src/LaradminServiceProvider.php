@@ -28,11 +28,12 @@ class LaradminServiceProvider extends ServiceProvider
             return new Laradmin();
         });
 
+        $this->registerConfigs();
+
         $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
         $this->app->register(\Spatie\MediaLibrary\MediaLibraryServiceProvider::class);
 
         $this->loadHelpers();
-        $this->registerConfigs();
         $this->registerFormFields();
 
         if ($this->app->runningInConsole()) {
@@ -86,7 +87,7 @@ class LaradminServiceProvider extends ServiceProvider
         );
 
         $this->mergeConfigFrom(
-            dirname(__DIR__) . '/publishable/config/medialibrary.php', 'laradmin-medialibrary'
+            dirname(__DIR__) . '/publishable/config/medialibrary.php', 'medialibrary'
         );
     }
 

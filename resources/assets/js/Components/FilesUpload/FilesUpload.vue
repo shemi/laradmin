@@ -2,15 +2,26 @@
 
     <div class="la-files-upload">
 
-        <div class="columns is-multiline is-mobile">
+        <vddl-list class="columns is-multiline is-mobile"
+                   :list="value"
+                   :horizontal="true">
 
-            <div class="column is-one-quarter" v-for="file in files">
-                <la-file-card :file="file"></la-file-card>
-            </div>
+            <vddl-draggable class="column is-one-quarter"
+                 v-for="(file, index) in value"
+                 :key="file.customAttributes.id || file.customAttributes.temp_id"
+                 :draggable="file"
+                 :index="index"
+                 :wrapper="value"
+                 effect-allowed="move">
+
+                <la-file-card :file="file" @on-delete="deleteFile"></la-file-card>
+
+            </vddl-draggable>
 
             <div class="column is-one-quarter">
                 <vue-clip :options="options"
                           :on-complete="complete"
+                          :on-queue-complete="queueComplete"
                           :on-added-file="addedFile">
                     <template slot="clip-uploader-action">
                         <div class="file is-boxed">
@@ -29,7 +40,13 @@
                 </vue-clip>
             </div>
 
-        </div>
+            <vddl-placeholder class="column is-one-quarter drag-placeholder">
+                <div>
+                    <span>Move Hear</span>
+                </div>
+            </vddl-placeholder>
+
+        </vddl-list>
 
     </div>
 
@@ -38,6 +55,8 @@
 <script>
 
     import LaFileCard from './FileCard.vue';
+    import File from 'vue-clip/src/File';
+    import Helpers from '../../Helpers/Helpers';
 
     const token = document.head.querySelector('meta[name="csrf-token"]');
 
@@ -68,34 +87,44 @@
                     'params': {
                         'field_form_key': this.formKey
                     }
-                },
-                files: []
+                }
             }
         },
 
         created() {
+            for(let fileIndex in this.value) {
+                let file = this.value[fileIndex],
+                    fileModel = new File({
+                        status: 'exists',
+                        name: file.name,
+                        upload: {},
+                        type: '',
+                        size: file.size
+                    });
 
-        },
+                fileModel.customAttributes = {
+                    alt: file.alt,
+                    caption: file.caption,
+                    ext: file.ext,
+                    id: file.id
+                };
 
-        watch: {
-            files(newVal, oldVal) {
-                console.log(newVal);
+                this.value[fileIndex] = fileModel;
             }
         },
 
         methods: {
-
             addedFile (file) {
-                this.files.push(file);
+                file.customAttributes.temp_id = Helpers.makeId(20);
+
+                this.value.push(file);
             },
 
             complete (file, status, xhr) {
-                let self = this;
-
                 if(status === 'error') {
                     setTimeout(function() {
-                        self.deleteFile(file);
-                    }, 5000);
+                        this.deleteFile(file);
+                    }.bind(this), 1500);
 
                     return;
                 }
@@ -103,13 +132,16 @@
                 let data = JSON.parse(xhr.response);
                 file.customAttributes = data.data;
                 delete file.dataUrl;
-                this.value.push(file);
             },
 
-            deleteFile(file) {
-                for (let fileIndex in this.files) {
-                    if(this.files[fileIndex] === file) {
-                        this.$delete(this.files, fileIndex);
+            queueComplete() {
+
+            },
+
+            deleteFile(file, sync = true) {
+                for (let fileIndex in this.value) {
+                    if(this.value[fileIndex] === file) {
+                        this.$delete(this.value, fileIndex);
                     }
                 }
             }

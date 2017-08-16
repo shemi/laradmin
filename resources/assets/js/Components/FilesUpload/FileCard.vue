@@ -21,11 +21,11 @@
         </div>
 
         <div class="file-actions" v-if="showActions">
-            <button class="button">
+            <button type="button" class="button" @click.stop="deleteFile">
                 <b-icon icon="trash"></b-icon>
             </button>
 
-            <button class="button">
+            <button type="button" class="button" @click.stop="isEditModalOpen = true">
                 <b-icon icon="edit"></b-icon>
             </button>
         </div>
@@ -40,6 +40,43 @@
             </p>
 
         </div>
+
+        <vddl-nodrag class="nodrag">
+            <b-modal :active.sync="isEditModalOpen" has-modal-card>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Edit File</p>
+                    </header>
+                    <section class="modal-card-body">
+                        <b-field label="Name">
+                            <b-input type="text"
+                                     v-model="file.name"
+                                     placeholder="File Display Name">
+                            </b-input>
+                        </b-field>
+
+                        <b-field label="ALT">
+                            <b-input type="text"
+                                     v-model="file.customAttributes.alt"
+                                     placeholder="Alternative Text">
+                            </b-input>
+                        </b-field>
+
+                        <b-field label="Caption">
+                            <b-input type="textarea"
+                                    v-model="file.customAttributes.caption">
+                            </b-input>
+                        </b-field>
+                    </section>
+
+                    <footer class="modal-card-foot">
+                        <button class="button" type="button" @click="isEditModalOpen = false">
+                            Close and save
+                        </button>
+                    </footer>
+                </div>
+            </b-modal>
+        </vddl-nodrag>
 
     </div>
 </template>
@@ -59,11 +96,15 @@
 
         data() {
             return {
-
+                isEditModalOpen: false,
             }
         },
 
         methods: {
+
+            deleteFile() {
+                this.$emit('on-delete', this.file);
+            }
 
         },
 
@@ -87,18 +128,17 @@
             },
 
             icon() {
-                const ext = this.file.name.split('.').pop();
+                const ext = this.file.customAttributes.ext || this.file.name.split('.').pop();
 
                 return extensions[ext] || icons.file;
             },
 
             showActions() {
-                return this.file.status === 'success' || this.file.hashName;
+                return this.file.status === 'success' ||
+                       this.file.customAttributes.id;
             },
 
             hasErrors() {
-                console.log(this.file.xhrResponse);
-
                 return this.file.status === 'error';
             },
 

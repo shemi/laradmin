@@ -12,6 +12,7 @@ import Crud from './Components/Crud/Crud';
 import { Vue2Dragula } from 'vue2-dragula';
 import VueClip from 'vue-clip'
 import Multiselect from 'vue-multiselect/src/index';
+import Vddl from 'vddl';
 
 import './Filters/Slugify';
 import './Filters/Date';
@@ -24,6 +25,7 @@ Vue.use(Buefy, {
 
 Vue.use(Vue2Dragula, {});
 Vue.use(VueClip);
+Vue.use(Vddl);
 
 const app = new Vue({
     el: '#app',

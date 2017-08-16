@@ -17,7 +17,8 @@
                 </tr>
                 </thead>
 
-                <tbody v-if="rows.length">
+                <tbody v-if="rows.length" v-dragula="rows" drake="repeater">
+
                 <tr v-for="(row, index) in rows" :key="row.jsId">
 
                     <td class="index-cell" >
@@ -32,6 +33,7 @@
                     </th>
 
                 </tr>
+
                 </tbody>
                 <tbody v-else>
                 <tr>

@@ -145,20 +145,24 @@ class Controller extends BaseController
                     continue;
                 }
 
-                $mediaModel->name = $media->name;
+                $mediaModel->name = $media->name ?: $mediaModel->name;
+                $mediaModel->order_column = $media->order;
                 $mediaModel->setCustomProperty('alt', $media->alt);
                 $mediaModel->setCustomProperty('caption', $media->caption);
                 $mediaModel->save();
             }
 
             foreach ($mediaToInsert as $media) {
-                $model->addMedia(storage_path('app/'.$media->temp_path))
+                $mediaModel = $model->addMedia(storage_path('app/'.$media->temp_path))
                     ->usingName($media->name)
                     ->withCustomProperties([
                         'alt' => $media->alt,
                         'caption' => $media->caption
                     ])
                     ->toMediaCollection($collection);
+
+                $mediaModel->order_column = $media->order;
+                $mediaModel->save();
             }
 
         }

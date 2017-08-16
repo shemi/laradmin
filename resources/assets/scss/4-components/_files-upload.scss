@@ -1,0 +1,17 @@
+.la-files-upload {
+  .drag-placeholder {
+
+	> div {
+	  display: flex;
+	  border: 4px dashed $grey;
+	  height: 100%;
+
+	  span {
+		margin: auto;
+	  }
+
+	}
+
+  }
+}
+
