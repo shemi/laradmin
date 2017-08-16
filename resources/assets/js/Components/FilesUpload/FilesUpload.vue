@@ -130,7 +130,7 @@
                 }
                 
                 let data = JSON.parse(xhr.response);
-                file.customAttributes = data.data;
+                file.customAttributes = Object.assign(file.customAttributes, data.data);
                 delete file.dataUrl;
             },
 
