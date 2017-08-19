@@ -256,6 +256,10 @@ class Field extends Model
 
     public function getModelValue(EloquentModel $model)
     {
+        if($this->is_password || in_array($this->key, $model->getHidden())) {
+            return "";
+        }
+
         if(! $model->exists() || (! $model->offsetExists($this->key) && ! $this->is_media)) {
             $value = $this->getDefaultValue($model);
 
@@ -322,6 +326,10 @@ class Field extends Model
 
     public function getBrowseValue(EloquentModel $model)
     {
+        if(in_array($this->key, $model->getHidden())) {
+            return "";
+        }
+
         switch ($this->type) {
 
             case 'text':
