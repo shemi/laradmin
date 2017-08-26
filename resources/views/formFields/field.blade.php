@@ -1,8 +1,8 @@
 @php
 
     $properties = [
-        ":type=\"form.errors.has('{$field->key}') ? 'is-danger' : ''\"",
-        ":message=\"form.errors.has('{$field->key}') ? form.errors.get('{$field->key}') : ''\"",
+        ":type=\"form.errors.has('{$field->validation_key}') ? 'is-danger' : ''\"",
+        ":message=\"form.errors.has('{$field->validation_key}') ? form.errors.get('{$field->validation_key}') : ''\"",
         "position={$field->template_position}"
     ];
 

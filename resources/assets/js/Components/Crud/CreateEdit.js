@@ -2,6 +2,7 @@ import Vue from 'vue';
 import MixinsLoader from '../../Helpers/MixinsLoader';
 import LaForm from '../../Forms/LaForm';
 import deleteMixin from '../../Mixins/Delete';
+import ServerError from '../../Mixins/ServerError';
 import {LaRepeater, LaRepeaterRow} from '../Repeater/index';
 import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
 
@@ -11,7 +12,7 @@ export default {
 
     props: ['type', 'model'],
 
-    mixins: MixinsLoader.load('crudCreateEdit', [deleteMixin]),
+    mixins: MixinsLoader.load('crudCreateEdit', [deleteMixin, ServerError]),
 
     data() {
         return {
@@ -42,11 +43,17 @@ export default {
                         });
                     }
                 })
-                .catch((err) => {
+                .catch(err => {
                     this.$toast.open({
                         message: 'Whoops.. Something went wrong!',
                         type: 'is-danger'
                     });
+
+                    let code = err.status ? err.status : err.code;
+
+                    if(code !== 422) {
+                        this.alertServerError(err);
+                    }
                 });
         },
 

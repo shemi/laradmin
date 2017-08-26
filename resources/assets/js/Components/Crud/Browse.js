@@ -3,9 +3,13 @@ import FormatDate from '../../Mixins/FormatDate';
 import LaHttp from '../../Forms/LaHttp';
 import {LaTable, LaTableColumn} from '../Table';
 import deleteMixin from '../../Mixins/Delete';
+import ServerError from '../../Mixins/ServerError';
 
 export default {
-    mixins: MixinsLoader.load('crudBrowse', [FormatDate, deleteMixin]),
+    mixins: MixinsLoader.load(
+        'crudBrowse',
+        [FormatDate, deleteMixin, ServerError]
+    ),
 
     props: ['typeName', 'typeSlug'],
 
@@ -43,7 +47,9 @@ export default {
                     this.loading = false;
                 })
                 .catch(err => {
-                    console.log(err);
+                    this.alertServerError(err);
+
+                    this.login = false;
                 });
 
         },

@@ -23,9 +23,15 @@ export default {
                 .then((res) => {
                     this.afterDelete(res, typeName);
                 }).catch((err) => {
-                    this.$toast.open({
-                        message: 'Whoops.. Something went wrong!',
-                        type: 'is-danger'
+                    let data = err.response ? err.response.data : err;
+
+                    this.$dialog.alert({
+                        title: `Action Canceled.`,
+                        message: `The server respond width status code: <b>${data.code}</b>.
+                                  <br> message: <code>${data.message}</code>`,
+                        confirmText: 'OK',
+                        type: 'is-danger',
+                        hasIcon: true
                     });
                 });
         },

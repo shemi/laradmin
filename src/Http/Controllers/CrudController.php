@@ -21,14 +21,14 @@ class CrudController extends Controller
     public function index(Request $request)
     {
         $type = $this->getTypeBySlug($request);
-        $model = null;
-        $columns = $type->browse_columns;
-        $primaryKey = 'id';
 
-        if($type->hasModel()) {
-            $model = app($type->model);
-            $primaryKey = $model->getKeyName();
+        if(! $this->userCanBrowse($type, $request)) {
+            return $this->responseUnauthorized($request);
         }
+
+        $model = app($type->model);
+        $columns = $type->browse_columns;
+        $primaryKey = $model->getKeyName();
 
         $editRoute = route("laradmin.{$type->slug}.edit", ["{$type->slug}" => "__primaryKey__"]);
         $editRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $editRoute);
@@ -43,6 +43,17 @@ class CrudController extends Controller
     }
 
     /**
+     *
+     *
+     * @param Type $type
+     * @param Request $request
+     */
+    protected function userCanBrowse(Type $type, Request $request)
+    {
+        return $request->user()->can("browse {$type->slug}");
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param Request $request
@@ -51,22 +62,21 @@ class CrudController extends Controller
     public function query(Request $request)
     {
         $type = $this->getTypeBySlug($request);
-        $primaryKey = 'id';
+
+        if(! $this->userCanBrowse($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
         $orderBy = $request->input('order_by');
         $orderDirection = $request->input('order', 'desc');
         $search = $request->input('search');
 
-        if($type->hasModel()) {
-            $model = app($type->model);
-            $query = $model::select('*');
-            $primaryKey = $model->getKeyName();
+        $model = app($type->model);
+        $query = $model::select('*');
+        $primaryKey = $model->getKeyName();
 
-            if ($model->timestamps && ! $orderBy) {
-                $orderBy = 'created_at';
-            }
-
-        } else {
-            $query = DB::table($type->table_name);
+        if ($model->timestamps && ! $orderBy) {
+            $orderBy = 'created_at';
         }
 
         $relationships = $type->relationships;
@@ -213,12 +223,29 @@ class CrudController extends Controller
     }
 
     /**
+     *
+     *
+     * @param Type $type
+     * @param Request $request
+     */
+    protected function userCanCreate(Type $type, Request $request)
+    {
+        return $request->user()->can("create {$type->slug}");
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
+        $type = $this->getTypeBySlug($request);
+
+        if(! $this->userCanCreate($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
         return $this->createEditResponse(null, $request);
     }
 
@@ -232,9 +259,12 @@ class CrudController extends Controller
     {
         $type = $this->getTypeBySlug($request);
         $model = app($type->model);
-        $user = $request->user();
 
-        $this->validate($request, [], [], []);
+        if(! $this->userCanCreate($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
+        $this->validateTypeRequest($request, $model, $type);
 
         $model = $this->insertCreateUpdateData($request, $model, $type);
         $redirect = route("laradmin.{$type->slug}.edit", [
@@ -256,6 +286,17 @@ class CrudController extends Controller
     }
 
     /**
+     *
+     *
+     * @param Type $type
+     * @param Request $request
+     */
+    protected function userCanUpdate(Type $type, Request $request)
+    {
+        return $request->user()->can("update {$type->slug}");
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -264,6 +305,12 @@ class CrudController extends Controller
      */
     public function edit($id, Request $request)
     {
+        $type = $this->getTypeBySlug($request);
+
+        if(! $this->userCanUpdate($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
         return $this->createEditResponse($id, $request);
     }
 
@@ -277,15 +324,30 @@ class CrudController extends Controller
     public function update(Request $request, $id)
     {
         $type = $this->getTypeBySlug($request);
-        $model = app($type->model)->findOrFail($id);
-        $user = $request->user();
 
-        $this->validate($request, [], [], []);
+        if(! $this->userCanUpdate($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
+        $model = app($type->model)->findOrFail($id);
+
+        $this->validateTypeRequest($request, $model, $type);
 
         $model = $this->insertCreateUpdateData($request, $model, $type);
         $redirect = false;
 
         return $this->response(compact('model', 'redirect'));
+    }
+
+    /**
+     *
+     *
+     * @param Type $type
+     * @param Request $request
+     */
+    protected function userCanDelete(Type $type, Request $request)
+    {
+        return $request->user()->can("delete {$type->slug}");
     }
 
     /**
@@ -298,6 +360,11 @@ class CrudController extends Controller
     public function destroy($id, Request $request)
     {
         $type = $this->getTypeBySlug($request);
+
+        if(! $this->userCanDelete($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
         $model = app($type->model)->findOrFail($id);
 
         $model->delete();

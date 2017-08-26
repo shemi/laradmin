@@ -16,6 +16,7 @@ class Field extends Model
     protected $fillable = [
         'label',
         'key',
+        'parent',
         'show_label',
         'default_value',
         'nullable',
@@ -99,12 +100,24 @@ class Field extends Model
         return $value !== null ? $value : "form.";
     }
 
+    public function getValidationKeyAttribute()
+    {
+        if($this->is_repeater_field) {
+            $parent = $this->parent;
+
+            return "{$parent->validation_key}.'+ props.index +'.{$this->key}";
+        }
+
+        return $this->key;
+    }
+
     public function getFieldsAttribute($value)
     {
         $fields = collect($value);
 
         $fields = $fields->transform(function($rawField) {
             $rawField['is_repeater_field'] = true;
+            $rawField['parent'] = $this;
             $rawField['form_prefix'] = "props.row.";
 
             return static::fromArray($rawField);

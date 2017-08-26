@@ -46,4 +46,9 @@ class FilesField extends FormField
         });
     }
 
+    public function getValidationRoles(Field $field)
+    {
+        return false;
+    }
+
 }

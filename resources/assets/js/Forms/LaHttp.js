@@ -85,7 +85,7 @@ class LaHttp {
                     form.errors.set(error.response.data);
                     form.busy = false;
 
-                    reject(error.response.data);
+                    reject(error.response);
                 });
         });
     }

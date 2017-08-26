@@ -9,5 +9,9 @@ class User extends AuthUser
 {
     use LaradminUser;
 
+    public function can($ability, $arguments = [])
+    {
+        parent::can($ability);
+    }
 
 }

@@ -66,4 +66,13 @@ abstract class FormField implements FieldContract
         return $data;
     }
 
+    public function getValidationRoles(Field $field)
+    {
+        if(! $field->validation || empty($field->validation)) {
+            return false;
+        }
+
+        return ["{$field->key}" => $field->validation];
+    }
+
 }
