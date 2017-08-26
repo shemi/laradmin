@@ -10,6 +10,7 @@ use Shemi\Laradmin\Console\Commands\AdminCommand;
 use Shemi\Laradmin\Console\Commands\InstallCommand;
 use Shemi\Laradmin\Console\Commands\RolesCommand;
 use Shemi\Laradmin\Facades\Laradmin as LaradminFacade;
+use Shemi\Laradmin\Http\Middleware\CanAccessBackend;
 use Shemi\Laradmin\Http\Middleware\RedirectIfAuthenticated;
 use Shemi\Laradmin\Http\Middleware\RedirectIfCantAdmin;
 
@@ -51,10 +52,10 @@ class LaradminServiceProvider extends ServiceProvider
 
         if (app()->version() >= 5.4) {
             $router->aliasMiddleware('laradmin.gust', RedirectIfAuthenticated::class);
-            $router->aliasMiddleware('laradmin.user.admin', RedirectIfCantAdmin::class);
+            $router->aliasMiddleware('laradmin.user.admin', CanAccessBackend::class);
         } else {
             $router->middleware('laradmin.gust', RedirectIfAuthenticated::class);
-            $router->middleware('laradmin.user.admin', RedirectIfCantAdmin::class);
+            $router->middleware('laradmin.user.admin', CanAccessBackend::class);
         }
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/laradmin.php');

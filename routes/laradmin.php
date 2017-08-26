@@ -6,7 +6,9 @@ Route::group(
     [
         'prefix' => 'admin',
         'as' => 'laradmin.',
-        'middleware' => ['web']
+        'middleware' => [
+            'web'
+        ]
     ],
     function () use ($namespacePrefix) {
 
