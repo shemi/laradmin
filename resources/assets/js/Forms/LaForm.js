@@ -22,7 +22,7 @@ class LaForm {
     }
 
     extend(data) {
-        const types = window.laradmin.type.types;
+        const types = window.laradmin.type ? window.laradmin.type.types : false;
         const keys = Object.keys(data);
         let keyIndex,
             key,

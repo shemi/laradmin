@@ -33,6 +33,11 @@
     </div>
 
     @yield('scripts')
+
+    @if(view()->exists('laradmin::before-scripts'))
+        @include('laradmin::before-scripts')
+    @endif
+
     <script src="{{ laradmin_asset('app.js') }}"></script>
 </body>
 

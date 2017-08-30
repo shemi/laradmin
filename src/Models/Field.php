@@ -369,6 +369,10 @@ class Field extends Model
                     );
                 }
 
+                if($value instanceof \DateTime) {
+                    return $value->format("d/m/Y");
+                }
+
                 return $value;
 
             case 'select_multiple':
@@ -384,7 +388,8 @@ class Field extends Model
 
             case 'checkbox':
             case 'switch':
-            return (bool) $model->getAttribute($this->key);
+                return (bool) $model->getAttribute($this->key);
+
                 break;
 
             default:

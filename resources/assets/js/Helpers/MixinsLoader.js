@@ -13,7 +13,7 @@ class MixinsLoader {
         }
 
         for (mixinIndex in userMixins) {
-            mixins.concat(userMixins[mixinIndex]);
+            mixins = mixins.concat(userMixins[mixinIndex]);
         }
 
         return mixins;
