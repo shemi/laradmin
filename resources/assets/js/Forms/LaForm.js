@@ -1,6 +1,8 @@
 import LaFormErrors from './LaFormErrors';
 import LaHttp from './LaHttp';
 
+import Helpers from '../Helpers/Helpers';
+
 class LaForm {
 
     constructor(data) {
@@ -20,13 +22,28 @@ class LaForm {
     }
 
     extend(data) {
+        const types = window.laradmin.type.types;
         const keys = Object.keys(data);
         let keyIndex,
-            key;
+            key,
+            value,
+            transformMethod,
+            type;
 
         for (keyIndex in keys) {
             key = keys[keyIndex];
-            this[key] = data[key];
+            value = data[key];
+
+            if(types && types[key]) {
+                type = Helpers.capitalizeFirstLetter(types[key]);
+                transformMethod = `transform${type}Value`;
+
+                if(typeof this[transformMethod] === 'function') {
+                    value = this[transformMethod](value);
+                }
+            }
+
+            this[key] = value;
 
             if(this.lifetimeKeys.indexOf(key) < 0) {
                 this.lifetimeKeys.push(key);
@@ -45,6 +62,14 @@ class LaForm {
         }
 
         this.extend(this.original);
+    }
+
+    transformDateValue(val) {
+        if(val) {
+            val = new Date(val);
+        }
+
+        return val;
     }
 
     toJson() {

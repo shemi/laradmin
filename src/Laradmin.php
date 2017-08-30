@@ -100,6 +100,17 @@ class Laradmin
     public function publishJs($key, $value)
     {
         array_set($this->jsObject, $key, $value);
+
+        return $this;
+    }
+
+    public function publishManyJs($array)
+    {
+        foreach ($array as $key => $value) {
+            $this->publishJs($key, $value);
+        }
+
+        return $this;
     }
 
     public function jsObject()

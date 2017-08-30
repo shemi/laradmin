@@ -101,6 +101,9 @@ class LaradminServiceProvider extends ServiceProvider
             'repeater',
             'switch',
             'files',
+            'date',
+            'select',
+            'message',
         ];
 
         foreach ($formFields as $formField) {

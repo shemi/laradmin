@@ -55,7 +55,7 @@ abstract class FormField implements FieldContract
     public function transformRequest(Field $field, $data)
     {
         if($field->nullable != false) {
-            return $data == $field->nullable ? null : $data;
+            return $data === $field->nullable ? null : $data;
         }
 
         return $data;

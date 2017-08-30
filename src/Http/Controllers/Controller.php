@@ -2,6 +2,8 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -86,6 +88,17 @@ class Controller extends BaseController
             }
 
             if($field->is_relationship) {
+                $relation = $field->getRelationClass($model);
+
+                if($relation instanceof HasOne) {
+
+                    continue;
+                } elseif ($relation instanceof BelongsTo) {
+                    $model->{$relation->getForeignKey()} = $value;
+
+                    continue;
+                }
+
                 $relationsData[$field->key] = $value;
             } else {
                 $transform = explode(':', $field->getTemplateOption('transform', 'value'));

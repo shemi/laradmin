@@ -29,10 +29,6 @@ class Panel extends Model
 
     public function getHasContainerAttribute($value)
     {
-        if($this->position === 'side') {
-            return true;
-        }
-
         return $value === null ? true : $value;
     }
 

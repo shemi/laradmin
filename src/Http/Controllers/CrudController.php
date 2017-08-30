@@ -196,28 +196,35 @@ class CrudController extends Controller
 
         $saveRouteParameters = $action === 'create' ? [] : ['id' => $model->getKey()];
 
-        app('laradmin')->publishJs('model', $form);
-        app('laradmin')->publishJs('routs.save', route($saveRouteKey, $saveRouteParameters));
-        app('laradmin')->publishJs(
-            'routs.upload',
-            route("laradmin.upload", ['type' => $type->slug])
-        );
+        $fields = $model->exists ? $type->edit_fields : $type->create_fields;
 
-        if($action === 'edit') {
-            app('laradmin')->publishJs(
-                'routs.delete',
-                route("laradmin.{$type->slug}.destroy", $saveRouteParameters)
-            );
+        $fieldsTypes = [];
+
+        foreach ($fields as $field) {
+            $fieldsTypes[$field->key] = $field->type;
         }
 
-        app('laradmin')->publishJs('type', [
-            'action' => $action,
-            'name' => $type->name,
-            'singular_name' => str_singular($type->name),
-            'slug' => $type->slug,
-            'id' => $type->id,
-            'modelPrimaryKey' => $model->getKeyName()
-        ]);
+        $jsObject = [
+            'model' => $form,
+            'routs.save' => route($saveRouteKey, $saveRouteParameters),
+            'routs.upload' => route("laradmin.upload", ['type' => $type->slug]),
+            'type' => [
+                'action' => $action,
+                'name' => $type->name,
+                'singular_name' => str_singular($type->name),
+                'slug' => $type->slug,
+                'id' => $type->id,
+                'types' => $fieldsTypes,
+                'modelPrimaryKey' => $model->getKeyName()
+            ]
+        ];
+
+
+        if($action === 'edit') {
+            $jsObject['routs.delete'] = route("laradmin.{$type->slug}.destroy", $saveRouteParameters);
+        }
+
+        app('laradmin')->publishManyJs($jsObject);
 
         return view($view, compact('type', 'model', 'form', 'data'));
     }

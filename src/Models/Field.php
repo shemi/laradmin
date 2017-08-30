@@ -393,7 +393,7 @@ class Field extends Model
         }
     }
 
-    public function getRelationModelClass(EloquentModel $model)
+    public function getRelationClass(EloquentModel $model)
     {
         if(! $this->is_relationship || ! method_exists($model, $this->key)) {
             return false;
@@ -402,6 +402,15 @@ class Field extends Model
         $relation = $model->{$this->key}();
 
         if(! ($relation instanceof Relation)) {
+            return false;
+        }
+
+        return $relation;
+    }
+
+    public function getRelationModelClass(EloquentModel $model)
+    {
+        if(! $relation = $this->getRelationClass($model)) {
             return false;
         }
 

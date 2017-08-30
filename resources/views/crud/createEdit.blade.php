@@ -75,6 +75,14 @@
 
                                     @continue
 
+                                @elseif(! $panel->has_container)
+                                    <div :style="{{ $panel->style }}">
+                                        @foreach($panel->fieldsFor($viewType) as $field)
+                                            {{ $field->render($type, $model, $data) }}
+                                        @endforeach
+                                    </div>
+
+                                    @continue
                                 @endif
 
                                 <b-panel :collapsible="true">
