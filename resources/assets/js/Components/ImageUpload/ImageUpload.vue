@@ -85,9 +85,12 @@
 
         methods: {
             addedFile (file) {
+                this.newFile = null;
                 file.customAttributes.temp_id = Helpers.makeId(20);
 
-                this.newFile = file;
+                this.$nextTick(function() {
+                    this.newFile = file;
+                });
             },
 
             complete (file, status, xhr) {
@@ -103,8 +106,9 @@
                 delete file.dataUrl;
                 this.newFile.customAttributes = Object.assign(this.newFile.customAttributes, data.data);
 
-                this.$emit('input', this.newFile);
-                this.newFile = null;
+                this.$nextTick(function() {
+                    this.$emit('input', this.newFile);
+                });
             },
 
             queueComplete() {

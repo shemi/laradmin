@@ -23,6 +23,7 @@
                                      :label="row.label"
                                      :extra-labels="row.extra_labels"
                                      :image="row.image"
+                                     :edit-link="showEditButton ? row.edit_link : null"
                                      :is-selected="isSelected(row)"
                                      :key="row.key">
 
@@ -46,6 +47,7 @@
                                      :label="row.label"
                                      :extra-labels="row.extra_labels"
                                      :image="row.image"
+                                     :edit-link="showEditButton ? row.edit_link : null"
                                      :key="row.key">
 
                     <button class="button is-small is-danger"
@@ -65,15 +67,32 @@
         </div>
 
         <div class="pagination-control">
-            <b-pagination
-                    :total="total"
-                    :current.sync="page"
-                    order="is-centered"
-                    size="is-small"
-                    :per-page="perPage"
-                    @change="onPageChange"
-                    simple>
-            </b-pagination>
+            <div class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <b-pagination
+                                :total="total"
+                                :current.sync="page"
+                                order="is-centered"
+                                size="is-small"
+                                :per-page="perPage"
+                                @change="onPageChange"
+                                simple>
+                        </b-pagination>
+                    </div>
+                </div>
+
+                <div class="level-right" v-if="showCreateButton && createButtonLink">
+                    <div class="level-item">
+                        <a :href="createButtonLink"
+                           class="button is-success"
+                           target="_blank">
+                            <b-icon icon="plus"></b-icon>
+                            <span>Create new {{ labelSingular.toLowerCase() }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -107,6 +126,18 @@
             labelSingular: {
                 type: String,
                 default: "Item"
+            },
+            showCreateButton: {
+                type: Boolean,
+                default: false
+            },
+            showEditButton: {
+                type: Boolean,
+                default: false
+            },
+            createButtonLink: {
+                type: String,
+                default: null
             }
         },
 

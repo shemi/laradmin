@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\HasMediaContract;
+use Shemi\Laradmin\Models\Type;
 
 /**
  * Shemi\Laradmin\Models\Traits\FieldHasRelationshipAttributes
@@ -13,6 +14,9 @@ use Shemi\Laradmin\Contracts\HasMediaContract;
  * @property int $id
  * @property array|null $relationship
  * @property boolean $is_relationship
+ * @property boolean $has_relationship_type
+ * @property string $relationship_type_slug
+ * @property Type $relationship_type
  * @property array $relation_labels
  * @property array $relation_image
  * @property boolean $is_ajax_powered_relationship
@@ -54,6 +58,27 @@ trait InteractsWithRelationship
         }
 
         return $image;
+    }
+
+    public function getRelationshipTypeSlugAttribute()
+    {
+        return array_get($this->relationship, 'type', false);
+    }
+
+    public function getHasRelationshipTypeAttribute()
+    {
+        if(! $typeSlug = $this->relationship_type_slug) {
+            return false;
+        }
+
+        $type = Type::whereSlug($typeSlug);
+
+        return (boolean) $type;
+    }
+
+    public function getRelationshipTypeAttribute()
+    {
+        return Type::whereSlug($this->relationship_type_slug);
     }
 
     /**
@@ -125,6 +150,14 @@ trait InteractsWithRelationship
                     'pc' => $this->relation_image['conversion']
                 ]);
             }
+        }
+
+        if($this->has_relationship_type) {
+            $type = $this->relationship_type;
+
+            $return['edit_link'] = route("laradmin.{$type->slug}.edit", [
+                "{$type->slug}" => $model->id
+            ]);
         }
 
         return $return;

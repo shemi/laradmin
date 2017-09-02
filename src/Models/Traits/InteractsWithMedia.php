@@ -10,6 +10,8 @@ use Shemi\Laradmin\Models\Media;
  *
  * @property int $id
  * @property array|null $relationship
+ * @property array $media
+ * @property array $media_disc
  * @property boolean $is_relationship
  * @property string $key
  * @property string $type
@@ -25,6 +27,26 @@ trait InteractsWithMedia
     public function getIsSingleMediaAttribute()
     {
         return in_array($this->type, ['file', 'image']);
+    }
+
+    public function getMediaAttribute($value)
+    {
+        if(! $value || ! is_array($value)) {
+            return [
+                'disc' => config('medialibrary.defaultFilesystem')
+            ];
+        }
+
+        if(! array_key_exists('disc', $value) || ! $value['disc']) {
+            $value['disc'] = config('medialibrary.defaultFilesystem');
+        }
+
+        return $value;
+    }
+
+    public function getMediaDiscAttribute()
+    {
+        return $this->media['disc'];
     }
 
     public function transformMediaCollection(Collection $collection)

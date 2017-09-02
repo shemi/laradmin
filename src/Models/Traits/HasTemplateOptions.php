@@ -14,6 +14,7 @@ namespace Shemi\Laradmin\Models\Traits;
  * @property string $field_size
  * @property boolean $is_grouped
  * @property boolean $is_group_multiline
+ * @property mixed $show_if
  * @property string $template_position
  * @property integer $max_length
 */
@@ -63,6 +64,10 @@ trait HasTemplateOptions
 
     public function getMaxLengthAttribute() {
         return $this->getTemplateOption('max_length', 0);
+    }
+
+    public function getShowIfAttribute() {
+        return $this->getTemplateOption('show_if');
     }
 
     public function getTemplateOption($key, $default = null)

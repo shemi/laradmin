@@ -18,6 +18,10 @@
         $properties[] = 'class=is-grouped-multiline';
     }
 
+    if($field->show_if) {
+        $properties[] = 'v-if="'. $field->show_if .'"';
+    }
+
 @endphp
 
 <b-field @foreach($properties as $property){!!  ' '.$property  !!}@endforeach>

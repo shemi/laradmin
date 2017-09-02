@@ -85,7 +85,10 @@ class Controller extends BaseController
             $value = $field->transformRequest($request->input($field->key));
 
             if($field->is_media) {
-                $mediaData[$field->key] = $value;
+                $mediaData[] = [
+                    'field' => $field,
+                    'value' => $value
+                ];
 
                 continue;
             }
@@ -122,7 +125,12 @@ class Controller extends BaseController
         }
 
         /** @var Collection $newMedia */
-        foreach ($mediaData as $collection => $newMedia) {
+        foreach ($mediaData as $item) {
+            /** @var Field $mediaField */
+            $mediaField = $item['field'];
+            $newMedia = $item['value'];
+            $collection = $mediaField->key;
+
             /** @var Collection $currentCollectionMedia */
             $currentCollectionMedia = $model->getMedia($collection);
 
@@ -140,7 +148,7 @@ class Controller extends BaseController
                 return ! $media->is_new;
             });
 
-            if($mediaToUpdate->isNotEmpty() && $currentCollectionMedia->isNotEmpty()) {
+            if($currentCollectionMedia->isNotEmpty()) {
                 $currentCollectionMedia = $currentCollectionMedia->reject(function($media) use ($mediaToUpdate) {
                     if(! $mediaToUpdate->pluck('id')->contains($media->id)) {
                         $media->delete();
@@ -169,13 +177,14 @@ class Controller extends BaseController
             }
 
             foreach ($mediaToInsert as $media) {
-                $mediaModel = $model->addMedia(storage_path('app/'.$media->temp_path))
+                $mediaModel = $model
+                    ->addMedia(storage_path('app/'.$media->temp_path))
                     ->usingName($media->name)
                     ->withCustomProperties([
                         'alt' => $media->alt,
                         'caption' => $media->caption
                     ])
-                    ->toMediaCollection($collection);
+                    ->toMediaCollection($collection, $mediaField->media_disc);
 
                 $mediaModel->order_column = $media->order;
                 $mediaModel->save();

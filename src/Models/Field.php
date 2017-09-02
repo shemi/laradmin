@@ -59,7 +59,8 @@ class Field extends Model
         'relationship',
         'is_repeater_field',
         'fields',
-        'form_prefix'
+        'form_prefix',
+        'media'
     ];
 
     public static function fromArray($rawField)

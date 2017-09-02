@@ -12,6 +12,14 @@
                 <p>
                     <strong>{{ label }}</strong>
                     <span v-if="hasSubLabels" v-html="subLabels"></span>
+                    <span v-if="editLink">
+                        <br>
+                        <small>
+                            <a :href="editLink" target="_blank">
+                                Edit
+                            </a>
+                        </small>
+                    </span>
                 </p>
             </div>
         </div>
@@ -44,6 +52,10 @@
             image: {
                 type: String,
                 default: "https://placeholdit.co//i/64x64?bg=efefef&fc=000"
+            },
+            editLink: {
+                type: String,
+                default: null
             },
         },
 
