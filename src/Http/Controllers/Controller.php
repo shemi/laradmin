@@ -50,12 +50,15 @@ class Controller extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request|string $request
      * @return Type
      */
-    protected function getTypeBySlug(Request $request)
+    protected function getTypeBySlug($request)
     {
-        $typeSlug = $this->getSlug($request);
+        $typeSlug = $request instanceof Request ?
+            $this->getSlug($request) :
+            $request;
+
         $type = Type::where('slug', $typeSlug)->first();
 
         if(! $type) {
@@ -81,7 +84,7 @@ class Controller extends BaseController
 
             $value = $field->transformRequest($request->input($field->key));
 
-            if(in_array($field->type, ['files'])) {
+            if($field->is_media) {
                 $mediaData[$field->key] = $value;
 
                 continue;

@@ -92,25 +92,25 @@
         },
 
         created() {
-            for(let fileIndex in this.value) {
-                let file = this.value[fileIndex],
-                    fileModel = new File({
-                        status: 'exists',
-                        name: file.name,
-                        upload: {},
-                        type: '',
-                        size: file.size
-                    });
-
-                fileModel.customAttributes = {
-                    alt: file.alt,
-                    caption: file.caption,
-                    ext: file.ext,
-                    id: file.id
-                };
-
-                this.value[fileIndex] = fileModel;
-            }
+//            for(let fileIndex in this.value) {
+//                let file = this.value[fileIndex],
+//                    fileModel = new File({
+//                        status: 'exists',
+//                        name: file.name,
+//                        upload: {},
+//                        type: '',
+//                        size: file.size
+//                    });
+//
+//                fileModel.customAttributes = {
+//                    alt: file.alt,
+//                    caption: file.caption,
+//                    ext: file.ext,
+//                    id: file.id
+//                };
+//
+//                this.value[fileIndex] = fileModel;
+//            }
         },
 
         methods: {

@@ -105,6 +105,7 @@ class LaradminServiceProvider extends ServiceProvider
             'select',
             'message',
             'relationship',
+            'image'
         ];
 
         foreach ($formFields as $formField) {

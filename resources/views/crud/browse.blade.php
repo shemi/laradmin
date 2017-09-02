@@ -46,7 +46,7 @@
                                         {{ $column->sortable ? 'sortable' : '' }}
                                         {{--{{ $column->is_numeric ? 'numeric' : '' }}--}}
                         >
-                            <span v-text="props.row.{{ $column->key }}"></span>
+                            <div v-html="props.row.{{ $column->key }}"></div>
                         </la-table-column>
                     @endforeach
 

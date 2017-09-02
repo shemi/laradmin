@@ -1,0 +1,99 @@
+.fa-relationship {
+  border: 1px solid rgba(219, 219, 219, 0.5);
+
+  .pagination-control,
+  .search-control {
+	padding: 1rem;
+	background-color: rgba(219, 219, 219, 0.5);
+  }
+
+  .pagination-list {
+	margin: 0;
+	list-style: none;
+  }
+
+  .relation-lists {
+	padding: 1rem 0.5rem;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: flex-start;
+
+	> * {
+	  flex-basis: 50%;
+	  overflow-y: auto;
+	  overflow-x: hidden;
+	  height: 430px;
+	  position: relative;
+
+	  &:last-child {
+		padding-left: 0.5rem;
+		border-left: 1px solid rgba(219, 219, 219, 0.5);
+	  }
+
+	  &:first-child {
+		padding-right: 0.5rem;
+		border-right: 1px solid rgba(219, 219, 219, 0.5);
+	  }
+	}
+  }
+
+  .media-content {
+	min-width: 0;
+
+	p {
+	  word-wrap: break-word;
+	  font-size: 0.9em;
+	  line-height: 1.1;
+	}
+  }
+
+  .loading-overlay {
+	position: absolute;
+
+	.loading-icon {
+	  width: 5em;
+	  height: 5em;
+	}
+  }
+
+  &.is-loading {
+	.relation-lists {
+	  > * {
+		overflow-y: hidden;
+	  }
+	}
+  }
+
+  .media {
+	background-color: rgba(219, 219, 219, 0);
+	transition: background-color 0.2s ease;
+
+	> * {
+	  transition: opacity 0.8s ease;
+	}
+
+	&.is-selected {
+	  > * {
+		opacity: 0.5;
+	  }
+	}
+
+	.button {
+	  transition: opacity 0.3s ease;
+	  opacity: 0;
+	}
+
+	&:hover {
+	  &:not(.is-selected) {
+	  	background-color: rgba(219, 219, 219, 0.1);
+	  }
+
+	  .button {
+		opacity: 1;
+	  }
+	}
+
+  }
+
+}

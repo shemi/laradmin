@@ -6,6 +6,7 @@ import ServerError from '../../Mixins/ServerError';
 import {LaRepeater, LaRepeaterRow} from '../Repeater/index';
 import {LaRelationship, LaRelationshipRow} from '../Relationship/index';
 import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
+import LaImageUpload from '../ImageUpload/ImageUpload.vue';
 
 export default {
 
@@ -76,7 +77,8 @@ export default {
         LaRepeaterRow,
         LaFilesUpload,
         LaRelationship,
-        LaRelationshipRow
+        LaRelationshipRow,
+        LaImageUpload
     }
 
 }

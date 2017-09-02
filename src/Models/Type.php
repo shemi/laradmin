@@ -7,6 +7,24 @@ use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 
+/**
+ * Shemi\Laradmin\Models\Type
+ *
+ * @property string $name
+ * @property string $model
+ * @property string $slug
+ * @property boolean $public
+ * @property string $controller
+ * @property Collection $panels
+ * @property integer $records_per_page
+ * @property Collection $fields
+ * @property Collection $browse_columns
+ * @property Collection $edit_fields
+ * @property Collection $create_fields
+ * @property Collection $searchable_fields
+ * @property Collection $side_panels
+ * @property Collection $main_panels
+ */
 class Type extends Model
 {
     protected $_fields;
@@ -149,17 +167,17 @@ class Type extends Model
 
         $fields = $model->exists ? $this->edit_fields : $this->create_fields;
 
+        /** @var Field $field */
         foreach ($fields as $field) {
-            if($field->is_relationship) {
-                $data[$field->key] = [];
-                $relation = $field->getRelationModelClass($model);
+            if(! $field->is_relationship || $field->is_ajax_powered_relationship) {
+                continue;
+            }
 
-                foreach ($relation->all() as $relationInst) {
-                    $data[$field->key][] = [
-                        'key' => $relationInst->getAttribute($field->relationship['key']),
-                        'label' => $relationInst->getAttribute($field->relationship['label'])
-                    ];
-                }
+            $data[$field->key] = [];
+            $relation = $field->getRelationModelClass($model);
+
+            foreach ($relation->all() as $relationInst) {
+                $data[$field->key][] = $field->transformRelationModel($relationInst);
             }
         }
 

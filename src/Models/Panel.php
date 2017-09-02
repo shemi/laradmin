@@ -2,10 +2,20 @@
 
 namespace Shemi\Laradmin\Models;
 
+use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
-use \Illuminate\Database\Eloquent\Model as EloquentModel;
-
+/**
+ * Shemi\Laradmin\Models\Type
+ *
+ * @property integer $id
+ * @property string $title
+ * @property string $position
+ * @property boolean $is_main_meta
+ * @property boolean $has_container
+ * @property array $style
+ * @property Collection $fields
+ */
 class Panel extends Model
 {
     protected $dataable = false;

@@ -61,6 +61,18 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::get('serve-file/{mediaId}/{fileName}', [
+            "uses" => "{$namespacePrefix}UploadsController@serve",
+            "as" => "serve",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
+        Route::get('relationship-query/{typeSlug}/{fieldKey}', [
+            "uses" => "{$namespacePrefix}RelationshipController@query",
+            "as" => "relationship.query",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 
             Route::get("/{$type->slug}/query", [

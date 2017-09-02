@@ -21,4 +21,12 @@ class RelationshipField extends FormField
         ));
     }
 
+    public function transformRequest(Field $field, $data)
+    {
+        return collect($data)
+            ->pluck('key')
+            ->values()
+            ->all();
+    }
+
 }

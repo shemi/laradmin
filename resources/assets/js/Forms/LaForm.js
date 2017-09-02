@@ -1,6 +1,7 @@
 import LaFormErrors from './LaFormErrors';
 import LaHttp from './LaHttp';
 
+import File from 'vue-clip/src/File';
 import Helpers from '../Helpers/Helpers';
 
 class LaForm {
@@ -70,6 +71,44 @@ class LaForm {
         }
 
         return val;
+    }
+
+    transformFilesValue(files) {
+        if(! files || files.length <= 0) {
+            return [];
+        }
+
+        return files.map(file => {
+            return this.transformFileValue(file);
+        });
+    }
+
+    transformImageValue(file) {
+        return this.transformFileValue(file);
+    }
+
+    transformFileValue(file) {
+        if(! file || typeof file === File) {
+            return file;
+        }
+
+        let fileModel = new File({
+            status: file.id ? 'exists' : file.status,
+            name: file.name,
+            upload: {},
+            type: '',
+            size: file.size
+        });
+
+        fileModel.customAttributes = {
+            alt: file.alt,
+            caption: file.caption,
+            ext: file.ext,
+            uri: file.uri,
+            id: file.id
+        };
+
+        return fileModel;
     }
 
     toJson() {
