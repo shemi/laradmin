@@ -24,7 +24,7 @@
 
 @endphp
 
-<b-field @foreach($properties as $property){!!  ' '.$property  !!}@endforeach>
+<b-field {!! implode(' ', $properties) !!}>
 
     {{ $slot }}
 
