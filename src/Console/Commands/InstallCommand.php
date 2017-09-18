@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Migrations\Migrator;
+use Shemi\Laradmin\LaradminServiceProvider;
 
 class InstallCommand extends Command
 {
@@ -47,6 +48,27 @@ class InstallCommand extends Command
         $this->call("vendor:publish", [
             '--provider' => \Spatie\Permission\PermissionServiceProvider::class,
             '--tag' => 'config'
+        ]);
+
+        $this->line('Publishing laradmin assets files');
+
+        $this->call("vendor:publish", [
+            '--provider' => LaradminServiceProvider::class,
+            '--tag' => 'laradmin_assets'
+        ]);
+
+        $this->line('Publishing laradmin config file');
+
+        $this->call("vendor:publish", [
+            '--provider' => LaradminServiceProvider::class,
+            '--tag' => 'laradmin_config'
+        ]);
+
+        $this->line('Publishing laradmin data files');
+
+        $this->call("vendor:publish", [
+            '--provider' => LaradminServiceProvider::class,
+            '--tag' => 'laradmin_data'
         ]);
 
     }

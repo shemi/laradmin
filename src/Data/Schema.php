@@ -20,6 +20,10 @@ class Schema extends Collection
     {
         static::$filesystem = $filesystem;
 
+        if(! static::$filesystem->exists(static::getSchemaPath())) {
+            return false;
+        }
+
         $schema = json_decode(
             static::$filesystem->get(static::getSchemaPath()),
             true

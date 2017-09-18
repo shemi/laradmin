@@ -130,6 +130,7 @@ class LaradminServiceProvider extends ServiceProvider
             ],
             'laradmin_config' => [
                 "{$publishablePath}/config/laradmin.php" => config_path('laradmin.php'),
+                "{$publishablePath}/config/medialibrary.php" => config_path('medialibrary.php'),
             ],
             'laradmin_data' => [
                 "{$publishablePath}/data/" => storage_path('app/laradmin'),

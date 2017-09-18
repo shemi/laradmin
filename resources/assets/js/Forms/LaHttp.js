@@ -82,7 +82,13 @@ class LaHttp {
                     resolve(response.data);
                 })
                 .catch((error) => {
-                    form.errors.set(error.response.data);
+                    let errors = error.response.data;
+
+                    if(errors.errors) {
+                        errors  = errors.errors;
+                    }
+
+                    form.errors.set(errors);
                     form.busy = false;
 
                     reject(error.response);
