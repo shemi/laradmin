@@ -1,0 +1,50 @@
+.la-panel {
+  //border: 2px solid $grey-lighter;
+  //border-radius: 3px;
+  overflow: hidden;
+
+  .la-panel-header {
+	margin: 0;
+	background-color: white;
+	padding: 0 0.5em;
+  	border: 2px solid $grey-lighter;
+
+	.panel-header-actions {
+	  opacity: 1;
+	}
+
+	.level-left {
+	  padding: 1em 0;
+	  position: relative;
+	  flex-shrink: 1;
+	  flex-grow: 1;
+	}
+
+	.panel-header-actions {
+	  position: absolute;
+	  left: 0;
+	  bottom: 0;
+	  font-size: 0.8em;
+	  opacity: 0;
+	}
+
+	&:hover {
+	  .panel-header-actions {
+		opacity: 1;
+	  }
+	}
+
+  }
+
+  > .la-options-list {
+	min-height: 100px;
+	background-color: white;
+	border: 2px solid $grey-lighter;
+	border-top: 0;
+  }
+
+  .panel-content-toggle {
+	cursor: pointer;
+  }
+
+}

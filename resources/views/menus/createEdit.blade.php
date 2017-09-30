@@ -8,6 +8,8 @@
 
 @extends('laradmin::layouts.page', ['bodyClass' => 'menus-create-edit', 'pageTitle' => $pageTitle])
 
+@include('laradmin::menus.blade.page-header')
+
 @section('content')
 
     <menu-builder :menu='{{ $menu->toJson() }}'

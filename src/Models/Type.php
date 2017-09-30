@@ -6,10 +6,12 @@ use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\Http\Controllers\CrudController;
 
 /**
  * Shemi\Laradmin\Models\Type
  *
+ * @property integer $id
  * @property string $name
  * @property string $model
  * @property string $slug
@@ -38,6 +40,7 @@ class Type extends Model
         'public',
         'controller',
         'panels',
+        'icon',
         'records_per_page',
     ];
 
@@ -49,6 +52,15 @@ class Type extends Model
     public function hasModel()
     {
         return ! empty($this->model);
+    }
+
+    public function getControllerAttribute($value)
+    {
+        if(is_null($value)) {
+            return CrudController::class;
+        }
+
+        return $value;
     }
 
     public function getPanelsAttribute($value)
@@ -182,6 +194,72 @@ class Type extends Model
         }
 
         return $data;
+    }
+
+    public static function getAllFieldTypes($fields, $parent = "")
+    {
+        $fieldTypes = [];
+
+        /** @var Field $field */
+        foreach ($fields as $field) {
+            $fieldTypes[$parent.$field->key] = $field->type;
+
+            if($field->fields && $field->fields->isNotEmpty()) {
+                $fieldTypes = array_merge(
+                    $fieldTypes,
+                    static::getAllFieldTypes($field->fields, "{$parent}{$field->key}.")
+                );
+            }
+        }
+
+        return $fieldTypes;
+    }
+
+    public static function browseAll()
+    {
+        /** @var Collection $allTypes */
+        $allTypes = static::all();
+
+        $allTypes->transform(function($type) {
+            /** @var static $type */
+            return [
+                'id' => $type->id,
+                'name' => $type->name,
+                'slug' => $type->slug,
+                'model' => $type->model,
+                'controller' => $type->controller,
+                'updated_at' => $type->updated_at,
+                'created_at' => $type->created_at,
+                'records_per_page' => $type->records_per_page,
+                'panels_count' => $type->panels->count(),
+                'fields_count' => $type->fields->count()
+            ];
+        });
+
+        return $allTypes;
+    }
+
+    public function toBuilderArray()
+    {
+        $fields = [
+            'name',
+            'model',
+            'slug',
+            'public',
+            'controller',
+            'main_panels',
+            'side_panels',
+            'icon',
+            'records_per_page'
+        ];
+
+        $array = [];
+
+        foreach ($fields as $key) {
+            $array[$key] = $this->$key;
+        }
+
+        return $array;
     }
 
 }

@@ -45,9 +45,16 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::get('/types/query', [
+            "uses" => "{$namespacePrefix}TypesBuilderController@query",
+            "as" => "types.query",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         Route::resource('types', "{$namespacePrefix}TypesBuilderController", [
             "middleware" => "laradmin.user.admin"
         ]);
+
 
         Route::get('/icons', [
             "uses" => "{$namespacePrefix}IconsController@index",

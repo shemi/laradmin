@@ -70,6 +70,11 @@ class Laradmin
         return isset($this->formFields[$type]);
     }
 
+    public function formFields()
+    {
+        return $this->formFields;
+    }
+
     public function formField($type)
     {
         return $this->formFields[$type];

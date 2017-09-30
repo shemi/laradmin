@@ -1,6 +1,6 @@
 @php
-    if($type->exist) {
-        $pageTitle = trans('laradmin::type-builder.edit.page_title', ['name' => $type->name]);
+    if($model->exist) {
+        $pageTitle = trans('laradmin::type-builder.edit.page_title', ['name' => $model->name]);
     } else {
         $pageTitle = trans('laradmin::type-builder.create.page_title');
     }
@@ -8,28 +8,29 @@
 
 @extends('laradmin::layouts.page', ['bodyClass' => 'types-create-edit', 'pageTitle' => $pageTitle])
 
+@include('laradmin::typeBuilder.blade.page-header')
+
 @section('content')
 
-    <type-create-edit :type='{{ $type->toJson() }}'
-                      :tables='{{ json_encode($tables, JSON_UNESCAPED_UNICODE) }}'
-                      inline-template>
+    <type-create-edit inline-template>
 
         <div>
 
             <form v-on:submit.prevent="save()" novalidate>
+                <section class="section type-options">
 
-                <div class="columns">
+                    @include('laradmin::typeBuilder.blade.actions-level')
 
-                    <div class="column is-three-quarters">
+                    <div class="columns">
+                        <div class="column">
 
-                        <section class="section">
                             @include('laradmin::components.forms.globalFormErrors', ['key' => 'form'])
 
                             <div class="columns">
                                 <div class="column">
                                     <b-field :type="form.errors.has('name') ? 'is-danger' : ''"
                                              :message="form.errors.has('name') ? form.errors.get('name') : ''">
-                                        <b-input placeholder="@lang('laradmin::type-builder.builder.group_name')"
+                                        <b-input placeholder="@lang('laradmin::type-builder.builder.name')"
                                                  type="text"
                                                  size="is-large"
                                                  v-model="form.name">
@@ -39,90 +40,122 @@
                             </div>
                             <div class="columns">
                                 <div class="column">
-                                    <b-field :type="form.errors.has('table') ? 'is-danger' : ''"
-                                             :message="form.errors.has('table') ? form.errors.get('table') : ''"
-                                             label="Table">
-                                        <b-select v-model="form.table" placeholder="Select a table" expanded>
-                                            <option v-for="(object, table) in tables"
-                                                    :value="object"
-                                                    :key="table">
-                                                @{{ table }}
-                                            </option>
-                                        </b-select>
+                                    <b-field :type="form.errors.has('controller') ? 'is-danger' : ''"
+                                             :message="form.errors.has('controller') ? form.errors.get('controller') : ''"
+                                             label="@lang('laradmin::type-builder.builder.controller')">
+                                        <b-input type="text" v-model="form.controller"></b-input>
                                     </b-field>
-
                                 </div>
                                 <div class="column">
                                     <b-field :type="form.errors.has('name') ? 'is-danger' : ''"
-                                             :message="form.errors.has('name') ? form.errors.get('name') : ''">
-                                        <b-input placeholder="@lang('laradmin::type-builder.builder.group_name')"
+                                             :message="form.errors.has('name') ? form.errors.get('name') : ''"
+                                             label="@lang('laradmin::type-builder.builder.model')">
+                                        <b-input placeholder="e.g. \App\User"
                                                  type="text"
-                                                 v-model="form.name">
+                                                 v-model="form.model">
                                         </b-input>
                                     </b-field>
                                 </div>
                             </div>
-                        </section>
-
-                        <section class="section fields-group">
-
-                        </section>
-
-                    </div>
-
-
-                    <div class="column">
-
-                        <section class="section">
-
-                            @component('laradmin::components.meta-box')
-
-                                @slot('title')
-                                    @lang('laradmin::template.publish')
-                                @endslot
-
-                                @slot('footer')
-                                    <button type="submit"
-                                            :class="{'is-loading': form.busy}"
-                                            class="button is-primary">
-                                        @lang('laradmin::template.save')
-                                    </button>
-                                    @if($type->exists)
-                                        <a class="button is-link is-small is-danger is-outlined">
-                                            @lang('laradmin::template.delete')
-                                        </a>
-                                    @endif
-                                @endslot
-
-                                @component('laradmin::components.meta-line', ['langKey' => 'laradmin::template.created_at'])
-                                    form.created_at
-                                @endcomponent
-
-                                @component('laradmin::components.meta-line', ['langKey' => 'laradmin::template.updated_at'])
-                                    form.updated_at
-                                @endcomponent
-
-                                @component('laradmin::components.meta-line', [
-                                    'langKey' => 'laradmin::template.slug',
-                                    'filter' => 'slugify',
-                                    'hr' => false
-                                ])
-                                    form.name
-                                @endcomponent
-
-                            @endcomponent
-
-                        </section>
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field :type="form.errors.has('controller') ? 'is-danger' : ''"
+                                             :message="form.errors.has('controller') ? form.errors.get('controller') : ''"
+                                             label="@lang('laradmin::type-builder.builder.records_per_page')">
+                                        <b-input type="number" :min="1" v-model="form.records_per_page"></b-input>
+                                    </b-field>
+                                </div>
+                                <div class="column">
+                                    <b-field :type="form.errors.has('icon') ? 'is-danger' : ''"
+                                             label="@lang('laradmin::menus.builder.item_icon')"
+                                             :message="form.errors.has('icon') ? form.errors.get('icon') : ''">
+                                        <b-field>
+                                            <p class="control icon-only-addon">
+                                                <b-icon :icon="form.icon"></b-icon>
+                                            </p>
+                                            <b-input type="text"
+                                                     expanded
+                                                     v-model="form.icon">
+                                            </b-input>
+                                            <p class="control">
+                                                <button type="button"
+                                                        @click="openIconSelectModal"
+                                                        class="button is-primary">
+                                                    <b-icon icon="smile-o"></b-icon>
+                                                </button>
+                                            </p>
+                                        </b-field>
+                                    </b-field>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
+                </section>
 
-                </div>
+                <section class="section panels">
 
+                    <div class="columns">
+                        <div class="column panels-area is-three-quarters">
+                            <div>
+                                <div class="level panels-area-header">
+                                    <div class="level-left">
+                                        <h3 class="level-item title is-5">
+                                            @lang('laradmin::type-builder.builder.panels')
+                                        </h3>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="level-item">
+                                            <button type="button"
+                                                    @click.prevent="addPanel('main')"
+                                                    class="button is-primary">
+                                                @lang('laradmin::type-builder.builder.add_panel')
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <la-panel-list class="main-panels"
+                                               form-key="main_panels"
+                                               ref="main_panels"
+                                               :panels="form.main_panels"></la-panel-list>
+                            </div>
+                        </div>
+
+                        <div class="column panels-area">
+                            <div>
+                                <div class="level panels-area-header">
+                                    <div class="level-left">
+                                        <h3 class="level-item title is-5">
+                                            @lang('laradmin::type-builder.builder.side_panels')
+                                        </h3>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="level-item">
+                                            <button type="button"
+                                                    @click.prevent="addPanel('side')"
+                                                    class="button is-primary">
+                                                @lang('laradmin::type-builder.builder.add_panel')
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <la-panel-list class="side-panels"
+                                               form-key="side_panels"
+                                               ref="side_panels"
+                                               :panels="form.side_panels">
+                                </la-panel-list>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
             </form>
 
-            {{--<icon-select-modal :active.sync="isIconSelectModalActive"--}}
-                               {{--:selected-icon.sync="itemForm.icon">--}}
-            {{--</icon-select-modal>--}}
+            <icon-select-modal :active.sync="isIconSelectModalActive"
+                               :selected-icon.sync="form.icon">
+            </icon-select-modal>
 
         </div>
 

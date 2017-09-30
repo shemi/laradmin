@@ -23,7 +23,6 @@ class LaForm {
     }
 
     extend(data) {
-        const types = window.laradmin.type ? window.laradmin.type.types : false;
         const keys = Object.keys(data);
         let keyIndex,
             key,
@@ -34,15 +33,7 @@ class LaForm {
         for (keyIndex in keys) {
             key = keys[keyIndex];
             value = data[key];
-
-            if(types && types[key]) {
-                type = Helpers.capitalizeFirstLetter(types[key]);
-                transformMethod = `transform${type}Value`;
-
-                if(typeof this[transformMethod] === 'function') {
-                    value = this[transformMethod](value);
-                }
-            }
+            value = this.transformValue(data, key);
 
             this[key] = value;
 
@@ -50,6 +41,26 @@ class LaForm {
                 this.lifetimeKeys.push(key);
             }
         }
+    }
+
+    transformValue(data, key, typePrefix = "") {
+        const types = window.laradmin.type ? window.laradmin.type.types : false;
+        let value = data[key],
+            type,
+            transformMethod;
+
+        if(! types || ! types[typePrefix + key]) {
+            return value;
+        }
+
+        type = Helpers.capitalizeFirstLetter(types[typePrefix + key]);
+        transformMethod = `transform${type}Value`;
+
+        if(typeof this[transformMethod] === 'function') {
+            value = this[transformMethod](value, typePrefix + key);
+        }
+
+        return value;
     }
 
     rebuild(data) {
@@ -85,6 +96,32 @@ class LaForm {
 
     transformImageValue(file) {
         return this.transformFileValue(file);
+    }
+
+    transformRepeaterValue(value, parentKey) {
+        let rowIndex,
+            newValue = [],
+            keys,
+            keyIndex;
+
+        if(! value || value.length === 0) {
+            return [];
+        }
+
+        for (rowIndex in value) {
+            let row = {};
+            keys = Object.keys(value[rowIndex]);
+
+            for (keyIndex in keys) {
+                let key = keys[keyIndex];
+
+                row[key] = this.transformValue(value[rowIndex], key, parentKey + '.');
+            }
+
+            newValue[rowIndex] = row;
+        }
+
+        return newValue;
     }
 
     transformFileValue(file) {

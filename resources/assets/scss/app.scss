@@ -17,6 +17,7 @@
 //views
 @import "3-views/login";
 @import "3-views/menus-create-edit";
+@import "3-views/types-create-edit";
 
 //components
 @import "4-components/top-bar";
@@ -32,3 +33,5 @@
 @import "4-components/file-card";
 @import "4-components/image-card";
 @import "4-components/relationship";
+@import "4-components/la-panel-list";
+@import "4-components/la-panel";

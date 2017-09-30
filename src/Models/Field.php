@@ -29,7 +29,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  * @property array $browse_settings
  * @property array $relationship
  * @property boolean $is_repeater_field
- * @property array|null $fields
+ * @property Collection|null $fields
  * @property string $form_prefix
  */
 class Field extends Model
@@ -197,7 +197,7 @@ class Field extends Model
         }
 
         if(! $model->exists() || (! $model->offsetExists($this->key) && ! $this->is_media)) {
-            $value = $this->getDefaultValue($model);
+            $value = $this->getDefaultValue();
 
             return $this->transformResponse($value);
         }

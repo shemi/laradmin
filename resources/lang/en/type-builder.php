@@ -15,8 +15,13 @@ return [
     ],
 
     'builder' => [
-        'group_name' => 'Group Name',
-
+        'name' => 'Name',
+        'controller' => 'Controller',
+        'model' => 'Model',
+        'records_per_page' => 'Records Per Page',
+        'panels' => 'Panels',
+        'side_panels' => 'Side Panels',
+        'add_panel' => 'Add Panel',
     ]
 
 ];

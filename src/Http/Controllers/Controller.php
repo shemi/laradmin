@@ -308,7 +308,6 @@ class Controller extends BaseController
             'code'    => $this->getStatusCode()
         ];
 
-
-        return response($data, $this->getStatusCode(), $headers);
+        return response()->json($data, $this->getStatusCode(), $headers);
     }
 }

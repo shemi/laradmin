@@ -5,6 +5,8 @@ $editRoute = route('laradmin.menus.menus.edit', ['menu' => "__menu__"]);
 $editRoute = str_replace('__menu__', '\'+ props.row.slug +\'', $editRoute);
 @endphp
 
+@include('laradmin::menus.blade.page-header')
+
 @section('content')
 
     <browse-menus :menus='{{ json_encode($menus, JSON_UNESCAPED_UNICODE) }}' inline-template>

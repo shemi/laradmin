@@ -1,0 +1,21 @@
+.types-create-edit {
+
+  .panels-area {
+	> div {
+	  background-color: $white-ter;
+	}
+
+	.panels-area-header {
+	  @extend .hero.is-twitter.is-bold;
+	  padding: 1em;
+	  margin: 0;
+
+	  .title {
+		color: white;
+	  }
+
+	}
+  }
+
+
+}

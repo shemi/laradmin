@@ -1,40 +1,43 @@
 import LaForm from '../../Forms/LaForm';
+import IconSelectModal from '../IconSelectModal/IconSelectModal.vue';
+import LaPanelList from './PanelsList.vue';
 
 export default {
 
     name: 'type-create-edit',
 
-    props: ['type', 'tables'],
+    props: [],
 
     data() {
         return {
-            form: new LaForm({
-                id: 0,
-                name: '',
-                table: null,
-                model: '',
-                slug: '',
-                public: true,
-                controller: '',
-                fields: []
-            })
+            form: new LaForm(window.laradmin.model),
+            isIconSelectModalActive: false
         }
     },
 
     mounted() {
-        console.log(this.tables);
+
     },
 
     methods: {
 
         save() {
 
+        },
+
+        addPanel(position) {
+            this.$refs[position + '_panels'].createPanel();
+        },
+
+        openIconSelectModal(toUpdate) {
+            this.isIconSelectModalActive = true;
         }
 
     },
 
     components: {
-
+        IconSelectModal,
+        LaPanelList
     }
 
 }

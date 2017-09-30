@@ -198,11 +198,7 @@ class CrudController extends Controller
 
         $fields = $model->exists ? $type->edit_fields : $type->create_fields;
 
-        $fieldsTypes = [];
-
-        foreach ($fields as $field) {
-            $fieldsTypes[$field->key] = $field->type;
-        }
+        $fieldsTypes = Type::getAllFieldTypes($fields);
 
         $jsObject = [
             'model' => $form,

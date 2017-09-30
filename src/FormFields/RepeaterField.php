@@ -57,4 +57,48 @@ class RepeaterField extends FormField
         return empty($roles) ? false : $roles;
     }
 
+    public function transformRequest(Field $field, $data)
+    {
+        $data = parent::transformRequest($field, $data);
+
+        if(! is_array($data) || empty($data)) {
+            return [];
+        }
+
+        $newData = [];
+
+        foreach ($data as $row) {
+            /** @var Field $childField */
+            foreach ($field->fields as $childField) {
+                $value = array_get($row, $childField->key, $childField->getDefaultValue());
+                $row[$childField->key] = $childField->transformRequest($value);
+            }
+
+            $newData[] = $row;
+        }
+
+        return $newData;
+    }
+
+    public function transformResponse(Field $field, $values)
+    {
+        $values = collect($values);
+
+        if($values->isEmpty()) {
+            return $values;
+        }
+
+        $values->transform(function($row) use ($field) {
+            foreach ($field->fields as $field) {
+                $value = array_get($row, $field->key, $field->getDefaultValue());
+
+                $row[$field->key] = $field->transformResponse($value);
+            }
+
+            return $row;
+        });
+
+        return $values;
+    }
+
 }

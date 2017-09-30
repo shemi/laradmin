@@ -18,6 +18,8 @@
         <nav class="tabs is-boxed">
             <div class="container is-fluid">
                 <ul>
+                    @yield('page-header-actions-before')
+
                     @if(isset($type))
                         <li class="{{ route("laradmin.{$type->slug}.index") === url()->current() ? 'is-active' : '' }}">
                             <a href="{{ route("laradmin.{$type->slug}.index") }}">
@@ -37,6 +39,8 @@
                             </a>
                         </li>
                     @endif
+
+                    @yield('page-header-actions-after')
                 </ul>
             </div>
         </nav>
