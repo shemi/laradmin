@@ -103,4 +103,30 @@ class Panel extends Model
             ->values();
     }
 
+    public function toBuilder()
+    {
+        $fields = [
+            'id',
+            'title',
+            'position',
+            'is_main_meta',
+            'has_container',
+            'style'
+        ];
+
+        $array = [];
+
+        foreach ($fields as $key) {
+            $array[$key] = $this->{$key};
+        }
+
+        if($this->fields->isNotEmpty()) {
+            $array['fields'] = $this->fields->map(function($field) {
+                return $field->toBuilder();
+            });
+        }
+
+        return $array;
+    }
+
 }

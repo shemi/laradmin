@@ -250,4 +250,37 @@ class Field extends Model
             ! empty($field['key']);
     }
 
+    public function toBuilder()
+    {
+        $fields = [
+            'label',
+            'key',
+            'show_label',
+            'default_value',
+            'nullable',
+            'type',
+            'validation',
+            'visibility',
+            'options',
+            'template_options',
+            'browse_settings',
+            'relationship',
+            'media'
+        ];
+
+        $array = [];
+
+        foreach ($fields as $key) {
+            $array[$key] = $this->{$key};
+        }
+
+        if($this->fields->isNotEmpty()) {
+            $array['fields'] = $this->fields->map(function($field) {
+                return $field->toBuilder();
+            });
+        }
+
+        return $array;
+    }
+
 }

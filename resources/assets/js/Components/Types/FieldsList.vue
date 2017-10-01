@@ -66,8 +66,12 @@
             },
         },
 
+        beforeCreate: function () {
+            this.$options.components.LaField = require('./Field.vue')
+        },
+
         components: {
-            LaField
+
         }
 
     }

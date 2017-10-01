@@ -27,10 +27,16 @@
             </div>
         </div>
 
-        <la-options-set :type="newValue.type"
-                        :form-key="formKey"
-                        v-model="newValue"
-                        v-if="isOpen"></la-options-set>
+        <div class="field-options-set">
+
+
+
+            <la-options-set :type="newValue.type"
+                            :form-key="formKey"
+                            v-model="newValue">
+            </la-options-set>
+        </div>
+
 
     </div>
 
@@ -55,14 +61,18 @@
 
         data() {
             return {
-                isOpen: true,
+                isOpen: false,
                 newValue: this.value,
 //                options: window.laradmin.schemas[this.type]['options']
             }
         },
 
+        beforeCreate: function () {
+            this.$options.components.LaOptionsSet = require('./OptionsSet.vue')
+        },
+
         components: {
-            LaOptionsSet
+
         }
 
     }

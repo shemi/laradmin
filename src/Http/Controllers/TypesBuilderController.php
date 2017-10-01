@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
+use Shemi\Laradmin\Data\DataNotFoundException;
 use Shemi\Laradmin\Database\Schema\SchemaManager;
 use Shemi\Laradmin\FormFields\FormField;
 use Shemi\Laradmin\Models\Type;
@@ -27,6 +28,22 @@ class TypesBuilderController extends Controller
     {
         $model = new Type;
 
+        return $this->getCreateEditResponse($model);
+    }
+
+    public function edit($slug)
+    {
+        $model = Type::where('slug', $slug)->first();
+
+        if(! $model) {
+            throw new DataNotFoundException($slug);
+        }
+
+        return $this->getCreateEditResponse($model);
+    }
+
+    public function getCreateEditResponse(Type $model)
+    {
         $schemas = [
             'panel' => [
                 'schema' => [

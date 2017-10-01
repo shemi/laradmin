@@ -1,7 +1,7 @@
 <template>
 
     <div class="la-options-list">
-        <div>
+        <div v-if="options.length > 0">
 
             <la-option v-for="(option, index) in options"
                        :props="option.props || {}"
@@ -56,8 +56,8 @@
             },
         },
 
-        components: {
-            LaOption
+        beforeCreate: function () {
+            this.$options.components.LaOption = require('./Option.vue')
         }
 
     }

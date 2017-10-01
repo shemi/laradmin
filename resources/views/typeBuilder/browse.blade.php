@@ -4,7 +4,7 @@
 ])
 
 @php
-    $editRoute = route('laradmin.menus.menus.edit', ['menu' => "__type__"]);
+    $editRoute = route('laradmin.types.edit', ['menu' => "__type__"]);
     $editRoute = str_replace('__type__', '\'+ props.row.slug +\'', $editRoute);
 @endphp
 

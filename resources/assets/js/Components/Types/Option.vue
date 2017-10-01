@@ -70,8 +70,12 @@
             }
         },
 
+        beforeCreate: function () {
+            this.$options.components.LaFieldsList = require('./FieldsList.vue')
+        },
+
         components: {
-            LaFieldsList
+
         }
 
     }
