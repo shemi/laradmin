@@ -26,7 +26,7 @@ export default {
         },
 
         addPanel(position) {
-            this.$refs[position + '_panels'].createPanel();
+            this.$refs.panels.createPanel();
         },
 
         openIconSelectModal(toUpdate) {

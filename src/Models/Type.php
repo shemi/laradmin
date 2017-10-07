@@ -260,11 +260,7 @@ class Type extends Model
             $array[$key] = $this->$key;
         }
 
-        $array['main_panels'] = $this->main_panels->map(function($panel) {
-            return $panel->toBuilder();
-        });
-
-        $array['side_panels'] = $this->side_panels->map(function($panel) {
+        $array['panels'] = $this->panels->map(function($panel) {
             return $panel->toBuilder();
         });
 

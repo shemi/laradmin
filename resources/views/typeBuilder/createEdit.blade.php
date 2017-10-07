@@ -96,7 +96,7 @@
                 <section class="section panels">
 
                     <div class="columns">
-                        <div class="column panels-area is-three-quarters">
+                        <div class="column panels-area">
                             <div>
                                 <div class="level panels-area-header">
                                     <div class="level-left">
@@ -116,38 +116,38 @@
                                 </div>
 
                                 <la-panel-list class="main-panels"
-                                               form-key="main_panels"
-                                               ref="main_panels"
-                                               :panels="form.main_panels"></la-panel-list>
+                                               form-key="panels"
+                                               ref="panels"
+                                               :panels="form.panels"></la-panel-list>
                             </div>
                         </div>
 
-                        <div class="column panels-area">
-                            <div>
-                                <div class="level panels-area-header">
-                                    <div class="level-left">
-                                        <h3 class="level-item title is-5">
-                                            @lang('laradmin::type-builder.builder.side_panels')
-                                        </h3>
-                                    </div>
-                                    <div class="level-right">
-                                        <div class="level-item">
-                                            <button type="button"
-                                                    @click.prevent="addPanel('side')"
-                                                    class="button is-primary">
-                                                @lang('laradmin::type-builder.builder.add_panel')
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                        {{--<div class="column panels-area">--}}
+                            {{--<div>--}}
+                                {{--<div class="level panels-area-header">--}}
+                                    {{--<div class="level-left">--}}
+                                        {{--<h3 class="level-item title is-5">--}}
+                                            {{--@lang('laradmin::type-builder.builder.side_panels')--}}
+                                        {{--</h3>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="level-right">--}}
+                                        {{--<div class="level-item">--}}
+                                            {{--<button type="button"--}}
+                                                    {{--@click.prevent="addPanel('side')"--}}
+                                                    {{--class="button is-primary">--}}
+                                                {{--@lang('laradmin::type-builder.builder.add_panel')--}}
+                                            {{--</button>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
-                                <la-panel-list class="side-panels"
-                                               form-key="side_panels"
-                                               ref="side_panels"
-                                               :panels="form.side_panels">
-                                </la-panel-list>
-                            </div>
-                        </div>
+                                {{--<la-panel-list class="side-panels"--}}
+                                               {{--form-key="side_panels"--}}
+                                               {{--ref="side_panels"--}}
+                                               {{--:panels="form.side_panels">--}}
+                                {{--</la-panel-list>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                     </div>
 
                 </section>

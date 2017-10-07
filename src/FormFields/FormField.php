@@ -119,4 +119,11 @@ abstract class FormField implements FieldContract
         return [];
     }
 
+    public function getSubTypes()
+    {
+        return property_exists($this, 'subFields') ?
+            $this->subFields :
+            null;
+    }
+
 }

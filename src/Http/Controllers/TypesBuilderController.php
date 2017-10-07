@@ -82,16 +82,21 @@ class TypesBuilderController extends Controller
             ]
         ];
 
+        $fieldTypes = [];
+
         /** @var FormField $formField */
         foreach (app('laradmin')->formFields() as $formField) {
             $schemas[$formField->getCodename()] = [
                 'schema' => $formField->getBuilderSchema(),
                 'options' => $formField->getBuilderOptions()
             ];
+
+            $fieldTypes[$formField->getCodename()] = $formField->getSubTypes();
         }
 
         app('laradmin')->publishManyJs([
             'model' => $model->toBuilderArray(),
+            'types' => $fieldTypes,
             'schemas' => $schemas
         ]);
 

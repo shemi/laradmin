@@ -7,7 +7,7 @@
                 <div class="level-item">
                     <div>
                         <p class="la-panel-header-title title is-4">
-                            {{ newValue.name }}
+                            {{ newValue.label }}
                         </p>
 
                         <div class="panel-header-actions">
@@ -28,8 +28,51 @@
         </div>
 
         <div class="field-options-set">
+            <div class="columns">
+                <div class="column">
+                    <la-option :form-key="formKey + '.label'"
+                               :props="{'type': 'text'}"
+                               v-model="newValue.label"
+                               :option="{'label': 'Label'}"
+                               type="b-input">
+                    </la-option>
+                </div>
+                <div class="column">
+                    <la-option :form-key="formKey + '.key'"
+                               :props="{'type': 'text'}"
+                               v-model="newValue.key"
+                               :option="{'label': 'Key'}"
+                               type="b-input">
+                    </la-option>
+                </div>
+            </div>
 
-
+            <div class="columns">
+                <div class="column">
+                    <b-field label="Field Type">
+                        <b-select v-model="newValue.type"
+                                  expanded
+                                  placeholder="Select a type">
+                            <option v-for="(sub, key) in types"
+                                    :value="key">
+                                {{ key }}
+                            </option>
+                        </b-select>
+                    </b-field>
+                </div>
+                <div class="column">
+                    <b-field label="Field Sub Type" v-if="subTypes">
+                        <b-select v-model="newValue.template_options.type"
+                                  expanded
+                                  placeholder="Select a type">
+                            <option v-for="key in subTypes"
+                                    :value="key">
+                                {{ key }}
+                            </option>
+                        </b-select>
+                    </b-field>
+                </div>
+            </div>
 
             <la-options-set :type="newValue.type"
                             :form-key="formKey"
@@ -45,7 +88,6 @@
 <script>
 
     import ParentFormMixin from '../../Mixins/ParentForm';
-    import LaOptionsSet from './OptionsSet.vue';
 
     export default {
 
@@ -63,12 +105,20 @@
             return {
                 isOpen: false,
                 newValue: this.value,
+                types: window.laradmin.types,
 //                options: window.laradmin.schemas[this.type]['options']
             }
         },
 
         beforeCreate: function () {
-            this.$options.components.LaOptionsSet = require('./OptionsSet.vue')
+            this.$options.components.LaOptionsSet = require('./OptionsSet.vue');
+            this.$options.components.LaOption = require('./Option.vue');
+        },
+
+        computed: {
+            subTypes() {
+                return this.types[this.newValue.type];
+            }
         },
 
         components: {

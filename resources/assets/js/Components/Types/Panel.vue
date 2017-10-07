@@ -3,14 +3,22 @@
     <div class="la-panel">
 
         <div class="level la-panel-header">
-            <div class="level-left">
+            <div class="level-left" @click.prevent="isOpen = ! isOpen">
+                <div class="level-item">
+                    <b-icon icon="arrows"></b-icon>
+                </div>
                 <div class="level-item">
                     <div>
                         <p class="la-panel-header-title title is-4">
-                            {{ panel.title }}
+                            <span>{{ panel.title }}</span>
+                            <b-tooltip label="Main meta panel"
+                                       position="is-right"
+                                       v-if="panel.is_main_meta">
+                                <b-icon icon="star"></b-icon>
+                            </b-tooltip>
                         </p>
 
-                        <div class="panel-header-actions">
+                        <div class="panel-header-actions" v-if="! panel.is_main_meta">
                             <a class="is-small">Duplicate</a>
                             <a class="is-small has-text-danger">Delete</a>
                         </div>
@@ -19,6 +27,23 @@
             </div>
 
             <div class="level-right">
+                <div class="level-item">
+                    <b-tooltip label="Select The Panel Position" position="is-left">
+                        <b-field>
+                            <b-radio-button v-model="panel.position"
+                                            :disabled="panel.is_main_meta"
+                                            native-value="main">
+                                <span>Main Panel</span>
+                            </b-radio-button>
+
+                            <b-radio-button v-model="panel.position"
+                                            :disabled="panel.is_main_meta"
+                                            native-value="side">
+                                <span>Side panel</span>
+                            </b-radio-button>
+                        </b-field>
+                    </b-tooltip>
+                </div>
                 <div class="level-item">
                     <a class="panel-content-toggle" @click.prevent="isOpen = ! isOpen">
                         <b-icon :icon="isOpen ? 'caret-down' : 'caret-up'"></b-icon>
@@ -30,7 +55,8 @@
         <la-options-set type="panel"
                         :form-key="formKey"
                         v-model="panel"
-                        v-if="isOpen"></la-options-set>
+                        v-if="isOpen">
+        </la-options-set>
 
     </div>
 
@@ -54,7 +80,7 @@
 
         data() {
             return {
-                isOpen: true
+                isOpen: false
             }
         },
 
