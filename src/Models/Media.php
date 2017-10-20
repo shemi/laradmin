@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models;
 
+use League\Flysystem\Util\MimeType;
 use Spatie\MediaLibrary\Media as BaseMedia;
 
 class Media extends BaseMedia
@@ -9,7 +10,9 @@ class Media extends BaseMedia
 
     public function getNameAttribute($value)
     {
-        if(! pathinfo($value, PATHINFO_EXTENSION)) {
+        $userExt = pathinfo($value, PATHINFO_EXTENSION);
+
+        if(! $userExt || $userExt !== $this->extension) {
             $value .= ".{$this->extension}";
         }
 
