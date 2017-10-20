@@ -3,7 +3,7 @@
 namespace Shemi\Laradmin\Models\Traits;
 
 use Illuminate\Support\Collection;
-use Shemi\Laradmin\Models\Media;
+use Spatie\MediaLibrary\Media;
 
 /**
  * Shemi\Laradmin\Models\Traits\FieldHasMedia
