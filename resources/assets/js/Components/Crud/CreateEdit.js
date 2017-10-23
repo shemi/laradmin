@@ -8,6 +8,7 @@ import {LaRelationship, LaRelationshipRow} from '../Relationship/index';
 import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
 import LaImageUpload from '../ImageUpload/ImageUpload.vue';
 import LaFileUpload from '../FileUpload/FileUpload.vue';
+import TagsField from '../TagsField/TagsField.vue';
 
 export default {
 
@@ -80,7 +81,8 @@ export default {
         LaRelationship,
         LaRelationshipRow,
         LaImageUpload,
-        LaFileUpload
+        LaFileUpload,
+        TagsField
     }
 
 }

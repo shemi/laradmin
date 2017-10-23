@@ -80,6 +80,12 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::post('relationship-create/{typeSlug}/{fieldKey}', [
+            "uses" => "{$namespacePrefix}RelationshipController@simpleCreate",
+            "as" => "relationship.create",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 
             Route::get("/{$type->slug}/query", [
