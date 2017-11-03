@@ -9,15 +9,13 @@ use Shemi\Laradmin\LaradminServiceProvider;
 class InstallCommand extends Command
 {
 
-    protected $signature = "laradmin:install";
+    protected $signature = "laradmin:install {--dev}";
 
     protected $description = "Install Laradmin";
 
     public function __construct()
     {
         parent::__construct();
-
-
 
     }
 
@@ -50,12 +48,25 @@ class InstallCommand extends Command
             '--tag' => 'config'
         ]);
 
-        $this->line('Publishing laradmin assets files');
+        if (! $this->option('dev')) {
+            $this->line('Publishing laradmin assets files');
 
-        $this->call("vendor:publish", [
-            '--provider' => LaradminServiceProvider::class,
-            '--tag' => 'laradmin_assets'
-        ]);
+            $this->call("vendor:publish", [
+                '--provider' => LaradminServiceProvider::class,
+                '--tag' => 'laradmin_assets'
+            ]);
+        } else {
+            $this->line('Creating symlink to laradmin assets files');
+
+            if(! file_exists(public_path('/vendor/laradmin'))) {
+                mkdir(public_path('/vendor/laradmin'), 0777, true);
+            }
+
+            symlink(
+                __DIR__ . '/../../../publishable/public',
+                public_path('/vendor/laradmin/assets')
+            );
+        }
 
         $this->line('Publishing laradmin config file');
 
