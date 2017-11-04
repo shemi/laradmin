@@ -17,7 +17,7 @@ mix.js('resources/assets/js/app.js', './publishable/public')
     .setPublicPath('./')
     // .webpackConfig({devtool: "inline-source-map"})
     .browserSync({
-        proxy: 'maytiv-app.dev',
+        proxy: 'laradmin.dev',
         files: [
             'src/**/*.php',
             'resources/views/**/*.php',

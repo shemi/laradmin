@@ -1,6 +1,7 @@
 <template>
 
-    <div class="la-panel">
+    <div class="la-panel"
+         :class="{'is-open': isOpen}">
 
         <div class="level la-panel-header">
             <div class="level-left" @click.prevent="isOpen = ! isOpen">
@@ -33,13 +34,13 @@
                             <b-radio-button v-model="panel.position"
                                             :disabled="panel.is_main_meta"
                                             native-value="main">
-                                <span>Main Panel</span>
+                                <span>Main</span>
                             </b-radio-button>
 
                             <b-radio-button v-model="panel.position"
                                             :disabled="panel.is_main_meta"
                                             native-value="side">
-                                <span>Side panel</span>
+                                <span>Side</span>
                             </b-radio-button>
                         </b-field>
                     </b-tooltip>

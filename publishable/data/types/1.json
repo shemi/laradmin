@@ -1,0 +1,164 @@
+{
+    "id": 1,
+    "name": "Users",
+    "slug": "users",
+    "model": "\\App\\User",
+    "controller": "\\Shemi\\Laradmin\\Http\\Controllers\\CrudController",
+    "updated_at": "2000-01-01 00:00:00.00",
+    "created_at": "2000-01-01 00:00:00.00",
+    "records_per_page": 25,
+
+    "panels": [
+        {
+            "id": 2,
+            "title": "Publish",
+            "position": "side",
+            "is_main_meta": true,
+            "fields": [
+                {
+                    "label": "Created at",
+                    "key": "created_at",
+                    "type": "date",
+                    "read_only": true,
+                    "visibility": ["browse", "create", "edit"],
+                    "browse_settings": {
+                        "order": 99,
+                        "sortable": true,
+                        "date_format": "d\\m\\Y H:i"
+                    }
+                },
+                {
+                    "label": "Updated at",
+                    "key": "updated_at",
+                    "type": "date",
+                    "read_only": true,
+                    "visibility": ["browse", "create", "edit"],
+                    "browse_settings": {
+                        "order": 99,
+                        "sortable": true,
+                        "date_format": "d\\m\\Y H:i"
+                    }
+                }
+            ]
+        },
+
+        {
+            "id": 1,
+            "title": "Title",
+            "position": "main",
+            "style": {
+                "marginBottom": "50px"
+            },
+            "has_container": false,
+            "fields": [
+                {
+                    "label": "Name",
+                    "key": "name",
+                    "type": "input",
+                    "show_label": false,
+                    "validation": [
+                        "required"
+                    ],
+                    "visibility": ["browse", "create", "edit"],
+                    "template_options": {
+                        "placeholder": "The user full name",
+                        "type": "text",
+                        "size": "is-large"
+                    },
+                    "browse_settings": {
+                        "order": 1,
+                        "sortable": true,
+                        "searchable": true,
+                        "search_comparison": "like"
+                    }
+                }
+            ]
+        },
+
+        {
+            "id": 2,
+            "title": "General",
+            "position": "main",
+            "fields": [
+                {
+                    "label": "ID",
+                    "key": "id",
+                    "type": "input",
+                    "validation": [],
+                    "visibility": ["browse"],
+                    "template_options": {
+                        "placeholder": "",
+                        "read_only": true,
+                        "type": "number"
+                    },
+                    "browse_settings": {
+                        "label": "Id",
+                        "order": 0,
+                        "sortable": true
+                    }
+                },
+                {
+                    "label": "Email",
+                    "key": "email",
+                    "type": "input",
+                    "validation": [
+                        "required",
+                        "email"
+                    ],
+                    "visibility": ["browse", "create", "edit"],
+                    "template_options": {
+                        "placeholder": "The User Email",
+                        "type": "email"
+                    },
+                    "browse_settings": {
+                        "sortable": true,
+                        "searchable": true,
+                        "order": 2
+                    }
+                },
+                {
+                    "label": "Password",
+                    "key": "password",
+                    "type": "input",
+                    "is_password": true,
+                    "validation": [
+                        "required",
+                        "min:6"
+                    ],
+                    "visibility": ["create", "edit"],
+                    "template_options": {
+                        "type": "password",
+                        "transform": "bcrypt"
+                    },
+                    "browse_settings": {
+                        "sortable": false,
+                        "searchable": false,
+                        "order": 2
+                    }
+                },
+                {
+                    "label": "Roles",
+                    "key": "roles",
+                    "relationship": {
+                        "key": "id",
+                        "label": "name"
+                    },
+                    "default_value": null,
+                    "template_options": {
+                        "placeholder": "Select user role"
+                    },
+                    "nullable": false,
+                    "visibility": ["browse", "create", "edit"],
+                    "type": "select_multiple",
+                    "width": null,
+                    "search_comparison": "like",
+                    "browse_settings": {
+                        "sortable": false,
+                        "searchable": false,
+                        "order": 3
+                    }
+                }
+            ]
+        }
+    ]
+}

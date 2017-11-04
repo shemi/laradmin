@@ -1,0 +1,69 @@
+.la-fields-list-item {
+  .la-field {
+	border: 1px solid $grey-light;
+
+	.la-field-header {
+	  padding: 0.5em;
+	  background-color: $white-ter;
+	  margin: 0;
+	}
+
+	.la-panel-header-extra {
+	  color: $grey-light;
+	  font-size: 0.9em;
+	}
+
+	&.is-open {
+	  .la-field-header {
+		  border-bottom: 1px solid $grey-light;
+	  }
+	}
+
+	.la-panel-header-title {
+	  font-size: 1.2em;
+	}
+
+	.field-options-set {
+	  padding: 0.5em;
+	}
+
+	.la-options-list {
+	  padding: 0;
+	}
+
+  }
+
+  &:not(:last-child) {
+  	.la-field {
+		border-bottom: 0;
+	}
+  }
+
+}
+
+.placeholder-field {
+  border: 1px dotted $grey-light;
+  height: 43px;
+  background-color: $white-ter;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $grey-light;
+}
+
+.vddl-list,
+.vddl-draggable {
+  position: relative;
+}
+
+.vddl-list {
+  min-height: 44px;
+}
+
+.vddl-dragging{
+  opacity: 0.7;
+}
+
+.vddl-dragging-source {
+  display: none;
+}

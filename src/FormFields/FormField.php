@@ -15,6 +15,15 @@ abstract class FormField implements FieldContract
     protected $name;
     protected $codename;
 
+    protected $visibilityOptions = [
+        "browse",
+        "create",
+        "edit",
+        "view",
+        "export",
+        "import"
+    ];
+
     protected $defaultBuilderSchema = [
         'id' => null,
         'label' => '',
@@ -101,6 +110,8 @@ abstract class FormField implements FieldContract
     {
         $schema = $this->defaultBuilderSchema;
 
+        $schema['type'] = $this->getCodename();
+
         if(property_exists($this, 'builderSchema')) {
             $schema = array_replace_recursive($schema, $this->builderSchema);
         }
@@ -124,6 +135,11 @@ abstract class FormField implements FieldContract
         return property_exists($this, 'subFields') ?
             $this->subFields :
             null;
+    }
+
+    public function getVisibilityOptions()
+    {
+        return $this->visibilityOptions;
     }
 
 }

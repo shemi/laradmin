@@ -19,6 +19,7 @@ class CanAccessBackend
      */
     public function handle($request, Closure $next, $guard = null)
     {
+
         if (Auth::guard($guard)->check()) {
             $user = Auth::guard($guard)->user();
 

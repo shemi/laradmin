@@ -21,18 +21,33 @@ class InstallCommand extends Command
 
     public function handle()
     {
+        $this->publishMigrations();
+
+        if (! $this->option('dev')) {
+            $this->publishAssets();
+        } else {
+            $this->symlinkAssetsFolder();
+        }
+
+        $this->publishConfig();
+
+        $this->publishData();
+    }
+
+    protected function publishMigrations()
+    {
         $migrationFiles = glob(database_path('/migrations/*.php'));
         $migrationExists = false;
 
         foreach ($migrationFiles as $file) {
-            if(preg_match("/(\d{4}_\d{2}_\d{2}_\d{6})(_create_permission_tables\.php$)/", basename($file))) {
+            if (preg_match("/(\d{4}_\d{2}_\d{2}_\d{6})(_create_permission_tables\.php$)/", basename($file))) {
                 $migrationExists = true;
 
                 break;
             }
         }
 
-        if(! $migrationExists) {
+        if (! $migrationExists) {
             $this->line('Publishing laravel-permission migrations');
 
             $this->call("vendor:publish", [
@@ -47,41 +62,50 @@ class InstallCommand extends Command
             '--provider' => \Spatie\Permission\PermissionServiceProvider::class,
             '--tag' => 'config'
         ]);
+    }
 
-        if (! $this->option('dev')) {
-            $this->line('Publishing laradmin assets files');
+    protected function publishAssets()
+    {
+        $this->line('Publishing laradmin assets files');
 
-            $this->call("vendor:publish", [
-                '--provider' => LaradminServiceProvider::class,
-                '--tag' => 'laradmin_assets'
-            ]);
-        } else {
-            $this->line('Creating symlink to laradmin assets files');
+        $this->call("vendor:publish", [
+            '--provider' => LaradminServiceProvider::class,
+            '--tag' => 'laradmin_assets'
+        ]);
+    }
 
-            if(! file_exists(public_path('/vendor/laradmin'))) {
-                mkdir(public_path('/vendor/laradmin'), 0777, true);
-            }
+    protected function symlinkAssetsFolder()
+    {
+        $this->line('Creating symlink to laradmin assets files');
 
-            symlink(
-                __DIR__ . '/../../../publishable/public',
-                public_path('/vendor/laradmin/assets')
-            );
+        if (! file_exists(public_path('/vendor/laradmin'))) {
+            mkdir(public_path('/vendor/laradmin'), 0777, true);
         }
 
+        symlink(
+            __DIR__ . '/../../../publishable/public',
+            public_path('/vendor/laradmin/assets')
+        );
+    }
+
+    public function publishConfig()
+    {
         $this->line('Publishing laradmin config file');
 
         $this->call("vendor:publish", [
             '--provider' => LaradminServiceProvider::class,
             '--tag' => 'laradmin_config'
         ]);
+    }
 
+    public function publishData()
+    {
         $this->line('Publishing laradmin data files');
 
         $this->call("vendor:publish", [
             '--provider' => LaradminServiceProvider::class,
             '--tag' => 'laradmin_data'
         ]);
-
     }
 
 }

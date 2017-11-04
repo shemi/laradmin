@@ -1,6 +1,7 @@
 <template>
 
     <b-field :type="hasErrors ? 'is-danger' : ''"
+             :class="'field-' + type"
              :messag="errorMessage"
              :label="option.label">
 

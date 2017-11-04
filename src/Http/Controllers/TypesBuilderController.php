@@ -88,7 +88,8 @@ class TypesBuilderController extends Controller
         foreach (app('laradmin')->formFields() as $formField) {
             $schemas[$formField->getCodename()] = [
                 'schema' => $formField->getBuilderSchema(),
-                'options' => $formField->getBuilderOptions()
+                'options' => $formField->getBuilderOptions(),
+                'visibility' => $formField->getVisibilityOptions()
             ];
 
             $fieldTypes[$formField->getCodename()] = $formField->getSubTypes();

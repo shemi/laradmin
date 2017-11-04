@@ -1,0 +1,26 @@
+.la-options-list {
+  padding: 0.5em;
+
+  .field-la-fields-list {
+	border: 1px solid $grey-lighter;
+
+	> .label {
+	  padding: 0.5em;
+	  margin: 0;
+	  background-color: $grey-lighter;
+	}
+
+	.fields-list-container {
+	  padding: 0.5em;
+	}
+
+	.fields-list-actions {
+	  padding: 0.5em;
+	  display: flex;
+	  justify-content: flex-end;
+	  background-color: $grey-lighter;
+	}
+
+  }
+
+}
