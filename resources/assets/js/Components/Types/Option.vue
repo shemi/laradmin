@@ -11,6 +11,12 @@
                    @input="input"
                    @blur="$emit('blur', $event)"
                    @focus="$emit('focus', $event)">
+
+            <la-dynamic-render v-if="option.slot"
+                               :form-key="formKey"
+                               :template="option.slot">
+            </la-dynamic-render>
+
         </component>
 
     </b-field>
@@ -19,7 +25,6 @@
 
 <script>
     import ParentFormMixin from '../../Mixins/ParentForm';
-    import LaFieldsList from './FieldsList.vue';
 
     export default {
         name: 'la-option',
@@ -72,7 +77,8 @@
         },
 
         beforeCreate: function () {
-            this.$options.components.LaFieldsList = require('./FieldsList.vue')
+            this.$options.components.LaFieldsList = require('./FieldsList.vue');
+            this.$options.components.LaDynamicRender = require('./DynamicRender.vue');
         },
 
         components: {

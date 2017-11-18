@@ -67,7 +67,9 @@ class TypesBuilderController extends Controller
                         'validation' => ['required']
                     ],
                     [
-                        'label' => 'Has Container',
+                        'label' => null,
+                        'slot' => '<span>Has Container</span>',
+                        'slot_el' => 'span',
                         'key' => 'has_container',
                         'type' => 'b-switch',
                         'validation' => []

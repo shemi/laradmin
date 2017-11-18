@@ -89,15 +89,19 @@ trait HasBrowseSettings
             case 'datetime':
             case 'time':
                 $value = $model->getAttribute($this->key);
+                $format = "d/m/Y";
+
+                try {
+                    $value = \Carbon\Carbon::parse($value);
+                    $value->tz('Asia/Jerusalem');
+                } catch (\Exception $e) {}
 
                 if(isset($this->browse_settings['date_format']) && $this->browse_settings['date_format']) {
-                    return \Carbon\Carbon::parse($value)->format(
-                        addslashes($this->browse_settings['date_format'])
-                    );
+                    $format = addslashes($this->browse_settings['date_format']);
                 }
 
                 if($value instanceof \DateTime) {
-                    return $value->format("d/m/Y");
+                    $value = $value->format($format);
                 }
 
                 return $value;

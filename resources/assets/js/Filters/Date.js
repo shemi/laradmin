@@ -8,10 +8,11 @@ Vue.filter('date', function(value, format = null) {
         return "";
     }
 
+
     if(value.date) {
         if(value.timezone && value.timezone.toLowerCase() === 'utc') {
             date = moment.utc(value.date);
-            date.local();
+            date = moment(date).local();
         } else {
             date = moment(value.date);
         }
@@ -23,5 +24,5 @@ Vue.filter('date', function(value, format = null) {
         return value;
     }
 
-    return date.format(format || 'DD/MM/YYYY HH:MM');
+    return date.format(format || 'DD/MM/YYYY HH:mm');
 });

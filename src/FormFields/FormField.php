@@ -46,10 +46,30 @@ abstract class FormField implements FieldContract
         ]
     ];
 
+    protected $defaultBuilderOptions = [
+        [
+            'key' => 'show_label',
+            'label' => null,
+            'slot' => '<span>{{ field && field.show_label ? "Label Visible" : "Label Hidden" }}</span>',
+            'slot_el' => 'span',
+            'type' => 'b-switch',
+            'validation' => []
+        ],
+        [
+            'key' => 'read_only',
+            'label' => null,
+            'slot' => '<span>Read Only</span>',
+            'slot_el' => 'span',
+            'type' => 'b-switch',
+            'validation' => []
+        ],
+    ];
+
     /**
      * @param Field $field
      * @param Type $type
      * @param Model $model
+     * @param $data
      * @return string
      */
     public function handle(Field $field, Type $type, Model $model, $data)
@@ -121,13 +141,13 @@ abstract class FormField implements FieldContract
 
     public function getBuilderOptions()
     {
-//        $schema = $this->defaultBuilderSchema;
+        $options = $this->defaultBuilderOptions;
 //
 //        if(property_exists($this, 'builderSchema')) {
 //            $schema = array_replace_recursive($schema, $this->builderSchema);
 //        }
 
-        return [];
+        return $options;
     }
 
     public function getSubTypes()

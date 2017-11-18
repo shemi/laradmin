@@ -45,6 +45,11 @@ export default {
                             message: 'All Changes Saved!',
                             type: 'is-success'
                         });
+
+                        //POC
+                        if(this.form.updated_at) {
+                            this.form.updated_at = new Date();
+                        }
                     }
                 })
                 .catch(err => {

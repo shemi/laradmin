@@ -51,10 +51,10 @@
                     @endforeach
 
                     <la-table-column label="Actions" width="220">
-                        <a :href="'{{ $editRoute }}'" class="button">
+                        <a :href="'{{ $editRoute }}'" class="button has-text-black">
                             Edit
                         </a>
-                        <a :href="'{{ $editRoute }}'" class="button">
+                        <a :href="'{{ $editRoute }}'" class="button has-text-black">
                             View
                         </a>
                         <a class="button is-danger"

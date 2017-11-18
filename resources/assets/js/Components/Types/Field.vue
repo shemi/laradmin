@@ -95,18 +95,6 @@
                     </div>
                 </div>
 
-                <div class="field">
-                    <b-switch v-model="newValue.show_label">
-                        {{ newValue.show_label ? "Label Visible" : "Label Hidden" }}
-                    </b-switch>
-                </div>
-
-                <div class="field">
-                    <b-switch v-model="newValue.read_only">
-                        Read Only
-                    </b-switch>
-                </div>
-
                 <b-field label="Visibility">
                     <div class="block">
                         <b-checkbox v-model="newValue.visibility"
@@ -117,7 +105,6 @@
                         </b-checkbox>
                     </div>
                 </b-field>
-
 
                 <la-options-set :type="newValue.type"
                                 :form-key="formKey"

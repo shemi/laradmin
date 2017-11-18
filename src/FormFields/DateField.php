@@ -27,7 +27,7 @@ class DateField extends FormField
         $value = parent::transformRequest($field, $data);
 
         if($value) {
-            $value = Carbon::parse($value, 'utc');
+            $value = Carbon::parse($value, 'UTC');
         }
 
         return $value;
@@ -38,7 +38,7 @@ class DateField extends FormField
         $value = parent::transformResponse($field, $data);
 
         if(is_array($value) && array_key_exists('date', $value)) {
-            $value = Carbon::parse($value['date'], 'utc');
+            $value = Carbon::parse($value['date'], 'UTC');
         }
 
         if(is_string($value)) {

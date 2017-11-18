@@ -11,6 +11,12 @@ class MessageField extends FormField
 
     protected $codename = "message";
 
+    protected $visibilityOptions = [
+        "create",
+        "edit",
+        "view"
+    ];
+
     public function createContent(Field $field, Type $type, Model $model, $data)
     {
         return view('laradmin::formFields.message', compact(
