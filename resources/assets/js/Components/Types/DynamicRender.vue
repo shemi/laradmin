@@ -47,8 +47,6 @@
 
         computed: {
             field() {
-                console.log(this.formKey.split('.'), this.formKey, this.form);
-
                 return get(this.form, this.formKey.split('.'));
             }
         }

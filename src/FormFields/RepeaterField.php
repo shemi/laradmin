@@ -11,6 +11,10 @@ class RepeaterField extends FormField
 
     protected $codename = "repeater";
 
+    protected $builderSchema = [
+        'fields' => []
+    ];
+
     public function createContent(Field $field, Type $type, Model $model, $data)
     {
         return view('laradmin::formFields.repeater', compact(
@@ -19,6 +23,18 @@ class RepeaterField extends FormField
             'model',
             'data'
         ));
+    }
+
+    protected function builderOptions($defaultOptions)
+    {
+        return array_merge($defaultOptions, [
+            [
+                'label' => 'Fields',
+                'key' => 'fields',
+                'type' => 'la-fields-list',
+                'validation' => []
+            ]
+        ]);
     }
 
     public function getValidationRoles(Field $field)

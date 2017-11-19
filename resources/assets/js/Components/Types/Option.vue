@@ -25,6 +25,7 @@
 
 <script>
     import ParentFormMixin from '../../Mixins/ParentForm';
+    import {get} from 'lodash';
 
     export default {
         name: 'la-option',
@@ -41,11 +42,11 @@
 
         data() {
             return {
-                newValue: this.value
+                newValue: this.value,
             }
         },
 
-        mounted() {
+        created() {
 
         },
 

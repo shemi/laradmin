@@ -55,6 +55,7 @@
 
         <la-options-set type="panel"
                         :form-key="formKey"
+                        :options="options"
                         v-model="panel"
                         v-if="isOpen">
         </la-options-set>
@@ -64,9 +65,9 @@
 </template>
 
 <script>
-
     import ParentFormMixin from '../../Mixins/ParentForm';
     import LaOptionsSet from './OptionsSet.vue';
+    import {cloneDeep} from "lodash";
 
     export default {
 
@@ -81,7 +82,8 @@
 
         data() {
             return {
-                isOpen: false
+                isOpen: false,
+                options: cloneDeep(window.laradmin.schemas['panel']['options'])
             }
         },
 

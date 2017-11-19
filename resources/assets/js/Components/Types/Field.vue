@@ -108,6 +108,7 @@
 
                 <la-options-set :type="newValue.type"
                                 :form-key="formKey"
+                                :options="options"
                                 v-model="newValue">
                 </la-options-set>
 
@@ -144,6 +145,7 @@
                 newValue: this.value,
                 newType: null,
                 newSubType: null,
+                windowData: cloneDeep(window.laradmin.schemas)
             }
         },
 
@@ -154,25 +156,32 @@
         },
 
         created() {
-            this.newType = this.type;
-            this.newSubType = this.subType;
-
-            if(! this.newValue.id) {
-                this.newValue.id = Helpers.makeId();
-
-                this.$emit('input', this.newValue);
-            }
-
-            this.checkSchema();
+            this.initField();
         },
 
         watch: {
             value(newValue) {
                 this.newValue = newValue;
+            },
+            newValue(newValue) {
+                this.$emit('input', newValue);
             }
         },
 
         methods: {
+
+            initField() {
+                this.newType = this.type;
+                this.newSubType = this.subType;
+
+                if(! this.newValue.id) {
+                    this.newValue.id = Helpers.makeId();
+
+                    this.$emit('input', this.newValue);
+                }
+
+                this.checkSchema();
+            },
 
             checkSchema() {
                 let schemaKeys = Object.keys(this.schema),
@@ -261,7 +270,7 @@
             },
 
             data() {
-                return window.laradmin.schemas[this.type]
+                return this.windowData[this.type];
             },
 
             schema() {
@@ -283,7 +292,6 @@
             newSchema() {
                 return this.newData.schema;
             }
-
         },
 
         components: {

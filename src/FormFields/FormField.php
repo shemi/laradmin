@@ -63,6 +63,14 @@ abstract class FormField implements FieldContract
             'type' => 'b-switch',
             'validation' => []
         ],
+        [
+            'key' => 'template_options.size',
+            'label' => "Size",
+            'slot' => '<optgroup><option value="is-small">Small</option><option :value="null">Default</option><option value="is-medium">Medium</option><option value="is-large">Large</option></optgroup>',
+            'slot_el' => 'div',
+            'type' => 'b-select',
+            'validation' => []
+        ],
     ];
 
     /**
@@ -142,10 +150,10 @@ abstract class FormField implements FieldContract
     public function getBuilderOptions()
     {
         $options = $this->defaultBuilderOptions;
-//
-//        if(property_exists($this, 'builderSchema')) {
-//            $schema = array_replace_recursive($schema, $this->builderSchema);
-//        }
+
+        if(method_exists($this, 'builderOptions')) {
+            $options = $this->builderOptions($options);
+        }
 
         return $options;
     }
