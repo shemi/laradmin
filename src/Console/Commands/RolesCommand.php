@@ -83,7 +83,10 @@ class RolesCommand extends Command
         $this->line('***********************************************');
 
         $this->line('Creating "'. $name .'" permission');
-        $permission = Permission::firstOrNew(['name' => $name]);
+        $permission = Permission::firstOrNew([
+            'name' => $name,
+            'guard_name' => config('laradmin.guard')
+        ]);
         $line = 'The "'. $name .'" permission Exists.';
 
         if(! $permission->exists) {
