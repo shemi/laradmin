@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -51,6 +52,11 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect('/');
+    }
+
+    public function guard()
+    {
+        return Auth::guard(config('laradmin.guard'));
     }
 
 }

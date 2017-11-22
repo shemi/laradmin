@@ -46,7 +46,12 @@ class RolesCommand extends Command
         app()['cache']->forget('spatie.permission.cache');
 
         $this->line('Creating "admin" role');
-        $adminRole = Role::firstOrNew(['name' => 'admin']);
+
+        $adminRole = Role::firstOrNew([
+            'name' => 'admin',
+            'guard_name' => config('laradmin.guard')
+        ]);
+
         $line = 'The "admin" Role Exists.';
 
         if(! $adminRole->exists) {

@@ -17,6 +17,8 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        $guard = $guard ?: config('laradmin.guard');
+
         if (Auth::guard($guard)->check()) {
             return redirect()->route('laradmin.dashboard');
         }

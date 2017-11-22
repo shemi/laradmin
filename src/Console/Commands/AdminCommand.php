@@ -21,8 +21,8 @@ class AdminCommand extends Command
     {
         app()['cache']->forget('spatie.permission.cache');
         $model = app(config('laradmin.user.model'));
-        $user = $model->whereEmail($this->argument('email'))->firstOrFail();
-        $user->assignRole('admin');
+        $user = $model->where('email', $this->argument('email'))->firstOrFail();
+        $user->assignRole('admin', config('laradmin.guard'));
 
         $this->line('Cool Cool Cool :)');
     }
