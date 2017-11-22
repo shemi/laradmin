@@ -50,7 +50,7 @@ class CrudController extends Controller
      */
     protected function userCanBrowse(Type $type, Request $request)
     {
-        return $request->user()->can("browse {$type->slug}");
+        return $this->user()->can("browse {$type->slug}");
     }
 
     /**
@@ -233,7 +233,7 @@ class CrudController extends Controller
      */
     protected function userCanCreate(Type $type, Request $request)
     {
-        return $request->user()->can("create {$type->slug}");
+        return $this->user()->can("create {$type->slug}");
     }
 
     /**
@@ -296,7 +296,7 @@ class CrudController extends Controller
      */
     protected function userCanUpdate(Type $type, Request $request)
     {
-        return $request->user()->can("update {$type->slug}");
+        return $this->user()->can("update {$type->slug}");
     }
 
     /**
@@ -350,7 +350,7 @@ class CrudController extends Controller
      */
     protected function userCanDelete(Type $type, Request $request)
     {
-        return $request->user()->can("delete {$type->slug}");
+        return $this->user()->can("delete {$type->slug}");
     }
 
     /**
@@ -376,4 +376,10 @@ class CrudController extends Controller
             'redirect' => route("laradmin.{$type->slug}.index")
         ]);
     }
+
+    public function user()
+    {
+        return \Auth::guard(config('laradmin.guard'))->user();
+    }
+
 }
