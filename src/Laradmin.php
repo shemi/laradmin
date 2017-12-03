@@ -94,9 +94,9 @@ class Laradmin
     public function initJsObject()
     {
         $this->jsObject = [
-            'api_base' => route('laradmin.dashboard'),
+            'api_base' => route('laradmin.dashboard', false),
             'routs' => [
-                'icons' => route('laradmin.icons')
+                'icons' => route('laradmin.icons', false)
             ],
             'mixins' => []
         ];
