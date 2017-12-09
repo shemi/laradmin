@@ -22,6 +22,8 @@ namespace Shemi\Laradmin\Models\Traits;
 trait HasTemplateOptions
 {
 
+    static public $forceGroupedTypes = ['checkboxes'];
+
     public function getFieldTypeAttribute()
     {
         return $this->getTemplateOption('type', 'text');
@@ -43,7 +45,7 @@ trait HasTemplateOptions
     }
 
     public function getIsGroupedAttribute() {
-        if(in_array($this->type, ['checkboxes'])) {
+        if(in_array($this->type, static::$forceGroupedTypes)) {
             return true;
         }
 

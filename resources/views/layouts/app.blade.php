@@ -19,7 +19,7 @@
     </script>
 
     <script src="https://use.fontawesome.com/a89966cad4.js"></script>
-    <link rel="stylesheet" href="{{ laradmin_asset('app.css') }}">
+    <link rel="stylesheet" href="{{ laradmin_asset('/css/app.css') }}">
     @yield('styles')
 
 </head>
@@ -38,7 +38,7 @@
         @include('laradmin::before-scripts')
     @endif
 
-    <script src="{{ laradmin_asset('app.js') }}"></script>
+    <script src="{{ laradmin_asset('/js/app.js') }}"></script>
 </body>
 
 </html>

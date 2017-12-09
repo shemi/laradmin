@@ -1,16 +1,20 @@
 <script>
     import Vue from 'vue';
     import ParentFormMixin from '../../Mixins/ParentForm';
+    import LaForm from '../../Forms/LaForm';
 
     import {get} from 'lodash';
 
     export default {
-        props: [
-            'template',
-            'formKey'
-        ],
 
-        mixins: [ParentFormMixin],
+        props: {
+            'template': String,
+            'formKey': String,
+            'form': Object,
+            'field': {
+                default: ''
+            }
+        },
 
         data() {
             return {
@@ -30,7 +34,8 @@
             template: {
                 immediate: true,
                 handler() {
-                    let res = Vue.compile(this.template);
+                    let res = Vue.compile(this.template),
+                        i;
 
                     this.templateRender = res.render;
 
@@ -38,18 +43,12 @@
 
                     this._staticTrees = [];
 
-                    for (let i in res.staticRenderFns) {
+                    for (i in res.staticRenderFns) {
                         this.$options.staticRenderFns.push(res.staticRenderFns[i]);
                     }
                 }
             }
         },
-
-        computed: {
-            field() {
-                return get(this.form, this.formKey.split('.'));
-            }
-        }
 
     }
 

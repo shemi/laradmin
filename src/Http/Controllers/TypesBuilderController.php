@@ -94,6 +94,10 @@ class TypesBuilderController extends Controller
                 'visibility' => $formField->getVisibilityOptions()
             ];
 
+            if(method_exists($formField, 'schema')) {
+                $schemas[$formField->getCodename()]['coolSchema'] = $formField->schema()->toArray();
+            }
+
             $fieldTypes[$formField->getCodename()] = $formField->getSubTypes();
         }
 

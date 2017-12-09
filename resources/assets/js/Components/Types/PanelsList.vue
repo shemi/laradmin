@@ -4,7 +4,7 @@
         <div>
 
             <la-panel v-for="(panel, index) in panels"
-                      :form-key="formKey+'.'+index"
+                      :form-key="formKey + '.' + index"
                       :panel="panel"
                       :key="panel.id">
             </la-panel>

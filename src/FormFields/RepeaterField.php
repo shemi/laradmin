@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -25,9 +26,9 @@ class RepeaterField extends FormField
         ));
     }
 
-    protected function builderOptions($defaultOptions)
+    protected function builderOptions(Collection $defaultOptions)
     {
-        return array_merge($defaultOptions, [
+        return $defaultOptions->merge([
             [
                 'label' => 'Fields',
                 'key' => 'fields',

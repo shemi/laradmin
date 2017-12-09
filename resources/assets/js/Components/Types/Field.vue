@@ -106,16 +106,10 @@
                     </div>
                 </b-field>
 
-                <la-options-set :type="newValue.type"
-                                :form-key="formKey"
-                                :options="options"
-                                v-model="newValue">
-                </la-options-set>
+                <json-editor v-model="newValue" :schema="{}">
 
-                <b-field label="Validation" v-if="! value.read_only">
-                    <la-validation-set v-model="newValue.validation">
-                    </la-validation-set>
-                </b-field>
+                </json-editor>
+
             </div>
 
     </vddl-nodrag>
@@ -126,6 +120,7 @@
     import {cloneDeep, isUndefined} from 'lodash';
     import ParentFormMixin from '../../Mixins/ParentForm';
     import Helpers from '../../Helpers/Helpers';
+    import JsonEditor from '../JsonEditor/JsonEditor.vue';
 
     export default {
 
@@ -140,6 +135,7 @@
 
         data() {
             return {
+                isField: true,
                 types: window.laradmin.types,
                 isOpen: false,
                 newValue: this.value,
@@ -295,7 +291,7 @@
         },
 
         components: {
-
+            JsonEditor
         }
 
     }

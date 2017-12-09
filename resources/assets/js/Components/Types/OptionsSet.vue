@@ -8,6 +8,7 @@
                 <la-option :props="option.props || {}"
                            :key="index"
                            :type="option.type"
+                           :field-type="type"
                            :form-key="(formKey ? formKey + '.' : '') + option.key"
                            :option="option"
                            v-if="! isSubOption(option.key)"
@@ -17,7 +18,7 @@
 
                 <la-options-set v-else
                                 :key="index"
-                                :type="option.type"
+                                :type="type"
                                 :form-key="(formKey ? formKey + '.' : '') + getSubOptionKeys(option.key)[0]"
                                 :options="[fixSubOptionKey(option)]"
                                 v-model="newValue[getSubOptionKeys(option.key)[0]]">

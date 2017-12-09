@@ -118,7 +118,8 @@
                                 <la-panel-list class="main-panels"
                                                form-key="panels"
                                                ref="panels"
-                                               :panels="form.panels"></la-panel-list>
+                                               :panels="form.panels">
+                                </la-panel-list>
                             </div>
                         </div>
 

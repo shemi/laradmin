@@ -6,14 +6,17 @@
              :label="option.label">
 
         <component :is="type"
-                   v-bind="props"
+                   v-bind="newProps"
                    v-model="newValue"
+                   :form-key="formKey"
                    @input="input"
                    @blur="$emit('blur', $event)"
                    @focus="$emit('focus', $event)">
 
             <la-dynamic-render v-if="option.slot"
                                :form-key="formKey"
+                               :form="form"
+                               :field="newValue"
                                :template="option.slot">
             </la-dynamic-render>
 
@@ -25,6 +28,7 @@
 
 <script>
     import ParentFormMixin from '../../Mixins/ParentForm';
+    import ParentFieldMixin from '../../Mixins/ParentField';
     import {get} from 'lodash';
 
     export default {
@@ -33,21 +37,27 @@
         props: {
             formKey: String,
             type: String,
+            fieldType: String,
             value: [String, Boolean, Object, Array],
             props: Object,
             option: Object
         },
 
-        mixins: [ParentFormMixin],
+        mixins: [ParentFormMixin, ParentFieldMixin],
 
         data() {
             return {
                 newValue: this.value,
+                newProps: {}
             }
         },
 
-        created() {
+        mounted() {
+            this.setProps();
+        },
 
+        updated() {
+            this.setProps();
         },
 
         watch: {
@@ -61,6 +71,28 @@
                 this.newValue = value;
                 this.$emit('input', value);
             },
+
+            setProps() {
+                let propsKeys = Object.keys(this.props);
+
+                if(propsKeys.length <= 0) {
+                    return;
+                }
+
+                for (let keyIndex in propsKeys) {
+                    let key = propsKeys[keyIndex];
+                    let val = this.props[key];
+
+                    if(key.indexOf(':') === 0) {
+                        key = key.replace(':', '');
+                        val = new Function('return ' + val).bind(this);
+                        val = val();
+                    }
+
+                    this.$set(this.newProps, key, val);
+                }
+            }
+
         },
 
         computed: {

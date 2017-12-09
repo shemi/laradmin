@@ -3,6 +3,10 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Shemi\Laradmin\FormFields\Schema\Blueprint;
+use Shemi\Laradmin\FormFields\Schema\ObjectBlueprint;
+use Shemi\Laradmin\FormFields\Schema\Schema;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -14,6 +18,8 @@ class InputField extends FormField
     protected $builderSchema = [
         'type' => 'input',
         'template_options' => [
+            'icon' => null,
+            'grouped' => false,
             'placeholder' => null,
             'type' => 'text',
             'size' => null,
@@ -40,6 +46,61 @@ class InputField extends FormField
             'model',
             'data'
         ));
+    }
+
+    protected function builderOptions(Collection $defaultOptions)
+    {
+        return $defaultOptions->merge([
+            $this->getTemplateOptionsIsGroupedOption(),
+            $this->getTemplateOptionsSizeOption(),
+            $this->getTemplateOptionsPositionOption(),
+            [
+                'label' => 'Icon',
+                'type' => 'la-icon-input',
+                'key' => 'template_options.icon',
+                'props' => (object) [],
+                'validation' => []
+            ],
+            $this->getTemplateOptionsShowIfOption()
+        ]);
+    }
+
+    public function schema()
+    {
+        return Schema::create('input', function(Blueprint $schema, ObjectBlueprint $root) {
+            $schema->string('key')
+                ->minLength(1)
+                ->nullable()
+                ->required();
+
+            $schema->string('label')
+                ->minLength(1)
+                ->required();
+
+            $schema->boolean('nullable');
+
+            $schema->null('options');
+
+            $schema->array('visibility')
+                ->items(function(Blueprint $schema) {
+                    $schema->string()
+                        ->enum(['browse', 'create', 'edit',
+                            'view', 'export', 'import']);
+                })
+                ->nullable()
+                ->maxItems(15);
+
+            $schema->object('template_options', function(Blueprint $schema) {
+                $schema->string('placeholder');
+                $schema->string('type')
+                    ->enum(['text', 'number', 'email', 'password'])
+                    ->required()
+                    ->nullable();
+                $schema->string('size')
+                    ->enum(['']);
+            });
+
+        });
     }
 
 }

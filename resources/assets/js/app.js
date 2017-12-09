@@ -13,11 +13,13 @@ import { Vue2Dragula } from 'vue2-dragula';
 import VueClip from 'vue-clip'
 import Multiselect from 'vue-multiselect/src/index';
 import Vddl from 'vddl';
+import LaIconInput from './Components/IconInput/IconInput.vue';
 
 import './Filters/Slugify';
 import './Filters/Date';
 
 Vue.component('multiselect', Multiselect);
+Vue.component('la-icon-input', LaIconInput);
 
 Vue.use(Buefy, {
     defaultIconPack: 'fa',

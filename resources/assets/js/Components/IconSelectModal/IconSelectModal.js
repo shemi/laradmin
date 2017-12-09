@@ -1,5 +1,7 @@
 import LaHttp from '../../Forms/LaHttp';
 
+let icons = null;
+
 export default {
     props: {
         active: Boolean,
@@ -53,9 +55,16 @@ export default {
                 return;
             }
 
+            if(icons && icons.length > 0) {
+                this.icons = icons;
+
+                return;
+            }
+
             LaHttp.get('/icons')
-                .then(res => {
-                    this.icons = res.data.data.icons;
+                .then(({ data }) => {
+                    this.icons = data.data.icons;
+                    icons = data.data.icons;
                 });
 
         }

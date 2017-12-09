@@ -2,7 +2,7 @@
 
   .content-area {
     position: relative;
-    min-height: calc(100vh - #{$nav-height});
+    min-height: calc(100vh - #{$navbar-height});
   }
 
   .side-menu-holder {

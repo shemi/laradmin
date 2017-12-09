@@ -20,7 +20,7 @@ export default {
         }
 
         if(! form) {
-            throw new Error("Parent most have form object");
+            throw new Error("Parent must have form object");
         }
 
         this.form = form;
