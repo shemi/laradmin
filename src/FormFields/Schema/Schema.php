@@ -9,6 +9,15 @@ use Illuminate\Contracts\Support\Jsonable;
 class Schema implements Arrayable, Jsonable
 {
 
+    protected static $formFieldVisibilityOptions = [
+        'browse',
+        'create',
+        'edit',
+        'view',
+        'export',
+        'import'
+    ];
+
     /**
      * @var Builder
      */
@@ -31,6 +40,18 @@ class Schema implements Arrayable, Jsonable
         });
     }
 
+    public static function getVisibilityOptions($except = [])
+    {
+        $options = collect(static::$formFieldVisibilityOptions);
+
+        if(! empty($except)) {
+            $options = $options->reject(function($option) use ($except) {
+                return in_array($option, $except);
+            });
+        }
+
+        return $options->values()->toArray();
+    }
 
     /**
      * Get the instance as an array.

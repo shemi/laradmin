@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\FormFields\Schema;
 
 use Closure;
+use Illuminate\Contracts\Support\Arrayable;
 
 class ArrayBlueprint implements Schemable
 {
@@ -10,7 +11,7 @@ class ArrayBlueprint implements Schemable
 
     public $nullable;
 
-    protected $additionalItems = null;
+    protected $uniqueItems = null;
 
     protected $minItems = null;
 
@@ -18,8 +19,10 @@ class ArrayBlueprint implements Schemable
 
     protected $required = null;
 
-
-    protected $items;
+    /**
+     * @var null|Blueprint
+     */
+    protected $blueprint;
 
 
     /**
@@ -47,7 +50,7 @@ class ArrayBlueprint implements Schemable
 
         $callback($blueprint);
 
-        $this->items = $blueprint;
+        $this->blueprint = $blueprint;
 
         return $this;
     }
@@ -78,20 +81,20 @@ class ArrayBlueprint implements Schemable
     }
 
     /**
-     * @param bool $additionalItems
+     * @param bool $uniqueItems
      *
      * @return $this
      */
-    public function additionalItems($additionalItems = true)
+    public function uniqueItems($uniqueItems = true)
     {
-        $this->additionalItems = $additionalItems;
+        $this->uniqueItems = $uniqueItems;
 
         return $this;
     }
 
-    public function required()
+    public function required($required = true)
     {
-        $this->required = true;
+        $this->required = $required;
 
         return $this;
     }
@@ -117,6 +120,21 @@ class ArrayBlueprint implements Schemable
         return $this;
     }
 
+    protected function prepareItems()
+    {
+        if(! $this->blueprint || $this->blueprint->isEmpty()) {
+            return;
+        }
+
+        if($this->blueprint->properties()->count() > 1) {
+            $items = $this->blueprint->properties()->toArray();
+            $this->blueprint = new Blueprint();
+            $this->blueprint->oneOf(null, $items);
+        }
+
+        $this->blueprint = $this->blueprint->properties()->first();
+    }
+
     /**
      * Get the instance as an array.
      *
@@ -124,16 +142,18 @@ class ArrayBlueprint implements Schemable
      */
     public function toArray()
     {
+        $this->prepareItems();
+
         $schema = [
             'type' => $this->type
         ];
 
-        if($this->items instanceof Blueprint) {
-            $schema['items'] = $this->items->toArray();
+        if($this->blueprint instanceof Arrayable) {
+            $schema['items'] = $this->blueprint->toArray();
         }
 
-        if(! is_null($this->additionalItems)) {
-            $schema['additionalProperties'] = $this->additionalItems;
+        if(! is_null($this->uniqueItems)) {
+            $schema['uniqueItems'] = $this->uniqueItems;
         }
 
         if(! is_null($this->minItems)) {
@@ -145,7 +165,7 @@ class ArrayBlueprint implements Schemable
         }
 
         if($this->required) {
-           $schema['required'] = true;
+           $schema['required'] = $this->required;
         }
 
         return $schema;

@@ -10,23 +10,29 @@ class Builder
 
     public function create($title, Closure $callback)
     {
-        $this->schema = tap(
-            ObjectBlueprint::create(),
+        $this->schema = $this->createBlueprint(
             function(ObjectBlueprint $objectBlueprint) use ($title, $callback) {
-                $objectBlueprint->title($title)
+                $objectBlueprint
+                    ->title($title)
                     ->properties(
                         function(Blueprint $blueprint) use ($callback, $objectBlueprint) {
                             $callback($blueprint, $objectBlueprint);
-                        });
+                        }
+                    );
             }
         );
 
         return $this;
     }
 
-    protected function createBlueprint()
+    protected function createBlueprint(Closure $callback)
     {
-        return new Blueprint();
+        return tap(
+            ObjectBlueprint::create(),
+            function (ObjectBlueprint $objectBlueprint) use ($callback) {
+                $callback($objectBlueprint);
+            }
+        );
     }
 
     /**
@@ -79,18 +85,6 @@ class Builder
             'key',
             'label',
             'visibility'
-        ];
-    }
-
-    protected function visibilityOptions()
-    {
-        return [
-            'browse',
-            'create',
-            'edit',
-            'view',
-            'export',
-            'import'
         ];
     }
 

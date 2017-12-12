@@ -75,6 +75,12 @@ class Laradmin
         return $this->formFields;
     }
 
+    public function getFormFieldNames()
+    {
+        return collect($this->formFields)
+            ->keys();
+    }
+
     public function formField($type)
     {
         return $this->formFields[$type];

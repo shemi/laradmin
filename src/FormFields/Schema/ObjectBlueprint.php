@@ -24,7 +24,10 @@ class ObjectBlueprint implements Schemable
 
     protected $required = [];
 
-    protected $properties;
+    /**
+     * @var null|Blueprint
+     */
+    protected $blueprint;
 
 
 
@@ -45,11 +48,11 @@ class ObjectBlueprint implements Schemable
 
     public function properties(Closure $callback)
     {
-        $blueprint = new Blueprint();
+        if(! $this->blueprint) {
+            $this->blueprint = new Blueprint();
+        }
 
-        $callback($blueprint);
-
-        $this->properties = $blueprint;
+        $callback($this->blueprint);
 
         return $this;
     }
@@ -66,9 +69,9 @@ class ObjectBlueprint implements Schemable
         return $this;
     }
 
-    public function required()
+    public function required($required = true)
     {
-        $this->isRequired = true;
+        $this->isRequired = $required;
 
         return;
     }
@@ -127,18 +130,16 @@ class ObjectBlueprint implements Schemable
      */
     public function toArray()
     {
-        if($this->properties instanceof Blueprint) {
-            $this->properties = $this->properties->toArray();
-        }
-
         $schema = [
             'title' => $this->title,
             'type' => $this->type
         ];
 
 
-        if (is_array($this->properties) && ! empty($this->properties)) {
-            $schema['properties'] = $this->extractRequired($this->properties);
+        if ($this->blueprint && ! $this->blueprint->isEmpty()) {
+            $schema['properties'] = $this->extractRequired(
+                $this->blueprint->toArray()
+            );
         }
 
         if(! is_null($this->additionalProperties)) {
@@ -158,7 +159,7 @@ class ObjectBlueprint implements Schemable
         }
 
         if($this->isRequired) {
-            $schema['isRequired'] = true;
+            $schema['isRequired'] = $this->isRequired;
         }
 
         return $schema;

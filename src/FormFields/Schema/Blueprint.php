@@ -8,7 +8,7 @@ use Illuminate\Support\Fluent;
 
 class Blueprint implements Arrayable
 {
-    protected $items = [];
+    protected $properties = [];
 
     protected static function create()
     {
@@ -173,9 +173,9 @@ class Blueprint implements Arrayable
     protected function setItem($key, $item)
     {
         if(is_string($key)) {
-            $this->items[$key] = $item;
+            $this->properties[$key] = $item;
         } else {
-            $this->items[] = $item;
+            $this->properties[] = $item;
         }
 
         return $item;
@@ -219,6 +219,141 @@ class Blueprint implements Arrayable
         return $item;
     }
 
+    public function commonFormFieldSchema()
+    {
+        $this->string('key')
+            ->minLength(1)
+            ->required();
+
+        $this->string('label')
+            ->minLength(1)
+            ->required();
+
+        $this->string('type')
+            ->enum(app('laradmin')->getFormFieldNames())
+            ->required();
+
+        $this->string('id')
+            ->minLength(5)
+            ->required();
+
+        $this->boolean('nullable')
+            ->required()
+            ->nullable();
+
+        $this->boolean('read_only')
+            ->required()
+            ->nullable();
+
+        $this->boolean('show_label')
+            ->required()
+            ->nullable();
+
+        $this->anyOf('default_value', function(Blueprint $schema) {
+            $schema->null();
+            $schema->string();
+            $schema->object();
+            $schema->boolean();
+            $schema->array();
+        })->required();
+
+    }
+
+    public function visibility($except = [])
+    {
+        return $this->array(
+            'visibility',
+            function(Blueprint $schema) use ($except) {
+                $schema->string()
+                    ->enum(Schema::getVisibilityOptions($except));
+            }
+        )->uniqueItems()
+            ->required();
+    }
+
+    public function validation()
+    {
+        return $this->array('validation', function(Blueprint $schema) {
+                $schema->string();
+        })->uniqueItems()->required();
+    }
+
+    public function templateOptions()
+    {
+        return $this->object('template_options', function (Blueprint $schema) {
+
+            $schema->string('placeholder')
+                ->nullable();
+
+            $schema->string('size')
+                ->enum(['default', 'is-small', 'is-medium', 'is-large'])
+                ->nullable();
+
+            $schema->string('type')
+                ->nullable();
+
+            $schema->string('transform')
+                ->nullable();
+
+            $schema->string('position')
+                ->enum(['is-left', 'is-center', 'is-right'])
+                ->nullable();
+
+            $schema->string('show_if')
+                ->nullable();
+
+            $schema->string('icon')
+                ->nullable();
+
+            $schema->boolean('grouped');
+
+            $schema->boolean('group_multiline');
+
+            $schema->number('max_length')->nullable();
+
+        })->required();
+    }
+
+    public function browseSettings()
+    {
+        return $this->object('browse_settings', function (Blueprint $schema) {
+
+            $schema->number('order')
+                ->required()
+                ->nullable();
+
+            $schema->string('label')
+                ->nullable();
+
+            $schema->boolean('sortable');
+
+            $schema->boolean('searchable');
+
+            $schema->string('search_comparison')
+                ->enum(['=', '>=', '>', 'like', '<', '<=']);
+
+            $schema->string('date_format')
+                ->nullable();
+
+        })->required();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function properties()
+    {
+        return collect($this->properties);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->properties()->isEmpty();
+    }
+
     /**
      * Get the instance as an array.
      *
@@ -228,7 +363,7 @@ class Blueprint implements Arrayable
     {
         $array = [];
 
-        foreach ($this->items as $name => $item) {
+        foreach ($this->properties as $name => $item) {
             $item = $this->extractCombinations($name, $item);
 
             $array[$name] = $item instanceof Arrayable ?
