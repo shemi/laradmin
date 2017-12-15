@@ -16,6 +16,10 @@
             'schema': {
                 type: Object,
                 default: {}
+            },
+            'onEditable': {
+                type: Function,
+                default: node => true
             }
         },
 
@@ -34,6 +38,13 @@
                 },
                 deep: true,
                 immediate: false
+            },
+            schema: {
+                handler: function (value) {
+                    this.setSchema(value);
+                },
+                deep: true,
+                immediate: false
             }
         },
 
@@ -48,7 +59,8 @@
                     mode: 'tree',
                     name: 'field',
                     onChange: this.onEditorChange.bind(this),
-                    schema: window.laradmin.schemas.input.coolSchema
+                    onEditable: this.onEditable,
+                    schema: this.schema
                 };
 
                 this.editor = new JSONEditor(this.$el, options, {});
@@ -63,8 +75,17 @@
                 this.selfChange = false;
             },
 
+            setSchema(schema) {
+                this.editor.setSchema(schema);
+            },
+
             onEditorChange() {
-                this.newValue = this.editor.get();
+                try {
+                    this.newValue = this.editor.get();
+                } catch (e) {
+                    return false;
+                }
+
                 this.$emit('input', this.newValue);
                 this.selfChange = true;
             }

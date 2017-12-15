@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import { cloneDeep } from 'lodash';
     import LaPanel from './Panel.vue';
     import ParentFormMixin from '../../Mixins/ParentForm';
     import Helpers from '../../Helpers/Helpers';
@@ -31,14 +32,14 @@
 
         data() {
             return {
-
+                builderData: window.laradmin.builderData
             }
         },
 
         methods: {
             createPanel() {
-                let panelSchema = JSON.parse(JSON.stringify(window.laradmin.schemas.panel.schema));
-                panelSchema.id = Helpers.makeId();
+                let panelStructure = cloneDeep(this.builderData.panels.panel.structure);
+                panelStructure.id = Helpers.makeId();
 
                 this.form[this.formKey]['push'](panelSchema);
             }

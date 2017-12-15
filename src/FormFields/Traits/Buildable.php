@@ -4,7 +4,7 @@ namespace Shemi\Laradmin\FormFields\Traits;
 
 trait Buildable
 {
-    use HasBuilderOptions, HasBuilderSchema;
+    use HasJsonStructure, HasJsonSchema;
 
     protected $visibilityOptions = [
         "browse",
@@ -13,6 +13,13 @@ trait Buildable
         "view",
         "export",
         "import"
+    ];
+
+    protected $templateOptionsSizes = [
+        'default',
+        'is-small',
+        'is-medium',
+        'is-large'
     ];
 
     public function getSubTypes()
@@ -27,5 +34,14 @@ trait Buildable
         return $this->visibilityOptions;
     }
 
+    public function getBuilderData()
+    {
+        return [
+            'schema' => $this->schema()->toArray(),
+            'structure' => $this->structure(),
+            'subTypes' => $this->getSubTypes(),
+            'name' => $this->getName()
+        ];
+    }
 
 }

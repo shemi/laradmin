@@ -14,12 +14,12 @@
                                 :wrapper="newValue"
                                 class="la-fields-list-item"
                                 effect-allowed="move">
+
                     <la-field :form-key="formKey + '.' + index"
                               @clone="cloneField(index, field)"
                               @delete="deleteField(index, field)"
                               v-model="newValue[index]">
                     </la-field>
-
 
                 </vddl-draggable>
 
@@ -62,7 +62,8 @@
 
         data() {
             return {
-                newValue: this.value
+                newValue: this.value,
+                builderData: window.laradmin.builderData
             }
         },
 
@@ -74,10 +75,10 @@
 
         methods: {
             createField() {
-                let schema = JSON.parse(JSON.stringify(window.laradmin.schemas['input'].schema));
-                schema.id = Helpers.makeId();
+                let structure = cloneDeep(builderData.fields.field.structure);
+                structure.id = Helpers.makeId();
 
-                this.newValue.push(schema);
+                this.newValue.push(structure);
                 this.$emit('input', this.newValue);
             },
 

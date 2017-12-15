@@ -27,4 +27,17 @@ class MessageField extends FormField
         ));
     }
 
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        return array_replace($structure, [
+            'read_only' => true,
+            'visibility' => [
+                'create',
+                'edit'
+            ]
+        ]);
+    }
+
 }

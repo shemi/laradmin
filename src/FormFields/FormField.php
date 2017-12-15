@@ -18,6 +18,10 @@ abstract class FormField implements FieldContract
 
     protected $codename;
 
+    public function __construct()
+    {
+        $this->registerBlueprintMacros();
+    }
 
     /**
      * @param Field $field

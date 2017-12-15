@@ -4,9 +4,9 @@ namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Shemi\Laradmin\FormFields\Schema\Blueprint;
-use Shemi\Laradmin\FormFields\Schema\ObjectBlueprint;
-use Shemi\Laradmin\FormFields\Schema\Schema;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
+use Shemi\Laradmin\JsonSchema\Schema;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -14,19 +14,6 @@ class InputField extends FormField
 {
 
     protected $codename = "input";
-
-    protected $builderSchema = [
-        'type' => 'input',
-        'template_options' => [
-            'icon' => null,
-            'grouped' => false,
-            'placeholder' => null,
-            'type' => 'text',
-            'size' => null,
-            'max_length' => null,
-            'show_if' => null
-        ],
-    ];
 
     protected $subFields = [
         'text',
@@ -65,52 +52,21 @@ class InputField extends FormField
         ]);
     }
 
-    public function schema()
+    public function structure()
     {
-        $s = Schema::create('input', function(Blueprint $schema, ObjectBlueprint $root) {
-//            $schema->string('key')
-//                ->minLength(1)
-//                ->nullable()
-//                ->required();
-//
-//            $schema->string('label')
-//                ->minLength(1)
-//                ->required();
-//
-//            $schema->boolean('nullable');
-//
-//            $schema->null('options');
-//
-//            $schema->array('visibility')
-//                ->items(function(Blueprint $schema) {
-//                    $schema->string()
-//                        ->enum(['browse', 'create', 'edit',
-//                            'view', 'export', 'import']);
-//                })
-//                ->nullable()
-//                ->maxItems(15);
-//
-//            $schema->object('template_options', function(Blueprint $schema) {
-//                $schema->string('placeholder');
-//                $schema->string('type')
-//                    ->enum(['text', 'number', 'email', 'password'])
-//                    ->required()
-//                    ->nullable();
-//                $schema->string('size')
-//                    ->enum(['']);
-//            });
+        $structure = parent::structure();
 
-            $schema->commonFormFieldSchema();
-            $schema->visibility();
-            $schema->validation();
-            $schema->templateOptions();
-            $schema->browseSettings();
-
-        });
-
-//        dd($s->toJson());
-
-        return $s;
+        return array_replace_recursive($structure, [
+            'template_options' => [
+                'icon' => null,
+                'grouped' => false,
+                'placeholder' => null,
+                'type' => 'text',
+                'size' => null,
+                'max_length' => null,
+                'show_if' => null
+            ]
+        ]);
     }
 
 }

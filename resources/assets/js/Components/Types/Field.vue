@@ -3,121 +3,111 @@
     <vddl-nodrag class="no-drag la-field"
                  :class="{'is-open': isOpen}">
 
-            <div class="level la-field-header" @click.prevent="isOpen = ! isOpen">
-                <div class="level-left">
-                    <div class="level-item">
-                        <vddl-handle
-                                :handle-left="20"
-                                :handle-top="20"
-                                class="handle">
-                            <b-icon icon="arrows"></b-icon>
-                        </vddl-handle>
-                    </div>
-                    <div class="level-item" @click.stop>
-                        <b-dropdown>
-                            <button class="button is-small" slot="trigger">
-                                <b-icon icon="ellipsis-v" size="is-small"></b-icon>
-                            </button>
-
-                            <b-dropdown-item @click="cloneField">Clone</b-dropdown-item>
-                            <b-dropdown-item separator>Clone</b-dropdown-item>
-                            <b-dropdown-item class="has-text-danger" @click="deleteField">Delete</b-dropdown-item>
-                        </b-dropdown>
-                    </div>
-                    <div class="level-item">
-                        <p class="la-panel-header-title title is-4">
-                            {{ newValue.label || 'New Field' }}
-                        </p>
-                    </div>
-                    <div class="level-item">
-                        <p class="la-panel-header-extra">
-                            key: {{ newValue.key || 'NULL' }} <b>|</b>
-                            type: {{ displayType || 'NULL' }} <b>|</b>
-                            id: {{ newValue.id || 'NULL' }}
-                        </p>
-                    </div>
+        <div class="level la-field-header" @click.prevent="isOpen = ! isOpen">
+            <div class="level-left">
+                <div class="level-item">
+                    <vddl-handle
+                            :handle-left="20"
+                            :handle-top="20"
+                            class="handle">
+                        <b-icon icon="arrows"></b-icon>
+                    </vddl-handle>
                 </div>
+                <div class="level-item" @click.stop>
+                    <b-dropdown>
+                        <button class="button is-small" slot="trigger">
+                            <b-icon icon="ellipsis-v" size="is-small"></b-icon>
+                        </button>
 
-                <div class="level-right">
-                    <div class="level-item">
-                        <a class="panel-content-toggle">
-                            <b-icon :icon="isOpen ? 'caret-down' : 'caret-up'"></b-icon>
-                        </a>
-                    </div>
+                        <b-dropdown-item @click="cloneField">Clone</b-dropdown-item>
+                        <b-dropdown-item separator>Clone</b-dropdown-item>
+                        <b-dropdown-item class="has-text-danger" @click="deleteField">Delete</b-dropdown-item>
+                    </b-dropdown>
+                </div>
+                <div class="level-item">
+                    <p class="la-panel-header-title title is-4">
+                        {{ newValue.label || 'New Field' }}
+                    </p>
+                </div>
+                <div class="level-item">
+                    <p class="la-panel-header-extra">
+                        key: {{ newValue.key || 'NULL' }} <b>|</b>
+                        type: {{ displayType || 'NULL' }} <b>|</b>
+                        id: {{ newValue.id || 'NULL' }}
+                    </p>
                 </div>
             </div>
 
-            <div class="field-options-set" v-if="isOpen">
-                <div class="columns">
-                    <div class="column">
-                        <la-option :form-key="formKey + '.label'"
-                                   :props="{'type': 'text'}"
-                                   v-model="newValue.label"
-                                   :option="{'label': 'Label'}"
-                                   type="b-input">
-                        </la-option>
-                    </div>
-                    <div class="column">
-                        <la-option :form-key="formKey + '.key'"
-                                   :props="{'type': 'text'}"
-                                   v-model="newValue.key"
-                                   :option="{'label': 'Key'}"
-                                   type="b-input">
-                        </la-option>
-                    </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <a class="panel-content-toggle">
+                        <b-icon :icon="isOpen ? 'caret-down' : 'caret-up'"></b-icon>
+                    </a>
                 </div>
-
-                <div class="columns">
-                    <div class="column">
-                        <b-field label="Field Type">
-                            <b-select v-model="newType"
-                                      expanded
-                                      @input="changeSchema"
-                                      placeholder="Select a type">
-                                <option v-for="(sub, key) in types"
-                                        :value="key">
-                                    {{ key }}
-                                </option>
-                            </b-select>
-                        </b-field>
-                    </div>
-                    <div class="column">
-                        <b-field label="Field Sub Type" v-if="subTypes">
-                            <b-select v-model="newValue.template_options.type"
-                                      expanded
-                                      placeholder="Select a type">
-                                <option v-for="key in subTypes"
-                                        :value="key">
-                                    {{ key }}
-                                </option>
-                            </b-select>
-                        </b-field>
-                    </div>
-                </div>
-
-                <b-field label="Visibility">
-                    <div class="block">
-                        <b-checkbox v-model="newValue.visibility"
-                                    v-for="view in screens"
-                                    :key="view"
-                                    :native-value="view">
-                            {{ view }}
-                        </b-checkbox>
-                    </div>
-                </b-field>
-
-                <json-editor v-model="newValue" :schema="{}">
-
-                </json-editor>
-
             </div>
+        </div>
+
+        <div class="field-options-set" v-if="isOpen">
+            <div class="columns">
+                <div class="column">
+                    <la-option :form-key="formKey + '.label'"
+                               :props="{'type': 'text'}"
+                               v-model="newValue.label"
+                               :option="{'label': 'Label'}"
+                               type="b-input">
+                    </la-option>
+                </div>
+                <div class="column">
+                    <la-option :form-key="formKey + '.key'"
+                               :props="{'type': 'text'}"
+                               v-model="newValue.key"
+                               :option="{'label': 'Key'}"
+                               type="b-input">
+                    </la-option>
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <b-field label="Field Type">
+                        <b-select v-model="newType"
+                                  expanded
+                                  @input="changeStructure"
+                                  placeholder="Select a type">
+                            <option v-for="(name, key) in types"
+                                    :value="key">
+                                {{ name }}
+                            </option>
+                        </b-select>
+                    </b-field>
+                </div>
+                <div class="column">
+                    <b-field label="Field Sub Type" v-if="subTypes">
+                        <b-select v-model="newValue.template_options.type"
+                                  expanded
+                                  placeholder="Select a type">
+                            <option v-for="key in subTypes"
+                                    :value="key">
+                                {{ key }}
+                            </option>
+                        </b-select>
+                    </b-field>
+                </div>
+            </div>
+
+            <json-editor v-model="newValue"
+                         :on-editable="isNodeEditable"
+                         :schema="schema">
+            </json-editor>
+
+        </div>
 
     </vddl-nodrag>
 
 </template>
 
 <script>
-    import {cloneDeep, isUndefined} from 'lodash';
+    import {cloneDeep, isUndefined, defaults} from 'lodash';
     import ParentFormMixin from '../../Mixins/ParentForm';
     import Helpers from '../../Helpers/Helpers';
     import JsonEditor from '../JsonEditor/JsonEditor.vue';
@@ -136,12 +126,11 @@
         data() {
             return {
                 isField: true,
-                types: window.laradmin.types,
                 isOpen: false,
                 newValue: this.value,
                 newType: null,
                 newSubType: null,
-                windowData: cloneDeep(window.laradmin.schemas)
+                builderData: cloneDeep(window.laradmin.builderData.fields)
             }
         },
 
@@ -170,55 +159,43 @@
                 this.newType = this.type;
                 this.newSubType = this.subType;
 
-                if(! this.newValue.id) {
+                if (!this.newValue.id) {
                     this.newValue.id = Helpers.makeId();
 
                     this.$emit('input', this.newValue);
                 }
 
-                this.checkSchema();
+                this.checkStructure();
             },
 
-            checkSchema() {
-                let schemaKeys = Object.keys(this.schema),
-                    schemaKeyIndex,
-                    schemaKey;
-
-                for (schemaKeyIndex in schemaKeys) {
-                    schemaKey = schemaKeys[schemaKeyIndex];
-
-                    if(isUndefined(this.newValue[schemaKey])) {
-                        this.$set(this.newValue, schemaKey, this.schema[schemaKey]);
-                    }
-                }
+            checkStructure() {
+                defaults(this.newValue, this.structure);
 
                 this.$emit('input', this.newValue);
             },
 
-            changeSchema() {
+            changeStructure() {
                 const keysToKeep = [
                     "label",
                     "key",
                     "validation",
                     "show_label",
-                    "visibility",
-                    "read_only",
                     "id",
                     "browse_settings"
                 ];
 
-                let newSchema = this.newSchema,
+                let newStructure = this.newStructure,
                     valueClone = cloneDeep(this.newValue),
-                    newSchemaKeys = Object.keys(newSchema),
-                    newSchemaKeyIndex,
+                    newStructureKeys = Object.keys(newStructure),
+                    newStructureKeyIndex,
                     key,
                     value;
 
-                for (newSchemaKeyIndex in newSchemaKeys) {
-                    key = newSchemaKeys[newSchemaKeyIndex];
-                    value = newSchema[key];
+                for (newStructureKeyIndex in newStructureKeys) {
+                    key = newStructureKeys[newStructureKeyIndex];
+                    value = newStructure[key];
 
-                    if(keysToKeep.indexOf(key) >= 0) {
+                    if (keysToKeep.indexOf(key) >= 0 && ! isUndefined(valueClone[key])) {
                         value = valueClone[key];
                     }
 
@@ -238,6 +215,38 @@
                 this.isOpen = false;
 
                 this.$emit('delete');
+            },
+
+            isNodeEditable(node) {
+                let field = node.path ? node.path.join('.') : false,
+                    readOnlyFields = [
+                        'id',
+                        'type',
+                        'template_options.type',
+                        'fields'
+                    ],
+                    roles = {
+                        field: true,
+                        value: true
+                    };
+
+                if(! field) {
+                    return true;
+                }
+
+                if(readOnlyFields.indexOf(field) >= 0) {
+                    roles.field = false;
+                }
+
+                switch (field) {
+
+                    case 'id':
+                        roles.value = false;
+                        break;
+
+                }
+
+                return roles;
             }
 
         },
@@ -248,7 +257,7 @@
             },
 
             subType() {
-                if(! this.newValue.template_options) {
+                if (! this.newValue.template_options) {
                     return null;
                 }
 
@@ -261,20 +270,34 @@
                     this.type;
             },
 
-            subTypes() {
-                return this.types[this.type];
+            types() {
+                let types = {},
+                    typeKey,
+                    type;
+
+                for(typeKey in this.builderData) {
+                    type = this.builderData[typeKey];
+
+                    types[typeKey] = type.name;
+                }
+
+                return types;
             },
 
             data() {
-                return this.windowData[this.type];
+                return this.builderData[this.type];
+            },
+
+            subTypes() {
+                return this.data.subTypes;
             },
 
             schema() {
                 return this.data.schema;
             },
 
-            options() {
-                return this.data.options;
+            structure() {
+                return this.data.structure;
             },
 
             screens() {
@@ -282,11 +305,15 @@
             },
 
             newData() {
-                return window.laradmin.schemas[this.newType]
+                return this.builderData[this.newType]
             },
 
             newSchema() {
                 return this.newData.schema;
+            },
+
+            newStructure() {
+                return this.newData.structure;
             }
         },
 

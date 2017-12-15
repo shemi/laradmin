@@ -67,7 +67,7 @@
 <script>
     import ParentFormMixin from '../../Mixins/ParentForm';
     import LaOptionsSet from './OptionsSet.vue';
-    import {cloneDeep} from "lodash";
+    import { cloneDeep } from "lodash";
 
     export default {
 
@@ -83,7 +83,7 @@
         data() {
             return {
                 isOpen: false,
-                options: cloneDeep(window.laradmin.schemas['panel']['options'])
+                options: cloneDeep(window.laradmin.builderData.panels.panel.options)
             }
         },
 

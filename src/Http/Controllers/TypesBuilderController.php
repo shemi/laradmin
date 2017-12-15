@@ -44,9 +44,9 @@ class TypesBuilderController extends Controller
 
     public function getCreateEditResponse(Type $model)
     {
-        $schemas = [
+        $panels = [
             'panel' => [
-                'schema' => [
+                'structure' => [
                     'id' => null,
                     'title' => 'New Panel',
                     'position' => null,
@@ -84,27 +84,16 @@ class TypesBuilderController extends Controller
             ]
         ];
 
-        $fieldTypes = [];
+        $fields = [];
 
         /** @var FormField $formField */
         foreach (app('laradmin')->formFields() as $formField) {
-            $schemas[$formField->getCodename()] = [
-                'schema' => $formField->getBuilderSchema(),
-                'options' => $formField->getBuilderOptions(),
-                'visibility' => $formField->getVisibilityOptions()
-            ];
-
-            if(method_exists($formField, 'schema')) {
-                $schemas[$formField->getCodename()]['coolSchema'] = $formField->schema()->toArray();
-            }
-
-            $fieldTypes[$formField->getCodename()] = $formField->getSubTypes();
+            $fields[$formField->getCodename()] = $formField->getBuilderData();
         }
 
         app('laradmin')->publishManyJs([
             'model' => $model->toBuilderArray(),
-            'types' => $fieldTypes,
-            'schemas' => $schemas
+            'builderData' => compact('panels', 'fields')
         ]);
 
         return view('laradmin::typeBuilder.createEdit', compact('model'));
