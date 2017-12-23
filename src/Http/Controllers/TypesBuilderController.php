@@ -131,7 +131,7 @@ class TypesBuilderController extends Controller
 
     protected function storeUpdateType(Request $request, Type $type)
     {
-        $this->validate($request, [
+        $data = $this->validate($request, [
             'name' => 'required|string',
             'model' => 'required|string',
             'controller' => 'required|string',
@@ -141,42 +141,90 @@ class TypesBuilderController extends Controller
         ]);
 
         $errors = [];
-        $controller = $request->input('controller');
 
-        if(! class_exists($controller) || ! is_subclass_of($controller, BaseController::class)) {
+        if(! class_exists($data['controller']) || ! is_subclass_of($data['controller'], BaseController::class)) {
             $errors['controller'] = ['The controller class most be subclass of "' . BaseController::class . '"'];
         }
 
-        $model = $request->input('model');
-
-        if(! class_exists($model) || ! is_subclass_of($model, Model::class)) {
+        if(! class_exists($data['model']) || ! is_subclass_of($data['model'], Model::class)) {
             $errors['model'] = ['The model class most be subclass of "' . Model::class . '"'];
         }
 
-        $panels = $request->input('panels');
-
-
+        foreach ($this->validatePanelsJsonSchema($data['panels']) as $path => $error) {
+            $errors['panels'.$path] = $error;
+        }
 
         if(! empty($errors)) {
             return $this->responseValidationError($errors);
         }
 
-        return $this->response($request->all());
+        $type->name = $data['name'];
+        $type->slug = str_slug($data['name']);
+        $type->model = $data['model'];
+        $type->panels = $data['panels'];
+        $type->records_per_page = $data['records_per_page'];
+
+        $data['saved'] = $type->save();
+
+        return $this->response($data);
     }
 
-    protected function validatePanelsJsonSchema($data)
+    protected function validatePanelsJsonSchema($panels)
     {
+        $errors = [];
 
+        foreach ($panels as $index => &$panel) {
+            $panelErrors = [];
+
+            foreach ($this->validateFormFieldsJsonSchema($panel['fields']) as $path => $error) {
+                $panelErrors['.fields'.$path] = $error;
+            }
+
+            foreach ($panelErrors as $path => $error) {
+                $errors['.'.$index.$path] = $error;
+            }
+        }
+
+        return $errors;
     }
 
-    protected function validatePanelJsonSchema($data)
+    protected function validateFormFieldsJsonSchema($fields)
     {
+        $errors = [];
 
+        foreach ($fields as $index => $field) {
+            foreach ($this->validateFormFieldJsonSchema($field) as $path => $error) {
+                $errors['.'.$index.$path] = $error;
+            }
+        }
+
+        return $errors;
     }
 
-    protected function validateFormFieldJsonSchema($data, Field $field)
+    protected function validateFormFieldJsonSchema($data)
     {
+        if(! isset($data['type'])) {
+            return ['.type' => ['the type property is required']];
+        }
 
+        if(! app('laradmin')->formFieldExists($data['type'])) {
+            return ['.type' => ['the type: "'.$data['type'].'" not exists']];
+        }
+
+        /** @var FormField $formField */
+        $formField = app('laradmin')->formField($data['type']);
+
+        $validator = $formField->schema()->validate($data, '.');
+
+        $errors = $validator->errors();
+
+        if($formField->isSupportingSubFields() && ! empty($data['fields'])) {
+            foreach ($this->validateFormFieldsJsonSchema($data['fields']) as $path => $error) {
+                $errors['.fields'.$path] = $error;
+            }
+        }
+
+        return $errors;
     }
 
 }

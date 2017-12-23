@@ -18,7 +18,8 @@
     "illuminate/support": "~5.5.0",
     "spatie/laravel-permission": "^2.4",
     "spatie/laravel-medialibrary": "^6.0",
-    "easybook/slugger": "1.*"
+    "easybook/slugger": "1.*",
+    "justinrainbow/json-schema": "^5.2"
   },
   "require-dev": {
     "doctrine/dbal": "^2.5",
