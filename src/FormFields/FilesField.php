@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Testing\File;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -50,5 +52,33 @@ class FilesField extends FormField
     {
         return false;
     }
+
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        return array_replace_recursive($structure, [
+            'media' => [
+                'disk' => config(
+                    'medialibrary.defaultFilesystem',
+                    config('filesystems.default')
+                )
+            ],
+            'template_options' => [
+                'preview_conversion' => null
+            ]
+        ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->media();
+        $schema->template_options->properties(function(Blueprint $schema) {
+            $schema->string('preview_conversion')
+                ->nullable()
+                ->required();
+        });
+    }
+
 
 }

@@ -3,6 +3,8 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -15,6 +17,18 @@ class MessageField extends FormField
         "create",
         "edit",
         "view"
+    ];
+
+    protected $subFields = [
+        'is-white',
+        'is-black',
+        'is-light',
+        'is-dark',
+        'is-primary',
+        'is-info',
+        'is-success',
+        'is-warning',
+        'is-danger'
     ];
 
     public function createContent(Field $field, Type $type, Model $model, $data)
@@ -33,11 +47,22 @@ class MessageField extends FormField
 
         return array_replace($structure, [
             'read_only' => true,
+            'template_options' => [
+                'view' => '',
+                'type' => 'is-info'
+            ],
             'visibility' => [
                 'create',
                 'edit'
             ]
         ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->template_options->properties(function(Blueprint $schema) {
+            $schema->string('view')->required();
+        });
     }
 
 }

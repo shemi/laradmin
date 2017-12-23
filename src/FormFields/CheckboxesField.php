@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -11,14 +13,6 @@ class CheckboxesField extends FormField
 {
 
     protected $codename = "checkboxes";
-
-    protected $builderSchema = [
-        'template_options' => [
-            'grouped' => true,
-            'size' => null,
-            'show_if' => null
-        ],
-    ];
 
     public function createContent(Field $field, Type $type, Model $model, $data)
     {
@@ -35,13 +29,23 @@ class CheckboxesField extends FormField
         return (array) array_values($data);
     }
 
-    protected function builderOptions(Collection $defaultOptions)
+    public function structure()
     {
-        return $defaultOptions->merge([
-            $this->getTemplateOptionsIsGroupedOption(),
-            $this->getTemplateOptionsSizeOption(),
-            $this->getTemplateOptionsPositionOption()
+        return array_replace_recursive(parent::structure(), [
+            'relationship' => null,
+            'options' => (array) [],
+            'template_options' => [
+                'grouped' => false,
+                'placeholder' => null,
+                'size' => null,
+            ]
         ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->options();
+        $schema->relationship();
     }
 
 }

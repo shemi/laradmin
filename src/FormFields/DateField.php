@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\FormFields;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -46,6 +48,25 @@ class DateField extends FormField
         }
 
         return $value instanceof Carbon ? $value->toIso8601String() : null;
+    }
+
+    public function structure()
+    {
+        return array_replace_recursive(parent::structure(), [
+            'template_options' => [
+                'icon' => null,
+                'placeholder' => null,
+                'size' => null,
+            ]
+        ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->string('default_value')
+            ->format('date')
+            ->nullable()
+            ->required();
     }
 
 }

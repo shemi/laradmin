@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\Traits\Macroable;
+use Exception;
 
 class Blueprint implements Arrayable
 {
@@ -137,7 +138,7 @@ class Blueprint implements Arrayable
                 $this->{$name}(null, $item);
             }
             elseif(is_string($item) && method_exists($this, $item)) {
-                $this->{$name}();
+                $this->{$item}($name);
             }
             elseif(! is_string($name) && is_array($item)) {
                 $type = isset($item['type']) ? $item['type'] : false;
@@ -257,4 +258,14 @@ class Blueprint implements Arrayable
 
         return $array;
     }
+
+    public function __get($key)
+    {
+        if(! array_key_exists($key, $this->properties)) {
+            throw new Exception("Property [{$key}] does not exist.");
+        }
+
+        return $this->properties[$key];
+    }
+
 }

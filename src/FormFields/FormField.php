@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FieldContract;
 use Shemi\Laradmin\FormFields\Traits\Buildable;
 use Shemi\Laradmin\Models\Field;
@@ -18,6 +19,8 @@ abstract class FormField implements FieldContract
 
     protected $codename;
 
+    protected $subFieldsSupported = false;
+
     public function __construct()
     {
         $this->registerBlueprintMacros();
@@ -28,7 +31,8 @@ abstract class FormField implements FieldContract
      * @param Type $type
      * @param Model $model
      * @param $data
-     * @return string
+     *
+     * @return HtmlString
      */
     public function handle(Field $field, Type $type, Model $model, $data)
     {
@@ -37,6 +41,9 @@ abstract class FormField implements FieldContract
         return $this->render($content);
     }
 
+    /**
+     * @return string
+     */
     public function getCodename()
     {
         if (empty($this->codename)) {
@@ -52,6 +59,9 @@ abstract class FormField implements FieldContract
         return $this->codename;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         if (empty($this->name)) {
@@ -82,6 +92,11 @@ abstract class FormField implements FieldContract
         }
 
         return ["{$field->key}" => $field->validation];
+    }
+
+    public function isSupportingSubFields()
+    {
+        return (boolean) $this->subFieldsSupported;
     }
 
 }

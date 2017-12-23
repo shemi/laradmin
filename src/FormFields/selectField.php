@@ -3,6 +3,8 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -19,6 +21,27 @@ class SelectField extends FormField
             'model',
             'data'
         ));
+    }
+
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        return array_replace_recursive($structure, [
+            'options' => (array) [],
+            'nullable' => false,
+            'template_options' => [
+                'icon' => null,
+                'placeholder' => null,
+                'size' => null,
+                'show_if' => null
+            ]
+        ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->options();
     }
 
 }

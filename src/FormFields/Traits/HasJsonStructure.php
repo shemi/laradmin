@@ -10,16 +10,16 @@ trait HasJsonStructure
         return [
             'id' => null,
             'type' => $this->getCodename(),
-            'label' => '',
-            'key' => '',
+            'label' => null,
+            'key' => null,
             'show_label' => true,
             'read_only' => false,
+            'nullable' => null,
             'default_value' => null,
             'validation' => [],
             'relationship' => null,
             'visibility' => ["browse", "create", "edit"],
             'template_options' => [
-                'size' => null,
                 'show_if' => null
             ],
             'browse_settings' => [

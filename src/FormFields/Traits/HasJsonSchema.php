@@ -5,6 +5,7 @@ namespace Shemi\Laradmin\FormFields\Traits;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\JsonSchema\Schema;
+use Shemi\Laradmin\Models\Type;
 
 trait HasJsonSchema
 {
@@ -16,6 +17,9 @@ trait HasJsonSchema
         $this->registerVisibilityBlueprintMacro();
         $this->registerValidationBlueprintMacro();
         $this->registerBrowseSettingsBlueprintMacro();
+        $this->registerOptionsBlueprintMacro();
+        $this->registerRelationshipBlueprintMacro();
+        $this->registerMediaBlueprintMacro();
     }
 
     public function registerCommonFormFieldSchemaMacro()
@@ -30,12 +34,10 @@ trait HasJsonSchema
                 ->required();
 
             $this->string('type')
-                ->enum(app('laradmin')->getFormFieldNames())
-                ->required();
+                ->enum(app('laradmin')->getFormFieldNames());
 
             $this->string('id')
-                ->minLength(5)
-                ->required();
+                ->minLength(5);
 
             $this->boolean('nullable')
                 ->required()
@@ -131,6 +133,18 @@ trait HasJsonSchema
         });
     }
 
+    protected function registerOptionsBlueprintMacro()
+    {
+        Blueprint::macro('options', function() {
+            return $this->array('options', function(Blueprint $schema) {
+                $schema->object(null, function (Blueprint $schema) {
+                    $schema->string('key')->required();
+                    $schema->string('value')->required();
+                });
+            });
+        });
+    }
+
     public function registerBrowseSettingsBlueprintMacro()
     {
         Blueprint::macro('browseSettings', function() {
@@ -157,6 +171,56 @@ trait HasJsonSchema
         });
     }
 
+    public function registerRelationshipBlueprintMacro()
+    {
+        Blueprint::macro('relationship', function() {
+            return $this->oneOf('relationship', function (Blueprint $schema) {
+
+                $schema->null();
+
+                $schema->object(null, function(Blueprint $schema) {
+
+                    $schema->boolean('ajax_powered');
+
+                    $schema->oneOf('label', ['array', 'string'])
+                        ->required();
+
+                    $schema->string('image')->nullable();
+
+                    $schema->string('type')
+                        ->enum(
+                            Type::browseAll()
+                                ->pluck('slug')
+                                ->values()
+                                ->toArray()
+                        )
+                        ->nullable();
+                });
+
+            })->required();
+        });
+    }
+
+    public function registerMediaBlueprintMacro()
+    {
+        Blueprint::macro('media', function() {
+
+            return $this->object('media', function (Blueprint $schema) {
+
+                $schema->string('disk')
+                    ->enum(array_keys(config('filesystems.disks', [])))
+                    ->required();
+
+            })->required();
+
+        });
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+
+    }
+
     public function schema()
     {
         $this->registerBlueprintMacros();
@@ -167,6 +231,7 @@ trait HasJsonSchema
             $schema->validation();
             $schema->templateOptions();
             $schema->browseSettings();
+            $this->customSchema($schema, $root);
         });
     }
 

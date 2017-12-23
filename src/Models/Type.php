@@ -251,6 +251,7 @@ class Type extends Model
             'created_at',
             'side_panels',
             'icon',
+            'exists',
             'records_per_page'
         ];
 

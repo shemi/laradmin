@@ -47,8 +47,8 @@
                                     </b-field>
                                 </div>
                                 <div class="column">
-                                    <b-field :type="form.errors.has('name') ? 'is-danger' : ''"
-                                             :message="form.errors.has('name') ? form.errors.get('name') : ''"
+                                    <b-field :type="form.errors.has('model') ? 'is-danger' : ''"
+                                             :message="form.errors.has('model') ? form.errors.get('model') : ''"
                                              label="@lang('laradmin::type-builder.builder.model')">
                                         <b-input placeholder="e.g. \App\User"
                                                  type="text"
@@ -59,8 +59,8 @@
                             </div>
                             <div class="columns">
                                 <div class="column">
-                                    <b-field :type="form.errors.has('controller') ? 'is-danger' : ''"
-                                             :message="form.errors.has('controller') ? form.errors.get('controller') : ''"
+                                    <b-field :type="form.errors.has('records_per_page') ? 'is-danger' : ''"
+                                             :message="form.errors.has('records_per_page') ? form.errors.get('records_per_page') : ''"
                                              label="@lang('laradmin::type-builder.builder.records_per_page')">
                                         <b-input type="number" :min="1" v-model="form.records_per_page"></b-input>
                                     </b-field>

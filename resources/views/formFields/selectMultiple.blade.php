@@ -3,14 +3,26 @@
     @php
         $options = json_encode($field->options, JSON_UNESCAPED_UNICODE);
 
+        $closeOnSelect = $field->getTemplateOption('multiselect.closeOnSelect', 'true');
+        $closeOnSelect = is_string($closeOnSelect) ? $closeOnSelect : ($closeOnSelect ? 'true' : 'false');
+
+        $clearOnSelect = $field->getTemplateOption('multiselect.clearOnSelect', 'true');
+        $clearOnSelect = is_string($clearOnSelect) ? $clearOnSelect : ($clearOnSelect ? 'true' : 'false');
+
+        $hideSelected = $field->getTemplateOption('multiselect.hideSelected', 'true');
+        $hideSelected = is_string($hideSelected) ? $hideSelected : ($hideSelected ? 'true' : 'false');
+
+        $preserveSearch = $field->getTemplateOption('multiselect.preserveSearch', 'true');
+        $preserveSearch = is_string($preserveSearch) ? $preserveSearch : ($preserveSearch ? 'true' : 'false');
+
         $properties = [
             "v-model=".$field->form_prefix.$field->key,
             ":multiple=true",
             ":options='".$options."'",
-            ":close-on-select=".$field->getTemplateOption('multiselect.clearOnSelect', 'true'),
-            ":clear-on-select=".$field->getTemplateOption('multiselect.clearOnSelect', 'false'),
-            ":hide-selected=".$field->getTemplateOption('multiselect.hideSelected', 'true'),
-            ":preserve-search=".$field->getTemplateOption('multiselect.preserveSearch', 'true'),
+            ":close-on-select=".$closeOnSelect,
+            ":clear-on-select=".$clearOnSelect,
+            ":hide-selected=".$hideSelected,
+            ":preserve-search=".$preserveSearch,
             "label=label",
             "track-by=key"
         ];
@@ -26,7 +38,7 @@
 
     @endphp
 
-    <multiselect @foreach($properties as $property){!!  ' '.$property  !!}@endforeach>
+    <multiselect {!! implode(' ', $properties) !!}>
         <template slot="tag" scope="props">
             <span class="tag is-primary">
                 <span>@{{ props.option.label }}</span>

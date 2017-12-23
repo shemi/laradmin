@@ -15,6 +15,8 @@ trait Buildable
         "import"
     ];
 
+    protected $subFields = null;
+
     protected $templateOptionsSizes = [
         'default',
         'is-small',
@@ -24,9 +26,7 @@ trait Buildable
 
     public function getSubTypes()
     {
-        return property_exists($this, 'subFields') ?
-            $this->subFields :
-            null;
+        return $this->subFields;
     }
 
     public function getVisibilityOptions()
@@ -40,7 +40,8 @@ trait Buildable
             'schema' => $this->schema()->toArray(),
             'structure' => $this->structure(),
             'subTypes' => $this->getSubTypes(),
-            'name' => $this->getName()
+            'name' => $this->getName(),
+            'supportSubFields' => $this->isSupportingSubFields()
         ];
     }
 

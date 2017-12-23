@@ -11,18 +11,12 @@
         }
 
         if($field->icon) {
-            $properties[] = "icon=".$field->icon;
+            $properties[] = "icon=".($field->icon ?: 'calendar-o');
         }
 
         if($field->placeholder) {
             $properties[] = "placeholder='".$field->placeholder."'";
         }
-
-        if($field->max_length > 0) {
-            $properties[] = "maxlength=".$field->max_length;
-        }
-
-        $properties[] = "icon='calendar-o'";
 
     @endphp
 

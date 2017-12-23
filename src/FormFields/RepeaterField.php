@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -11,6 +13,8 @@ class RepeaterField extends FormField
 {
 
     protected $codename = "repeater";
+
+    protected $subFieldsSupported = true;
 
     protected $builderSchema = [
         'fields' => []
@@ -116,6 +120,30 @@ class RepeaterField extends FormField
         });
 
         return $values;
+    }
+
+    public function structure()
+    {
+        return array_replace_recursive(parent::structure(), [
+            'fields' => (array) [],
+            'template_options' => [
+                'repeater_items_label' => null,
+                'repeater_item_label' => null,
+                'repeater_add_text' => null,
+            ]
+        ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->array('fields', function(Blueprint $schema) {
+            $schema->object();
+        });
+        $schema->template_options->properties(function(Blueprint $schema) {
+            $schema->string('repeater_items_label')->nullable();
+            $schema->string('repeater_item_label')->nullable();
+            $schema->string('repeater_add_text')->nullable();
+        });
     }
 
 }

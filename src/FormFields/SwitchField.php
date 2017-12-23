@@ -35,4 +35,18 @@ class SwitchField extends FormField
         return (bool) $data;
     }
 
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        return array_replace_recursive($structure, [
+            'nullable' => false,
+            'default_value' => false,
+            'template_options' => [
+                'size' => null,
+                'show_if' => null
+            ]
+        ]);
+    }
+
 }

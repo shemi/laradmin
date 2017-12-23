@@ -8,6 +8,11 @@ use Illuminate\View\View;
 trait Renderable
 {
 
+    /**
+     * @param $content
+     *
+     * @return HtmlString
+     */
     public function render($content)
     {
         if ($content instanceof View) {

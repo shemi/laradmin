@@ -48,24 +48,24 @@
         </div>
 
         <div class="field-options-set" v-if="isOpen">
-            <div class="columns">
-                <div class="column">
-                    <la-option :form-key="formKey + '.label'"
-                               :props="{'type': 'text'}"
-                               v-model="newValue.label"
-                               :option="{'label': 'Label'}"
-                               type="b-input">
-                    </la-option>
-                </div>
-                <div class="column">
-                    <la-option :form-key="formKey + '.key'"
-                               :props="{'type': 'text'}"
-                               v-model="newValue.key"
-                               :option="{'label': 'Key'}"
-                               type="b-input">
-                    </la-option>
-                </div>
-            </div>
+            <!--<div class="columns">-->
+                <!--<div class="column">-->
+                    <!--<la-option :form-key="formKey + '.label'"-->
+                               <!--:props="{'type': 'text'}"-->
+                               <!--v-model="newValue.label"-->
+                               <!--:option="{'label': 'Label'}"-->
+                               <!--type="b-input">-->
+                    <!--</la-option>-->
+                <!--</div>-->
+                <!--<div class="column">-->
+                    <!--<la-option :form-key="formKey + '.key'"-->
+                               <!--:props="{'type': 'text'}"-->
+                               <!--v-model="newValue.key"-->
+                               <!--:option="{'label': 'Key'}"-->
+                               <!--type="b-input">-->
+                    <!--</la-option>-->
+                <!--</div>-->
+            <!--</div>-->
 
             <div class="columns">
                 <div class="column">
@@ -95,10 +95,19 @@
                 </div>
             </div>
 
-            <json-editor v-model="newValue"
+            <json-editor v-model="editorObject"
+                         @input="updateValueFromEditorObject"
                          :on-editable="isNodeEditable"
                          :schema="schema">
             </json-editor>
+
+            <b-field label="Fields"
+                     class="field-la-fields-list"
+                     v-if="data.supportSubFields">
+                <la-fields-list v-model="newValue.fields"
+                                :form-key="formKey + '.fields'">
+                </la-fields-list>
+            </b-field>
 
         </div>
 
@@ -111,6 +120,7 @@
     import ParentFormMixin from '../../Mixins/ParentForm';
     import Helpers from '../../Helpers/Helpers';
     import JsonEditor from '../JsonEditor/JsonEditor.vue';
+
 
     export default {
 
@@ -128,6 +138,7 @@
                 isField: true,
                 isOpen: false,
                 newValue: this.value,
+                editorObject: {},
                 newType: null,
                 newSubType: null,
                 builderData: cloneDeep(window.laradmin.builderData.fields)
@@ -138,6 +149,7 @@
             this.$options.components.LaOptionsSet = require('./OptionsSet.vue');
             this.$options.components.LaOption = require('./Option.vue');
             this.$options.components.LaValidationSet = require('./ValidationSet.vue');
+            this.$options.components.laFieldsList = require('./FieldsList.vue');
         },
 
         created() {
@@ -166,6 +178,7 @@
                 }
 
                 this.checkStructure();
+                this.updateEditorObject();
             },
 
             checkStructure() {
@@ -202,6 +215,46 @@
                     this.$set(this.newValue, key, cloneDeep(value));
                 }
 
+                this.updateEditorObject();
+                this.$emit('input', this.newValue);
+            },
+
+            updateEditorObject() {
+                let leaveOutKeys = ['id', 'type', 'fields'],
+                    newValueKeys = Object.keys(this.newValue),
+                    i, key,
+                    editorObject = {};
+
+                for(i in newValueKeys) {
+                    key = newValueKeys[i];
+
+                    if(leaveOutKeys.indexOf(key) >= 0) {
+                        continue;
+                    }
+
+                    editorObject[key] = this.newValue[key];
+                }
+
+                this.$nextTick(function () {
+                    this.editorObject = editorObject;
+                });
+            },
+
+            updateValueFromEditorObject() {
+                let leaveOutKeys = ['id', 'type', 'fields'],
+                    editorObjectKeys = Object.keys(this.editorObject),
+                    i, key;
+
+                for (i in editorObjectKeys) {
+                    key = editorObjectKeys[i];
+
+                    if(leaveOutKeys.indexOf(key) >= 0) {
+                        continue;
+                    }
+
+                    this.newValue[key] = this.editorObject[key];
+                }
+
                 this.$emit('input', this.newValue);
             },
 
@@ -236,14 +289,7 @@
 
                 if(readOnlyFields.indexOf(field) >= 0) {
                     roles.field = false;
-                }
-
-                switch (field) {
-
-                    case 'id':
-                        roles.value = false;
-                        break;
-
+                    roles.value = false;
                 }
 
                 return roles;

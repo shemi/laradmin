@@ -55,7 +55,7 @@
         methods: {
             initEditor() {
                 let options = {
-                    modes: [],
+                    modes: ['code', 'tree'],
                     mode: 'tree',
                     name: 'field',
                     onChange: this.onEditorChange.bind(this),

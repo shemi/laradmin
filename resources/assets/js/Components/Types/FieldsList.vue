@@ -75,7 +75,7 @@
 
         methods: {
             createField() {
-                let structure = cloneDeep(builderData.fields.field.structure);
+                let structure = cloneDeep(this.builderData.fields.input.structure);
                 structure.id = Helpers.makeId();
 
                 this.newValue.push(structure);

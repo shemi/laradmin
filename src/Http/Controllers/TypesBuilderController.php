@@ -2,10 +2,15 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Shemi\Laradmin\Data\DataNotFoundException;
 use Shemi\Laradmin\Database\Schema\SchemaManager;
 use Shemi\Laradmin\FormFields\FormField;
+use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Models\Panel;
 use Shemi\Laradmin\Models\Type;
+use Illuminate\Routing\Controller as BaseController;
 
 class TypesBuilderController extends Controller
 {
@@ -28,7 +33,14 @@ class TypesBuilderController extends Controller
     {
         $model = new Type;
 
+        app('laradmin')->publishJs('routs.save', route('laradmin.types.store'));
+
         return $this->getCreateEditResponse($model);
+    }
+
+    public function store(Request $request)
+    {
+        return $this->storeUpdateType($request, new Type);
     }
 
     public function edit($slug)
@@ -39,7 +51,25 @@ class TypesBuilderController extends Controller
             throw new DataNotFoundException($slug);
         }
 
+        app('laradmin')->publishJs(
+            'routs.save',
+            route('laradmin.types.update', [
+                'type' => $slug
+            ])
+        );
+
         return $this->getCreateEditResponse($model);
+    }
+
+    public function update($slug, Request $request)
+    {
+        $type = Type::where('slug', $slug)->first();
+
+        if(! $type) {
+            throw new DataNotFoundException($slug);
+        }
+
+        return $this->storeUpdateType($request, $type);
     }
 
     public function getCreateEditResponse(Type $model)
@@ -97,6 +127,56 @@ class TypesBuilderController extends Controller
         ]);
 
         return view('laradmin::typeBuilder.createEdit', compact('model'));
+    }
+
+    protected function storeUpdateType(Request $request, Type $type)
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'model' => 'required|string',
+            'controller' => 'required|string',
+            'icon' => 'string|nullable',
+            'records_per_page' => 'required|numeric',
+            'panels' => 'required|array'
+        ]);
+
+        $errors = [];
+        $controller = $request->input('controller');
+
+        if(! class_exists($controller) || ! is_subclass_of($controller, BaseController::class)) {
+            $errors['controller'] = ['The controller class most be subclass of "' . BaseController::class . '"'];
+        }
+
+        $model = $request->input('model');
+
+        if(! class_exists($model) || ! is_subclass_of($model, Model::class)) {
+            $errors['model'] = ['The model class most be subclass of "' . Model::class . '"'];
+        }
+
+        $panels = $request->input('panels');
+
+
+
+        if(! empty($errors)) {
+            return $this->responseValidationError($errors);
+        }
+
+        return $this->response($request->all());
+    }
+
+    protected function validatePanelsJsonSchema($data)
+    {
+
+    }
+
+    protected function validatePanelJsonSchema($data)
+    {
+
+    }
+
+    protected function validateFormFieldJsonSchema($data, Field $field)
+    {
+
     }
 
 }

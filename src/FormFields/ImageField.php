@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Testing\File;
 use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FieldHasBrowseValue;
+use Shemi\Laradmin\JsonSchema\Blueprint;
+use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -68,4 +70,32 @@ class ImageField extends FormField implements FieldHasBrowseValue
 
         return "<div class='image' style='max-width: 96px'><img src='{$src}'></div>";
     }
+
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        return array_replace_recursive($structure, [
+            'media' => [
+                'disk' => config(
+                        'medialibrary.defaultFilesystem',
+                        config('filesystems.default')
+                    )
+            ],
+            'template_options' => [
+                'preview_conversion' => null
+            ]
+        ]);
+    }
+
+    protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
+    {
+        $schema->media();
+        $schema->template_options->properties(function(Blueprint $schema) {
+            $schema->string('preview_conversion')
+                ->nullable()
+                ->required();
+        });
+    }
+
 }
