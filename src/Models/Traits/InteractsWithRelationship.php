@@ -18,6 +18,7 @@ use Shemi\Laradmin\Models\Type;
  * @property string $relationship_type_slug
  * @property Type $relationship_type
  * @property array $relation_labels
+ * @property string $relation_key
  * @property array $relation_image
  * @property boolean $is_ajax_powered_relationship
  * @property string $key
@@ -42,6 +43,11 @@ trait InteractsWithRelationship
     public function getRelationLabelsAttribute()
     {
         return (array) array_get($this->relationship, 'label', 'id');
+    }
+
+    public function getRelationKeyAttribute()
+    {
+        return array_get($this->relationship, 'key', 'id');
     }
 
     public function getRelationImageAttribute()
@@ -112,7 +118,7 @@ trait InteractsWithRelationship
     protected function transformRelationCollection(Collection $collection, EloquentModel $model)
     {
         if(in_array($this->type, ['checkboxes'])) {
-            return $collection->pluck($this->relationship['key']);
+            return $collection->pluck($this->relation_key);
         }
 
         return $collection->transform(function($model) {
@@ -126,7 +132,7 @@ trait InteractsWithRelationship
         $labelKey = array_shift($labels);
 
         $return = [
-            'key' => $model->getAttribute($this->relationship['key']),
+            'key' => $model->getAttribute($this->relation_key),
             'label' => $model->getAttribute($labelKey)
         ];
 

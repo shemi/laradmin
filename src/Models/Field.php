@@ -43,12 +43,25 @@ class Field extends Model
 
     protected $dataable = false;
 
+    protected $keyType = 'string';
+
+    protected $jsonIgnore = [
+        'parent'
+    ];
+
+    public $parent = null;
+
+    public $form_prefix = "form.";
+
+    public $is_repeater_field = false;
+
     protected $fillable = [
+        'id',
         'label',
         'key',
-        'parent',
         'show_label',
         'default_value',
+        'read_only',
         'nullable',
         'type',
         'validation',
@@ -57,15 +70,27 @@ class Field extends Model
         'template_options',
         'browse_settings',
         'relationship',
-        'is_repeater_field',
         'fields',
-        'form_prefix',
         'media'
     ];
 
     public static function fromArray($rawField)
     {
-        return (new static)->newFromManager($rawField);
+        $inst = new static;
+        $localAttributes = [
+            'parent' => null,
+            'form_prefix' => "form.",
+            'is_repeater_field' => false
+
+        ];
+
+        foreach ($localAttributes as $attribute => $defaultValue) {
+            $inst->{$attribute} = array_get($rawField, $attribute, $defaultValue);
+
+            array_forget($rawField, $attribute);
+        }
+
+        return $inst->newFromManager($rawField);
     }
 
     /**
@@ -94,11 +119,6 @@ class Field extends Model
         }
 
         return $value !== null ? $value : true;
-    }
-
-    public function getFormPrefixAttribute($value)
-    {
-        return $value !== null ? $value : "form.";
     }
 
     public function getValidationKeyAttribute()
@@ -253,25 +273,27 @@ class Field extends Model
     public function toBuilder()
     {
         $fields = [
-            'label',
-            'key',
-            'show_label',
-            'default_value',
-            'nullable',
-            'type',
-            'validation',
-            'visibility',
-            'options',
-            'template_options',
-            'browse_settings',
-            'relationship',
-            'media'
+            'id' => 'string',
+            'label' => 'string',
+            'key' => 'string',
+            'show_label' => 'bool',
+            'default_value' => null,
+            'nullable' => null,
+            'type' => 'string',
+            'validation' => 'array',
+            'visibility' => 'array',
+            'options' => 'array',
+            'template_options' => 'object',
+            'read_only' => 'bool',
+            'browse_settings' => 'object',
+            'relationship' => 'object',
+            'media' => 'object'
         ];
 
         $array = [];
 
-        foreach ($fields as $key) {
-            $array[$key] = $this->{$key};
+        foreach ($fields as $key => $cast) {
+            $array[$key] = $this->castBuilderAttribute($this->{$key}, $cast);
         }
 
         if($this->fields->isNotEmpty()) {
@@ -282,5 +304,7 @@ class Field extends Model
 
         return $array;
     }
+
+
 
 }

@@ -57,7 +57,7 @@
                         :form-key="formKey"
                         :options="options"
                         v-model="panel"
-                        v-if="isOpen">
+                        v-show="isOpen">
         </la-options-set>
 
     </div>

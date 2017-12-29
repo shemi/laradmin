@@ -20,6 +20,10 @@ class Model implements Arrayable, Jsonable, JsonSerializable
         GuardsAttributes,
         HasTimestamps;
 
+    const CREATED_AT = 'created_at';
+
+    const UPDATED_AT = 'updated_at';
+
     protected $location;
 
     protected $fileExt;
@@ -34,11 +38,11 @@ class Model implements Arrayable, Jsonable, JsonSerializable
 
     protected $keyType = 'int';
 
+    protected $isSaving = false;
+
+    protected $jsonIgnore = [];
+
     public $incrementing = true;
-
-    const CREATED_AT = 'created_at';
-
-    const UPDATED_AT = 'updated_at';
 
     public function __construct(array $attributes = [])
     {
@@ -103,6 +107,16 @@ class Model implements Arrayable, Jsonable, JsonSerializable
     }
 
     /**
+     * Get the primary key value for the model.
+     *
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->{$this->primaryKey};
+    }
+
+    /**
      * Set the primary key for the model.
      *
      * @param  string  $key
@@ -148,12 +162,16 @@ class Model implements Arrayable, Jsonable, JsonSerializable
      */
     public function save()
     {
+        $this->isSaving = true;
+
         if ($this->exists) {
             $saved = $this->isDirty() ?
                 $this->performUpdate() : true;
         } else {
             $saved = $this->performInsert();
         }
+
+        $this->isSaving = false;
 
         return $saved;
     }
@@ -222,6 +240,38 @@ class Model implements Arrayable, Jsonable, JsonSerializable
         return $json;
     }
 
+    protected function castBuilderAttribute($value, $type)
+    {
+        if(is_null($value) || is_null($type)) {
+            return $value;
+        }
+
+        switch ($type) {
+
+            case 'array':
+                return (array) $value;
+
+            case 'object':
+                return (object) $value;
+
+            case 'string':
+                return (string) $value;
+
+            case 'bool':
+            case 'boolean':
+                return (boolean) $value;
+
+            case 'int':
+                return (int) $value;
+
+            case 'float':
+                return (float) $value;
+
+        }
+
+        return $value;
+    }
+
     /**
      * Convert the object into something JSON serializable.
      *
@@ -229,7 +279,17 @@ class Model implements Arrayable, Jsonable, JsonSerializable
      */
     public function jsonSerialize()
     {
-        return $this->toArray();
+        $array = $this->toArray();
+
+        if(! empty($this->jsonIgnore)) {
+            foreach ($this->jsonIgnore as $attribute) {
+                if(isset($array[$attribute])) {
+                    unset($array[$attribute]);
+                }
+            }
+        }
+
+        return $array;
     }
 
     /**

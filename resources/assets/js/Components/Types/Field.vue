@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="field-options-set" v-if="isOpen">
+        <div class="field-options-set" v-show="isOpen">
             <!--<div class="columns">-->
                 <!--<div class="column">-->
                     <!--<la-option :form-key="formKey + '.label'"-->

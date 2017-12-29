@@ -173,7 +173,7 @@ class TypesBuilderController extends Controller
     {
         $errors = [];
 
-        foreach ($panels as $index => &$panel) {
+        foreach ($panels as $index => $panel) {
             $panelErrors = [];
 
             foreach ($this->validateFormFieldsJsonSchema($panel['fields']) as $path => $error) {
