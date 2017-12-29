@@ -107,7 +107,13 @@ class Controller extends BaseController
 
                 $relationsData[$field->key] = $value;
             } else {
+
+                if($model->exists && $field->is_password && ! $value) {
+                    continue;
+                }
+
                 $transform = explode(':', $field->getTemplateOption('transform', 'value'));
+
                 if(! $value && count($transform) > 1) {
                     $value = $model->{$transform[1]};
                 }
@@ -213,6 +219,19 @@ class Controller extends BaseController
 
             if(! $fieldRoles || empty($fieldRoles)) {
                 continue;
+            }
+
+            if($model->exists && $field->is_password) {
+                $fieldRoles = collect($fieldRoles)
+                    ->transform(function ($roles) {
+                        return array_map(function($role) {
+                            if($role === 'required') {
+                                return 'nullable';
+                            }
+
+                            return $role;
+                        }, $roles);
+                    })->toArray();
             }
 
             $roles = array_merge($roles, $fieldRoles);

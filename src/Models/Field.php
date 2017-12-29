@@ -29,6 +29,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  * @property array $browse_settings
  * @property array $relationship
  * @property boolean $is_repeater_field
+ * @property boolean $is_password
  * @property Collection|null $fields
  * @property string $form_prefix
  */
@@ -130,6 +131,11 @@ class Field extends Model
         }
 
         return $this->key;
+    }
+
+    public function getIsPasswordAttribute()
+    {
+        return $this->field_type === 'password';
     }
 
     public function getFieldsAttribute($value)
