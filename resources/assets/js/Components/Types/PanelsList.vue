@@ -41,7 +41,7 @@
                 let panelStructure = cloneDeep(this.builderData.panels.panel.structure);
                 panelStructure.id = Helpers.makeId();
 
-                this.form[this.formKey]['push'](panelSchema);
+                this.form[this.formKey]['push'](panelStructure);
             }
         },
 
