@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Data\DataNotFoundException;
 use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Facades\Laradmin;
@@ -66,184 +67,6 @@ class Controller extends BaseController
         }
 
         return $type;
-    }
-
-    protected function insertCreateUpdateData(Request $request, Model $model, Type $type)
-    {
-        /** @var Collection $fields */
-        $fields = $model->exists ? $type->edit_fields : $type->create_fields;
-        $relationsData = [];
-        $mediaData = [];
-
-        /** @var Field $field */
-        foreach ($fields as $field)
-        {
-            if($field->read_only) {
-                continue;
-            }
-
-            $value = $field->transformRequest($request->input($field->key));
-
-            if($field->is_media) {
-                $mediaData[] = [
-                    'field' => $field,
-                    'value' => $value
-                ];
-
-                continue;
-            }
-
-            if($field->is_relationship) {
-                $relation = $field->getRelationClass($model);
-
-                if($relation instanceof HasOne) {
-
-                    continue;
-                } elseif ($relation instanceof BelongsTo) {
-                    $model->{$relation->getForeignKey()} = $value;
-
-                    continue;
-                }
-
-                $relationsData[$field->key] = $value;
-            } else {
-
-                if($model->exists && $field->is_password && ! $value) {
-                    continue;
-                }
-
-                $transform = explode(':', $field->getTemplateOption('transform', 'value'));
-
-                if(! $value && count($transform) > 1) {
-                    $value = $model->{$transform[1]};
-                }
-
-                $value = call_user_func($transform[0], $value);
-
-                $model->{$field->key} = $value;
-            }
-        }
-
-        $model->save();
-
-        foreach ($relationsData as $key => $values) {
-            $model->{$key}()->sync($values);
-        }
-
-        /** @var Collection $newMedia */
-        foreach ($mediaData as $item) {
-            /** @var Field $mediaField */
-            $mediaField = $item['field'];
-            $newMedia = $item['value'];
-            $collection = $mediaField->key;
-
-            /** @var Collection $currentCollectionMedia */
-            $currentCollectionMedia = $model->getMedia($collection);
-
-            if($newMedia->isEmpty() && $currentCollectionMedia->isNotEmpty()) {
-                $model->clearMediaCollection($collection);
-
-                continue;
-            }
-
-            $mediaToUpdate = $newMedia->reject(function($media) {
-                return $media->is_new;
-            });
-
-            $mediaToInsert = $newMedia->reject(function($media) {
-                return ! $media->is_new;
-            });
-
-            if($currentCollectionMedia->isNotEmpty()) {
-                $currentCollectionMedia = $currentCollectionMedia->reject(function($media) use ($mediaToUpdate) {
-                    if(! $mediaToUpdate->pluck('id')->contains($media->id)) {
-                        $media->delete();
-
-                        return true;
-                    }
-
-                    return false;
-                });
-            }
-
-            foreach ($mediaToUpdate as $media) {
-                $mediaModel = $currentCollectionMedia->first(function($model) use ($media) {
-                    return $media->id === $model->id;
-                });
-
-                if(! $mediaModel) {
-                    continue;
-                }
-
-                $mediaModel->name = $media->name ?: $mediaModel->name;
-                $mediaModel->order_column = $media->order;
-                $mediaModel->setCustomProperty('alt', $media->alt);
-                $mediaModel->setCustomProperty('caption', $media->caption);
-                $mediaModel->save();
-            }
-
-            foreach ($mediaToInsert as $media) {
-                $mediaModel = $model
-                    ->addMedia(storage_path('app/'.$media->temp_path))
-                    ->usingName($media->name)
-                    ->withCustomProperties([
-                        'alt' => $media->alt,
-                        'caption' => $media->caption
-                    ])
-                    ->toMediaCollection($collection, $mediaField->media_disc);
-
-                $mediaModel->order_column = $media->order;
-                $mediaModel->save();
-            }
-
-        }
-
-        return $model;
-    }
-
-    protected function validateTypeRequest(Request $request, Model $model, Type $type)
-    {
-        $fields = $model->exists ? $type->edit_fields : $type->create_fields;
-
-        $roles = [];
-
-        /** @var Field $field */
-        foreach ($fields as $field) {
-
-            if($field->read_only) {
-                continue;
-            }
-
-            $formField = $field->formField();
-            $fieldRoles = $formField->getValidationRoles($field);
-
-            if(! $fieldRoles || empty($fieldRoles)) {
-                continue;
-            }
-
-            if($model->exists && $field->is_password) {
-                $fieldRoles = collect($fieldRoles)
-                    ->transform(function ($roles) {
-                        return array_map(function($role) {
-                            if($role === 'required') {
-                                return 'nullable';
-                            }
-
-                            return $role;
-                        }, $roles);
-                    })->toArray();
-            }
-
-            $roles = array_merge($roles, $fieldRoles);
-        }
-
-        $oldLocal = app()->getLocale();
-
-        app()->setLocale('en');
-
-        $this->validate($request, $roles);
-
-        app()->setLocale($oldLocal);
     }
 
     /**
@@ -304,12 +127,12 @@ class Controller extends BaseController
 
     protected function responseBadRequest($message = 'Bad Request')
     {
-        return $this->setStatusCode(400)->responseWithError($message);
+        return $this->setStatusCode(400)
+            ->responseWithError($message, 'Bad Request');
     }
 
     protected function responseWithError($message, $resultCode = 'err')
     {
-
         return response()->json([
             'message' => $message,
             'resultCode' => $resultCode,

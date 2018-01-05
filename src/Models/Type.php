@@ -95,48 +95,40 @@ class Type extends Model
 
     public function getBrowseColumnsAttribute()
     {
-        $fields = $this->fields
-            ->reject(function($field) {
+        return $this->fields
+            ->reject(function(Field $field) {
                 return ! $field->isVisibleOn('browse');
             })
             ->sortBy('browse_order')
             ->values();
-
-        return $fields;
     }
 
     public function getEditFieldsAttribute()
     {
-        $fields = $this->fields
+        return $this->fields
             ->reject(function($field) {
                 return ! $field->isVisibleOn('edit');
             })
             ->values();
-
-        return $fields;
     }
 
     public function getCreateFieldsAttribute()
     {
-        $fields = $this->fields
+        return $this->fields
             ->reject(function($field) {
                 return ! $field->isVisibleOn('create');
             })
             ->values();
-
-        return $fields;
     }
 
     public function getSearchableFieldsAttribute()
     {
-        $fields = $this->fields
+        return $this->fields
             ->reject(function($field) {
                 return ! $field->searchable;
             })
             ->sortBy('browse_order')
             ->values();
-
-        return $fields;
     }
 
     public function getSidePanelsAttribute()
@@ -166,6 +158,7 @@ class Type extends Model
     {
         $array = [];
 
+        /** @var Field $field */
         foreach ($this->fields as $field) {
             $array[$field->key] = $field->getModelValue($model);
         }

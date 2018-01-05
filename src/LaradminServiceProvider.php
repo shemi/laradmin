@@ -40,6 +40,8 @@ class LaradminServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->registerPublishableResources();
         }
+
+        $this->registerServices();
     }
 
     public function boot(Router $router, Dispatcher $event)
@@ -68,6 +70,20 @@ class LaradminServiceProvider extends ServiceProvider
                 RolesCommand::class,
                 AdminCommand::class
             ]);
+        }
+    }
+
+    protected function registerServices()
+    {
+        $services = [
+            'Contracts\Repositories\CreateUpdateRepository' => 'Repositories\CreateUpdateRepository',
+            'Contracts\Repositories\TypeModelQueryRepository' => 'Repositories\TypeModelQueryRepository',
+            'Contracts\Repositories\TransformTypeModelDataRepository' => 'Repositories\TransformTypeModelDataRepository',
+            'Contracts\Repositories\TypeRequestValidatorRepository' => 'Repositories\TypeRequestValidatorRepository',
+        ];
+
+        foreach ($services as $key => $value) {
+            $this->app->singleton('Shemi\Laradmin\\'.$key, 'Shemi\Laradmin\\'.$value);
         }
     }
 

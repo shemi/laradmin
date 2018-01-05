@@ -138,8 +138,16 @@ trait HasJsonSchema
         Blueprint::macro('options', function() {
             return $this->array('options', function(Blueprint $schema) {
                 $schema->object(null, function (Blueprint $schema) {
-                    $schema->string('key')->required();
-                    $schema->string('value')->required();
+                    $schema->oneOf('key', function(Blueprint $schema) {
+                        $schema->string();
+                        $schema->number();
+                        $schema->null();
+                    })->required();
+
+                    $schema->oneOf('label', function(Blueprint $schema) {
+                        $schema->string();
+                        $schema->number();
+                    })->required();
                 });
             });
         });

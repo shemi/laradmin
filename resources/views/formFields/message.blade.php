@@ -4,7 +4,7 @@
         "type=".$field->field_type
     ];
 
-    if($field->field_size !== 'default') {
+    if($field->field_size && $field->field_size !== 'default') {
         $properties[] = "size=".$field->field_size;
     }
 

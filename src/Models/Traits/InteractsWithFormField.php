@@ -26,6 +26,15 @@ trait InteractsWithFormField
         return app('laradmin')->formField($this->type);
     }
 
+    public function getValidationRoles()
+    {
+        $formField = $this->formField();
+
+        return $formField
+            ? $formField->getValidationRoles($this)
+            : [];
+    }
+
     public function transformRequest($value)
     {
         return $this->formField()->transformRequest($this, $value);

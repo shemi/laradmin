@@ -4,8 +4,13 @@ namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
+use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
+use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
+use Shemi\Laradmin\Contracts\Repositories\TypeRequestValidatorRepository;
 use Shemi\Laradmin\Models\Type;
 
 class CrudController extends Controller
@@ -162,16 +167,12 @@ class CrudController extends Controller
         $model = app($type->model);
 
         if($id) {
-            $model = $model->findOrFail($id);
+            $model = app(TypeModelQueryRepository::class)
+                ->find($id, $type);
         }
 
-        $getFormMethod = camel_case("get_{$action}_form_data");
-
-        if(method_exists($this, $getFormMethod)) {
-            $form = call_user_func_array([$this, $getFormMethod], [$type, $model]);
-        } else {
-            $form = $type->getModelArray($model);
-        }
+        $form = app(TransformTypeModelDataRepository::class)
+            ->transform($type, $model);
 
         $data = $type->getRelationData($model);
         $getDataMethod = camel_case("get_{$action}_data");
@@ -198,8 +199,6 @@ class CrudController extends Controller
 
         $fields = $model->exists ? $type->edit_fields : $type->create_fields;
 
-        $fieldsTypes = Type::getAllFieldTypes($fields);
-
         $jsObject = [
             'model' => $form,
             'routs.save' => route($saveRouteKey, $saveRouteParameters),
@@ -210,7 +209,7 @@ class CrudController extends Controller
                 'singular_name' => str_singular($type->name),
                 'slug' => $type->slug,
                 'id' => $type->id,
-                'types' => $fieldsTypes,
+                'types' => Type::getAllFieldTypes($fields),
                 'modelPrimaryKey' => $model->getKeyName()
             ]
         ];
@@ -226,8 +225,6 @@ class CrudController extends Controller
     }
 
     /**
-     *
-     *
      * @param Type $type
      * @param Request $request
      */
@@ -239,6 +236,7 @@ class CrudController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -267,14 +265,32 @@ class CrudController extends Controller
             return $this->responseUnauthorized($request);
         }
 
-        $this->validateTypeRequest($request, $model, $type);
+        $fields = $type->create_fields;
 
-        $model = $this->insertCreateUpdateData($request, $model, $type);
+        app(TypeRequestValidatorRepository::class)
+            ->validate($request, $type, $model, $fields);
+
+        /** @var CreateUpdateRepository $createRepository */
+        $createRepository = app(CreateUpdateRepository::class)
+            ->createOrUpdate(
+                $request->only($fields->pluck('key')->toArray()),
+                $model,
+                $type
+            );
+
+        if($createRepository->failed()) {
+            return $this->responseBadRequest(
+                $createRepository->errors()->first()
+            );
+        }
+
+        $warnings = $createRepository->warnings();
+
         $redirect = route("laradmin.{$type->slug}.edit", [
             'id' => $model->getKey()
         ]);
 
-        return $this->response(compact('model', 'redirect'));
+        return $this->response(compact('model', 'redirect', 'warnings'));
     }
 
     /**
@@ -332,14 +348,39 @@ class CrudController extends Controller
             return $this->responseUnauthorized($request);
         }
 
-        $model = app($type->model)->findOrFail($id);
+        $fields = $type->edit_fields;
 
-        $this->validateTypeRequest($request, $model, $type);
+        /** @var Model $model */
+        $model = app(TypeModelQueryRepository::class)
+            ->find($id, $type, $fields);
 
-        $model = $this->insertCreateUpdateData($request, $model, $type);
+        app(TypeRequestValidatorRepository::class)
+            ->validate($request, $type, $model, $fields);
+
+        /** @var CreateUpdateRepository $updateRepository */
+        $updateRepository = app(CreateUpdateRepository::class)
+            ->createOrUpdate(
+                $request->only($fields->pluck('key')->toArray()),
+                $model,
+                $type
+            );
+
+        if($updateRepository->failed()) {
+            return $this->responseBadRequest(
+                $updateRepository->errors()->first()
+            );
+        }
+
+        $warnings = $updateRepository->warnings();
+
+        $model = app(TransformTypeModelDataRepository::class)
+            ->transform($type, $model->refresh());
+
         $redirect = false;
 
-        return $this->response(compact('model', 'redirect'));
+        return $this->response(
+            compact('model', 'redirect', 'warnings')
+        );
     }
 
     /**

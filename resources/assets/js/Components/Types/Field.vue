@@ -48,24 +48,6 @@
         </div>
 
         <div class="field-options-set" v-show="isOpen">
-            <!--<div class="columns">-->
-                <!--<div class="column">-->
-                    <!--<la-option :form-key="formKey + '.label'"-->
-                               <!--:props="{'type': 'text'}"-->
-                               <!--v-model="newValue.label"-->
-                               <!--:option="{'label': 'Label'}"-->
-                               <!--type="b-input">-->
-                    <!--</la-option>-->
-                <!--</div>-->
-                <!--<div class="column">-->
-                    <!--<la-option :form-key="formKey + '.key'"-->
-                               <!--:props="{'type': 'text'}"-->
-                               <!--v-model="newValue.key"-->
-                               <!--:option="{'label': 'Key'}"-->
-                               <!--type="b-input">-->
-                    <!--</la-option>-->
-                <!--</div>-->
-            <!--</div>-->
 
             <div class="columns">
                 <div class="column">
@@ -194,6 +176,7 @@
                     "validation",
                     "show_label",
                     "id",
+                    "options",
                     "browse_settings"
                 ];
 

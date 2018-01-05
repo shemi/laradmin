@@ -222,7 +222,7 @@ class Field extends Model
             return "";
         }
 
-        if(! $model->exists() || (! $model->offsetExists($this->key) && ! $this->is_media)) {
+        if(! $model->exists || (! $model->offsetExists($this->key) && ! $this->is_media)) {
             $value = $this->getDefaultValue();
 
             return $this->transformResponse($value);

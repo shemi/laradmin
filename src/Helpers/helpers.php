@@ -22,3 +22,8 @@ function la_str_slug($title, $separator = '-')
 
     return $slugger->slugify($title);
 }
+
+function ddd(...$args){
+    http_response_code(500);
+    call_user_func_array('dd', $args);
+}

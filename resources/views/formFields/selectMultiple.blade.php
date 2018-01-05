@@ -42,7 +42,9 @@
         <template slot="tag" scope="props">
             <span class="tag is-primary">
                 <span>@{{ props.option.label }}</span>
-                <button class="delete is-small" @click="props.remove(props.option)"></button>
+                <button class="delete is-small"
+                        type="button"
+                        @click="props.remove(props.option)"></button>
             </span>
         </template>
     </multiselect>
