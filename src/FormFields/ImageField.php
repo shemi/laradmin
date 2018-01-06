@@ -11,7 +11,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class ImageField extends FormField implements FieldHasBrowseValue
+class ImageField extends FormFormField implements FieldHasBrowseValue
 {
 
     protected $codename = "image";

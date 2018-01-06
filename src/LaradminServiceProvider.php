@@ -50,8 +50,6 @@ class LaradminServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laradmin');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        LaradminFacade::registerPolicies();
-
         if (app()->version() >= 5.4) {
             $router->aliasMiddleware('laradmin.gust', RedirectIfAuthenticated::class);
             $router->aliasMiddleware('laradmin.user.admin', CanAccessBackend::class);

@@ -9,7 +9,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class DateField extends FormField
+class DateField extends FormFormField
 {
 
     protected $codename = "date";

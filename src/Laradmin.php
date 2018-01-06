@@ -3,12 +3,8 @@
 namespace Shemi\Laradmin;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Database\Eloquent\Model;
 use Route;
-use Shemi\Laradmin\Data\DataManager;
-use Shemi\Laradmin\FormFields\FieldContract;
-use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Contracts\FormFieldContract;
 use Shemi\Laradmin\Models\User;
 
 class Laradmin
@@ -27,17 +23,9 @@ class Laradmin
      */
     public $filesystem;
 
-    /**
-     * @var RoleSystems\RoleSystem;
-     */
-    protected $roleSystem;
-
     public function __construct()
     {
         $this->filesystem = app(Filesystem::class);
-
-        $roleSystem = "\\Shemi\\Laradmin\\RoleSystems\\" . studly_case(config('laradmin.roles.system', 'simple'));
-        $this->roleSystem = new $roleSystem();
     }
 
     public function filesystem()
@@ -53,16 +41,6 @@ class Laradmin
     public function modelClass($name)
     {
         return $this->models[$name];
-    }
-
-    public function registerPolicies()
-    {
-        $this->roleSystem->registerPolicies();
-    }
-
-    public function getRoleSystem()
-    {
-        return $this->roleSystem;
     }
 
     public function formFieldExists($type)
@@ -88,7 +66,7 @@ class Laradmin
 
     public function addFormField($fieldClass)
     {
-        if(! ($fieldClass instanceof FieldContract)) {
+        if(! ($fieldClass instanceof FormFieldContract)) {
             $fieldClass = app($fieldClass);
         }
 

@@ -4,11 +4,8 @@ namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Shemi\Laradmin\Data\DataNotFoundException;
-use Shemi\Laradmin\Database\Schema\SchemaManager;
-use Shemi\Laradmin\FormFields\FormField;
-use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Panel;
+use Shemi\Laradmin\Exceptions\DataNotFoundException;
+use Shemi\Laradmin\FormFields\FormFormField;
 use Shemi\Laradmin\Models\Type;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -116,7 +113,7 @@ class TypesBuilderController extends Controller
 
         $fields = [];
 
-        /** @var FormField $formField */
+        /** @var FormFormField $formField */
         foreach (app('laradmin')->formFields() as $formField) {
             $fields[$formField->getCodename()] = $formField->getBuilderData();
         }
@@ -211,7 +208,7 @@ class TypesBuilderController extends Controller
             return ['.type' => ['the type: "'.$data['type'].'" not exists']];
         }
 
-        /** @var FormField $formField */
+        /** @var FormFormField $formField */
         $formField = app('laradmin')->formField($data['type']);
 
         $validator = $formField->schema()->validate($data, '.');

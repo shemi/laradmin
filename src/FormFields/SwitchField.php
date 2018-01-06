@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class SwitchField extends FormField
+class SwitchField extends FormFormField
 {
 
     protected $codename = "switch";

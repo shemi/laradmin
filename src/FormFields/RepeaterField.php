@@ -9,7 +9,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class RepeaterField extends FormField
+class RepeaterField extends FormFormField
 {
 
     protected $codename = "repeater";

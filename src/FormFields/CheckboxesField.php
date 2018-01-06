@@ -9,7 +9,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class CheckboxesField extends FormField
+class CheckboxesField extends FormFormField
 {
 
     protected $codename = "checkboxes";

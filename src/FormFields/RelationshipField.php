@@ -8,7 +8,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class RelationshipField extends FormField
+class RelationshipField extends FormFormField
 {
 
     protected $codename = "relationship";

@@ -3,8 +3,7 @@
 namespace Shemi\Laradmin\Data;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
+use Shemi\Laradmin\Exceptions\DataNotFoundException;
 use Shemi\Laradmin\Facades\Laradmin;
 
 class DataManager
@@ -158,13 +157,10 @@ class DataManager
 
     public function delete($name, $ext = 'json')
     {
-        $path = $this->path($name.($ext ? '.'.$ext : ''));
-
-        if (! $this->filesystem->delete($path)) {
-            return false;
-        }
-
-        return true;
+        return $this->filesystem
+            ->delete(
+                $this->path($name.($ext ? '.'.$ext : ''))
+            );
     }
 
     public function dir($path = null, $ext = 'json')
@@ -227,10 +223,10 @@ class DataManager
             );
         }
 
-        $id = $model->{$model->getKeyName()};
+        $id = $model->getKey();
 
         $json = $model->toJson(JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        $path = $this->path($id . '.json');
+        $path = $this->path($id.'.json');
 
         $this->filesystem->put($path, $json);
 

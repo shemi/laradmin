@@ -10,7 +10,7 @@ use Shemi\Laradmin\JsonSchema\Schema;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class InputField extends FormField
+class InputField extends FormFormField
 {
 
     protected $codename = "input";

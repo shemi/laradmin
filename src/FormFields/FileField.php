@@ -11,7 +11,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class FileField extends FormField implements FieldHasBrowseValue
+class FileField extends FormFormField implements FieldHasBrowseValue
 {
 
     protected $codename = "file";

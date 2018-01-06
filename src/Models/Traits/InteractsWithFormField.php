@@ -3,7 +3,7 @@
 namespace Shemi\Laradmin\Models\Traits;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
-use Shemi\Laradmin\FormFields\FormField;
+use Shemi\Laradmin\FormFields\FormFormField;
 use Shemi\Laradmin\Models\Type;
 
 /**
@@ -19,7 +19,7 @@ trait InteractsWithFormField
 {
 
     /**
-     * @return FormField
+     * @return FormFormField
      */
     public function formField()
     {

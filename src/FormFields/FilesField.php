@@ -9,7 +9,7 @@ use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
-class FilesField extends FormField
+class FilesField extends FormFormField
 {
 
     protected $codename = "files";
