@@ -89,6 +89,15 @@ abstract class IntegrationTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('app.env', 'test');
+
+        $app['config']->set('filesystems.disks.test', [
+            'driver' => 'local',
+            'root' => __DIR__ . '/data',
+        ]);
+
+        $app['config']->set('laradmin.storage.data_disk', 'test');
+
         $app['config']->set('app.key', 'base64:skzdEVpefCXrAbslLq8Wq3TMADpdEyUSBwu3zPlF4g8=');
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [

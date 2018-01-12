@@ -1,0 +1,5602 @@
+[
+    {
+        "name": "Web Application Icons",
+        "icons": [
+            {
+                "name": "address-book",
+                "title": "Address Book",
+                "class": "fa-address-book",
+                "isAlias": false
+            },
+            {
+                "name": "address-book-o",
+                "title": "Address Book Outline",
+                "class": "fa-address-book-o",
+                "isAlias": false
+            },
+            {
+                "name": "address-card",
+                "title": "Address Card",
+                "class": "fa-address-card",
+                "isAlias": false
+            },
+            {
+                "name": "address-card-o",
+                "title": "Address Card Outline",
+                "class": "fa-address-card-o",
+                "isAlias": false
+            },
+            {
+                "name": "adjust",
+                "title": "Adjust",
+                "class": "fa-adjust",
+                "isAlias": false
+            },
+            {
+                "name": "american-sign-language-interpreting",
+                "title": "American Sign Language Interpreting",
+                "class": "fa-american-sign-language-interpreting",
+                "isAlias": false
+            },
+            {
+                "name": "anchor",
+                "title": "Anchor",
+                "class": "fa-anchor",
+                "isAlias": false
+            },
+            {
+                "name": "archive",
+                "title": "Archive",
+                "class": "fa-archive",
+                "isAlias": false
+            },
+            {
+                "name": "area-chart",
+                "title": "Area Chart",
+                "class": "fa-area-chart",
+                "isAlias": false
+            },
+            {
+                "name": "arrows",
+                "title": "Arrows",
+                "class": "fa-arrows",
+                "isAlias": false
+            },
+            {
+                "name": "arrows-h",
+                "title": "Arrows H",
+                "class": "fa-arrows-h",
+                "isAlias": false
+            },
+            {
+                "name": "arrows-v",
+                "title": "Arrows V",
+                "class": "fa-arrows-v",
+                "isAlias": false
+            },
+            {
+                "name": "asl-interpreting",
+                "title": "Asl Interpreting",
+                "class": "fa-asl-interpreting",
+                "isAlias": true
+            },
+            {
+                "name": "assistive-listening-systems",
+                "title": "Assistive Listening Systems",
+                "class": "fa-assistive-listening-systems",
+                "isAlias": false
+            },
+            {
+                "name": "asterisk",
+                "title": "Asterisk",
+                "class": "fa-asterisk",
+                "isAlias": false
+            },
+            {
+                "name": "at",
+                "title": "At",
+                "class": "fa-at",
+                "isAlias": false
+            },
+            {
+                "name": "audio-description",
+                "title": "Audio Description",
+                "class": "fa-audio-description",
+                "isAlias": false
+            },
+            {
+                "name": "automobile",
+                "title": "Automobile",
+                "class": "fa-automobile",
+                "isAlias": true
+            },
+            {
+                "name": "balance-scale",
+                "title": "Balance Scale",
+                "class": "fa-balance-scale",
+                "isAlias": false
+            },
+            {
+                "name": "ban",
+                "title": "Ban",
+                "class": "fa-ban",
+                "isAlias": false
+            },
+            {
+                "name": "bank",
+                "title": "Bank",
+                "class": "fa-bank",
+                "isAlias": true
+            },
+            {
+                "name": "bar-chart",
+                "title": "Bar Chart",
+                "class": "fa-bar-chart",
+                "isAlias": false
+            },
+            {
+                "name": "bar-chart-o",
+                "title": "Bar Chart O",
+                "class": "fa-bar-chart-o",
+                "isAlias": true
+            },
+            {
+                "name": "barcode",
+                "title": "Barcode",
+                "class": "fa-barcode",
+                "isAlias": false
+            },
+            {
+                "name": "bars",
+                "title": "Bars",
+                "class": "fa-bars",
+                "isAlias": false
+            },
+            {
+                "name": "bath",
+                "title": "Bath",
+                "class": "fa-bath",
+                "isAlias": false
+            },
+            {
+                "name": "bathtub",
+                "title": "Bathtub",
+                "class": "fa-bathtub",
+                "isAlias": true
+            },
+            {
+                "name": "battery",
+                "title": "Battery",
+                "class": "fa-battery",
+                "isAlias": true
+            },
+            {
+                "name": "battery-0",
+                "title": "Battery 0",
+                "class": "fa-battery-0",
+                "isAlias": true
+            },
+            {
+                "name": "battery-1",
+                "title": "Battery 1",
+                "class": "fa-battery-1",
+                "isAlias": true
+            },
+            {
+                "name": "battery-2",
+                "title": "Battery 2",
+                "class": "fa-battery-2",
+                "isAlias": true
+            },
+            {
+                "name": "battery-3",
+                "title": "Battery 3",
+                "class": "fa-battery-3",
+                "isAlias": true
+            },
+            {
+                "name": "battery-4",
+                "title": "Battery 4",
+                "class": "fa-battery-4",
+                "isAlias": true
+            },
+            {
+                "name": "battery-empty",
+                "title": "Battery Empty",
+                "class": "fa-battery-empty",
+                "isAlias": false
+            },
+            {
+                "name": "battery-full",
+                "title": "Battery Full",
+                "class": "fa-battery-full",
+                "isAlias": false
+            },
+            {
+                "name": "battery-half",
+                "title": "Battery Half",
+                "class": "fa-battery-half",
+                "isAlias": false
+            },
+            {
+                "name": "battery-quarter",
+                "title": "Battery Quarter",
+                "class": "fa-battery-quarter",
+                "isAlias": false
+            },
+            {
+                "name": "battery-three-quarters",
+                "title": "Battery Three Quarters",
+                "class": "fa-battery-three-quarters",
+                "isAlias": false
+            },
+            {
+                "name": "bed",
+                "title": "Bed",
+                "class": "fa-bed",
+                "isAlias": false
+            },
+            {
+                "name": "beer",
+                "title": "Beer",
+                "class": "fa-beer",
+                "isAlias": false
+            },
+            {
+                "name": "bell",
+                "title": "Bell",
+                "class": "fa-bell",
+                "isAlias": false
+            },
+            {
+                "name": "bell-o",
+                "title": "Bell Outline",
+                "class": "fa-bell-o",
+                "isAlias": false
+            },
+            {
+                "name": "bell-slash",
+                "title": "Bell Slash",
+                "class": "fa-bell-slash",
+                "isAlias": false
+            },
+            {
+                "name": "bell-slash-o",
+                "title": "Bell Slash Outline",
+                "class": "fa-bell-slash-o",
+                "isAlias": false
+            },
+            {
+                "name": "bicycle",
+                "title": "Bicycle",
+                "class": "fa-bicycle",
+                "isAlias": false
+            },
+            {
+                "name": "binoculars",
+                "title": "Binoculars",
+                "class": "fa-binoculars",
+                "isAlias": false
+            },
+            {
+                "name": "birthday-cake",
+                "title": "Birthday Cake",
+                "class": "fa-birthday-cake",
+                "isAlias": false
+            },
+            {
+                "name": "blind",
+                "title": "Blind",
+                "class": "fa-blind",
+                "isAlias": false
+            },
+            {
+                "name": "bluetooth",
+                "title": "Bluetooth",
+                "class": "fa-bluetooth",
+                "isAlias": false
+            },
+            {
+                "name": "bluetooth-b",
+                "title": "Bluetooth B",
+                "class": "fa-bluetooth-b",
+                "isAlias": false
+            },
+            {
+                "name": "bolt",
+                "title": "Bolt",
+                "class": "fa-bolt",
+                "isAlias": false
+            },
+            {
+                "name": "bomb",
+                "title": "Bomb",
+                "class": "fa-bomb",
+                "isAlias": false
+            },
+            {
+                "name": "book",
+                "title": "Book",
+                "class": "fa-book",
+                "isAlias": false
+            },
+            {
+                "name": "bookmark",
+                "title": "Bookmark",
+                "class": "fa-bookmark",
+                "isAlias": false
+            },
+            {
+                "name": "bookmark-o",
+                "title": "Bookmark Outline",
+                "class": "fa-bookmark-o",
+                "isAlias": false
+            },
+            {
+                "name": "braille",
+                "title": "Braille",
+                "class": "fa-braille",
+                "isAlias": false
+            },
+            {
+                "name": "briefcase",
+                "title": "Briefcase",
+                "class": "fa-briefcase",
+                "isAlias": false
+            },
+            {
+                "name": "bug",
+                "title": "Bug",
+                "class": "fa-bug",
+                "isAlias": false
+            },
+            {
+                "name": "building",
+                "title": "Building",
+                "class": "fa-building",
+                "isAlias": false
+            },
+            {
+                "name": "building-o",
+                "title": "Building Outline",
+                "class": "fa-building-o",
+                "isAlias": false
+            },
+            {
+                "name": "bullhorn",
+                "title": "Bullhorn",
+                "class": "fa-bullhorn",
+                "isAlias": false
+            },
+            {
+                "name": "bullseye",
+                "title": "Bullseye",
+                "class": "fa-bullseye",
+                "isAlias": false
+            },
+            {
+                "name": "bus",
+                "title": "Bus",
+                "class": "fa-bus",
+                "isAlias": false
+            },
+            {
+                "name": "cab",
+                "title": "Cab",
+                "class": "fa-cab",
+                "isAlias": true
+            },
+            {
+                "name": "calculator",
+                "title": "Calculator",
+                "class": "fa-calculator",
+                "isAlias": false
+            },
+            {
+                "name": "calendar",
+                "title": "Calendar",
+                "class": "fa-calendar",
+                "isAlias": false
+            },
+            {
+                "name": "calendar-check-o",
+                "title": "Calendar Check Outline",
+                "class": "fa-calendar-check-o",
+                "isAlias": false
+            },
+            {
+                "name": "calendar-minus-o",
+                "title": "Calendar Minus Outline",
+                "class": "fa-calendar-minus-o",
+                "isAlias": false
+            },
+            {
+                "name": "calendar-o",
+                "title": "Calendar Outline",
+                "class": "fa-calendar-o",
+                "isAlias": false
+            },
+            {
+                "name": "calendar-plus-o",
+                "title": "Calendar Plus Outline",
+                "class": "fa-calendar-plus-o",
+                "isAlias": false
+            },
+            {
+                "name": "calendar-times-o",
+                "title": "Calendar Times Outline",
+                "class": "fa-calendar-times-o",
+                "isAlias": false
+            },
+            {
+                "name": "camera",
+                "title": "Camera",
+                "class": "fa-camera",
+                "isAlias": false
+            },
+            {
+                "name": "camera-retro",
+                "title": "Camera Retro",
+                "class": "fa-camera-retro",
+                "isAlias": false
+            },
+            {
+                "name": "car",
+                "title": "Car",
+                "class": "fa-car",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-down",
+                "title": "Caret Square O Down",
+                "class": "fa-caret-square-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-left",
+                "title": "Caret Square O Left",
+                "class": "fa-caret-square-o-left",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-right",
+                "title": "Caret Square O Right",
+                "class": "fa-caret-square-o-right",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-up",
+                "title": "Caret Square O Up",
+                "class": "fa-caret-square-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "cart-arrow-down",
+                "title": "Cart Arrow Down",
+                "class": "fa-cart-arrow-down",
+                "isAlias": false
+            },
+            {
+                "name": "cart-plus",
+                "title": "Cart Plus",
+                "class": "fa-cart-plus",
+                "isAlias": false
+            },
+            {
+                "name": "cc",
+                "title": "Cc",
+                "class": "fa-cc",
+                "isAlias": false
+            },
+            {
+                "name": "certificate",
+                "title": "Certificate",
+                "class": "fa-certificate",
+                "isAlias": false
+            },
+            {
+                "name": "check",
+                "title": "Check",
+                "class": "fa-check",
+                "isAlias": false
+            },
+            {
+                "name": "check-circle",
+                "title": "Check Circle",
+                "class": "fa-check-circle",
+                "isAlias": false
+            },
+            {
+                "name": "check-circle-o",
+                "title": "Check Circle Outline",
+                "class": "fa-check-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "check-square",
+                "title": "Check Square",
+                "class": "fa-check-square",
+                "isAlias": false
+            },
+            {
+                "name": "check-square-o",
+                "title": "Check Square Outline",
+                "class": "fa-check-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "child",
+                "title": "Child",
+                "class": "fa-child",
+                "isAlias": false
+            },
+            {
+                "name": "circle",
+                "title": "Circle",
+                "class": "fa-circle",
+                "isAlias": false
+            },
+            {
+                "name": "circle-o",
+                "title": "Circle Outline",
+                "class": "fa-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "circle-o-notch",
+                "title": "Circle O Notch",
+                "class": "fa-circle-o-notch",
+                "isAlias": false
+            },
+            {
+                "name": "circle-thin",
+                "title": "Circle Thin",
+                "class": "fa-circle-thin",
+                "isAlias": false
+            },
+            {
+                "name": "clock-o",
+                "title": "Clock Outline",
+                "class": "fa-clock-o",
+                "isAlias": false
+            },
+            {
+                "name": "clone",
+                "title": "Clone",
+                "class": "fa-clone",
+                "isAlias": false
+            },
+            {
+                "name": "close",
+                "title": "Close",
+                "class": "fa-close",
+                "isAlias": true
+            },
+            {
+                "name": "cloud",
+                "title": "Cloud",
+                "class": "fa-cloud",
+                "isAlias": false
+            },
+            {
+                "name": "cloud-download",
+                "title": "Cloud Download",
+                "class": "fa-cloud-download",
+                "isAlias": false
+            },
+            {
+                "name": "cloud-upload",
+                "title": "Cloud Upload",
+                "class": "fa-cloud-upload",
+                "isAlias": false
+            },
+            {
+                "name": "code",
+                "title": "Code",
+                "class": "fa-code",
+                "isAlias": false
+            },
+            {
+                "name": "code-fork",
+                "title": "Code Fork",
+                "class": "fa-code-fork",
+                "isAlias": false
+            },
+            {
+                "name": "coffee",
+                "title": "Coffee",
+                "class": "fa-coffee",
+                "isAlias": false
+            },
+            {
+                "name": "cog",
+                "title": "Cog",
+                "class": "fa-cog",
+                "isAlias": false
+            },
+            {
+                "name": "cogs",
+                "title": "Cogs",
+                "class": "fa-cogs",
+                "isAlias": false
+            },
+            {
+                "name": "comment",
+                "title": "Comment",
+                "class": "fa-comment",
+                "isAlias": false
+            },
+            {
+                "name": "comment-o",
+                "title": "Comment Outline",
+                "class": "fa-comment-o",
+                "isAlias": false
+            },
+            {
+                "name": "commenting",
+                "title": "Commenting",
+                "class": "fa-commenting",
+                "isAlias": false
+            },
+            {
+                "name": "commenting-o",
+                "title": "Commenting Outline",
+                "class": "fa-commenting-o",
+                "isAlias": false
+            },
+            {
+                "name": "comments",
+                "title": "Comments",
+                "class": "fa-comments",
+                "isAlias": false
+            },
+            {
+                "name": "comments-o",
+                "title": "Comments Outline",
+                "class": "fa-comments-o",
+                "isAlias": false
+            },
+            {
+                "name": "compass",
+                "title": "Compass",
+                "class": "fa-compass",
+                "isAlias": false
+            },
+            {
+                "name": "copyright",
+                "title": "Copyright",
+                "class": "fa-copyright",
+                "isAlias": false
+            },
+            {
+                "name": "creative-commons",
+                "title": "Creative Commons",
+                "class": "fa-creative-commons",
+                "isAlias": false
+            },
+            {
+                "name": "credit-card",
+                "title": "Credit Card",
+                "class": "fa-credit-card",
+                "isAlias": false
+            },
+            {
+                "name": "credit-card-alt",
+                "title": "Credit Card Alt",
+                "class": "fa-credit-card-alt",
+                "isAlias": false
+            },
+            {
+                "name": "crop",
+                "title": "Crop",
+                "class": "fa-crop",
+                "isAlias": false
+            },
+            {
+                "name": "crosshairs",
+                "title": "Crosshairs",
+                "class": "fa-crosshairs",
+                "isAlias": false
+            },
+            {
+                "name": "cube",
+                "title": "Cube",
+                "class": "fa-cube",
+                "isAlias": false
+            },
+            {
+                "name": "cubes",
+                "title": "Cubes",
+                "class": "fa-cubes",
+                "isAlias": false
+            },
+            {
+                "name": "cutlery",
+                "title": "Cutlery",
+                "class": "fa-cutlery",
+                "isAlias": false
+            },
+            {
+                "name": "dashboard",
+                "title": "Dashboard",
+                "class": "fa-dashboard",
+                "isAlias": true
+            },
+            {
+                "name": "database",
+                "title": "Database",
+                "class": "fa-database",
+                "isAlias": false
+            },
+            {
+                "name": "deaf",
+                "title": "Deaf",
+                "class": "fa-deaf",
+                "isAlias": false
+            },
+            {
+                "name": "deafness",
+                "title": "Deafness",
+                "class": "fa-deafness",
+                "isAlias": true
+            },
+            {
+                "name": "desktop",
+                "title": "Desktop",
+                "class": "fa-desktop",
+                "isAlias": false
+            },
+            {
+                "name": "diamond",
+                "title": "Diamond",
+                "class": "fa-diamond",
+                "isAlias": false
+            },
+            {
+                "name": "dot-circle-o",
+                "title": "Dot Circle Outline",
+                "class": "fa-dot-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "download",
+                "title": "Download",
+                "class": "fa-download",
+                "isAlias": false
+            },
+            {
+                "name": "drivers-license",
+                "title": "Drivers License",
+                "class": "fa-drivers-license",
+                "isAlias": true
+            },
+            {
+                "name": "drivers-license-o",
+                "title": "Drivers License O",
+                "class": "fa-drivers-license-o",
+                "isAlias": true
+            },
+            {
+                "name": "edit",
+                "title": "Edit",
+                "class": "fa-edit",
+                "isAlias": true
+            },
+            {
+                "name": "ellipsis-h",
+                "title": "Ellipsis H",
+                "class": "fa-ellipsis-h",
+                "isAlias": false
+            },
+            {
+                "name": "ellipsis-v",
+                "title": "Ellipsis V",
+                "class": "fa-ellipsis-v",
+                "isAlias": false
+            },
+            {
+                "name": "envelope",
+                "title": "Envelope",
+                "class": "fa-envelope",
+                "isAlias": false
+            },
+            {
+                "name": "envelope-o",
+                "title": "Envelope Outline",
+                "class": "fa-envelope-o",
+                "isAlias": false
+            },
+            {
+                "name": "envelope-open",
+                "title": "Envelope Open",
+                "class": "fa-envelope-open",
+                "isAlias": false
+            },
+            {
+                "name": "envelope-open-o",
+                "title": "Envelope Open Outline",
+                "class": "fa-envelope-open-o",
+                "isAlias": false
+            },
+            {
+                "name": "envelope-square",
+                "title": "Envelope Square",
+                "class": "fa-envelope-square",
+                "isAlias": false
+            },
+            {
+                "name": "eraser",
+                "title": "Eraser",
+                "class": "fa-eraser",
+                "isAlias": false
+            },
+            {
+                "name": "exchange",
+                "title": "Exchange",
+                "class": "fa-exchange",
+                "isAlias": false
+            },
+            {
+                "name": "exclamation",
+                "title": "Exclamation",
+                "class": "fa-exclamation",
+                "isAlias": false
+            },
+            {
+                "name": "exclamation-circle",
+                "title": "Exclamation Circle",
+                "class": "fa-exclamation-circle",
+                "isAlias": false
+            },
+            {
+                "name": "exclamation-triangle",
+                "title": "Exclamation Triangle",
+                "class": "fa-exclamation-triangle",
+                "isAlias": false
+            },
+            {
+                "name": "external-link",
+                "title": "External Link",
+                "class": "fa-external-link",
+                "isAlias": false
+            },
+            {
+                "name": "external-link-square",
+                "title": "External Link Square",
+                "class": "fa-external-link-square",
+                "isAlias": false
+            },
+            {
+                "name": "eye",
+                "title": "Eye",
+                "class": "fa-eye",
+                "isAlias": false
+            },
+            {
+                "name": "eye-slash",
+                "title": "Eye Slash",
+                "class": "fa-eye-slash",
+                "isAlias": false
+            },
+            {
+                "name": "eyedropper",
+                "title": "Eyedropper",
+                "class": "fa-eyedropper",
+                "isAlias": false
+            },
+            {
+                "name": "fax",
+                "title": "Fax",
+                "class": "fa-fax",
+                "isAlias": false
+            },
+            {
+                "name": "feed",
+                "title": "Feed",
+                "class": "fa-feed",
+                "isAlias": true
+            },
+            {
+                "name": "female",
+                "title": "Female",
+                "class": "fa-female",
+                "isAlias": false
+            },
+            {
+                "name": "fighter-jet",
+                "title": "Fighter Jet",
+                "class": "fa-fighter-jet",
+                "isAlias": false
+            },
+            {
+                "name": "file-archive-o",
+                "title": "File Archive Outline",
+                "class": "fa-file-archive-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-audio-o",
+                "title": "File Audio Outline",
+                "class": "fa-file-audio-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-code-o",
+                "title": "File Code Outline",
+                "class": "fa-file-code-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-excel-o",
+                "title": "File Excel Outline",
+                "class": "fa-file-excel-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-image-o",
+                "title": "File Image Outline",
+                "class": "fa-file-image-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-movie-o",
+                "title": "File Movie O",
+                "class": "fa-file-movie-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-pdf-o",
+                "title": "File Pdf Outline",
+                "class": "fa-file-pdf-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-photo-o",
+                "title": "File Photo O",
+                "class": "fa-file-photo-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-picture-o",
+                "title": "File Picture O",
+                "class": "fa-file-picture-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-powerpoint-o",
+                "title": "File Powerpoint Outline",
+                "class": "fa-file-powerpoint-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-sound-o",
+                "title": "File Sound O",
+                "class": "fa-file-sound-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-video-o",
+                "title": "File Video Outline",
+                "class": "fa-file-video-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-word-o",
+                "title": "File Word Outline",
+                "class": "fa-file-word-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-zip-o",
+                "title": "File Zip O",
+                "class": "fa-file-zip-o",
+                "isAlias": true
+            },
+            {
+                "name": "film",
+                "title": "Film",
+                "class": "fa-film",
+                "isAlias": false
+            },
+            {
+                "name": "filter",
+                "title": "Filter",
+                "class": "fa-filter",
+                "isAlias": false
+            },
+            {
+                "name": "fire",
+                "title": "Fire",
+                "class": "fa-fire",
+                "isAlias": false
+            },
+            {
+                "name": "fire-extinguisher",
+                "title": "Fire Extinguisher",
+                "class": "fa-fire-extinguisher",
+                "isAlias": false
+            },
+            {
+                "name": "flag",
+                "title": "Flag",
+                "class": "fa-flag",
+                "isAlias": false
+            },
+            {
+                "name": "flag-checkered",
+                "title": "Flag Checkered",
+                "class": "fa-flag-checkered",
+                "isAlias": false
+            },
+            {
+                "name": "flag-o",
+                "title": "Flag Outline",
+                "class": "fa-flag-o",
+                "isAlias": false
+            },
+            {
+                "name": "flash",
+                "title": "Flash",
+                "class": "fa-flash",
+                "isAlias": true
+            },
+            {
+                "name": "flask",
+                "title": "Flask",
+                "class": "fa-flask",
+                "isAlias": false
+            },
+            {
+                "name": "folder",
+                "title": "Folder",
+                "class": "fa-folder",
+                "isAlias": false
+            },
+            {
+                "name": "folder-o",
+                "title": "Folder Outline",
+                "class": "fa-folder-o",
+                "isAlias": false
+            },
+            {
+                "name": "folder-open",
+                "title": "Folder Open",
+                "class": "fa-folder-open",
+                "isAlias": false
+            },
+            {
+                "name": "folder-open-o",
+                "title": "Folder Open Outline",
+                "class": "fa-folder-open-o",
+                "isAlias": false
+            },
+            {
+                "name": "frown-o",
+                "title": "Frown Outline",
+                "class": "fa-frown-o",
+                "isAlias": false
+            },
+            {
+                "name": "futbol-o",
+                "title": "Futbol Outline",
+                "class": "fa-futbol-o",
+                "isAlias": false
+            },
+            {
+                "name": "gamepad",
+                "title": "Gamepad",
+                "class": "fa-gamepad",
+                "isAlias": false
+            },
+            {
+                "name": "gavel",
+                "title": "Gavel",
+                "class": "fa-gavel",
+                "isAlias": false
+            },
+            {
+                "name": "gear",
+                "title": "Gear",
+                "class": "fa-gear",
+                "isAlias": true
+            },
+            {
+                "name": "gears",
+                "title": "Gears",
+                "class": "fa-gears",
+                "isAlias": true
+            },
+            {
+                "name": "gift",
+                "title": "Gift",
+                "class": "fa-gift",
+                "isAlias": false
+            },
+            {
+                "name": "glass",
+                "title": "Glass",
+                "class": "fa-glass",
+                "isAlias": false
+            },
+            {
+                "name": "globe",
+                "title": "Globe",
+                "class": "fa-globe",
+                "isAlias": false
+            },
+            {
+                "name": "graduation-cap",
+                "title": "Graduation Cap",
+                "class": "fa-graduation-cap",
+                "isAlias": false
+            },
+            {
+                "name": "group",
+                "title": "Group",
+                "class": "fa-group",
+                "isAlias": true
+            },
+            {
+                "name": "hand-grab-o",
+                "title": "Hand Grab O",
+                "class": "fa-hand-grab-o",
+                "isAlias": true
+            },
+            {
+                "name": "hand-lizard-o",
+                "title": "Hand Lizard Outline",
+                "class": "fa-hand-lizard-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-paper-o",
+                "title": "Hand Paper Outline",
+                "class": "fa-hand-paper-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-peace-o",
+                "title": "Hand Peace Outline",
+                "class": "fa-hand-peace-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-pointer-o",
+                "title": "Hand Pointer Outline",
+                "class": "fa-hand-pointer-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-rock-o",
+                "title": "Hand Rock Outline",
+                "class": "fa-hand-rock-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-scissors-o",
+                "title": "Hand Scissors Outline",
+                "class": "fa-hand-scissors-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-spock-o",
+                "title": "Hand Spock Outline",
+                "class": "fa-hand-spock-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-stop-o",
+                "title": "Hand Stop O",
+                "class": "fa-hand-stop-o",
+                "isAlias": true
+            },
+            {
+                "name": "handshake-o",
+                "title": "Handshake Outline",
+                "class": "fa-handshake-o",
+                "isAlias": false
+            },
+            {
+                "name": "hard-of-hearing",
+                "title": "Hard Of Hearing",
+                "class": "fa-hard-of-hearing",
+                "isAlias": true
+            },
+            {
+                "name": "hashtag",
+                "title": "Hashtag",
+                "class": "fa-hashtag",
+                "isAlias": false
+            },
+            {
+                "name": "hdd-o",
+                "title": "Hdd Outline",
+                "class": "fa-hdd-o",
+                "isAlias": false
+            },
+            {
+                "name": "headphones",
+                "title": "Headphones",
+                "class": "fa-headphones",
+                "isAlias": false
+            },
+            {
+                "name": "heart",
+                "title": "Heart",
+                "class": "fa-heart",
+                "isAlias": false
+            },
+            {
+                "name": "heart-o",
+                "title": "Heart Outline",
+                "class": "fa-heart-o",
+                "isAlias": false
+            },
+            {
+                "name": "heartbeat",
+                "title": "Heartbeat",
+                "class": "fa-heartbeat",
+                "isAlias": false
+            },
+            {
+                "name": "history",
+                "title": "History",
+                "class": "fa-history",
+                "isAlias": false
+            },
+            {
+                "name": "home",
+                "title": "Home",
+                "class": "fa-home",
+                "isAlias": false
+            },
+            {
+                "name": "hotel",
+                "title": "Hotel",
+                "class": "fa-hotel",
+                "isAlias": true
+            },
+            {
+                "name": "hourglass",
+                "title": "Hourglass",
+                "class": "fa-hourglass",
+                "isAlias": false
+            },
+            {
+                "name": "hourglass-1",
+                "title": "Hourglass 1",
+                "class": "fa-hourglass-1",
+                "isAlias": true
+            },
+            {
+                "name": "hourglass-2",
+                "title": "Hourglass 2",
+                "class": "fa-hourglass-2",
+                "isAlias": true
+            },
+            {
+                "name": "hourglass-3",
+                "title": "Hourglass 3",
+                "class": "fa-hourglass-3",
+                "isAlias": true
+            },
+            {
+                "name": "hourglass-end",
+                "title": "Hourglass End",
+                "class": "fa-hourglass-end",
+                "isAlias": false
+            },
+            {
+                "name": "hourglass-half",
+                "title": "Hourglass Half",
+                "class": "fa-hourglass-half",
+                "isAlias": false
+            },
+            {
+                "name": "hourglass-o",
+                "title": "Hourglass Outline",
+                "class": "fa-hourglass-o",
+                "isAlias": false
+            },
+            {
+                "name": "hourglass-start",
+                "title": "Hourglass Start",
+                "class": "fa-hourglass-start",
+                "isAlias": false
+            },
+            {
+                "name": "i-cursor",
+                "title": "I Cursor",
+                "class": "fa-i-cursor",
+                "isAlias": false
+            },
+            {
+                "name": "id-badge",
+                "title": "Id Badge",
+                "class": "fa-id-badge",
+                "isAlias": false
+            },
+            {
+                "name": "id-card",
+                "title": "Id Card",
+                "class": "fa-id-card",
+                "isAlias": false
+            },
+            {
+                "name": "id-card-o",
+                "title": "Id Card Outline",
+                "class": "fa-id-card-o",
+                "isAlias": false
+            },
+            {
+                "name": "image",
+                "title": "Image",
+                "class": "fa-image",
+                "isAlias": true
+            },
+            {
+                "name": "inbox",
+                "title": "Inbox",
+                "class": "fa-inbox",
+                "isAlias": false
+            },
+            {
+                "name": "industry",
+                "title": "Industry",
+                "class": "fa-industry",
+                "isAlias": false
+            },
+            {
+                "name": "info",
+                "title": "Info",
+                "class": "fa-info",
+                "isAlias": false
+            },
+            {
+                "name": "info-circle",
+                "title": "Info Circle",
+                "class": "fa-info-circle",
+                "isAlias": false
+            },
+            {
+                "name": "institution",
+                "title": "Institution",
+                "class": "fa-institution",
+                "isAlias": true
+            },
+            {
+                "name": "key",
+                "title": "Key",
+                "class": "fa-key",
+                "isAlias": false
+            },
+            {
+                "name": "keyboard-o",
+                "title": "Keyboard Outline",
+                "class": "fa-keyboard-o",
+                "isAlias": false
+            },
+            {
+                "name": "language",
+                "title": "Language",
+                "class": "fa-language",
+                "isAlias": false
+            },
+            {
+                "name": "laptop",
+                "title": "Laptop",
+                "class": "fa-laptop",
+                "isAlias": false
+            },
+            {
+                "name": "leaf",
+                "title": "Leaf",
+                "class": "fa-leaf",
+                "isAlias": false
+            },
+            {
+                "name": "legal",
+                "title": "Legal",
+                "class": "fa-legal",
+                "isAlias": true
+            },
+            {
+                "name": "lemon-o",
+                "title": "Lemon Outline",
+                "class": "fa-lemon-o",
+                "isAlias": false
+            },
+            {
+                "name": "level-down",
+                "title": "Level Down",
+                "class": "fa-level-down",
+                "isAlias": false
+            },
+            {
+                "name": "level-up",
+                "title": "Level Up",
+                "class": "fa-level-up",
+                "isAlias": false
+            },
+            {
+                "name": "life-bouy",
+                "title": "Life Bouy",
+                "class": "fa-life-bouy",
+                "isAlias": true
+            },
+            {
+                "name": "life-buoy",
+                "title": "Life Buoy",
+                "class": "fa-life-buoy",
+                "isAlias": true
+            },
+            {
+                "name": "life-ring",
+                "title": "Life Ring",
+                "class": "fa-life-ring",
+                "isAlias": false
+            },
+            {
+                "name": "life-saver",
+                "title": "Life Saver",
+                "class": "fa-life-saver",
+                "isAlias": true
+            },
+            {
+                "name": "lightbulb-o",
+                "title": "Lightbulb Outline",
+                "class": "fa-lightbulb-o",
+                "isAlias": false
+            },
+            {
+                "name": "line-chart",
+                "title": "Line Chart",
+                "class": "fa-line-chart",
+                "isAlias": false
+            },
+            {
+                "name": "location-arrow",
+                "title": "Location Arrow",
+                "class": "fa-location-arrow",
+                "isAlias": false
+            },
+            {
+                "name": "lock",
+                "title": "Lock",
+                "class": "fa-lock",
+                "isAlias": false
+            },
+            {
+                "name": "low-vision",
+                "title": "Low Vision",
+                "class": "fa-low-vision",
+                "isAlias": false
+            },
+            {
+                "name": "magic",
+                "title": "Magic",
+                "class": "fa-magic",
+                "isAlias": false
+            },
+            {
+                "name": "magnet",
+                "title": "Magnet",
+                "class": "fa-magnet",
+                "isAlias": false
+            },
+            {
+                "name": "mail-forward",
+                "title": "Mail Forward",
+                "class": "fa-mail-forward",
+                "isAlias": true
+            },
+            {
+                "name": "mail-reply",
+                "title": "Mail Reply",
+                "class": "fa-mail-reply",
+                "isAlias": true
+            },
+            {
+                "name": "mail-reply-all",
+                "title": "Mail Reply All",
+                "class": "fa-mail-reply-all",
+                "isAlias": true
+            },
+            {
+                "name": "male",
+                "title": "Male",
+                "class": "fa-male",
+                "isAlias": false
+            },
+            {
+                "name": "map",
+                "title": "Map",
+                "class": "fa-map",
+                "isAlias": false
+            },
+            {
+                "name": "map-marker",
+                "title": "Map Marker",
+                "class": "fa-map-marker",
+                "isAlias": false
+            },
+            {
+                "name": "map-o",
+                "title": "Map Outline",
+                "class": "fa-map-o",
+                "isAlias": false
+            },
+            {
+                "name": "map-pin",
+                "title": "Map Pin",
+                "class": "fa-map-pin",
+                "isAlias": false
+            },
+            {
+                "name": "map-signs",
+                "title": "Map Signs",
+                "class": "fa-map-signs",
+                "isAlias": false
+            },
+            {
+                "name": "meh-o",
+                "title": "Meh Outline",
+                "class": "fa-meh-o",
+                "isAlias": false
+            },
+            {
+                "name": "microchip",
+                "title": "Microchip",
+                "class": "fa-microchip",
+                "isAlias": false
+            },
+            {
+                "name": "microphone",
+                "title": "Microphone",
+                "class": "fa-microphone",
+                "isAlias": false
+            },
+            {
+                "name": "microphone-slash",
+                "title": "Microphone Slash",
+                "class": "fa-microphone-slash",
+                "isAlias": false
+            },
+            {
+                "name": "minus",
+                "title": "Minus",
+                "class": "fa-minus",
+                "isAlias": false
+            },
+            {
+                "name": "minus-circle",
+                "title": "Minus Circle",
+                "class": "fa-minus-circle",
+                "isAlias": false
+            },
+            {
+                "name": "minus-square",
+                "title": "Minus Square",
+                "class": "fa-minus-square",
+                "isAlias": false
+            },
+            {
+                "name": "minus-square-o",
+                "title": "Minus Square Outline",
+                "class": "fa-minus-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "mobile",
+                "title": "Mobile",
+                "class": "fa-mobile",
+                "isAlias": false
+            },
+            {
+                "name": "mobile-phone",
+                "title": "Mobile Phone",
+                "class": "fa-mobile-phone",
+                "isAlias": true
+            },
+            {
+                "name": "money",
+                "title": "Money",
+                "class": "fa-money",
+                "isAlias": false
+            },
+            {
+                "name": "moon-o",
+                "title": "Moon Outline",
+                "class": "fa-moon-o",
+                "isAlias": false
+            },
+            {
+                "name": "mortar-board",
+                "title": "Mortar Board",
+                "class": "fa-mortar-board",
+                "isAlias": true
+            },
+            {
+                "name": "motorcycle",
+                "title": "Motorcycle",
+                "class": "fa-motorcycle",
+                "isAlias": false
+            },
+            {
+                "name": "mouse-pointer",
+                "title": "Mouse Pointer",
+                "class": "fa-mouse-pointer",
+                "isAlias": false
+            },
+            {
+                "name": "music",
+                "title": "Music",
+                "class": "fa-music",
+                "isAlias": false
+            },
+            {
+                "name": "navicon",
+                "title": "Navicon",
+                "class": "fa-navicon",
+                "isAlias": true
+            },
+            {
+                "name": "newspaper-o",
+                "title": "Newspaper Outline",
+                "class": "fa-newspaper-o",
+                "isAlias": false
+            },
+            {
+                "name": "object-group",
+                "title": "Object Group",
+                "class": "fa-object-group",
+                "isAlias": false
+            },
+            {
+                "name": "object-ungroup",
+                "title": "Object Ungroup",
+                "class": "fa-object-ungroup",
+                "isAlias": false
+            },
+            {
+                "name": "paint-brush",
+                "title": "Paint Brush",
+                "class": "fa-paint-brush",
+                "isAlias": false
+            },
+            {
+                "name": "paper-plane",
+                "title": "Paper Plane",
+                "class": "fa-paper-plane",
+                "isAlias": false
+            },
+            {
+                "name": "paper-plane-o",
+                "title": "Paper Plane Outline",
+                "class": "fa-paper-plane-o",
+                "isAlias": false
+            },
+            {
+                "name": "paw",
+                "title": "Paw",
+                "class": "fa-paw",
+                "isAlias": false
+            },
+            {
+                "name": "pencil",
+                "title": "Pencil",
+                "class": "fa-pencil",
+                "isAlias": false
+            },
+            {
+                "name": "pencil-square",
+                "title": "Pencil Square",
+                "class": "fa-pencil-square",
+                "isAlias": false
+            },
+            {
+                "name": "pencil-square-o",
+                "title": "Pencil Square Outline",
+                "class": "fa-pencil-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "percent",
+                "title": "Percent",
+                "class": "fa-percent",
+                "isAlias": false
+            },
+            {
+                "name": "phone",
+                "title": "Phone",
+                "class": "fa-phone",
+                "isAlias": false
+            },
+            {
+                "name": "phone-square",
+                "title": "Phone Square",
+                "class": "fa-phone-square",
+                "isAlias": false
+            },
+            {
+                "name": "photo",
+                "title": "Photo",
+                "class": "fa-photo",
+                "isAlias": true
+            },
+            {
+                "name": "picture-o",
+                "title": "Picture Outline",
+                "class": "fa-picture-o",
+                "isAlias": false
+            },
+            {
+                "name": "pie-chart",
+                "title": "Pie Chart",
+                "class": "fa-pie-chart",
+                "isAlias": false
+            },
+            {
+                "name": "plane",
+                "title": "Plane",
+                "class": "fa-plane",
+                "isAlias": false
+            },
+            {
+                "name": "plug",
+                "title": "Plug",
+                "class": "fa-plug",
+                "isAlias": false
+            },
+            {
+                "name": "plus",
+                "title": "Plus",
+                "class": "fa-plus",
+                "isAlias": false
+            },
+            {
+                "name": "plus-circle",
+                "title": "Plus Circle",
+                "class": "fa-plus-circle",
+                "isAlias": false
+            },
+            {
+                "name": "plus-square",
+                "title": "Plus Square",
+                "class": "fa-plus-square",
+                "isAlias": false
+            },
+            {
+                "name": "plus-square-o",
+                "title": "Plus Square Outline",
+                "class": "fa-plus-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "podcast",
+                "title": "Podcast",
+                "class": "fa-podcast",
+                "isAlias": false
+            },
+            {
+                "name": "power-off",
+                "title": "Power Off",
+                "class": "fa-power-off",
+                "isAlias": false
+            },
+            {
+                "name": "print",
+                "title": "Print",
+                "class": "fa-print",
+                "isAlias": false
+            },
+            {
+                "name": "puzzle-piece",
+                "title": "Puzzle Piece",
+                "class": "fa-puzzle-piece",
+                "isAlias": false
+            },
+            {
+                "name": "qrcode",
+                "title": "Qrcode",
+                "class": "fa-qrcode",
+                "isAlias": false
+            },
+            {
+                "name": "question",
+                "title": "Question",
+                "class": "fa-question",
+                "isAlias": false
+            },
+            {
+                "name": "question-circle",
+                "title": "Question Circle",
+                "class": "fa-question-circle",
+                "isAlias": false
+            },
+            {
+                "name": "question-circle-o",
+                "title": "Question Circle Outline",
+                "class": "fa-question-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "quote-left",
+                "title": "Quote Left",
+                "class": "fa-quote-left",
+                "isAlias": false
+            },
+            {
+                "name": "quote-right",
+                "title": "Quote Right",
+                "class": "fa-quote-right",
+                "isAlias": false
+            },
+            {
+                "name": "random",
+                "title": "Random",
+                "class": "fa-random",
+                "isAlias": false
+            },
+            {
+                "name": "recycle",
+                "title": "Recycle",
+                "class": "fa-recycle",
+                "isAlias": false
+            },
+            {
+                "name": "refresh",
+                "title": "Refresh",
+                "class": "fa-refresh",
+                "isAlias": false
+            },
+            {
+                "name": "registered",
+                "title": "Registered",
+                "class": "fa-registered",
+                "isAlias": false
+            },
+            {
+                "name": "remove",
+                "title": "Remove",
+                "class": "fa-remove",
+                "isAlias": true
+            },
+            {
+                "name": "reorder",
+                "title": "Reorder",
+                "class": "fa-reorder",
+                "isAlias": true
+            },
+            {
+                "name": "reply",
+                "title": "Reply",
+                "class": "fa-reply",
+                "isAlias": false
+            },
+            {
+                "name": "reply-all",
+                "title": "Reply All",
+                "class": "fa-reply-all",
+                "isAlias": false
+            },
+            {
+                "name": "retweet",
+                "title": "Retweet",
+                "class": "fa-retweet",
+                "isAlias": false
+            },
+            {
+                "name": "road",
+                "title": "Road",
+                "class": "fa-road",
+                "isAlias": false
+            },
+            {
+                "name": "rocket",
+                "title": "Rocket",
+                "class": "fa-rocket",
+                "isAlias": false
+            },
+            {
+                "name": "rss",
+                "title": "Rss",
+                "class": "fa-rss",
+                "isAlias": false
+            },
+            {
+                "name": "rss-square",
+                "title": "Rss Square",
+                "class": "fa-rss-square",
+                "isAlias": false
+            },
+            {
+                "name": "s15",
+                "title": "S15",
+                "class": "fa-s15",
+                "isAlias": true
+            },
+            {
+                "name": "search",
+                "title": "Search",
+                "class": "fa-search",
+                "isAlias": false
+            },
+            {
+                "name": "search-minus",
+                "title": "Search Minus",
+                "class": "fa-search-minus",
+                "isAlias": false
+            },
+            {
+                "name": "search-plus",
+                "title": "Search Plus",
+                "class": "fa-search-plus",
+                "isAlias": false
+            },
+            {
+                "name": "send",
+                "title": "Send",
+                "class": "fa-send",
+                "isAlias": true
+            },
+            {
+                "name": "send-o",
+                "title": "Send O",
+                "class": "fa-send-o",
+                "isAlias": true
+            },
+            {
+                "name": "server",
+                "title": "Server",
+                "class": "fa-server",
+                "isAlias": false
+            },
+            {
+                "name": "share",
+                "title": "Share",
+                "class": "fa-share",
+                "isAlias": false
+            },
+            {
+                "name": "share-alt",
+                "title": "Share Alt",
+                "class": "fa-share-alt",
+                "isAlias": false
+            },
+            {
+                "name": "share-alt-square",
+                "title": "Share Alt Square",
+                "class": "fa-share-alt-square",
+                "isAlias": false
+            },
+            {
+                "name": "share-square",
+                "title": "Share Square",
+                "class": "fa-share-square",
+                "isAlias": false
+            },
+            {
+                "name": "share-square-o",
+                "title": "Share Square Outline",
+                "class": "fa-share-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "shield",
+                "title": "Shield",
+                "class": "fa-shield",
+                "isAlias": false
+            },
+            {
+                "name": "ship",
+                "title": "Ship",
+                "class": "fa-ship",
+                "isAlias": false
+            },
+            {
+                "name": "shopping-bag",
+                "title": "Shopping Bag",
+                "class": "fa-shopping-bag",
+                "isAlias": false
+            },
+            {
+                "name": "shopping-basket",
+                "title": "Shopping Basket",
+                "class": "fa-shopping-basket",
+                "isAlias": false
+            },
+            {
+                "name": "shopping-cart",
+                "title": "Shopping Cart",
+                "class": "fa-shopping-cart",
+                "isAlias": false
+            },
+            {
+                "name": "shower",
+                "title": "Shower",
+                "class": "fa-shower",
+                "isAlias": false
+            },
+            {
+                "name": "sign-in",
+                "title": "Sign In",
+                "class": "fa-sign-in",
+                "isAlias": false
+            },
+            {
+                "name": "sign-language",
+                "title": "Sign Language",
+                "class": "fa-sign-language",
+                "isAlias": false
+            },
+            {
+                "name": "sign-out",
+                "title": "Sign Out",
+                "class": "fa-sign-out",
+                "isAlias": false
+            },
+            {
+                "name": "signal",
+                "title": "Signal",
+                "class": "fa-signal",
+                "isAlias": false
+            },
+            {
+                "name": "signing",
+                "title": "Signing",
+                "class": "fa-signing",
+                "isAlias": true
+            },
+            {
+                "name": "sitemap",
+                "title": "Sitemap",
+                "class": "fa-sitemap",
+                "isAlias": false
+            },
+            {
+                "name": "sliders",
+                "title": "Sliders",
+                "class": "fa-sliders",
+                "isAlias": false
+            },
+            {
+                "name": "smile-o",
+                "title": "Smile Outline",
+                "class": "fa-smile-o",
+                "isAlias": false
+            },
+            {
+                "name": "snowflake-o",
+                "title": "Snowflake Outline",
+                "class": "fa-snowflake-o",
+                "isAlias": false
+            },
+            {
+                "name": "soccer-ball-o",
+                "title": "Soccer Ball O",
+                "class": "fa-soccer-ball-o",
+                "isAlias": true
+            },
+            {
+                "name": "sort",
+                "title": "Sort",
+                "class": "fa-sort",
+                "isAlias": false
+            },
+            {
+                "name": "sort-alpha-asc",
+                "title": "Sort Alpha Asc",
+                "class": "fa-sort-alpha-asc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-alpha-desc",
+                "title": "Sort Alpha Desc",
+                "class": "fa-sort-alpha-desc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-amount-asc",
+                "title": "Sort Amount Asc",
+                "class": "fa-sort-amount-asc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-amount-desc",
+                "title": "Sort Amount Desc",
+                "class": "fa-sort-amount-desc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-asc",
+                "title": "Sort Asc",
+                "class": "fa-sort-asc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-desc",
+                "title": "Sort Desc",
+                "class": "fa-sort-desc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-down",
+                "title": "Sort Down",
+                "class": "fa-sort-down",
+                "isAlias": true
+            },
+            {
+                "name": "sort-numeric-asc",
+                "title": "Sort Numeric Asc",
+                "class": "fa-sort-numeric-asc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-numeric-desc",
+                "title": "Sort Numeric Desc",
+                "class": "fa-sort-numeric-desc",
+                "isAlias": false
+            },
+            {
+                "name": "sort-up",
+                "title": "Sort Up",
+                "class": "fa-sort-up",
+                "isAlias": true
+            },
+            {
+                "name": "space-shuttle",
+                "title": "Space Shuttle",
+                "class": "fa-space-shuttle",
+                "isAlias": false
+            },
+            {
+                "name": "spinner",
+                "title": "Spinner",
+                "class": "fa-spinner",
+                "isAlias": false
+            },
+            {
+                "name": "spoon",
+                "title": "Spoon",
+                "class": "fa-spoon",
+                "isAlias": false
+            },
+            {
+                "name": "square",
+                "title": "Square",
+                "class": "fa-square",
+                "isAlias": false
+            },
+            {
+                "name": "square-o",
+                "title": "Square Outline",
+                "class": "fa-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "star",
+                "title": "Star",
+                "class": "fa-star",
+                "isAlias": false
+            },
+            {
+                "name": "star-half",
+                "title": "Star Half",
+                "class": "fa-star-half",
+                "isAlias": false
+            },
+            {
+                "name": "star-half-empty",
+                "title": "Star Half Empty",
+                "class": "fa-star-half-empty",
+                "isAlias": true
+            },
+            {
+                "name": "star-half-full",
+                "title": "Star Half Full",
+                "class": "fa-star-half-full",
+                "isAlias": true
+            },
+            {
+                "name": "star-half-o",
+                "title": "Star Half Outline",
+                "class": "fa-star-half-o",
+                "isAlias": false
+            },
+            {
+                "name": "star-o",
+                "title": "Star Outline",
+                "class": "fa-star-o",
+                "isAlias": false
+            },
+            {
+                "name": "sticky-note",
+                "title": "Sticky Note",
+                "class": "fa-sticky-note",
+                "isAlias": false
+            },
+            {
+                "name": "sticky-note-o",
+                "title": "Sticky Note Outline",
+                "class": "fa-sticky-note-o",
+                "isAlias": false
+            },
+            {
+                "name": "street-view",
+                "title": "Street View",
+                "class": "fa-street-view",
+                "isAlias": false
+            },
+            {
+                "name": "suitcase",
+                "title": "Suitcase",
+                "class": "fa-suitcase",
+                "isAlias": false
+            },
+            {
+                "name": "sun-o",
+                "title": "Sun Outline",
+                "class": "fa-sun-o",
+                "isAlias": false
+            },
+            {
+                "name": "support",
+                "title": "Support",
+                "class": "fa-support",
+                "isAlias": true
+            },
+            {
+                "name": "tablet",
+                "title": "Tablet",
+                "class": "fa-tablet",
+                "isAlias": false
+            },
+            {
+                "name": "tachometer",
+                "title": "Tachometer",
+                "class": "fa-tachometer",
+                "isAlias": false
+            },
+            {
+                "name": "tag",
+                "title": "Tag",
+                "class": "fa-tag",
+                "isAlias": false
+            },
+            {
+                "name": "tags",
+                "title": "Tags",
+                "class": "fa-tags",
+                "isAlias": false
+            },
+            {
+                "name": "tasks",
+                "title": "Tasks",
+                "class": "fa-tasks",
+                "isAlias": false
+            },
+            {
+                "name": "taxi",
+                "title": "Taxi",
+                "class": "fa-taxi",
+                "isAlias": false
+            },
+            {
+                "name": "television",
+                "title": "Television",
+                "class": "fa-television",
+                "isAlias": false
+            },
+            {
+                "name": "terminal",
+                "title": "Terminal",
+                "class": "fa-terminal",
+                "isAlias": false
+            },
+            {
+                "name": "thermometer",
+                "title": "Thermometer",
+                "class": "fa-thermometer",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-0",
+                "title": "Thermometer 0",
+                "class": "fa-thermometer-0",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-1",
+                "title": "Thermometer 1",
+                "class": "fa-thermometer-1",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-2",
+                "title": "Thermometer 2",
+                "class": "fa-thermometer-2",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-3",
+                "title": "Thermometer 3",
+                "class": "fa-thermometer-3",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-4",
+                "title": "Thermometer 4",
+                "class": "fa-thermometer-4",
+                "isAlias": true
+            },
+            {
+                "name": "thermometer-empty",
+                "title": "Thermometer Empty",
+                "class": "fa-thermometer-empty",
+                "isAlias": false
+            },
+            {
+                "name": "thermometer-full",
+                "title": "Thermometer Full",
+                "class": "fa-thermometer-full",
+                "isAlias": false
+            },
+            {
+                "name": "thermometer-half",
+                "title": "Thermometer Half",
+                "class": "fa-thermometer-half",
+                "isAlias": false
+            },
+            {
+                "name": "thermometer-quarter",
+                "title": "Thermometer Quarter",
+                "class": "fa-thermometer-quarter",
+                "isAlias": false
+            },
+            {
+                "name": "thermometer-three-quarters",
+                "title": "Thermometer Three Quarters",
+                "class": "fa-thermometer-three-quarters",
+                "isAlias": false
+            },
+            {
+                "name": "thumb-tack",
+                "title": "Thumb Tack",
+                "class": "fa-thumb-tack",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-down",
+                "title": "Thumbs Down",
+                "class": "fa-thumbs-down",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-o-down",
+                "title": "Thumbs O Down",
+                "class": "fa-thumbs-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-o-up",
+                "title": "Thumbs O Up",
+                "class": "fa-thumbs-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-up",
+                "title": "Thumbs Up",
+                "class": "fa-thumbs-up",
+                "isAlias": false
+            },
+            {
+                "name": "ticket",
+                "title": "Ticket",
+                "class": "fa-ticket",
+                "isAlias": false
+            },
+            {
+                "name": "times",
+                "title": "Times",
+                "class": "fa-times",
+                "isAlias": false
+            },
+            {
+                "name": "times-circle",
+                "title": "Times Circle",
+                "class": "fa-times-circle",
+                "isAlias": false
+            },
+            {
+                "name": "times-circle-o",
+                "title": "Times Circle Outline",
+                "class": "fa-times-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "times-rectangle",
+                "title": "Times Rectangle",
+                "class": "fa-times-rectangle",
+                "isAlias": true
+            },
+            {
+                "name": "times-rectangle-o",
+                "title": "Times Rectangle O",
+                "class": "fa-times-rectangle-o",
+                "isAlias": true
+            },
+            {
+                "name": "tint",
+                "title": "Tint",
+                "class": "fa-tint",
+                "isAlias": false
+            },
+            {
+                "name": "toggle-down",
+                "title": "Toggle Down",
+                "class": "fa-toggle-down",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-left",
+                "title": "Toggle Left",
+                "class": "fa-toggle-left",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-off",
+                "title": "Toggle Off",
+                "class": "fa-toggle-off",
+                "isAlias": false
+            },
+            {
+                "name": "toggle-on",
+                "title": "Toggle On",
+                "class": "fa-toggle-on",
+                "isAlias": false
+            },
+            {
+                "name": "toggle-right",
+                "title": "Toggle Right",
+                "class": "fa-toggle-right",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-up",
+                "title": "Toggle Up",
+                "class": "fa-toggle-up",
+                "isAlias": true
+            },
+            {
+                "name": "trademark",
+                "title": "Trademark",
+                "class": "fa-trademark",
+                "isAlias": false
+            },
+            {
+                "name": "trash",
+                "title": "Trash",
+                "class": "fa-trash",
+                "isAlias": false
+            },
+            {
+                "name": "trash-o",
+                "title": "Trash Outline",
+                "class": "fa-trash-o",
+                "isAlias": false
+            },
+            {
+                "name": "tree",
+                "title": "Tree",
+                "class": "fa-tree",
+                "isAlias": false
+            },
+            {
+                "name": "trophy",
+                "title": "Trophy",
+                "class": "fa-trophy",
+                "isAlias": false
+            },
+            {
+                "name": "truck",
+                "title": "Truck",
+                "class": "fa-truck",
+                "isAlias": false
+            },
+            {
+                "name": "tty",
+                "title": "Tty",
+                "class": "fa-tty",
+                "isAlias": false
+            },
+            {
+                "name": "tv",
+                "title": "Tv",
+                "class": "fa-tv",
+                "isAlias": true
+            },
+            {
+                "name": "umbrella",
+                "title": "Umbrella",
+                "class": "fa-umbrella",
+                "isAlias": false
+            },
+            {
+                "name": "universal-access",
+                "title": "Universal Access",
+                "class": "fa-universal-access",
+                "isAlias": false
+            },
+            {
+                "name": "university",
+                "title": "University",
+                "class": "fa-university",
+                "isAlias": false
+            },
+            {
+                "name": "unlock",
+                "title": "Unlock",
+                "class": "fa-unlock",
+                "isAlias": false
+            },
+            {
+                "name": "unlock-alt",
+                "title": "Unlock Alt",
+                "class": "fa-unlock-alt",
+                "isAlias": false
+            },
+            {
+                "name": "unsorted",
+                "title": "Unsorted",
+                "class": "fa-unsorted",
+                "isAlias": true
+            },
+            {
+                "name": "upload",
+                "title": "Upload",
+                "class": "fa-upload",
+                "isAlias": false
+            },
+            {
+                "name": "user",
+                "title": "User",
+                "class": "fa-user",
+                "isAlias": false
+            },
+            {
+                "name": "user-circle",
+                "title": "User Circle",
+                "class": "fa-user-circle",
+                "isAlias": false
+            },
+            {
+                "name": "user-circle-o",
+                "title": "User Circle Outline",
+                "class": "fa-user-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "user-o",
+                "title": "User Outline",
+                "class": "fa-user-o",
+                "isAlias": false
+            },
+            {
+                "name": "user-plus",
+                "title": "User Plus",
+                "class": "fa-user-plus",
+                "isAlias": false
+            },
+            {
+                "name": "user-secret",
+                "title": "User Secret",
+                "class": "fa-user-secret",
+                "isAlias": false
+            },
+            {
+                "name": "user-times",
+                "title": "User Times",
+                "class": "fa-user-times",
+                "isAlias": false
+            },
+            {
+                "name": "users",
+                "title": "Users",
+                "class": "fa-users",
+                "isAlias": false
+            },
+            {
+                "name": "vcard",
+                "title": "Vcard",
+                "class": "fa-vcard",
+                "isAlias": true
+            },
+            {
+                "name": "vcard-o",
+                "title": "Vcard O",
+                "class": "fa-vcard-o",
+                "isAlias": true
+            },
+            {
+                "name": "video-camera",
+                "title": "Video Camera",
+                "class": "fa-video-camera",
+                "isAlias": false
+            },
+            {
+                "name": "volume-control-phone",
+                "title": "Volume Control Phone",
+                "class": "fa-volume-control-phone",
+                "isAlias": false
+            },
+            {
+                "name": "volume-down",
+                "title": "Volume Down",
+                "class": "fa-volume-down",
+                "isAlias": false
+            },
+            {
+                "name": "volume-off",
+                "title": "Volume Off",
+                "class": "fa-volume-off",
+                "isAlias": false
+            },
+            {
+                "name": "volume-up",
+                "title": "Volume Up",
+                "class": "fa-volume-up",
+                "isAlias": false
+            },
+            {
+                "name": "warning",
+                "title": "Warning",
+                "class": "fa-warning",
+                "isAlias": true
+            },
+            {
+                "name": "wheelchair",
+                "title": "Wheelchair",
+                "class": "fa-wheelchair",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair-alt",
+                "title": "Wheelchair Alt",
+                "class": "fa-wheelchair-alt",
+                "isAlias": false
+            },
+            {
+                "name": "wifi",
+                "title": "Wifi",
+                "class": "fa-wifi",
+                "isAlias": false
+            },
+            {
+                "name": "window-close",
+                "title": "Window Close",
+                "class": "fa-window-close",
+                "isAlias": false
+            },
+            {
+                "name": "window-close-o",
+                "title": "Window Close Outline",
+                "class": "fa-window-close-o",
+                "isAlias": false
+            },
+            {
+                "name": "window-maximize",
+                "title": "Window Maximize",
+                "class": "fa-window-maximize",
+                "isAlias": false
+            },
+            {
+                "name": "window-minimize",
+                "title": "Window Minimize",
+                "class": "fa-window-minimize",
+                "isAlias": false
+            },
+            {
+                "name": "window-restore",
+                "title": "Window Restore",
+                "class": "fa-window-restore",
+                "isAlias": false
+            },
+            {
+                "name": "wrench",
+                "title": "Wrench",
+                "class": "fa-wrench",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Accessibility Icons",
+        "icons": [
+            {
+                "name": "american-sign-language-interpreting",
+                "title": "American Sign Language Interpreting",
+                "class": "fa-american-sign-language-interpreting",
+                "isAlias": false
+            },
+            {
+                "name": "asl-interpreting",
+                "title": "Asl Interpreting",
+                "class": "fa-asl-interpreting",
+                "isAlias": true
+            },
+            {
+                "name": "assistive-listening-systems",
+                "title": "Assistive Listening Systems",
+                "class": "fa-assistive-listening-systems",
+                "isAlias": false
+            },
+            {
+                "name": "audio-description",
+                "title": "Audio Description",
+                "class": "fa-audio-description",
+                "isAlias": false
+            },
+            {
+                "name": "blind",
+                "title": "Blind",
+                "class": "fa-blind",
+                "isAlias": false
+            },
+            {
+                "name": "braille",
+                "title": "Braille",
+                "class": "fa-braille",
+                "isAlias": false
+            },
+            {
+                "name": "cc",
+                "title": "Cc",
+                "class": "fa-cc",
+                "isAlias": false
+            },
+            {
+                "name": "deaf",
+                "title": "Deaf",
+                "class": "fa-deaf",
+                "isAlias": false
+            },
+            {
+                "name": "deafness",
+                "title": "Deafness",
+                "class": "fa-deafness",
+                "isAlias": true
+            },
+            {
+                "name": "hard-of-hearing",
+                "title": "Hard Of Hearing",
+                "class": "fa-hard-of-hearing",
+                "isAlias": true
+            },
+            {
+                "name": "low-vision",
+                "title": "Low Vision",
+                "class": "fa-low-vision",
+                "isAlias": false
+            },
+            {
+                "name": "question-circle-o",
+                "title": "Question Circle Outline",
+                "class": "fa-question-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "sign-language",
+                "title": "Sign Language",
+                "class": "fa-sign-language",
+                "isAlias": false
+            },
+            {
+                "name": "signing",
+                "title": "Signing",
+                "class": "fa-signing",
+                "isAlias": true
+            },
+            {
+                "name": "tty",
+                "title": "Tty",
+                "class": "fa-tty",
+                "isAlias": false
+            },
+            {
+                "name": "universal-access",
+                "title": "Universal Access",
+                "class": "fa-universal-access",
+                "isAlias": false
+            },
+            {
+                "name": "volume-control-phone",
+                "title": "Volume Control Phone",
+                "class": "fa-volume-control-phone",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair",
+                "title": "Wheelchair",
+                "class": "fa-wheelchair",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair-alt",
+                "title": "Wheelchair Alt",
+                "class": "fa-wheelchair-alt",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Hand Icons",
+        "icons": [
+            {
+                "name": "hand-grab-o",
+                "title": "Hand Grab O",
+                "class": "fa-hand-grab-o",
+                "isAlias": true
+            },
+            {
+                "name": "hand-lizard-o",
+                "title": "Hand Lizard Outline",
+                "class": "fa-hand-lizard-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-down",
+                "title": "Hand O Down",
+                "class": "fa-hand-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-left",
+                "title": "Hand O Left",
+                "class": "fa-hand-o-left",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-right",
+                "title": "Hand O Right",
+                "class": "fa-hand-o-right",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-up",
+                "title": "Hand O Up",
+                "class": "fa-hand-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "hand-paper-o",
+                "title": "Hand Paper Outline",
+                "class": "fa-hand-paper-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-peace-o",
+                "title": "Hand Peace Outline",
+                "class": "fa-hand-peace-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-pointer-o",
+                "title": "Hand Pointer Outline",
+                "class": "fa-hand-pointer-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-rock-o",
+                "title": "Hand Rock Outline",
+                "class": "fa-hand-rock-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-scissors-o",
+                "title": "Hand Scissors Outline",
+                "class": "fa-hand-scissors-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-spock-o",
+                "title": "Hand Spock Outline",
+                "class": "fa-hand-spock-o",
+                "isAlias": false
+            },
+            {
+                "name": "hand-stop-o",
+                "title": "Hand Stop O",
+                "class": "fa-hand-stop-o",
+                "isAlias": true
+            },
+            {
+                "name": "thumbs-down",
+                "title": "Thumbs Down",
+                "class": "fa-thumbs-down",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-o-down",
+                "title": "Thumbs O Down",
+                "class": "fa-thumbs-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-o-up",
+                "title": "Thumbs O Up",
+                "class": "fa-thumbs-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "thumbs-up",
+                "title": "Thumbs Up",
+                "class": "fa-thumbs-up",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Transportation Icons",
+        "icons": [
+            {
+                "name": "ambulance",
+                "title": "Ambulance",
+                "class": "fa-ambulance",
+                "isAlias": false
+            },
+            {
+                "name": "automobile",
+                "title": "Automobile",
+                "class": "fa-automobile",
+                "isAlias": true
+            },
+            {
+                "name": "bicycle",
+                "title": "Bicycle",
+                "class": "fa-bicycle",
+                "isAlias": false
+            },
+            {
+                "name": "bus",
+                "title": "Bus",
+                "class": "fa-bus",
+                "isAlias": false
+            },
+            {
+                "name": "cab",
+                "title": "Cab",
+                "class": "fa-cab",
+                "isAlias": true
+            },
+            {
+                "name": "car",
+                "title": "Car",
+                "class": "fa-car",
+                "isAlias": false
+            },
+            {
+                "name": "fighter-jet",
+                "title": "Fighter Jet",
+                "class": "fa-fighter-jet",
+                "isAlias": false
+            },
+            {
+                "name": "motorcycle",
+                "title": "Motorcycle",
+                "class": "fa-motorcycle",
+                "isAlias": false
+            },
+            {
+                "name": "plane",
+                "title": "Plane",
+                "class": "fa-plane",
+                "isAlias": false
+            },
+            {
+                "name": "rocket",
+                "title": "Rocket",
+                "class": "fa-rocket",
+                "isAlias": false
+            },
+            {
+                "name": "ship",
+                "title": "Ship",
+                "class": "fa-ship",
+                "isAlias": false
+            },
+            {
+                "name": "space-shuttle",
+                "title": "Space Shuttle",
+                "class": "fa-space-shuttle",
+                "isAlias": false
+            },
+            {
+                "name": "subway",
+                "title": "Subway",
+                "class": "fa-subway",
+                "isAlias": false
+            },
+            {
+                "name": "taxi",
+                "title": "Taxi",
+                "class": "fa-taxi",
+                "isAlias": false
+            },
+            {
+                "name": "train",
+                "title": "Train",
+                "class": "fa-train",
+                "isAlias": false
+            },
+            {
+                "name": "truck",
+                "title": "Truck",
+                "class": "fa-truck",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair",
+                "title": "Wheelchair",
+                "class": "fa-wheelchair",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair-alt",
+                "title": "Wheelchair Alt",
+                "class": "fa-wheelchair-alt",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Gender Icons",
+        "icons": [
+            {
+                "name": "genderless",
+                "title": "Genderless",
+                "class": "fa-genderless",
+                "isAlias": false
+            },
+            {
+                "name": "intersex",
+                "title": "Intersex",
+                "class": "fa-intersex",
+                "isAlias": true
+            },
+            {
+                "name": "mars",
+                "title": "Mars",
+                "class": "fa-mars",
+                "isAlias": false
+            },
+            {
+                "name": "mars-double",
+                "title": "Mars Double",
+                "class": "fa-mars-double",
+                "isAlias": false
+            },
+            {
+                "name": "mars-stroke",
+                "title": "Mars Stroke",
+                "class": "fa-mars-stroke",
+                "isAlias": false
+            },
+            {
+                "name": "mars-stroke-h",
+                "title": "Mars Stroke H",
+                "class": "fa-mars-stroke-h",
+                "isAlias": false
+            },
+            {
+                "name": "mars-stroke-v",
+                "title": "Mars Stroke V",
+                "class": "fa-mars-stroke-v",
+                "isAlias": false
+            },
+            {
+                "name": "mercury",
+                "title": "Mercury",
+                "class": "fa-mercury",
+                "isAlias": false
+            },
+            {
+                "name": "neuter",
+                "title": "Neuter",
+                "class": "fa-neuter",
+                "isAlias": false
+            },
+            {
+                "name": "transgender",
+                "title": "Transgender",
+                "class": "fa-transgender",
+                "isAlias": false
+            },
+            {
+                "name": "transgender-alt",
+                "title": "Transgender Alt",
+                "class": "fa-transgender-alt",
+                "isAlias": false
+            },
+            {
+                "name": "venus",
+                "title": "Venus",
+                "class": "fa-venus",
+                "isAlias": false
+            },
+            {
+                "name": "venus-double",
+                "title": "Venus Double",
+                "class": "fa-venus-double",
+                "isAlias": false
+            },
+            {
+                "name": "venus-mars",
+                "title": "Venus Mars",
+                "class": "fa-venus-mars",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "File Type Icons",
+        "icons": [
+            {
+                "name": "file",
+                "title": "File",
+                "class": "fa-file",
+                "isAlias": false
+            },
+            {
+                "name": "file-archive-o",
+                "title": "File Archive Outline",
+                "class": "fa-file-archive-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-audio-o",
+                "title": "File Audio Outline",
+                "class": "fa-file-audio-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-code-o",
+                "title": "File Code Outline",
+                "class": "fa-file-code-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-excel-o",
+                "title": "File Excel Outline",
+                "class": "fa-file-excel-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-image-o",
+                "title": "File Image Outline",
+                "class": "fa-file-image-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-movie-o",
+                "title": "File Movie O",
+                "class": "fa-file-movie-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-o",
+                "title": "File Outline",
+                "class": "fa-file-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-pdf-o",
+                "title": "File Pdf Outline",
+                "class": "fa-file-pdf-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-photo-o",
+                "title": "File Photo O",
+                "class": "fa-file-photo-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-picture-o",
+                "title": "File Picture O",
+                "class": "fa-file-picture-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-powerpoint-o",
+                "title": "File Powerpoint Outline",
+                "class": "fa-file-powerpoint-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-sound-o",
+                "title": "File Sound O",
+                "class": "fa-file-sound-o",
+                "isAlias": true
+            },
+            {
+                "name": "file-text",
+                "title": "File Text",
+                "class": "fa-file-text",
+                "isAlias": false
+            },
+            {
+                "name": "file-text-o",
+                "title": "File Text Outline",
+                "class": "fa-file-text-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-video-o",
+                "title": "File Video Outline",
+                "class": "fa-file-video-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-word-o",
+                "title": "File Word Outline",
+                "class": "fa-file-word-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-zip-o",
+                "title": "File Zip O",
+                "class": "fa-file-zip-o",
+                "isAlias": true
+            }
+        ]
+    },
+    {
+        "name": "Spinner Icons",
+        "icons": [
+            {
+                "name": "circle-o-notch",
+                "title": "Circle O Notch",
+                "class": "fa-circle-o-notch",
+                "isAlias": false
+            },
+            {
+                "name": "cog",
+                "title": "Cog",
+                "class": "fa-cog",
+                "isAlias": false
+            },
+            {
+                "name": "gear",
+                "title": "Gear",
+                "class": "fa-gear",
+                "isAlias": true
+            },
+            {
+                "name": "refresh",
+                "title": "Refresh",
+                "class": "fa-refresh",
+                "isAlias": false
+            },
+            {
+                "name": "spinner",
+                "title": "Spinner",
+                "class": "fa-spinner",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Form Control Icons",
+        "icons": [
+            {
+                "name": "check-square",
+                "title": "Check Square",
+                "class": "fa-check-square",
+                "isAlias": false
+            },
+            {
+                "name": "check-square-o",
+                "title": "Check Square Outline",
+                "class": "fa-check-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "circle",
+                "title": "Circle",
+                "class": "fa-circle",
+                "isAlias": false
+            },
+            {
+                "name": "circle-o",
+                "title": "Circle Outline",
+                "class": "fa-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "dot-circle-o",
+                "title": "Dot Circle Outline",
+                "class": "fa-dot-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "minus-square",
+                "title": "Minus Square",
+                "class": "fa-minus-square",
+                "isAlias": false
+            },
+            {
+                "name": "minus-square-o",
+                "title": "Minus Square Outline",
+                "class": "fa-minus-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "plus-square",
+                "title": "Plus Square",
+                "class": "fa-plus-square",
+                "isAlias": false
+            },
+            {
+                "name": "plus-square-o",
+                "title": "Plus Square Outline",
+                "class": "fa-plus-square-o",
+                "isAlias": false
+            },
+            {
+                "name": "square",
+                "title": "Square",
+                "class": "fa-square",
+                "isAlias": false
+            },
+            {
+                "name": "square-o",
+                "title": "Square Outline",
+                "class": "fa-square-o",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Payment Icons",
+        "icons": [
+            {
+                "name": "cc-amex",
+                "title": "Cc Amex",
+                "class": "fa-cc-amex",
+                "isAlias": false
+            },
+            {
+                "name": "cc-diners-club",
+                "title": "Cc Diners Club",
+                "class": "fa-cc-diners-club",
+                "isAlias": false
+            },
+            {
+                "name": "cc-discover",
+                "title": "Cc Discover",
+                "class": "fa-cc-discover",
+                "isAlias": false
+            },
+            {
+                "name": "cc-jcb",
+                "title": "Cc Jcb",
+                "class": "fa-cc-jcb",
+                "isAlias": false
+            },
+            {
+                "name": "cc-mastercard",
+                "title": "Cc Mastercard",
+                "class": "fa-cc-mastercard",
+                "isAlias": false
+            },
+            {
+                "name": "cc-paypal",
+                "title": "Cc Paypal",
+                "class": "fa-cc-paypal",
+                "isAlias": false
+            },
+            {
+                "name": "cc-stripe",
+                "title": "Cc Stripe",
+                "class": "fa-cc-stripe",
+                "isAlias": false
+            },
+            {
+                "name": "cc-visa",
+                "title": "Cc Visa",
+                "class": "fa-cc-visa",
+                "isAlias": false
+            },
+            {
+                "name": "credit-card",
+                "title": "Credit Card",
+                "class": "fa-credit-card",
+                "isAlias": false
+            },
+            {
+                "name": "credit-card-alt",
+                "title": "Credit Card Alt",
+                "class": "fa-credit-card-alt",
+                "isAlias": false
+            },
+            {
+                "name": "google-wallet",
+                "title": "Google Wallet",
+                "class": "fa-google-wallet",
+                "isAlias": false
+            },
+            {
+                "name": "paypal",
+                "title": "Paypal",
+                "class": "fa-paypal",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Chart Icons",
+        "icons": [
+            {
+                "name": "area-chart",
+                "title": "Area Chart",
+                "class": "fa-area-chart",
+                "isAlias": false
+            },
+            {
+                "name": "bar-chart",
+                "title": "Bar Chart",
+                "class": "fa-bar-chart",
+                "isAlias": false
+            },
+            {
+                "name": "bar-chart-o",
+                "title": "Bar Chart O",
+                "class": "fa-bar-chart-o",
+                "isAlias": true
+            },
+            {
+                "name": "line-chart",
+                "title": "Line Chart",
+                "class": "fa-line-chart",
+                "isAlias": false
+            },
+            {
+                "name": "pie-chart",
+                "title": "Pie Chart",
+                "class": "fa-pie-chart",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Currency Icons",
+        "icons": [
+            {
+                "name": "bitcoin",
+                "title": "Bitcoin",
+                "class": "fa-bitcoin",
+                "isAlias": true
+            },
+            {
+                "name": "btc",
+                "title": "Btc",
+                "class": "fa-btc",
+                "isAlias": false
+            },
+            {
+                "name": "cny",
+                "title": "Cny",
+                "class": "fa-cny",
+                "isAlias": true
+            },
+            {
+                "name": "dollar",
+                "title": "Dollar",
+                "class": "fa-dollar",
+                "isAlias": true
+            },
+            {
+                "name": "eur",
+                "title": "Eur",
+                "class": "fa-eur",
+                "isAlias": false
+            },
+            {
+                "name": "euro",
+                "title": "Euro",
+                "class": "fa-euro",
+                "isAlias": true
+            },
+            {
+                "name": "gbp",
+                "title": "Gbp",
+                "class": "fa-gbp",
+                "isAlias": false
+            },
+            {
+                "name": "gg",
+                "title": "Gg",
+                "class": "fa-gg",
+                "isAlias": false
+            },
+            {
+                "name": "gg-circle",
+                "title": "Gg Circle",
+                "class": "fa-gg-circle",
+                "isAlias": false
+            },
+            {
+                "name": "ils",
+                "title": "Ils",
+                "class": "fa-ils",
+                "isAlias": false
+            },
+            {
+                "name": "inr",
+                "title": "Inr",
+                "class": "fa-inr",
+                "isAlias": false
+            },
+            {
+                "name": "jpy",
+                "title": "Jpy",
+                "class": "fa-jpy",
+                "isAlias": false
+            },
+            {
+                "name": "krw",
+                "title": "Krw",
+                "class": "fa-krw",
+                "isAlias": false
+            },
+            {
+                "name": "money",
+                "title": "Money",
+                "class": "fa-money",
+                "isAlias": false
+            },
+            {
+                "name": "rmb",
+                "title": "Rmb",
+                "class": "fa-rmb",
+                "isAlias": true
+            },
+            {
+                "name": "rouble",
+                "title": "Rouble",
+                "class": "fa-rouble",
+                "isAlias": true
+            },
+            {
+                "name": "rub",
+                "title": "Rub",
+                "class": "fa-rub",
+                "isAlias": false
+            },
+            {
+                "name": "ruble",
+                "title": "Ruble",
+                "class": "fa-ruble",
+                "isAlias": true
+            },
+            {
+                "name": "rupee",
+                "title": "Rupee",
+                "class": "fa-rupee",
+                "isAlias": true
+            },
+            {
+                "name": "shekel",
+                "title": "Shekel",
+                "class": "fa-shekel",
+                "isAlias": true
+            },
+            {
+                "name": "sheqel",
+                "title": "Sheqel",
+                "class": "fa-sheqel",
+                "isAlias": true
+            },
+            {
+                "name": "try",
+                "title": "Try",
+                "class": "fa-try",
+                "isAlias": false
+            },
+            {
+                "name": "turkish-lira",
+                "title": "Turkish Lira",
+                "class": "fa-turkish-lira",
+                "isAlias": true
+            },
+            {
+                "name": "usd",
+                "title": "Usd",
+                "class": "fa-usd",
+                "isAlias": false
+            },
+            {
+                "name": "won",
+                "title": "Won",
+                "class": "fa-won",
+                "isAlias": true
+            },
+            {
+                "name": "yen",
+                "title": "Yen",
+                "class": "fa-yen",
+                "isAlias": true
+            }
+        ]
+    },
+    {
+        "name": "Text Editor Icons",
+        "icons": [
+            {
+                "name": "align-center",
+                "title": "Align Center",
+                "class": "fa-align-center",
+                "isAlias": false
+            },
+            {
+                "name": "align-justify",
+                "title": "Align Justify",
+                "class": "fa-align-justify",
+                "isAlias": false
+            },
+            {
+                "name": "align-left",
+                "title": "Align Left",
+                "class": "fa-align-left",
+                "isAlias": false
+            },
+            {
+                "name": "align-right",
+                "title": "Align Right",
+                "class": "fa-align-right",
+                "isAlias": false
+            },
+            {
+                "name": "bold",
+                "title": "Bold",
+                "class": "fa-bold",
+                "isAlias": false
+            },
+            {
+                "name": "chain",
+                "title": "Chain",
+                "class": "fa-chain",
+                "isAlias": true
+            },
+            {
+                "name": "chain-broken",
+                "title": "Chain Broken",
+                "class": "fa-chain-broken",
+                "isAlias": false
+            },
+            {
+                "name": "clipboard",
+                "title": "Clipboard",
+                "class": "fa-clipboard",
+                "isAlias": false
+            },
+            {
+                "name": "columns",
+                "title": "Columns",
+                "class": "fa-columns",
+                "isAlias": false
+            },
+            {
+                "name": "copy",
+                "title": "Copy",
+                "class": "fa-copy",
+                "isAlias": true
+            },
+            {
+                "name": "cut",
+                "title": "Cut",
+                "class": "fa-cut",
+                "isAlias": true
+            },
+            {
+                "name": "dedent",
+                "title": "Dedent",
+                "class": "fa-dedent",
+                "isAlias": true
+            },
+            {
+                "name": "eraser",
+                "title": "Eraser",
+                "class": "fa-eraser",
+                "isAlias": false
+            },
+            {
+                "name": "file",
+                "title": "File",
+                "class": "fa-file",
+                "isAlias": false
+            },
+            {
+                "name": "file-o",
+                "title": "File Outline",
+                "class": "fa-file-o",
+                "isAlias": false
+            },
+            {
+                "name": "file-text",
+                "title": "File Text",
+                "class": "fa-file-text",
+                "isAlias": false
+            },
+            {
+                "name": "file-text-o",
+                "title": "File Text Outline",
+                "class": "fa-file-text-o",
+                "isAlias": false
+            },
+            {
+                "name": "files-o",
+                "title": "Files Outline",
+                "class": "fa-files-o",
+                "isAlias": false
+            },
+            {
+                "name": "floppy-o",
+                "title": "Floppy Outline",
+                "class": "fa-floppy-o",
+                "isAlias": false
+            },
+            {
+                "name": "font",
+                "title": "Font",
+                "class": "fa-font",
+                "isAlias": false
+            },
+            {
+                "name": "header",
+                "title": "Header",
+                "class": "fa-header",
+                "isAlias": false
+            },
+            {
+                "name": "indent",
+                "title": "Indent",
+                "class": "fa-indent",
+                "isAlias": false
+            },
+            {
+                "name": "italic",
+                "title": "Italic",
+                "class": "fa-italic",
+                "isAlias": false
+            },
+            {
+                "name": "link",
+                "title": "Link",
+                "class": "fa-link",
+                "isAlias": false
+            },
+            {
+                "name": "list",
+                "title": "List",
+                "class": "fa-list",
+                "isAlias": false
+            },
+            {
+                "name": "list-alt",
+                "title": "List Alt",
+                "class": "fa-list-alt",
+                "isAlias": false
+            },
+            {
+                "name": "list-ol",
+                "title": "List Ol",
+                "class": "fa-list-ol",
+                "isAlias": false
+            },
+            {
+                "name": "list-ul",
+                "title": "List Ul",
+                "class": "fa-list-ul",
+                "isAlias": false
+            },
+            {
+                "name": "outdent",
+                "title": "Outdent",
+                "class": "fa-outdent",
+                "isAlias": false
+            },
+            {
+                "name": "paperclip",
+                "title": "Paperclip",
+                "class": "fa-paperclip",
+                "isAlias": false
+            },
+            {
+                "name": "paragraph",
+                "title": "Paragraph",
+                "class": "fa-paragraph",
+                "isAlias": false
+            },
+            {
+                "name": "paste",
+                "title": "Paste",
+                "class": "fa-paste",
+                "isAlias": true
+            },
+            {
+                "name": "repeat",
+                "title": "Repeat",
+                "class": "fa-repeat",
+                "isAlias": false
+            },
+            {
+                "name": "rotate-left",
+                "title": "Rotate Left",
+                "class": "fa-rotate-left",
+                "isAlias": true
+            },
+            {
+                "name": "rotate-right",
+                "title": "Rotate Right",
+                "class": "fa-rotate-right",
+                "isAlias": true
+            },
+            {
+                "name": "save",
+                "title": "Save",
+                "class": "fa-save",
+                "isAlias": true
+            },
+            {
+                "name": "scissors",
+                "title": "Scissors",
+                "class": "fa-scissors",
+                "isAlias": false
+            },
+            {
+                "name": "strikethrough",
+                "title": "Strikethrough",
+                "class": "fa-strikethrough",
+                "isAlias": false
+            },
+            {
+                "name": "subscript",
+                "title": "Subscript",
+                "class": "fa-subscript",
+                "isAlias": false
+            },
+            {
+                "name": "superscript",
+                "title": "Superscript",
+                "class": "fa-superscript",
+                "isAlias": false
+            },
+            {
+                "name": "table",
+                "title": "Table",
+                "class": "fa-table",
+                "isAlias": false
+            },
+            {
+                "name": "text-height",
+                "title": "Text Height",
+                "class": "fa-text-height",
+                "isAlias": false
+            },
+            {
+                "name": "text-width",
+                "title": "Text Width",
+                "class": "fa-text-width",
+                "isAlias": false
+            },
+            {
+                "name": "th",
+                "title": "Th",
+                "class": "fa-th",
+                "isAlias": false
+            },
+            {
+                "name": "th-large",
+                "title": "Th Large",
+                "class": "fa-th-large",
+                "isAlias": false
+            },
+            {
+                "name": "th-list",
+                "title": "Th List",
+                "class": "fa-th-list",
+                "isAlias": false
+            },
+            {
+                "name": "underline",
+                "title": "Underline",
+                "class": "fa-underline",
+                "isAlias": false
+            },
+            {
+                "name": "undo",
+                "title": "Undo",
+                "class": "fa-undo",
+                "isAlias": false
+            },
+            {
+                "name": "unlink",
+                "title": "Unlink",
+                "class": "fa-unlink",
+                "isAlias": true
+            }
+        ]
+    },
+    {
+        "name": "Directional Icons",
+        "icons": [
+            {
+                "name": "angle-double-down",
+                "title": "Angle Double Down",
+                "class": "fa-angle-double-down",
+                "isAlias": false
+            },
+            {
+                "name": "angle-double-left",
+                "title": "Angle Double Left",
+                "class": "fa-angle-double-left",
+                "isAlias": false
+            },
+            {
+                "name": "angle-double-right",
+                "title": "Angle Double Right",
+                "class": "fa-angle-double-right",
+                "isAlias": false
+            },
+            {
+                "name": "angle-double-up",
+                "title": "Angle Double Up",
+                "class": "fa-angle-double-up",
+                "isAlias": false
+            },
+            {
+                "name": "angle-down",
+                "title": "Angle Down",
+                "class": "fa-angle-down",
+                "isAlias": false
+            },
+            {
+                "name": "angle-left",
+                "title": "Angle Left",
+                "class": "fa-angle-left",
+                "isAlias": false
+            },
+            {
+                "name": "angle-right",
+                "title": "Angle Right",
+                "class": "fa-angle-right",
+                "isAlias": false
+            },
+            {
+                "name": "angle-up",
+                "title": "Angle Up",
+                "class": "fa-angle-up",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-down",
+                "title": "Arrow Circle Down",
+                "class": "fa-arrow-circle-down",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-left",
+                "title": "Arrow Circle Left",
+                "class": "fa-arrow-circle-left",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-o-down",
+                "title": "Arrow Circle O Down",
+                "class": "fa-arrow-circle-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-o-left",
+                "title": "Arrow Circle O Left",
+                "class": "fa-arrow-circle-o-left",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-o-right",
+                "title": "Arrow Circle O Right",
+                "class": "fa-arrow-circle-o-right",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-o-up",
+                "title": "Arrow Circle O Up",
+                "class": "fa-arrow-circle-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-right",
+                "title": "Arrow Circle Right",
+                "class": "fa-arrow-circle-right",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-circle-up",
+                "title": "Arrow Circle Up",
+                "class": "fa-arrow-circle-up",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-down",
+                "title": "Arrow Down",
+                "class": "fa-arrow-down",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-left",
+                "title": "Arrow Left",
+                "class": "fa-arrow-left",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-right",
+                "title": "Arrow Right",
+                "class": "fa-arrow-right",
+                "isAlias": false
+            },
+            {
+                "name": "arrow-up",
+                "title": "Arrow Up",
+                "class": "fa-arrow-up",
+                "isAlias": false
+            },
+            {
+                "name": "arrows",
+                "title": "Arrows",
+                "class": "fa-arrows",
+                "isAlias": false
+            },
+            {
+                "name": "arrows-alt",
+                "title": "Arrows Alt",
+                "class": "fa-arrows-alt",
+                "isAlias": false
+            },
+            {
+                "name": "arrows-h",
+                "title": "Arrows H",
+                "class": "fa-arrows-h",
+                "isAlias": false
+            },
+            {
+                "name": "arrows-v",
+                "title": "Arrows V",
+                "class": "fa-arrows-v",
+                "isAlias": false
+            },
+            {
+                "name": "caret-down",
+                "title": "Caret Down",
+                "class": "fa-caret-down",
+                "isAlias": false
+            },
+            {
+                "name": "caret-left",
+                "title": "Caret Left",
+                "class": "fa-caret-left",
+                "isAlias": false
+            },
+            {
+                "name": "caret-right",
+                "title": "Caret Right",
+                "class": "fa-caret-right",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-down",
+                "title": "Caret Square O Down",
+                "class": "fa-caret-square-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-left",
+                "title": "Caret Square O Left",
+                "class": "fa-caret-square-o-left",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-right",
+                "title": "Caret Square O Right",
+                "class": "fa-caret-square-o-right",
+                "isAlias": false
+            },
+            {
+                "name": "caret-square-o-up",
+                "title": "Caret Square O Up",
+                "class": "fa-caret-square-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "caret-up",
+                "title": "Caret Up",
+                "class": "fa-caret-up",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-circle-down",
+                "title": "Chevron Circle Down",
+                "class": "fa-chevron-circle-down",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-circle-left",
+                "title": "Chevron Circle Left",
+                "class": "fa-chevron-circle-left",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-circle-right",
+                "title": "Chevron Circle Right",
+                "class": "fa-chevron-circle-right",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-circle-up",
+                "title": "Chevron Circle Up",
+                "class": "fa-chevron-circle-up",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-down",
+                "title": "Chevron Down",
+                "class": "fa-chevron-down",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-left",
+                "title": "Chevron Left",
+                "class": "fa-chevron-left",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-right",
+                "title": "Chevron Right",
+                "class": "fa-chevron-right",
+                "isAlias": false
+            },
+            {
+                "name": "chevron-up",
+                "title": "Chevron Up",
+                "class": "fa-chevron-up",
+                "isAlias": false
+            },
+            {
+                "name": "exchange",
+                "title": "Exchange",
+                "class": "fa-exchange",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-down",
+                "title": "Hand O Down",
+                "class": "fa-hand-o-down",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-left",
+                "title": "Hand O Left",
+                "class": "fa-hand-o-left",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-right",
+                "title": "Hand O Right",
+                "class": "fa-hand-o-right",
+                "isAlias": false
+            },
+            {
+                "name": "hand-o-up",
+                "title": "Hand O Up",
+                "class": "fa-hand-o-up",
+                "isAlias": false
+            },
+            {
+                "name": "long-arrow-down",
+                "title": "Long Arrow Down",
+                "class": "fa-long-arrow-down",
+                "isAlias": false
+            },
+            {
+                "name": "long-arrow-left",
+                "title": "Long Arrow Left",
+                "class": "fa-long-arrow-left",
+                "isAlias": false
+            },
+            {
+                "name": "long-arrow-right",
+                "title": "Long Arrow Right",
+                "class": "fa-long-arrow-right",
+                "isAlias": false
+            },
+            {
+                "name": "long-arrow-up",
+                "title": "Long Arrow Up",
+                "class": "fa-long-arrow-up",
+                "isAlias": false
+            },
+            {
+                "name": "toggle-down",
+                "title": "Toggle Down",
+                "class": "fa-toggle-down",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-left",
+                "title": "Toggle Left",
+                "class": "fa-toggle-left",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-right",
+                "title": "Toggle Right",
+                "class": "fa-toggle-right",
+                "isAlias": true
+            },
+            {
+                "name": "toggle-up",
+                "title": "Toggle Up",
+                "class": "fa-toggle-up",
+                "isAlias": true
+            }
+        ]
+    },
+    {
+        "name": "Video Player Icons",
+        "icons": [
+            {
+                "name": "arrows-alt",
+                "title": "Arrows Alt",
+                "class": "fa-arrows-alt",
+                "isAlias": false
+            },
+            {
+                "name": "backward",
+                "title": "Backward",
+                "class": "fa-backward",
+                "isAlias": false
+            },
+            {
+                "name": "compress",
+                "title": "Compress",
+                "class": "fa-compress",
+                "isAlias": false
+            },
+            {
+                "name": "eject",
+                "title": "Eject",
+                "class": "fa-eject",
+                "isAlias": false
+            },
+            {
+                "name": "expand",
+                "title": "Expand",
+                "class": "fa-expand",
+                "isAlias": false
+            },
+            {
+                "name": "fast-backward",
+                "title": "Fast Backward",
+                "class": "fa-fast-backward",
+                "isAlias": false
+            },
+            {
+                "name": "fast-forward",
+                "title": "Fast Forward",
+                "class": "fa-fast-forward",
+                "isAlias": false
+            },
+            {
+                "name": "forward",
+                "title": "Forward",
+                "class": "fa-forward",
+                "isAlias": false
+            },
+            {
+                "name": "pause",
+                "title": "Pause",
+                "class": "fa-pause",
+                "isAlias": false
+            },
+            {
+                "name": "pause-circle",
+                "title": "Pause Circle",
+                "class": "fa-pause-circle",
+                "isAlias": false
+            },
+            {
+                "name": "pause-circle-o",
+                "title": "Pause Circle Outline",
+                "class": "fa-pause-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "play",
+                "title": "Play",
+                "class": "fa-play",
+                "isAlias": false
+            },
+            {
+                "name": "play-circle",
+                "title": "Play Circle",
+                "class": "fa-play-circle",
+                "isAlias": false
+            },
+            {
+                "name": "play-circle-o",
+                "title": "Play Circle Outline",
+                "class": "fa-play-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "random",
+                "title": "Random",
+                "class": "fa-random",
+                "isAlias": false
+            },
+            {
+                "name": "step-backward",
+                "title": "Step Backward",
+                "class": "fa-step-backward",
+                "isAlias": false
+            },
+            {
+                "name": "step-forward",
+                "title": "Step Forward",
+                "class": "fa-step-forward",
+                "isAlias": false
+            },
+            {
+                "name": "stop",
+                "title": "Stop",
+                "class": "fa-stop",
+                "isAlias": false
+            },
+            {
+                "name": "stop-circle",
+                "title": "Stop Circle",
+                "class": "fa-stop-circle",
+                "isAlias": false
+            },
+            {
+                "name": "stop-circle-o",
+                "title": "Stop Circle Outline",
+                "class": "fa-stop-circle-o",
+                "isAlias": false
+            },
+            {
+                "name": "youtube-play",
+                "title": "Youtube Play",
+                "class": "fa-youtube-play",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Brand Icons",
+        "icons": [
+            {
+                "name": "500px",
+                "title": "500Px",
+                "class": "fa-500px",
+                "isAlias": false
+            },
+            {
+                "name": "adn",
+                "title": "Adn",
+                "class": "fa-adn",
+                "isAlias": false
+            },
+            {
+                "name": "amazon",
+                "title": "Amazon",
+                "class": "fa-amazon",
+                "isAlias": false
+            },
+            {
+                "name": "android",
+                "title": "Android",
+                "class": "fa-android",
+                "isAlias": false
+            },
+            {
+                "name": "angellist",
+                "title": "Angellist",
+                "class": "fa-angellist",
+                "isAlias": false
+            },
+            {
+                "name": "apple",
+                "title": "Apple",
+                "class": "fa-apple",
+                "isAlias": false
+            },
+            {
+                "name": "bandcamp",
+                "title": "Bandcamp",
+                "class": "fa-bandcamp",
+                "isAlias": false
+            },
+            {
+                "name": "behance",
+                "title": "Behance",
+                "class": "fa-behance",
+                "isAlias": false
+            },
+            {
+                "name": "behance-square",
+                "title": "Behance Square",
+                "class": "fa-behance-square",
+                "isAlias": false
+            },
+            {
+                "name": "bitbucket",
+                "title": "Bitbucket",
+                "class": "fa-bitbucket",
+                "isAlias": false
+            },
+            {
+                "name": "bitbucket-square",
+                "title": "Bitbucket Square",
+                "class": "fa-bitbucket-square",
+                "isAlias": false
+            },
+            {
+                "name": "bitcoin",
+                "title": "Bitcoin",
+                "class": "fa-bitcoin",
+                "isAlias": true
+            },
+            {
+                "name": "black-tie",
+                "title": "Black Tie",
+                "class": "fa-black-tie",
+                "isAlias": false
+            },
+            {
+                "name": "bluetooth",
+                "title": "Bluetooth",
+                "class": "fa-bluetooth",
+                "isAlias": false
+            },
+            {
+                "name": "bluetooth-b",
+                "title": "Bluetooth B",
+                "class": "fa-bluetooth-b",
+                "isAlias": false
+            },
+            {
+                "name": "btc",
+                "title": "Btc",
+                "class": "fa-btc",
+                "isAlias": false
+            },
+            {
+                "name": "buysellads",
+                "title": "Buysellads",
+                "class": "fa-buysellads",
+                "isAlias": false
+            },
+            {
+                "name": "cc-amex",
+                "title": "Cc Amex",
+                "class": "fa-cc-amex",
+                "isAlias": false
+            },
+            {
+                "name": "cc-diners-club",
+                "title": "Cc Diners Club",
+                "class": "fa-cc-diners-club",
+                "isAlias": false
+            },
+            {
+                "name": "cc-discover",
+                "title": "Cc Discover",
+                "class": "fa-cc-discover",
+                "isAlias": false
+            },
+            {
+                "name": "cc-jcb",
+                "title": "Cc Jcb",
+                "class": "fa-cc-jcb",
+                "isAlias": false
+            },
+            {
+                "name": "cc-mastercard",
+                "title": "Cc Mastercard",
+                "class": "fa-cc-mastercard",
+                "isAlias": false
+            },
+            {
+                "name": "cc-paypal",
+                "title": "Cc Paypal",
+                "class": "fa-cc-paypal",
+                "isAlias": false
+            },
+            {
+                "name": "cc-stripe",
+                "title": "Cc Stripe",
+                "class": "fa-cc-stripe",
+                "isAlias": false
+            },
+            {
+                "name": "cc-visa",
+                "title": "Cc Visa",
+                "class": "fa-cc-visa",
+                "isAlias": false
+            },
+            {
+                "name": "chrome",
+                "title": "Chrome",
+                "class": "fa-chrome",
+                "isAlias": false
+            },
+            {
+                "name": "codepen",
+                "title": "Codepen",
+                "class": "fa-codepen",
+                "isAlias": false
+            },
+            {
+                "name": "codiepie",
+                "title": "Codiepie",
+                "class": "fa-codiepie",
+                "isAlias": false
+            },
+            {
+                "name": "connectdevelop",
+                "title": "Connectdevelop",
+                "class": "fa-connectdevelop",
+                "isAlias": false
+            },
+            {
+                "name": "contao",
+                "title": "Contao",
+                "class": "fa-contao",
+                "isAlias": false
+            },
+            {
+                "name": "css3",
+                "title": "Css3",
+                "class": "fa-css3",
+                "isAlias": false
+            },
+            {
+                "name": "dashcube",
+                "title": "Dashcube",
+                "class": "fa-dashcube",
+                "isAlias": false
+            },
+            {
+                "name": "delicious",
+                "title": "Delicious",
+                "class": "fa-delicious",
+                "isAlias": false
+            },
+            {
+                "name": "deviantart",
+                "title": "Deviantart",
+                "class": "fa-deviantart",
+                "isAlias": false
+            },
+            {
+                "name": "digg",
+                "title": "Digg",
+                "class": "fa-digg",
+                "isAlias": false
+            },
+            {
+                "name": "dribbble",
+                "title": "Dribbble",
+                "class": "fa-dribbble",
+                "isAlias": false
+            },
+            {
+                "name": "dropbox",
+                "title": "Dropbox",
+                "class": "fa-dropbox",
+                "isAlias": false
+            },
+            {
+                "name": "drupal",
+                "title": "Drupal",
+                "class": "fa-drupal",
+                "isAlias": false
+            },
+            {
+                "name": "edge",
+                "title": "Edge",
+                "class": "fa-edge",
+                "isAlias": false
+            },
+            {
+                "name": "eercast",
+                "title": "Eercast",
+                "class": "fa-eercast",
+                "isAlias": false
+            },
+            {
+                "name": "empire",
+                "title": "Empire",
+                "class": "fa-empire",
+                "isAlias": false
+            },
+            {
+                "name": "envira",
+                "title": "Envira",
+                "class": "fa-envira",
+                "isAlias": false
+            },
+            {
+                "name": "etsy",
+                "title": "Etsy",
+                "class": "fa-etsy",
+                "isAlias": false
+            },
+            {
+                "name": "expeditedssl",
+                "title": "Expeditedssl",
+                "class": "fa-expeditedssl",
+                "isAlias": false
+            },
+            {
+                "name": "fa",
+                "title": "Fa",
+                "class": "fa-fa",
+                "isAlias": true
+            },
+            {
+                "name": "facebook",
+                "title": "Facebook",
+                "class": "fa-facebook",
+                "isAlias": false
+            },
+            {
+                "name": "facebook-f",
+                "title": "Facebook F",
+                "class": "fa-facebook-f",
+                "isAlias": true
+            },
+            {
+                "name": "facebook-official",
+                "title": "Facebook Official",
+                "class": "fa-facebook-official",
+                "isAlias": false
+            },
+            {
+                "name": "facebook-square",
+                "title": "Facebook Square",
+                "class": "fa-facebook-square",
+                "isAlias": false
+            },
+            {
+                "name": "firefox",
+                "title": "Firefox",
+                "class": "fa-firefox",
+                "isAlias": false
+            },
+            {
+                "name": "first-order",
+                "title": "First Order",
+                "class": "fa-first-order",
+                "isAlias": false
+            },
+            {
+                "name": "flickr",
+                "title": "Flickr",
+                "class": "fa-flickr",
+                "isAlias": false
+            },
+            {
+                "name": "font-awesome",
+                "title": "Font Awesome",
+                "class": "fa-font-awesome",
+                "isAlias": false
+            },
+            {
+                "name": "fonticons",
+                "title": "Fonticons",
+                "class": "fa-fonticons",
+                "isAlias": false
+            },
+            {
+                "name": "fort-awesome",
+                "title": "Fort Awesome",
+                "class": "fa-fort-awesome",
+                "isAlias": false
+            },
+            {
+                "name": "forumbee",
+                "title": "Forumbee",
+                "class": "fa-forumbee",
+                "isAlias": false
+            },
+            {
+                "name": "foursquare",
+                "title": "Foursquare",
+                "class": "fa-foursquare",
+                "isAlias": false
+            },
+            {
+                "name": "free-code-camp",
+                "title": "Free Code Camp",
+                "class": "fa-free-code-camp",
+                "isAlias": false
+            },
+            {
+                "name": "ge",
+                "title": "Ge",
+                "class": "fa-ge",
+                "isAlias": true
+            },
+            {
+                "name": "get-pocket",
+                "title": "Get Pocket",
+                "class": "fa-get-pocket",
+                "isAlias": false
+            },
+            {
+                "name": "gg",
+                "title": "Gg",
+                "class": "fa-gg",
+                "isAlias": false
+            },
+            {
+                "name": "gg-circle",
+                "title": "Gg Circle",
+                "class": "fa-gg-circle",
+                "isAlias": false
+            },
+            {
+                "name": "git",
+                "title": "Git",
+                "class": "fa-git",
+                "isAlias": false
+            },
+            {
+                "name": "git-square",
+                "title": "Git Square",
+                "class": "fa-git-square",
+                "isAlias": false
+            },
+            {
+                "name": "github",
+                "title": "Github",
+                "class": "fa-github",
+                "isAlias": false
+            },
+            {
+                "name": "github-alt",
+                "title": "Github Alt",
+                "class": "fa-github-alt",
+                "isAlias": false
+            },
+            {
+                "name": "github-square",
+                "title": "Github Square",
+                "class": "fa-github-square",
+                "isAlias": false
+            },
+            {
+                "name": "gitlab",
+                "title": "Gitlab",
+                "class": "fa-gitlab",
+                "isAlias": false
+            },
+            {
+                "name": "gittip",
+                "title": "Gittip",
+                "class": "fa-gittip",
+                "isAlias": true
+            },
+            {
+                "name": "glide",
+                "title": "Glide",
+                "class": "fa-glide",
+                "isAlias": false
+            },
+            {
+                "name": "glide-g",
+                "title": "Glide G",
+                "class": "fa-glide-g",
+                "isAlias": false
+            },
+            {
+                "name": "google",
+                "title": "Google",
+                "class": "fa-google",
+                "isAlias": false
+            },
+            {
+                "name": "google-plus",
+                "title": "Google Plus",
+                "class": "fa-google-plus",
+                "isAlias": false
+            },
+            {
+                "name": "google-plus-circle",
+                "title": "Google Plus Circle",
+                "class": "fa-google-plus-circle",
+                "isAlias": true
+            },
+            {
+                "name": "google-plus-official",
+                "title": "Google Plus Official",
+                "class": "fa-google-plus-official",
+                "isAlias": false
+            },
+            {
+                "name": "google-plus-square",
+                "title": "Google Plus Square",
+                "class": "fa-google-plus-square",
+                "isAlias": false
+            },
+            {
+                "name": "google-wallet",
+                "title": "Google Wallet",
+                "class": "fa-google-wallet",
+                "isAlias": false
+            },
+            {
+                "name": "gratipay",
+                "title": "Gratipay",
+                "class": "fa-gratipay",
+                "isAlias": false
+            },
+            {
+                "name": "grav",
+                "title": "Grav",
+                "class": "fa-grav",
+                "isAlias": false
+            },
+            {
+                "name": "hacker-news",
+                "title": "Hacker News",
+                "class": "fa-hacker-news",
+                "isAlias": false
+            },
+            {
+                "name": "houzz",
+                "title": "Houzz",
+                "class": "fa-houzz",
+                "isAlias": false
+            },
+            {
+                "name": "html5",
+                "title": "Html5",
+                "class": "fa-html5",
+                "isAlias": false
+            },
+            {
+                "name": "imdb",
+                "title": "Imdb",
+                "class": "fa-imdb",
+                "isAlias": false
+            },
+            {
+                "name": "instagram",
+                "title": "Instagram",
+                "class": "fa-instagram",
+                "isAlias": false
+            },
+            {
+                "name": "internet-explorer",
+                "title": "Internet Explorer",
+                "class": "fa-internet-explorer",
+                "isAlias": false
+            },
+            {
+                "name": "ioxhost",
+                "title": "Ioxhost",
+                "class": "fa-ioxhost",
+                "isAlias": false
+            },
+            {
+                "name": "joomla",
+                "title": "Joomla",
+                "class": "fa-joomla",
+                "isAlias": false
+            },
+            {
+                "name": "jsfiddle",
+                "title": "Jsfiddle",
+                "class": "fa-jsfiddle",
+                "isAlias": false
+            },
+            {
+                "name": "lastfm",
+                "title": "Lastfm",
+                "class": "fa-lastfm",
+                "isAlias": false
+            },
+            {
+                "name": "lastfm-square",
+                "title": "Lastfm Square",
+                "class": "fa-lastfm-square",
+                "isAlias": false
+            },
+            {
+                "name": "leanpub",
+                "title": "Leanpub",
+                "class": "fa-leanpub",
+                "isAlias": false
+            },
+            {
+                "name": "linkedin",
+                "title": "Linkedin",
+                "class": "fa-linkedin",
+                "isAlias": false
+            },
+            {
+                "name": "linkedin-square",
+                "title": "Linkedin Square",
+                "class": "fa-linkedin-square",
+                "isAlias": false
+            },
+            {
+                "name": "linode",
+                "title": "Linode",
+                "class": "fa-linode",
+                "isAlias": false
+            },
+            {
+                "name": "linux",
+                "title": "Linux",
+                "class": "fa-linux",
+                "isAlias": false
+            },
+            {
+                "name": "maxcdn",
+                "title": "Maxcdn",
+                "class": "fa-maxcdn",
+                "isAlias": false
+            },
+            {
+                "name": "meanpath",
+                "title": "Meanpath",
+                "class": "fa-meanpath",
+                "isAlias": false
+            },
+            {
+                "name": "medium",
+                "title": "Medium",
+                "class": "fa-medium",
+                "isAlias": false
+            },
+            {
+                "name": "meetup",
+                "title": "Meetup",
+                "class": "fa-meetup",
+                "isAlias": false
+            },
+            {
+                "name": "mixcloud",
+                "title": "Mixcloud",
+                "class": "fa-mixcloud",
+                "isAlias": false
+            },
+            {
+                "name": "modx",
+                "title": "Modx",
+                "class": "fa-modx",
+                "isAlias": false
+            },
+            {
+                "name": "odnoklassniki",
+                "title": "Odnoklassniki",
+                "class": "fa-odnoklassniki",
+                "isAlias": false
+            },
+            {
+                "name": "odnoklassniki-square",
+                "title": "Odnoklassniki Square",
+                "class": "fa-odnoklassniki-square",
+                "isAlias": false
+            },
+            {
+                "name": "opencart",
+                "title": "Opencart",
+                "class": "fa-opencart",
+                "isAlias": false
+            },
+            {
+                "name": "openid",
+                "title": "Openid",
+                "class": "fa-openid",
+                "isAlias": false
+            },
+            {
+                "name": "opera",
+                "title": "Opera",
+                "class": "fa-opera",
+                "isAlias": false
+            },
+            {
+                "name": "optin-monster",
+                "title": "Optin Monster",
+                "class": "fa-optin-monster",
+                "isAlias": false
+            },
+            {
+                "name": "pagelines",
+                "title": "Pagelines",
+                "class": "fa-pagelines",
+                "isAlias": false
+            },
+            {
+                "name": "paypal",
+                "title": "Paypal",
+                "class": "fa-paypal",
+                "isAlias": false
+            },
+            {
+                "name": "pied-piper",
+                "title": "Pied Piper",
+                "class": "fa-pied-piper",
+                "isAlias": false
+            },
+            {
+                "name": "pied-piper-alt",
+                "title": "Pied Piper Alt",
+                "class": "fa-pied-piper-alt",
+                "isAlias": false
+            },
+            {
+                "name": "pied-piper-pp",
+                "title": "Pied Piper Pp",
+                "class": "fa-pied-piper-pp",
+                "isAlias": false
+            },
+            {
+                "name": "pinterest",
+                "title": "Pinterest",
+                "class": "fa-pinterest",
+                "isAlias": false
+            },
+            {
+                "name": "pinterest-p",
+                "title": "Pinterest P",
+                "class": "fa-pinterest-p",
+                "isAlias": false
+            },
+            {
+                "name": "pinterest-square",
+                "title": "Pinterest Square",
+                "class": "fa-pinterest-square",
+                "isAlias": false
+            },
+            {
+                "name": "product-hunt",
+                "title": "Product Hunt",
+                "class": "fa-product-hunt",
+                "isAlias": false
+            },
+            {
+                "name": "qq",
+                "title": "Qq",
+                "class": "fa-qq",
+                "isAlias": false
+            },
+            {
+                "name": "quora",
+                "title": "Quora",
+                "class": "fa-quora",
+                "isAlias": false
+            },
+            {
+                "name": "ra",
+                "title": "Ra",
+                "class": "fa-ra",
+                "isAlias": true
+            },
+            {
+                "name": "ravelry",
+                "title": "Ravelry",
+                "class": "fa-ravelry",
+                "isAlias": false
+            },
+            {
+                "name": "rebel",
+                "title": "Rebel",
+                "class": "fa-rebel",
+                "isAlias": false
+            },
+            {
+                "name": "reddit",
+                "title": "Reddit",
+                "class": "fa-reddit",
+                "isAlias": false
+            },
+            {
+                "name": "reddit-alien",
+                "title": "Reddit Alien",
+                "class": "fa-reddit-alien",
+                "isAlias": false
+            },
+            {
+                "name": "reddit-square",
+                "title": "Reddit Square",
+                "class": "fa-reddit-square",
+                "isAlias": false
+            },
+            {
+                "name": "renren",
+                "title": "Renren",
+                "class": "fa-renren",
+                "isAlias": false
+            },
+            {
+                "name": "resistance",
+                "title": "Resistance",
+                "class": "fa-resistance",
+                "isAlias": true
+            },
+            {
+                "name": "safari",
+                "title": "Safari",
+                "class": "fa-safari",
+                "isAlias": false
+            },
+            {
+                "name": "scribd",
+                "title": "Scribd",
+                "class": "fa-scribd",
+                "isAlias": false
+            },
+            {
+                "name": "sellsy",
+                "title": "Sellsy",
+                "class": "fa-sellsy",
+                "isAlias": false
+            },
+            {
+                "name": "share-alt",
+                "title": "Share Alt",
+                "class": "fa-share-alt",
+                "isAlias": false
+            },
+            {
+                "name": "share-alt-square",
+                "title": "Share Alt Square",
+                "class": "fa-share-alt-square",
+                "isAlias": false
+            },
+            {
+                "name": "shirtsinbulk",
+                "title": "Shirtsinbulk",
+                "class": "fa-shirtsinbulk",
+                "isAlias": false
+            },
+            {
+                "name": "simplybuilt",
+                "title": "Simplybuilt",
+                "class": "fa-simplybuilt",
+                "isAlias": false
+            },
+            {
+                "name": "skyatlas",
+                "title": "Skyatlas",
+                "class": "fa-skyatlas",
+                "isAlias": false
+            },
+            {
+                "name": "skype",
+                "title": "Skype",
+                "class": "fa-skype",
+                "isAlias": false
+            },
+            {
+                "name": "slack",
+                "title": "Slack",
+                "class": "fa-slack",
+                "isAlias": false
+            },
+            {
+                "name": "slideshare",
+                "title": "Slideshare",
+                "class": "fa-slideshare",
+                "isAlias": false
+            },
+            {
+                "name": "snapchat",
+                "title": "Snapchat",
+                "class": "fa-snapchat",
+                "isAlias": false
+            },
+            {
+                "name": "snapchat-ghost",
+                "title": "Snapchat Ghost",
+                "class": "fa-snapchat-ghost",
+                "isAlias": false
+            },
+            {
+                "name": "snapchat-square",
+                "title": "Snapchat Square",
+                "class": "fa-snapchat-square",
+                "isAlias": false
+            },
+            {
+                "name": "soundcloud",
+                "title": "Soundcloud",
+                "class": "fa-soundcloud",
+                "isAlias": false
+            },
+            {
+                "name": "spotify",
+                "title": "Spotify",
+                "class": "fa-spotify",
+                "isAlias": false
+            },
+            {
+                "name": "stack-exchange",
+                "title": "Stack Exchange",
+                "class": "fa-stack-exchange",
+                "isAlias": false
+            },
+            {
+                "name": "stack-overflow",
+                "title": "Stack Overflow",
+                "class": "fa-stack-overflow",
+                "isAlias": false
+            },
+            {
+                "name": "steam",
+                "title": "Steam",
+                "class": "fa-steam",
+                "isAlias": false
+            },
+            {
+                "name": "steam-square",
+                "title": "Steam Square",
+                "class": "fa-steam-square",
+                "isAlias": false
+            },
+            {
+                "name": "stumbleupon",
+                "title": "Stumbleupon",
+                "class": "fa-stumbleupon",
+                "isAlias": false
+            },
+            {
+                "name": "stumbleupon-circle",
+                "title": "Stumbleupon Circle",
+                "class": "fa-stumbleupon-circle",
+                "isAlias": false
+            },
+            {
+                "name": "superpowers",
+                "title": "Superpowers",
+                "class": "fa-superpowers",
+                "isAlias": false
+            },
+            {
+                "name": "telegram",
+                "title": "Telegram",
+                "class": "fa-telegram",
+                "isAlias": false
+            },
+            {
+                "name": "tencent-weibo",
+                "title": "Tencent Weibo",
+                "class": "fa-tencent-weibo",
+                "isAlias": false
+            },
+            {
+                "name": "themeisle",
+                "title": "Themeisle",
+                "class": "fa-themeisle",
+                "isAlias": false
+            },
+            {
+                "name": "trello",
+                "title": "Trello",
+                "class": "fa-trello",
+                "isAlias": false
+            },
+            {
+                "name": "tripadvisor",
+                "title": "Tripadvisor",
+                "class": "fa-tripadvisor",
+                "isAlias": false
+            },
+            {
+                "name": "tumblr",
+                "title": "Tumblr",
+                "class": "fa-tumblr",
+                "isAlias": false
+            },
+            {
+                "name": "tumblr-square",
+                "title": "Tumblr Square",
+                "class": "fa-tumblr-square",
+                "isAlias": false
+            },
+            {
+                "name": "twitch",
+                "title": "Twitch",
+                "class": "fa-twitch",
+                "isAlias": false
+            },
+            {
+                "name": "twitter",
+                "title": "Twitter",
+                "class": "fa-twitter",
+                "isAlias": false
+            },
+            {
+                "name": "twitter-square",
+                "title": "Twitter Square",
+                "class": "fa-twitter-square",
+                "isAlias": false
+            },
+            {
+                "name": "usb",
+                "title": "Usb",
+                "class": "fa-usb",
+                "isAlias": false
+            },
+            {
+                "name": "viacoin",
+                "title": "Viacoin",
+                "class": "fa-viacoin",
+                "isAlias": false
+            },
+            {
+                "name": "viadeo",
+                "title": "Viadeo",
+                "class": "fa-viadeo",
+                "isAlias": false
+            },
+            {
+                "name": "viadeo-square",
+                "title": "Viadeo Square",
+                "class": "fa-viadeo-square",
+                "isAlias": false
+            },
+            {
+                "name": "vimeo",
+                "title": "Vimeo",
+                "class": "fa-vimeo",
+                "isAlias": false
+            },
+            {
+                "name": "vimeo-square",
+                "title": "Vimeo Square",
+                "class": "fa-vimeo-square",
+                "isAlias": false
+            },
+            {
+                "name": "vine",
+                "title": "Vine",
+                "class": "fa-vine",
+                "isAlias": false
+            },
+            {
+                "name": "vk",
+                "title": "Vk",
+                "class": "fa-vk",
+                "isAlias": false
+            },
+            {
+                "name": "wechat",
+                "title": "Wechat",
+                "class": "fa-wechat",
+                "isAlias": true
+            },
+            {
+                "name": "weibo",
+                "title": "Weibo",
+                "class": "fa-weibo",
+                "isAlias": false
+            },
+            {
+                "name": "weixin",
+                "title": "Weixin",
+                "class": "fa-weixin",
+                "isAlias": false
+            },
+            {
+                "name": "whatsapp",
+                "title": "Whatsapp",
+                "class": "fa-whatsapp",
+                "isAlias": false
+            },
+            {
+                "name": "wikipedia-w",
+                "title": "Wikipedia W",
+                "class": "fa-wikipedia-w",
+                "isAlias": false
+            },
+            {
+                "name": "windows",
+                "title": "Windows",
+                "class": "fa-windows",
+                "isAlias": false
+            },
+            {
+                "name": "wordpress",
+                "title": "Wordpress",
+                "class": "fa-wordpress",
+                "isAlias": false
+            },
+            {
+                "name": "wpbeginner",
+                "title": "Wpbeginner",
+                "class": "fa-wpbeginner",
+                "isAlias": false
+            },
+            {
+                "name": "wpexplorer",
+                "title": "Wpexplorer",
+                "class": "fa-wpexplorer",
+                "isAlias": false
+            },
+            {
+                "name": "wpforms",
+                "title": "Wpforms",
+                "class": "fa-wpforms",
+                "isAlias": false
+            },
+            {
+                "name": "xing",
+                "title": "Xing",
+                "class": "fa-xing",
+                "isAlias": false
+            },
+            {
+                "name": "xing-square",
+                "title": "Xing Square",
+                "class": "fa-xing-square",
+                "isAlias": false
+            },
+            {
+                "name": "y-combinator",
+                "title": "Y Combinator",
+                "class": "fa-y-combinator",
+                "isAlias": false
+            },
+            {
+                "name": "y-combinator-square",
+                "title": "Y Combinator Square",
+                "class": "fa-y-combinator-square",
+                "isAlias": true
+            },
+            {
+                "name": "yahoo",
+                "title": "Yahoo",
+                "class": "fa-yahoo",
+                "isAlias": false
+            },
+            {
+                "name": "yc",
+                "title": "Yc",
+                "class": "fa-yc",
+                "isAlias": true
+            },
+            {
+                "name": "yc-square",
+                "title": "Yc Square",
+                "class": "fa-yc-square",
+                "isAlias": true
+            },
+            {
+                "name": "yelp",
+                "title": "Yelp",
+                "class": "fa-yelp",
+                "isAlias": false
+            },
+            {
+                "name": "yoast",
+                "title": "Yoast",
+                "class": "fa-yoast",
+                "isAlias": false
+            },
+            {
+                "name": "youtube",
+                "title": "Youtube",
+                "class": "fa-youtube",
+                "isAlias": false
+            },
+            {
+                "name": "youtube-play",
+                "title": "Youtube Play",
+                "class": "fa-youtube-play",
+                "isAlias": false
+            },
+            {
+                "name": "youtube-square",
+                "title": "Youtube Square",
+                "class": "fa-youtube-square",
+                "isAlias": false
+            }
+        ]
+    },
+    {
+        "name": "Medical Icons",
+        "icons": [
+            {
+                "name": "ambulance",
+                "title": "Ambulance",
+                "class": "fa-ambulance",
+                "isAlias": false
+            },
+            {
+                "name": "h-square",
+                "title": "H Square",
+                "class": "fa-h-square",
+                "isAlias": false
+            },
+            {
+                "name": "heart",
+                "title": "Heart",
+                "class": "fa-heart",
+                "isAlias": false
+            },
+            {
+                "name": "heart-o",
+                "title": "Heart Outline",
+                "class": "fa-heart-o",
+                "isAlias": false
+            },
+            {
+                "name": "heartbeat",
+                "title": "Heartbeat",
+                "class": "fa-heartbeat",
+                "isAlias": false
+            },
+            {
+                "name": "hospital-o",
+                "title": "Hospital Outline",
+                "class": "fa-hospital-o",
+                "isAlias": false
+            },
+            {
+                "name": "medkit",
+                "title": "Medkit",
+                "class": "fa-medkit",
+                "isAlias": false
+            },
+            {
+                "name": "plus-square",
+                "title": "Plus Square",
+                "class": "fa-plus-square",
+                "isAlias": false
+            },
+            {
+                "name": "stethoscope",
+                "title": "Stethoscope",
+                "class": "fa-stethoscope",
+                "isAlias": false
+            },
+            {
+                "name": "user-md",
+                "title": "User Md",
+                "class": "fa-user-md",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair",
+                "title": "Wheelchair",
+                "class": "fa-wheelchair",
+                "isAlias": false
+            },
+            {
+                "name": "wheelchair-alt",
+                "title": "Wheelchair Alt",
+                "class": "fa-wheelchair-alt",
+                "isAlias": false
+            }
+        ]
+    }
+]

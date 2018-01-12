@@ -73,6 +73,7 @@ return [
 
     'storage' => [
         'disk' => 'public',
+        'data_disk' => 'local'
     ],
 
 

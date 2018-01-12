@@ -2,7 +2,7 @@
 
 namespace Shemi\Laradmin;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use Route;
 use Shemi\Laradmin\Contracts\FormFieldContract;
 use Shemi\Laradmin\Models\User;
@@ -18,19 +18,11 @@ class Laradmin
 
     protected $jsObject = [];
 
-    /**
-     * @var \Illuminate\Foundation\Application|mixed
-     */
-    public $filesystem;
-
-    public function __construct()
+    public function filesystem($disk = null)
     {
-        $this->filesystem = app(Filesystem::class);
-    }
+        $disk = $disk ?: config('laradmin.storage.data_disk');
 
-    public function filesystem()
-    {
-        return $this->filesystem;
+        return Storage::disk($disk);
     }
 
     public function model($name)

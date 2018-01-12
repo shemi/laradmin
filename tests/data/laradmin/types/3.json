@@ -1,0 +1,124 @@
+{
+    "id": 3,
+    "name": "Permissions",
+    "slug": "permissions",
+    "model": "\\Spatie\\Permission\\Models\\Permission",
+    "controller": "\\Shemi\\Laradmin\\Http\\Controllers\\CrudController",
+    "updated_at": "2000-01-01 00:00:00.00",
+    "created_at": "2000-01-01 00:00:00.00",
+    "records_per_page": 25,
+
+    "panels": [
+        {
+            "id": 2,
+            "title": "Personal Test",
+            "position": "side",
+            "is_main_meta": true,
+            "fields": [
+                {
+                    "label": "Created at",
+                    "key": "created_at",
+                    "type": "date",
+                    "read_only": true,
+                    "visibility": ["browse", "create", "edit"],
+                    "browse_settings": {
+                        "order": 99,
+                        "sortable": true,
+                        "date_format": "d\\m\\Y H:i"
+                    }
+                },
+                {
+                    "label": "Updated at",
+                    "key": "updated_at",
+                    "type": "date",
+                    "read_only": true,
+                    "visibility": ["browse", "create", "edit"],
+                    "browse_settings": {
+                        "order": 99,
+                        "sortable": true,
+                        "date_format": "d\\m\\Y H:i"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "title": "General",
+            "position": "main",
+            "fields": [
+                {
+                    "label": "ID",
+                    "key": "id",
+                    "type": "input",
+                    "validation": [],
+                    "visibility": ["browse"],
+                    "template_options": {
+                        "placeholder": "",
+                        "read_only": true,
+                        "type": "number"
+                    },
+                    "browse_settings": {
+                        "label": "Id",
+                        "order": 0,
+                        "sortable": true
+                    }
+                },
+                {
+                    "label": "Name",
+                    "key": "name",
+                    "type": "input",
+                    "validation": [
+                        "required"
+                    ],
+                    "visibility": ["browse", "create", "edit"],
+                    "template_options": {
+                        "placeholder": "",
+                        "type": "text"
+                    },
+                    "browse_settings": {
+                        "order": 1,
+                        "sortable": true,
+                        "searchable": true,
+                        "search_comparison": "like"
+                    }
+                },
+                {
+                    "label": "Guard",
+                    "key": "guard_name",
+                    "type": "input",
+                    "validation": [
+                        "required"
+                    ],
+                    "visibility": ["browse", "create", "edit"],
+                    "template_options": {
+                        "placeholder": "Select guard"
+                    },
+                    "browse_settings": {
+                        "sortable": true,
+                        "searchable": true,
+                        "order": 2
+                    }
+                },
+                {
+                    "label": "Roles",
+                    "key": "roles",
+                    "type": "select_multiple",
+                    "relationship": {
+                        "key": "id",
+                        "label": "name"
+                    },
+                    "validation": [],
+                    "visibility": ["browse", "create", "edit"],
+                    "template_options": {
+                        "placeholder": "Select guard"
+                    },
+                    "browse_settings": {
+                        "sortable": true,
+                        "searchable": true,
+                        "order": 2
+                    }
+                }
+            ]
+        }
+    ]
+}
