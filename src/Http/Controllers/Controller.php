@@ -2,20 +2,13 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
-use Shemi\Laradmin\Data\DataNotFoundException;
-use Illuminate\Database\Eloquent\Model;
-use Shemi\Laradmin\Facades\Laradmin;
-use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Exceptions\DataNotFoundException;
 use Shemi\Laradmin\Models\Type;
 
 class Controller extends BaseController
@@ -28,13 +21,17 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        $user = null;
+        view()->share('user', $this->user());
+    }
 
-        if(Auth::check()) {
-            $user = Laradmin::model('User')->find(Auth::id());
-        }
+    protected function user()
+    {
+        return $this->guard()->user();
+    }
 
-        view()->share('user', $user);
+    protected function guard()
+    {
+        return Auth::guard(config('laradmin.guard'));
     }
 
     /**

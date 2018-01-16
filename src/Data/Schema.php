@@ -20,16 +20,26 @@ class Schema extends Collection
     {
         static::$filesystem = $filesystem;
 
+        return new static(static::loadSchema());
+    }
+
+    public static function loadSchema()
+    {
         if(! static::$filesystem->exists(static::getSchemaPath())) {
             return false;
         }
 
-        $schema = json_decode(
+        return json_decode(
             static::$filesystem->get(static::getSchemaPath()),
             true
         );
+    }
 
-        return new static($schema);
+    public function fresh()
+    {
+        $this->items = static::loadSchema();
+
+        return $this;
     }
 
     protected static function getSchemaPath()
@@ -44,13 +54,27 @@ class Schema extends Collection
         return $this;
     }
 
-    public function getAndIncrementNextId($for)
+    public function increment($table)
     {
-        $nextId = $this->getNextId($for);
+        $nextId = $this->getNextId($table);
 
-        $this->incrementLastPrimary($for);
+        $this->incrementLastPrimary($table);
 
         return $nextId;
+    }
+
+    public function decrement($table)
+    {
+        $currentId = $this->getLastPrimary($table);
+
+        if($currentId > 0) {
+            $this->setLastPrimary($table, $currentId - 1)
+                ->save();
+
+            return $currentId - 1;
+        }
+
+        return $currentId;
     }
 
     public function get($key, $default = null)
@@ -58,16 +82,24 @@ class Schema extends Collection
         return Arr::get($this->items, $key, $default);
     }
 
-    public function getNextId($for)
+    public function getNextId($table)
     {
-        return $this->get("tables.{$for}.last_primary", 0) + 1;
+        return $this->getLastPrimary($table) + 1;
     }
 
-    public function incrementLastPrimary($for)
+    public function getLastPrimary($table)
     {
-        $id = $this->getNextId($for);
+        return $this->get("tables.{$table}.last_primary", 0);
+    }
 
-        $this->set("tables.{$for}.last_primary", $id)
+    public function setLastPrimary($table, $id)
+    {
+        return $this->set("tables.{$table}.last_primary", $id);
+    }
+
+    public function incrementLastPrimary($table)
+    {
+        $this->setLastPrimary($table, $this->getNextId($table))
             ->save();
 
         return $this;

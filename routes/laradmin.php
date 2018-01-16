@@ -35,7 +35,6 @@ Route::group(
         ]);
 
         Route::resource('menus', "{$namespacePrefix}MenusController", [
-            "as" => "menus",
             "middleware" => "laradmin.user.admin"
         ]);
 

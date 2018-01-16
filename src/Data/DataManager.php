@@ -30,7 +30,7 @@ class DataManager
     /**
      * @var Schema
      */
-    protected static $schema;
+    protected $schema;
 
     public function __construct()
     {
@@ -80,7 +80,7 @@ class DataManager
             $files = $files->where($key, $value);
         }
 
-        if($files->isEmpty()) {
+        if ($files->isEmpty()) {
             return $this->create($attributes);
         }
 
@@ -107,22 +107,20 @@ class DataManager
 
     public function find($id)
     {
-        if($this->files) {
-            $file = $this->files
-                ->where($this->model->getKeyName(), $id)
-                ->first();
-
-            if($file) {
-                return $file;
-            }
+        try {
+            $file = $this->load($id);
         }
 
-        return $this->maybeNewModel($this->load($id));
+        catch (\Exception $exception) {
+            return null;
+        }
+
+        return $this->maybeNewModel($file);
     }
 
     protected function maybeNewModel(array $data)
     {
-        if($this->model) {
+        if ($this->model) {
             return $this->newModel($data);
         }
 
@@ -144,36 +142,49 @@ class DataManager
         return $this->model;
     }
 
+    /**
+     * @param $name
+     * @param string $ext
+     * @return mixed
+     * @throws \Exception
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function load($name, $ext = 'json')
     {
-        $path = $this->path($name.($ext ? '.'.$ext : ''));
+        $path = $this->path($name . ($ext ? '.' . $ext : ''));
 
         if (! $this->filesystem->exists($path)) {
-            return false;
+            throw new \Exception("\"$path\" cannot be found");
         }
 
         return json_decode($this->filesystem->get($path), true);
     }
 
-    public function delete($name, $ext = 'json')
+    public function delete($name, $ext = 'json', $decrement = false)
     {
-        return $this->filesystem
+        $deleted = $this->filesystem
             ->delete(
-                $this->path($name.($ext ? '.'.$ext : ''))
+                $this->path($name . ($ext ? '.' . $ext : ''))
             );
+
+        if($deleted && $decrement) {
+            $this->schema()->decrement($this->location);
+        }
+
+        return $deleted;
     }
 
     public function dir($path = null, $ext = 'json')
     {
         $path = $this->path($path);
 
-        if(! $this->filesystem->exists($path)) {
+        if (! $this->filesystem->exists($path)) {
             return $this->model->newCollection([]);
         }
 
         $names = $this->filesystem->allFiles($path);
 
-        if(count($names) === 0) {
+        if (count($names) === 0) {
             return $this->model->newCollection([]);
         }
 
@@ -182,13 +193,13 @@ class DataManager
         foreach ($names as $name) {
             $name = basename($name);
 
-            if(! ends_with($name, '.'.$ext)) {
+            if (! ends_with($name, '.' . $ext)) {
                 continue;
             }
 
             $file = $this->load($name, null);
 
-            if($file) {
+            if ($file) {
                 $file = $this->maybeNewModel($file);
             }
 
@@ -216,17 +227,17 @@ class DataManager
     {
         $model = $model ?: $this->model;
 
-        if($model->getIncrementing() && ! $model->exists) {
+        if ($model->getIncrementing() && ! $model->exists) {
             $model->setAttribute(
                 $model->getKeyName(),
-                $this->schema()->getAndIncrementNextId($this->location)
+                $this->schema()->increment($this->location)
             );
         }
 
         $id = $model->getKey();
 
         $json = $model->toJson(JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        $path = $this->path($id.'.json');
+        $path = $this->path($id . '.json');
 
         $this->filesystem->put($path, $json);
 
@@ -235,13 +246,9 @@ class DataManager
 
     protected function loadSchema()
     {
-        if(is_array(static::$schema)) {
-            return static::$schema;
-        }
+        $this->schema = Schema::load($this->filesystem);
 
-        static::$schema = Schema::load($this->filesystem);
-
-        return static::$schema;
+        return $this->schema;
     }
 
     /**
@@ -249,11 +256,11 @@ class DataManager
      */
     protected function schema()
     {
-        if(! static::$schema) {
+        if (! $this->schema) {
             $this->loadSchema();
         }
 
-        return static::$schema;
+        return $this->schema;
     }
 
     public function __call($name, $arguments)

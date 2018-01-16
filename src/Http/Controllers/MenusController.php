@@ -19,17 +19,25 @@ class MenusController extends Controller
         parent::__construct();
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if($this->user()->cant("browse menus")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $menus = Menu::all();
 
         return view('laradmin::menus.browse', compact('menus'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $menu = new Menu;
         $routes = $this->getAllRoutes();
+
+        if($this->user()->cant("create menus")) {
+            return $this->responseUnauthorized($request);
+        }
 
         return view('laradmin::menus.createEdit', compact('menu', 'routes'));
     }
@@ -39,6 +47,10 @@ class MenusController extends Controller
         $menu = Menu::whereSlug($menu);
         $routes = $this->getAllRoutes();
 
+        if($this->user()->cant("update menus")) {
+            return $this->responseUnauthorized($request);
+        }
+
         return view('laradmin::menus.createEdit', compact('menu', 'routes'));
     }
 
@@ -47,14 +59,18 @@ class MenusController extends Controller
         $routes = collect(\Route::getRoutes()->getRoutes());
 
         $routes = $routes->reject(function ($route) {
+
             return (! isset($route->action['as']) ||
-                (! in_array('GET', $route->methods)));
+                   (! in_array('GET', $route->methods)));
+
         })->transform(function ($route) {
+
             return [
                 'name' => $route->action['as'],
                 'action' => $route->action['controller'],
                 'uri' => url($route->uri),
             ];
+
         })->values();
 
         return $routes;
@@ -74,6 +90,10 @@ class MenusController extends Controller
             'items' => 'array'
         ]);
 
+        if($this->user()->cant("create menus")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $menu = Menu::create([
             'name' => $request->name,
             'items' => $request->items,
@@ -82,7 +102,7 @@ class MenusController extends Controller
 
         return $this->response([
             'menu' => $menu->toJson(),
-            'redirect' => route('laradmin.menus.menus.edit', [
+            'redirect' => route('laradmin.menus.edit', [
                 'menu' => $menu->slug
             ])
         ]);
@@ -95,8 +115,11 @@ class MenusController extends Controller
             'items' => 'array'
         ]);
 
-        $menu = Menu::findOrFail($menu);
+        if($this->user()->cant("update menus")) {
+            return $this->responseUnauthorized($request);
+        }
 
+        $menu = Menu::findOrFail($menu);
         $redirect = $menu->name != $request->input('name');
 
         $menu->name = $request->input('name');
@@ -107,7 +130,7 @@ class MenusController extends Controller
         return $this->response([
             'menu' => $menu->toJson(),
             'redirect' => $redirect ?
-                route('laradmin.menus.menus.edit', ['menu' => $menu->slug]) :
+                route('laradmin.menus.edit', ['menu' => $menu->slug]) :
                 false
         ]);
     }
@@ -142,12 +165,16 @@ class MenusController extends Controller
 
     public function destroy($menuId, Request $request)
     {
+        if($this->user()->cant("delete menus")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $menu = Menu::findOrFail($menuId);
         $action = $menu->delete();
 
         return $this->response([
             'action' => $action,
-            'redirect' => route('laradmin.menus.menus.index', [], false)
+            'redirect' => route('laradmin.menus.index')
         ]);
     }
 

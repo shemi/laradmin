@@ -214,7 +214,6 @@ class CrudController extends Controller
             ]
         ];
 
-
         if($action === 'edit') {
             $jsObject['routs.delete'] = route("laradmin.{$type->slug}.destroy", $saveRouteParameters);
         }
@@ -416,11 +415,6 @@ class CrudController extends Controller
         return $this->response([
             'redirect' => route("laradmin.{$type->slug}.index")
         ]);
-    }
-
-    public function user()
-    {
-        return \Auth::guard(config('laradmin.guard'))->user();
     }
 
 }

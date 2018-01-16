@@ -1,7 +1,7 @@
 @extends('laradmin::layouts.page', ['bodyClass' => 'menus-browse', 'pageTitle' => trans('laradmin::menus.browse.page_title')])
 
 @php
-$editRoute = route('laradmin.menus.menus.edit', ['menu' => "__menu__"]);
+$editRoute = route('laradmin.menus.edit', ['menu' => "__menu__"]);
 $editRoute = str_replace('__menu__', '\'+ props.row.slug +\'', $editRoute);
 @endphp
 

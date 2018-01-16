@@ -54,9 +54,4 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function guard()
-    {
-        return Auth::guard(config('laradmin.guard'));
-    }
-
 }

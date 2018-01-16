@@ -211,6 +211,59 @@ class Model implements Arrayable, Jsonable, JsonSerializable
         return $this->keyType;
     }
 
+
+    /**
+     * Delete the model from the database.
+     *
+     * @return bool|null
+     *
+     * @throws \Exception
+     */
+    public function delete()
+    {
+        if (is_null($this->getKeyName())) {
+            throw new \Exception('No primary key defined on model.');
+        }
+
+        if (! $this->exists) {
+            return null;
+        }
+
+        return $this->newManager()->delete($this->getKey());
+    }
+
+    /**
+     * Reload a fresh model instance from the file.
+     *
+     * @return static|null
+     */
+    public function fresh()
+    {
+        if (! $this->exists) {
+            return null;
+        }
+
+        return $this->newManager()->findOrFail($this->getKey());
+    }
+
+    /**
+     * Reload the current model instance with fresh attributes from the file.
+     *
+     * @return $this
+     */
+    public function refresh()
+    {
+        if (! $this->exists) {
+            return $this;
+        }
+
+        $this->setRawAttributes(
+            $this->newManager()->load($this->getKey())
+        );
+
+        return $this;
+    }
+
     /**
      * Convert the model instance to an array.
      *
