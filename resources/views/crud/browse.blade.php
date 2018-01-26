@@ -25,28 +25,31 @@
                 </div>
             </div>
 
-            <la-table :data="data"
-                     bordered
+            <b-table :data="data.data"
+                     :loading="loading"
+
                      striped
                      checkable
-                     :loading="loading"
                      mobile-cards
                      paginated
-                     :per-page="25"
+                     backend-pagination
+                     :total="data.total"
+                     :per-page="{{ $type->records_per_page }}"
+                     backend-sorting
                      default-sort="id"
-                      @sort="onSort"
-                      @page-change="onPageChange"
+                     @sort="onSort"
+                     @page-change="onPageChange"
                      :selected.sync="selected"
                      :checked-rows.sync="checkedRows">
 
-                <template scope="props">
+                <template slot-scope="props">
                     @foreach($columns as $column)
                         <la-table-column field="{{ $column->key }}"
-                                        label="{{ $column->label }}"
-                                        {{ $column->sortable ? 'sortable' : '' }}
-                                        {{--{{ $column->is_numeric ? 'numeric' : '' }}--}}
-                        >
+                                        label="{{ $column->browse_label }}"
+                                        {{ $column->sortable ? 'sortable' : '' }}>
+
                             <div v-html="props.row.{{ $column->key }}"></div>
+
                         </la-table-column>
                     @endforeach
 
@@ -65,7 +68,7 @@
 
                 </template>
 
-            </la-table>
+            </b-table>
 
         </section>
 
