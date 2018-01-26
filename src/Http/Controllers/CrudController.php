@@ -4,9 +4,6 @@ namespace Shemi\Laradmin\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
@@ -71,6 +68,7 @@ class CrudController extends Controller
         if(! $this->userCanBrowse($type, $request)) {
             return $this->responseUnauthorized($request);
         }
+
 
         $orderBy = $request->input('order_by');
         $orderDirection = $request->input('order', 'desc');
@@ -140,8 +138,12 @@ class CrudController extends Controller
 
         $query->orderBy($orderBy ?: $primaryKey, $orderDirection);
 
-        $results = $query
-            ->paginate($type->records_per_page);
+        try {
+            $results = $query
+                ->paginate($type->records_per_page);
+        } catch (\Exception $exception) {
+            dd($exception->getMessage());
+        }
 
         $results->getCollection()
             ->transform(function ($model) use ($type) {

@@ -92,7 +92,7 @@ class MenusControllerTest extends AbstractControllerTest
     {
         $this->actingAs($this->createUser([], 'admin_with_menus_access'));
 
-        $this->post(route('laradmin.menus.item.validation'), [
+        $this->postJson(route('laradmin.menus.item.validation'), [
             'title' => 'Test title',
             'type' => 'route',
             'url' => '',
@@ -100,7 +100,7 @@ class MenusControllerTest extends AbstractControllerTest
         ])
         ->assertStatus(422);
 
-        $this->post(route('laradmin.menus.item.validation'), [
+        $this->postJson(route('laradmin.menus.item.validation'), [
             'title' => 'Test title',
             'type' => 'url',
             'url' => '/test/'

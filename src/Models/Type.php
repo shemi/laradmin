@@ -44,6 +44,10 @@ class Type extends Model
         'records_per_page',
     ];
 
+    /**
+     * @param $slug
+     * @return null|static
+     */
     public static function whereSlug($slug)
     {
         return static::where('slug', $slug)->first();
@@ -259,6 +263,14 @@ class Type extends Model
         });
 
         return $array;
+    }
+
+    public function refresh()
+    {
+        $this->_panels = null;
+        $this->_fields = null;
+
+        return parent::refresh();
     }
 
 }

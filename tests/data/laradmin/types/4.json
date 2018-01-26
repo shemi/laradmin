@@ -1,0 +1,176 @@
+{
+    "name": "Posts",
+    "slug": "posts",
+    "model": "\\Shemi\\Laradmin\\Tests\\Controller\\Fakes\\Post",
+    "controller": "Shemi\\Laradmin\\Http\\Controllers\\CrudController",
+    "panels": [
+        {
+            "id": 0,
+            "title": "Title",
+            "position": null,
+            "is_main_meta": false,
+            "has_container": true,
+            "style": "[]",
+            "fields": [
+                {
+                    "id": "p9sdp",
+                    "label": "title",
+                    "key": "title",
+                    "show_label": true,
+                    "default_value": null,
+                    "nullable": null,
+                    "type": "input",
+                    "validation": [
+                        "required"
+                    ],
+                    "visibility": [
+                        "browse",
+                        "create",
+                        "edit"
+                    ],
+                    "options": [],
+                    "template_options": {
+                        "show_if": null,
+                        "icon": null,
+                        "grouped": false,
+                        "placeholder": null,
+                        "type": "text",
+                        "size": null,
+                        "max_length": null
+                    },
+                    "read_only": false,
+                    "browse_settings": {
+                        "order": 1,
+                        "sortable": true,
+                        "searchable": true,
+                        "search_comparison": "like"
+                    },
+                    "relationship": null,
+                    "media": {
+                        "disc": "media"
+                    }
+                },
+                {
+                    "id": "5v2CD",
+                    "label": "slug",
+                    "key": "slug",
+                    "show_label": true,
+                    "default_value": null,
+                    "nullable": null,
+                    "type": "input",
+                    "validation": [],
+                    "visibility": [
+                        "browse",
+                        "create",
+                        "edit"
+                    ],
+                    "options": [],
+                    "template_options": {
+                        "transform": "str_slug:title",
+                        "show_if": null,
+                        "icon": null,
+                        "grouped": false,
+                        "placeholder": null,
+                        "type": "text",
+                        "size": null,
+                        "max_length": null
+                    },
+                    "read_only": false,
+                    "browse_settings": {
+                        "order": null,
+                        "sortable": false,
+                        "searchable": false,
+                        "search_comparison": "like"
+                    },
+                    "relationship": null,
+                    "media": {
+                        "disc": "media"
+                    }
+                },
+                {
+                    "id": "om31f",
+                    "label": "user",
+                    "key": "user",
+                    "show_label": true,
+                    "default_value": null,
+                    "nullable": false,
+                    "type": "select",
+                    "validation": [
+                        "required"
+                    ],
+                    "visibility": [
+                        "browse",
+                        "create",
+                        "edit"
+                    ],
+                    "options": [],
+                    "template_options": {
+                        "show_if": null,
+                        "icon": null,
+                        "placeholder": null,
+                        "size": null
+                    },
+                    "read_only": false,
+                    "browse_settings": {
+                        "order": null,
+                        "sortable": false,
+                        "searchable": false,
+                        "search_comparison": "like"
+                    },
+                    "relationship": {
+                        "label": "name",
+                        "key": "id"
+                    },
+                    "media": {
+                        "disc": "media"
+                    }
+                },
+                {
+                    "id": "N0tZs",
+                    "label": "categories",
+                    "key": "categories",
+                    "show_label": true,
+                    "default_value": null,
+                    "nullable": false,
+                    "type": "select_multiple",
+                    "validation": [],
+                    "visibility": [
+                        "browse",
+                        "create",
+                        "edit"
+                    ],
+                    "options": [],
+                    "template_options": {
+                        "show_if": null,
+                        "icon": null,
+                        "placeholder": null,
+                        "multiselect": {
+                            "clearOnSelect": false,
+                            "closeOnSelect": true,
+                            "hideSelected": true,
+                            "preserveSearch": true
+                        }
+                    },
+                    "read_only": false,
+                    "browse_settings": {
+                        "order": null,
+                        "sortable": false,
+                        "searchable": false,
+                        "search_comparison": "like"
+                    },
+                    "relationship": {
+                        "label": "title",
+                        "key": "id"
+                    },
+                    "media": {
+                        "disc": "media"
+                    }
+                }
+            ]
+        }
+    ],
+    "records_per_page": 15,
+    "updated_at": "2018-01-19 19:05:17.797811",
+    "created_at": "2018-01-19 18:55:16.348410",
+    "id": 7
+}

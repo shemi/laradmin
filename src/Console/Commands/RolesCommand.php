@@ -20,7 +20,12 @@ class RolesCommand extends Command
         'update options',
         'browse menus',
         'update menus',
-        'create menus'
+        'create menus',
+        'delete menus',
+        'browse types',
+        'update types',
+        'create types',
+        'delete types'
     ];
 
     protected $permissions = [

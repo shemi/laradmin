@@ -12,22 +12,34 @@ use Illuminate\Routing\Controller as BaseController;
 class TypesBuilderController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+        if($this->user()->cant("browse types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $types = Type::all();
 
         return view('laradmin::typeBuilder.browse', compact('types'));
     }
 
-    public function query()
+    public function query(Request $request)
     {
+        if($this->user()->cant("browse types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $types = Type::browseAll();
 
         return $this->response(compact('types'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        if($this->user()->cant("create types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $model = new Type;
 
         app('laradmin')->publishJs('routs.save', route('laradmin.types.store'));
@@ -37,11 +49,19 @@ class TypesBuilderController extends Controller
 
     public function store(Request $request)
     {
+        if($this->user()->cant("create types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         return $this->storeUpdateType($request, new Type);
     }
 
-    public function edit($slug)
+    public function edit($slug, Request $request)
     {
+        if($this->user()->cant("update types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $model = Type::where('slug', $slug)->first();
 
         if(! $model) {
@@ -60,6 +80,10 @@ class TypesBuilderController extends Controller
 
     public function update($slug, Request $request)
     {
+        if($this->user()->cant("update types")) {
+            return $this->responseUnauthorized($request);
+        }
+
         $type = Type::where('slug', $slug)->first();
 
         if(! $type) {
@@ -158,6 +182,7 @@ class TypesBuilderController extends Controller
         $type->name = $data['name'];
         $type->slug = str_slug($data['name']);
         $type->model = $data['model'];
+        $type->controller = $data['controller'];
         $type->panels = $data['panels'];
         $type->records_per_page = $data['records_per_page'];
 

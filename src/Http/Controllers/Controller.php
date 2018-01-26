@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Shemi\Laradmin\Exceptions\DataNotFoundException;
+use Shemi\Laradmin\Exceptions\ValidationException;
 use Shemi\Laradmin\Models\Type;
 
 class Controller extends BaseController
@@ -56,6 +57,7 @@ class Controller extends BaseController
         $typeSlug = $request instanceof Request ?
             $this->getSlug($request) :
             $request;
+
 
         $type = Type::where('slug', $typeSlug)->first();
 
@@ -106,6 +108,10 @@ class Controller extends BaseController
         return $this->setStatusCode(401)->responseWithError($message);
     }
 
+    /**
+     * @param string $messages
+     * @throws ValidationException
+     */
     protected function responseValidationError($messages = 'Check all your fields.')
     {
         if(is_string($messages)) {
@@ -114,7 +120,7 @@ class Controller extends BaseController
             ];
         }
 
-        return response()->json($messages, 422);
+        throw ValidationException::withMessages($messages);
     }
 
     protected function responseInternalError($message = 'Internal error.')

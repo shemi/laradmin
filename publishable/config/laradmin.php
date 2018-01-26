@@ -17,11 +17,7 @@ return [
         'default_avatar' => 'users/default.png'
     ],
 
-    'roles' => [
-        'system' => 'simple',
-    ],
 
-    'developers' => [],
 
     /*
     |--------------------------------------------------------------------------

@@ -27,6 +27,7 @@ class CanAccessBackend
             return $user->can('access backend') ? $next($request) : redirect('/');
         }
 
+
         $urlLogin = route('laradmin.login');
         $urlIntended = $request->url();
 

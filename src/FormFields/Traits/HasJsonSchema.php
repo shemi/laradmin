@@ -200,6 +200,8 @@ trait HasJsonSchema
                             Type::browseAll()
                                 ->pluck('slug')
                                 ->values()
+                                ->unique()
+                                ->values()
                                 ->toArray()
                         )
                         ->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 
 class RelationshipController extends Controller
 {
@@ -71,20 +72,31 @@ class RelationshipController extends Controller
             return $this->responseNotFound();
         }
 
-        $this->validate($request, [
+        $data = $this->validate($request, [
             $field->relation_labels[0] => 'required'
         ]);
-
 
         /** @var Type $relationType */
         $relationType = $field->relationship_type;
         /** @var Model $relationModel */
         $relationModel = app($relationType->model);
 
-        $newItem = $this->insertCreateUpdateData($request, $relationModel, $relationType);
+        /** @var CreateUpdateRepository $repository */
+        $repository = app(CreateUpdateRepository::class)
+            ->createOrUpdate(
+                $data,
+                $relationModel,
+                $relationType
+            );
+
+        if($repository->failed()) {
+            return $this->responseBadRequest(
+                $repository->errors()->first()
+            );
+        }
 
         return $this->response(
-            $field->transformRelationModel($newItem)
+            $field->transformRelationModel($relationModel->fresh())
         );
     }
 

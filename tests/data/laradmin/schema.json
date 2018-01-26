@@ -1,14 +1,14 @@
 {
     "tables": {
         "menus": {
-            "last_primary": 38,
+            "last_primary": 40,
             "rows": []
         },
         "options": {
             "last_primary": 0
         },
         "types": {
-            "last_primary": 3
+            "last_primary": 4
         }
     }
 }

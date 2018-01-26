@@ -39,7 +39,9 @@ abstract class AbstractControllerTest extends IntegrationTest
             'password' => bcrypt('password')
         ], $attributes);
 
-        $user = TestUser::forceCreate($attributes);
+        if(! $user = TestUser::where('email', $attributes['email'])->first()) {
+            $user = TestUser::forceCreate($attributes);
+        }
 
         if($role) {
             $user->assignRole($role);
