@@ -23,6 +23,21 @@
             $properties[] = "maxlength=".$field->max_length;
         }
 
+        if ($field->field_type === 'number') {
+
+            if($field->getTemplateOption('step')) {
+                $properties[] = 'step='.$field->getTemplateOption('step');
+            }
+
+            if($field->getTemplateOption('min')) {
+                $properties[] = 'min='.$field->getTemplateOption('min');
+            }
+
+            if($field->getTemplateOption('max')) {
+                $properties[] = 'max='.$field->getTemplateOption('max');
+            }
+        }
+
         if ($field->field_type === 'password'){
             $properties[] = 'password-reveal';
         }
