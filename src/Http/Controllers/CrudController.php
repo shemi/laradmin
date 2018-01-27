@@ -28,6 +28,7 @@ class CrudController extends Controller
             return $this->responseUnauthorized($request);
         }
 
+        /** @var Model $model */
         $model = app($type->model);
         $columns = $type->browse_columns;
         $primaryKey = $model->getKeyName();
@@ -145,12 +146,22 @@ class CrudController extends Controller
             dd($exception->getMessage());
         }
 
+        $primaryKey = $model->getKeyName();
+
+        $hasPrimaryKeyField = (bool) $type->browse_columns
+            ->where('key', $primaryKey)
+            ->count();
+
         $results->getCollection()
-            ->transform(function ($model) use ($type) {
+            ->transform(function ($model) use ($type, $hasPrimaryKeyField, $primaryKey) {
                 $return = [];
 
                 foreach ($type->browse_columns as $column) {
                     $return[$column->key] = $column->getBrowseValue($model);
+                }
+
+                if(! $hasPrimaryKeyField) {
+                    $return[$primaryKey] = $model->getKey();
                 }
 
                 return $return;
