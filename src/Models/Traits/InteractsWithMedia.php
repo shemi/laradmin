@@ -46,7 +46,7 @@ trait InteractsWithMedia
 
     public function getMediaDiscAttribute()
     {
-        return $this->media['disc'];
+        return $this->media['disk'];
     }
 
     public function transformMediaCollection(Collection $collection)
