@@ -258,9 +258,14 @@ class Type extends Model
             $array[$key] = $this->$key;
         }
 
-        $array['panels'] = $this->panels->map(function($panel) {
-            return $panel->toBuilder();
-        });
+        if($this->exists) {
+            $array['panels'] = $this->panels->map(function($panel) {
+                return $panel->toBuilder();
+            });
+        } else {
+            //POC ONLY
+            $array['panels'] = json_decode('[{"id":0,"title":"Publish","position":"side","is_main_meta":true,"has_container":true,"style":"null","fields":[]}]');
+        }
 
         return $array;
     }

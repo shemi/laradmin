@@ -76,7 +76,7 @@
                                     @continue
 
                                 @elseif(! $panel->has_container)
-                                    <div :style="{{ $panel->style }}">
+                                    <div class="panel" :style="{{ $panel->style }}">
                                         @foreach($panel->fieldsFor($viewType) as $field)
                                             {{ $field->render($type, $model, $data) }}
                                         @endforeach
