@@ -101,7 +101,6 @@ class RolesCommand extends Command
 
         $this->line($line);
 
-
         if(! $role->hasPermissionTo($permission)) {
             $this->line('Role "'. $role->name .'" give permission to "'. $name .'"');
             $role->givePermissionTo($permission);

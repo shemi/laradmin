@@ -33,12 +33,12 @@ trait InteractsWithMedia
     {
         if(! $value || ! is_array($value)) {
             return [
-                'disc' => config('medialibrary.defaultFilesystem')
+                'disk' => config('medialibrary.defaultFilesystem')
             ];
         }
 
-        if(! array_key_exists('disc', $value) || ! $value['disc']) {
-            $value['disc'] = config('medialibrary.defaultFilesystem');
+        if(! array_key_exists('disk', $value) || ! $value['disk']) {
+            $value['disk'] = config('medialibrary.defaultFilesystem');
         }
 
         return $value;
