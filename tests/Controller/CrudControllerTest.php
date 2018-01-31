@@ -95,13 +95,14 @@ class CrudControllerTest extends AbstractControllerTest
             ->assertStatus(200)
             ->assertSee('New Post');
 
-        $this->postJson(route('laradmin.posts.store'), [
+        $res = $this->postJson(route('laradmin.posts.store'), [
             'title' => 'new post',
             'slug' => 'new-post-test',
             'user' => $user->id,
             'categories' => []
-        ])
-        ->assertStatus(200);
+        ]);
+
+        $res->assertStatus(200);
 
         $this->assertInstanceOf(Post::class, Post::where('slug', 'new-post-test')->first());
     }

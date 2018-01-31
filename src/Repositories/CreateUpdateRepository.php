@@ -99,6 +99,8 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
 
         $this->setModelData();
 
+        $this->syncBelongsToRelationData();
+
         if(! $this->model->exists) {
             $this->saveModel();
         }
@@ -164,46 +166,76 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             $this->model->setAttribute($field->key, $this->getFieldValue($field));
         });
 
-        $this->setBelongsToRelationData();
-
         return $this;
     }
 
-    protected function setBelongsToRelationData()
+    protected function syncBelongsToRelationData()
     {
         $this->relationFields->each(function(Field $field) {
             $relation = $field->getRelationClass($this->model);
+            $value = $this->getFieldValue($field);
 
             if(! $relation instanceof BelongsTo) {
                 return;
             }
 
-            $this->model->setAttribute(
-                $relation->getForeignKey(),
-                $this->getFieldValue($field)
-            );
-        });
+            if($value) {
+                $relation->associate($value);
+            }
 
-        return $this;
+            else {
+                $relation->dissociate();
+            }
+        });
     }
 
     protected function syncRelationData()
     {
         $this->relationFields->each(function(Field $field) {
             $relation = $field->getRelationClass($this->model);
+            $value = $this->getFieldValue($field);
 
             if($relation instanceof BelongsTo) {
                 return;
             }
 
-            $value = $this->getFieldValue($field);
-
-            if($relation instanceof HasOne) {
-                return;
-            }
-
             elseif ($relation instanceof HasOneOrMany) {
-                return;
+                $relationModel = $field->getRelationModelClass($this->model);
+
+
+                if(! $value || empty($value)) {
+                    $relationModels = $relationModel
+                        ->where($relation->getForeignKeyName(), $this->model->getKey())
+                        ->get();
+
+                    $relationModels->each(function($model) use ($relation) {
+                        $model->setAttribute($relation->getForeignKeyName(), null);
+                        $model->save();
+                    });
+
+                    return;
+                }
+
+
+                $ids = Collection::make($value)->values()->all();
+
+                $current = $relationModel
+                    ->where($relation->getForeignKeyName(), $this->model->getKey())
+                    ->get();
+
+                $detach = $current->reject(function($model) use ($ids) {
+                    return in_array($model->getKey(), $ids);
+                });
+
+                if($detach->isNotEmpty()) {
+                    $detach->each(function($model) use ($relation) {
+                        $model->setAttribute($relation->getForeignKeyName(), null);
+                        $model->save();
+                    });
+                }
+
+                $relationModels = $relationModel->find($ids);
+                $relation->saveMany($relationModels);
             }
 
             else {
