@@ -5,7 +5,7 @@
                  add-button-text="{{ $field->getTemplateOption('repeater_add_text', 'Add ' . str_singular($field->label)) }}"
                  :form.sync="{{ trim($field->form_prefix, '.') }}">
 
-        <template scope="props">
+        <template slot-scope="props">
             @foreach($field->fields as $repeaterField)
                 <la-repeater-row field="{{ $repeaterField->key }}"
                                  label="{{ $repeaterField->label }}">

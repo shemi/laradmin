@@ -75,9 +75,10 @@ class Field extends Model
         'media'
     ];
 
-    public static function fromArray($rawField)
+    public static function fromArray($attributes)
     {
-        $inst = new static;
+        $model = new static;
+
         $localAttributes = [
             'parent' => null,
             'form_prefix' => "form.",
@@ -86,12 +87,14 @@ class Field extends Model
         ];
 
         foreach ($localAttributes as $attribute => $defaultValue) {
-            $inst->{$attribute} = array_get($rawField, $attribute, $defaultValue);
+            $model->{$attribute} = array_get($attributes, $attribute, $defaultValue);
 
-            array_forget($rawField, $attribute);
+            array_forget($attributes, $attribute);
         }
 
-        return $inst->newFromManager($rawField);
+        $model->setRawAttributes((array) $attributes, true);
+
+        return $model;
     }
 
     /**
@@ -140,17 +143,13 @@ class Field extends Model
 
     public function getFieldsAttribute($value)
     {
-        $fields = collect($value);
-
-        $fields = $fields->transform(function($rawField) {
+        return collect($value)->transform(function($rawField) {
             $rawField['is_repeater_field'] = true;
             $rawField['parent'] = $this;
             $rawField['form_prefix'] = "props.row.";
 
             return static::fromArray($rawField);
         });
-
-        return $fields;
     }
 
     public function getOptionsAttribute($value)
