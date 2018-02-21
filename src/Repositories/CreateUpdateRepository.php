@@ -112,7 +112,11 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $this->syncRelationData();
         $this->syncMedia();
 
+        event('laradmin::before-save-model', $model, $type);
+
         $this->saveModel();
+
+        event('laradmin::after-model-saved', $model, $type);
 
         return $this;
     }
