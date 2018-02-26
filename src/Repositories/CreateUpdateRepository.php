@@ -429,7 +429,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                 ->first();
 
             if($copyField) {
-                $value = $this->getFieldValue($field);
+                $value = $this->getFieldValue($copyField);
             }
 
             elseif ($this->model->offsetExists($copyKey)) {
