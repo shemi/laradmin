@@ -39,7 +39,7 @@
     @endphp
 
     <multiselect {!! implode(' ', $properties) !!}>
-        <template slot="tag" scope="props">
+        <template slot="tag" slot-scope="props">
             <span class="tag is-primary">
                 <span>@{{ props.option.label }}</span>
                 <button class="delete is-small"
