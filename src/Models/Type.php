@@ -182,6 +182,13 @@ class Type extends Model
                 continue;
             }
 
+            if($field->type === 'repeater' && $field->has_relationship_type) {
+                $type = $field->relationship_type;
+
+                $data[$field->key] = $type->getRelationData(app($type->model));
+                continue;
+            }
+
             $data[$field->key] = [];
             $relation = $field->getRelationModelClass($model);
 

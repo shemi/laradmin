@@ -1,3 +1,9 @@
+@php
+    $fieldsType = $field->has_relationship_type ? $field->relationship_type : $type;
+    $fieldsModel = $field->has_relationship_type ? app($field->relationship_type->model) : $model;
+    $fieldsData = $field->has_relationship_type ? $data[$field->key] : $data;
+@endphp
+
 @component('laradmin::formFields.field', ['field' => $field])
     <la-repeater v-model="{{ $field->form_prefix.$field->key }}"
                  label="{{ $field->getTemplateOption('repeater_items_label', $field->label) }}"
@@ -9,7 +15,7 @@
             @foreach($field->fields as $repeaterField)
                 <la-repeater-row field="{{ $repeaterField->key }}"
                                  label="{{ $repeaterField->label }}">
-                    {{ $repeaterField->render($type, $model, $data) }}
+                    {{ $repeaterField->render($fieldsType, $fieldsModel, $fieldsData) }}
                 </la-repeater-row>
             @endforeach
         </template>
