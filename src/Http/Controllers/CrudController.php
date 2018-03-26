@@ -173,6 +173,7 @@ class CrudController extends Controller
 
     public function createEditResponse($id = null, Request $request)
     {
+        $user = $this->user();
         $type = $this->getTypeBySlug($request);
         $action = $id === null ? 'create' : 'edit';
 
@@ -233,7 +234,7 @@ class CrudController extends Controller
 
         app('laradmin')->publishManyJs($jsObject);
 
-        return view($view, compact('type', 'model', 'form', 'data'));
+        return view($view, compact('type', 'model', 'form', 'data', 'user'));
     }
 
     /**
