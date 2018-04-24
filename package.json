@@ -17,21 +17,21 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.1",
-    "buefy": "^0.6.2",
-    "bulma": "^0.6.1",
-    "jsoneditor": "^5.12.0",
-    "laravel-mix": "^1.7.2",
-    "lodash": "^4.17.4",
-    "moment": "^2.19.2",
-    "vddl": "^0.7.0",
-    "vue": "^2.5.9",
+    "buefy": "^0.6.5",
+    "bulma": "^0.6.2",
+    "jsoneditor": "^5.14.1",
+    "laravel-mix": "^2.1",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "vddl": "^0.7.1",
+    "vue": "^2.5.16",
     "vue-clip": "^1.0.0",
-    "vue-multiselect": "^2.0.6",
-    "vue2-dragula": "^2.5.0",
-    "vuedraggable": "^2.15.0"
+    "vue-multiselect": "^2.1.0",
+    "vue2-dragula": "^2.5.4",
+    "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.23.7",
     "browser-sync-webpack-plugin": "^1.2.0"
   }
 }

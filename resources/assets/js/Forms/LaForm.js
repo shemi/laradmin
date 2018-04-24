@@ -84,6 +84,14 @@ class LaForm {
         return val;
     }
 
+    transformTimeValue(val) {
+        if(val) {
+            val = new Date(val);
+        }
+
+        return val;
+    }
+
     transformFilesValue(files) {
         if(! files || files.length <= 0) {
             return [];

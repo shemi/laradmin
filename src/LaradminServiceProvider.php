@@ -121,7 +121,8 @@ class LaradminServiceProvider extends ServiceProvider
             'relationship',
             'image',
             'file',
-            'tags'
+            'tags',
+            'time'
         ];
 
         foreach ($formFields as $formField) {

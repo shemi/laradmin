@@ -85,15 +85,20 @@ trait HasBrowseSettings
 
                 return $model->getAttribute($this->key);
 
+            case 'time':
             case 'date':
             case 'datetime':
-            case 'time':
                 $value = $model->getAttribute($this->key);
-                $format = "d/m/Y";
+
+                if($this->type === 'time') {
+                    $format = "H:i";
+                } else {
+                    $format = "d/m/Y";
+                }
 
                 try {
                     $value = \Carbon\Carbon::parse($value);
-                    $value->tz('Asia/Jerusalem');
+                    $value->tz(config('app.timezone'));
                 } catch (\Exception $e) {}
 
                 if(isset($this->browse_settings['date_format']) && $this->browse_settings['date_format']) {
