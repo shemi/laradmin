@@ -136,9 +136,34 @@ class RepeaterField extends FormFormField
 
     protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
     {
+        $schema->oneOf('relationship', function (Blueprint $schema) {
+
+            $schema->null();
+
+            $schema->object(null, function(Blueprint $schema) {
+
+                $schema->array('exclude', function(Blueprint $schema) {
+                    $schema->string();
+                })->required();
+
+                $schema->string('type')
+                    ->enum(
+                        Type::browseAll()
+                            ->pluck('slug')
+                            ->values()
+                            ->unique()
+                            ->values()
+                            ->toArray()
+                    )
+                    ->required();
+            });
+
+        })->required();
+
         $schema->array('fields', function(Blueprint $schema) {
             $schema->object();
         });
+
         $schema->template_options->properties(function(Blueprint $schema) {
             $schema->string('repeater_items_label')->nullable();
             $schema->string('repeater_item_label')->nullable();

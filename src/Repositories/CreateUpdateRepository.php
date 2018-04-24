@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository as CreateUpdateRepositoryContract;
@@ -83,14 +84,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $this->warnings = Collection::make([]);
     }
 
-    /**
-     * @param array $data
-     * @param Model $model
-     * @param Type $type
-     *
-     * @return $this
-     */
-    public function createOrUpdate($data, Model $model, Type $type)
+    public function initCreateOrUpdate($data, Model $model, Type $type)
     {
         $this->data = $data;
         $this->model = $model;
@@ -100,6 +94,18 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $this->setModelData();
 
         $this->syncBelongsToRelationData();
+    }
+
+    /**
+     * @param array $data
+     * @param Model $model
+     * @param Type $type
+     *
+     * @return $this
+     */
+    public function createOrUpdate($data, Model $model, Type $type)
+    {
+        $this->initCreateOrUpdate($data, $model, $type);
 
         if(! $this->model->exists) {
             $this->saveModel();
@@ -199,13 +205,18 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             $relation = $field->getRelationClass($this->model);
             $value = $this->getFieldValue($field);
 
+            if($field->type === 'repeater' && $field->has_relationship_type) {
+                $this->createUpdateDeleteRepeaterRows($field, $relation, $value);
+
+                return;
+            }
+
             if($relation instanceof BelongsTo) {
                 return;
             }
 
             elseif ($relation instanceof HasOneOrMany) {
                 $relationModel = $field->getRelationModelClass($this->model);
-
 
                 if(! $value || empty($value)) {
                     $relationModels = $relationModel
@@ -250,6 +261,32 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         });
 
         return $this;
+    }
+
+    /**
+     * @param Field $field
+     * @param MorphMany $relation
+     * @param $rows
+     * @return void
+     */
+    protected function createUpdateDeleteRepeaterRows(Field $field, $relation, $rows)
+    {
+        $type = $field->relationship_type;
+        /** @var Model $model */
+        $model = app($type->model);
+        $currentRows = $this->model->refresh()->{$field->key};
+        $rows = Collection::make($rows);
+
+        $rowsIds = $rows->pluck($model->getKeyName())->values()->toArray();
+
+        $rowsToCreateUpdate = $rows;
+
+        $rowsToDelete = $currentRows->reject(function(Model $row) use ($rowsIds) {
+            return in_array($row->getKey(), $rowsIds);
+        });
+
+
+
     }
 
     protected function saveModel()

@@ -17,6 +17,7 @@ namespace Shemi\Laradmin\Models\Traits;
  * @property mixed $show_if
  * @property string $template_position
  * @property integer $max_length
+ * @property boolean $is_horizontal
 */
 
 trait HasTemplateOptions
@@ -70,6 +71,11 @@ trait HasTemplateOptions
 
     public function getShowIfAttribute() {
         return $this->getTemplateOption('show_if');
+    }
+
+    public function getIsHorizontalAttribute()
+    {
+        return $this->getTemplateOption('horizontal', false);
     }
 
     public function getTemplateOption($key, $default = null)

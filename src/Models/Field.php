@@ -32,6 +32,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  * @property boolean $is_password
  * @property Collection|null $fields
  * @property string $form_prefix
+ * @property boolean $read_only
  */
 class Field extends Model
 {
@@ -143,6 +144,23 @@ class Field extends Model
 
     public function getFieldsAttribute($value)
     {
+        if($this->type === 'repeater' && $this->has_relationship_type) {
+            $relationType = $this->relationship_type;
+            $exclude = array_get($this->relationship, 'exclude', []);
+
+            return $relationType->fields
+                ->reject(function(Field $field) use ($exclude) {
+                    return in_array($field->key, $exclude) || $field->read_only;
+                })
+                ->map(function(Field $field) {
+                    $field->is_repeater_field = true;
+                    $field->parent = $this;
+                    $field->form_prefix = 'props.row.';
+
+                    return $field;
+                });
+        }
+
         return collect($value)->transform(function($rawField) {
             $rawField['is_repeater_field'] = true;
             $rawField['parent'] = $this;
@@ -301,7 +319,7 @@ class Field extends Model
             $array[$key] = $this->castBuilderAttribute($this->{$key}, $cast);
         }
 
-        if($this->fields->isNotEmpty()) {
+        if($this->fields->isNotEmpty() && ! $this->has_relationship_type) {
             $array['fields'] = $this->fields->map(function($field) {
                 return $field->toBuilder();
             });

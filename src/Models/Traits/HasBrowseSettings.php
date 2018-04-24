@@ -110,6 +110,10 @@ trait HasBrowseSettings
             case 'checkboxes':
             case 'repeater':
                 if($this->is_relationship) {
+                    if(! $model->{$this->key}) {
+                        return 'Relation error!';
+                    }
+
                     return $model->{$this->key}
                         ->pluck($this->relationship['label'])
                         ->implode(', ');

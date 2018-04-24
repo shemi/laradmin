@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Route;
 use Shemi\Laradmin\Contracts\FormFieldContract;
@@ -17,6 +18,11 @@ class Laradmin
     ];
 
     protected $jsObject = [];
+
+    public function user()
+    {
+        return Auth::guard(config('laradmin.guard'))->user();
+    }
 
     public function filesystem($disk = null)
     {
