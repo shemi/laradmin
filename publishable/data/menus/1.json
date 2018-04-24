@@ -6,53 +6,164 @@
             "title": "Dahsboard",
             "type": "route",
             "route_name": "laradmin.dashboard",
-            "url": null,
+            "url": "\/admin",
             "in_new_window": false,
             "icon": "dashboard",
-            "css_class": null,
-            "route_url": "http:\/\/localhost:3000\/admin",
-            "items": []
+            "css_class": "",
+            "items": [],
+            "is_active": false
         },
         {
-            "id": 944,
-            "title": "Menus",
+            "id": 1950,
+            "title": "Users",
             "type": "route",
-            "route_name": "laradmin.menus.index",
-            "url": null,
+            "route_name": "laradmin.users.index",
+            "url": "\/admin\/users",
             "in_new_window": false,
-            "icon": "view_list",
-            "css_class": null,
-            "route_url": "http:\/\/localhost:3000\/admin\/menus",
+            "icon": "users",
+            "css_class": "",
             "items": [
                 {
-                    "id": 52,
-                    "title": "All Menus",
+                    "id": 3733,
+                    "title": "Manage",
                     "type": "route",
-                    "route_name": "laradmin.menus.index",
-                    "url": null,
+                    "route_name": "laradmin.users.index",
+                    "url": "\/admin\/users",
                     "in_new_window": false,
-                    "icon": null,
-                    "css_class": null,
-                    "route_url": "http:\/\/localhost:3000\/admin\/menus",
-                    "items": []
+                    "icon": "list",
+                    "css_class": "",
+                    "items": [],
+                    "is_active": false
                 },
                 {
-                    "id": 9116,
-                    "title": "New Menu",
+                    "id": 6890,
+                    "title": "New User",
                     "type": "route",
-                    "route_name": "laradmin.menus.create",
-                    "url": null,
+                    "route_name": "laradmin.users.create",
+                    "url": "\/admin\/users\/create",
                     "in_new_window": false,
-                    "icon": null,
-                    "css_class": null,
-                    "route_url": "http:\/\/localhost:3000\/admin\/menus\/create",
-                    "items": []
+                    "icon": "user-plus",
+                    "css_class": "",
+                    "items": [],
+                    "is_active": false
+                },
+                {
+                    "id": 1935,
+                    "title": "Roles",
+                    "type": "route",
+                    "route_name": "laradmin.roles.index",
+                    "url": "\/admin\/roles",
+                    "in_new_window": false,
+                    "icon": "hand-stop-o",
+                    "css_class": "",
+                    "items": [],
+                    "is_active": false
+                },
+                {
+                    "id": 6069,
+                    "title": "Permissions",
+                    "type": "route",
+                    "route_name": "laradmin.permissions.index",
+                    "url": "\/admin\/permissions",
+                    "in_new_window": false,
+                    "icon": "check-square-o",
+                    "css_class": "",
+                    "items": [],
+                    "is_active": false
                 }
-            ]
+            ],
+            "is_active": false
+        },
+        {
+            "id": 6790,
+            "title": "Tools",
+            "type": "url",
+            "route_name": "laradmin.dashboard",
+            "url": "\/admin\/tools",
+            "in_new_window": false,
+            "icon": "sliders",
+            "css_class": "",
+            "items": [
+                {
+                    "id": 4702,
+                    "title": "Types",
+                    "type": "route",
+                    "route_name": "laradmin.types.index",
+                    "url": "\/admin\/types",
+                    "in_new_window": false,
+                    "icon": "sitemap",
+                    "css_class": "",
+                    "items": [
+                        {
+                            "id": 655,
+                            "title": "Manage",
+                            "type": "route",
+                            "route_name": "laradmin.types.index",
+                            "url": "\/admin\/types",
+                            "in_new_window": false,
+                            "icon": "wrench",
+                            "css_class": "",
+                            "items": [],
+                            "is_active": false
+                        },
+                        {
+                            "id": 6567,
+                            "title": "New Type",
+                            "type": "route",
+                            "route_name": "laradmin.types.create",
+                            "url": "\/admin\/types\/create",
+                            "in_new_window": false,
+                            "icon": "plus-square-o",
+                            "css_class": "",
+                            "items": [],
+                            "is_active": false
+                        }
+                    ],
+                    "is_active": false
+                },
+                {
+                    "id": 944,
+                    "title": "Menus",
+                    "type": "route",
+                    "route_name": "laradmin.menus.index",
+                    "url": "\/admin\/menus",
+                    "in_new_window": false,
+                    "icon": "navicon",
+                    "css_class": "",
+                    "items": [
+                        {
+                            "id": 52,
+                            "title": "Manage",
+                            "type": "route",
+                            "route_name": "laradmin.menus.index",
+                            "url": "\/admin\/menus",
+                            "in_new_window": false,
+                            "icon": "wrench",
+                            "css_class": "",
+                            "items": [],
+                            "is_active": false
+                        },
+                        {
+                            "id": 9116,
+                            "title": "New Menu",
+                            "type": "route",
+                            "route_name": "laradmin.menus.create",
+                            "url": "\/admin\/menus\/create",
+                            "in_new_window": false,
+                            "icon": "plus-square-o",
+                            "css_class": "",
+                            "items": [],
+                            "is_active": false
+                        }
+                    ],
+                    "is_active": true
+                }
+            ],
+            "is_active": false
         }
     ],
     "slug": "admin",
-    "updated_at": "2017-07-12 23:50:53.191670",
+    "updated_at": "2017-12-23 23:22:51.005143",
     "created_at": "2017-07-12 21:59:20.380834",
     "id": 1
 }
