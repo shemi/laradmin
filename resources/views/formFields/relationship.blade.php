@@ -13,11 +13,11 @@
         if($field->has_relationship_type) {
             $relationType = $field->relationship_type;
 
-            if($user->can("update {$relationType->slug}")) {
+            if(Laradmin::user()->can("update {$relationType->slug}")) {
                 $properties[] = "show-edit-button";
             }
 
-            if($user->can("create {$relationType->slug}")) {
+            if(Laradmin::user()->can("create {$relationType->slug}")) {
                 $properties[] = "show-create-button";
             }
 
