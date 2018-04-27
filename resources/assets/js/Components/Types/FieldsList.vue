@@ -5,6 +5,8 @@
 
             <vddl-list class="fields-list-container"
                        :list="newValue"
+                       :allowed-types="['fields']"
+                       :drop="handleDrop"
                        :horizontal="false">
 
                 <vddl-draggable v-for="(field, index) in newValue"
@@ -12,6 +14,8 @@
                                 :draggable="field"
                                 :index="index"
                                 :wrapper="newValue"
+                                type="fields"
+                                :moved="handleMoved"
                                 class="la-fields-list-item"
                                 effect-allowed="move">
 
@@ -100,7 +104,19 @@
             deleteField(index, field) {
                 this.$delete(this.newValue, index);
                 this.input(this.newValue);
-            }
+            },
+
+            handleDrop(data) {
+                const { index, list, item } = data;
+
+                item.id = Helpers.makeId();
+                list.splice(index, 0, item);
+            },
+
+            handleMoved(item) {
+                const { index, list } = item;
+                list.splice(index, 1);
+            },
 
         },
 

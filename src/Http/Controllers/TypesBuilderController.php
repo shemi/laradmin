@@ -179,8 +179,14 @@ class TypesBuilderController extends Controller
             return $this->responseValidationError($errors);
         }
 
+        $slug = str_slug($data['name']);
+
+        if(! $type->exists) {
+            $data['redirect'] = route('laradmin.types.edit', ['type' => $slug]);
+        }
+
         $type->name = $data['name'];
-        $type->slug = str_slug($data['name']);
+        $type->slug = $slug;
         $type->model = $data['model'];
         $type->controller = $data['controller'];
         $type->panels = $data['panels'];

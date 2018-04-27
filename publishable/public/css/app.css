@@ -14386,10 +14386,6 @@ label.panel-block:hover {
   padding: 1em;
 }
 
-.la-panel {
-  overflow: hidden;
-}
-
 .la-panel .la-panel-header {
   margin: 0;
   background-color: white;
@@ -14432,6 +14428,26 @@ label.panel-block:hover {
 
 .la-panel .panel-content-toggle {
   cursor: pointer;
+}
+
+.vddl-handle {
+  cursor: move;
+}
+
+.placeholder-panel {
+  border: 1px dotted #b5b5b5;
+  height: 64.5px;
+  background-color: whitesmoke;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: #b5b5b5;
 }
 
 .la-file-upload .file-card {

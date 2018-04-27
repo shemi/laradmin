@@ -1,7 +1,7 @@
 .la-panel {
   //border: 2px solid $grey-lighter;
   //border-radius: 3px;
-  overflow: hidden;
+  //overflow: hidden;
 
   .la-panel-header {
 	margin: 0;
@@ -47,4 +47,18 @@
 	cursor: pointer;
   }
 
+}
+
+.vddl-handle {
+  cursor: move;
+}
+
+.placeholder-panel {
+  border: 1px dotted $grey-light;
+  height: 64.5px;
+  background-color: $white-ter;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $grey-light;
 }

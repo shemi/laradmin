@@ -5,7 +5,7 @@ mix.js('resources/assets/js/app.js', 'js')
     .sourceMaps(false)
     .setPublicPath('./publishable/public')
     .browserSync({
-        proxy: 'anystore.test',
+        proxy: 'laradmin.test',
         files: [
             'src/**/*.php',
             'resources/views/**/*.php',

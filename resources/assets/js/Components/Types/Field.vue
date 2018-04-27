@@ -13,9 +13,9 @@
                         <b-icon icon="arrows"></b-icon>
                     </vddl-handle>
                 </div>
-                <div class="level-item" @click.stop>
+                <div class="level-item" @click.stop.prevent>
                     <b-dropdown>
-                        <button class="button is-small" slot="trigger">
+                        <button class="button is-small" slot="trigger" @click.prevent>
                             <b-icon icon="ellipsis-v" size="is-small"></b-icon>
                         </button>
 

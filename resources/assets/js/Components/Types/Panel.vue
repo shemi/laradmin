@@ -1,13 +1,31 @@
 <template>
 
-    <div class="la-panel"
-         :class="{'is-open': isOpen}">
+    <vddl-nodrag class="la-panel no-drag"
+                 :class="{'is-open': isOpen}">
 
         <div class="level la-panel-header">
             <div class="level-left" @click.prevent="isOpen = ! isOpen">
                 <div class="level-item">
-                    <b-icon icon="arrows"></b-icon>
+                    <vddl-handle
+                            :handle-left="20"
+                            :handle-top="20"
+                            class="handle">
+                        <b-icon icon="arrows"></b-icon>
+                    </vddl-handle>
                 </div>
+
+                <div class="level-item" @click.stop.prevent v-if="! panel.is_main_meta">
+                    <b-dropdown>
+                        <button class="button is-small" slot="trigger" @click.prevent>
+                            <b-icon icon="ellipsis-v" size="is-small"></b-icon>
+                        </button>
+
+                        <b-dropdown-item @click="clonePanel">Clone</b-dropdown-item>
+                        <b-dropdown-item separator>Clone</b-dropdown-item>
+                        <b-dropdown-item class="has-text-danger" @click="deletePanel">Delete</b-dropdown-item>
+                    </b-dropdown>
+                </div>
+
                 <div class="level-item">
                     <div>
                         <p class="la-panel-header-title title is-4">
@@ -18,11 +36,6 @@
                                 <b-icon icon="star"></b-icon>
                             </b-tooltip>
                         </p>
-
-                        <div class="panel-header-actions" v-if="! panel.is_main_meta">
-                            <a class="is-small">Duplicate</a>
-                            <a class="is-small has-text-danger">Delete</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +73,7 @@
                         v-show="isOpen">
         </la-options-set>
 
-    </div>
+    </vddl-nodrag>
 
 </template>
 
@@ -85,6 +98,20 @@
                 isOpen: false,
                 options: cloneDeep(window.laradmin.builderData.panels.panel.options)
             }
+        },
+
+        methods: {
+            clonePanel() {
+                this.isOpen = false;
+
+                this.$emit('clone');
+            },
+
+            deletePanel() {
+                this.isOpen = false;
+
+                this.$emit('delete');
+            },
         },
 
         components: {
