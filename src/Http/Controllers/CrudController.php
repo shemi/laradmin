@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
@@ -39,17 +40,18 @@ class CrudController extends Controller
         $deleteRoute = route("laradmin.{$type->slug}.destroy", ["{$type->slug}" => "__primaryKey__"]);
         $deleteRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $deleteRoute);
 
+        $deleteManyRoute = route("laradmin.{$type->slug}.destroyMany");
+
         return view(
             'laradmin::crud.browse',
-            compact('type', 'model', 'columns', 'primaryKey', 'editRoute', 'deleteRoute')
+            compact('type', 'model', 'columns', 'primaryKey', 'editRoute', 'deleteRoute', 'deleteManyRoute')
         );
     }
 
     /**
-     *
-     *
      * @param Type $type
      * @param Request $request
+     * @return boolean
      */
     protected function userCanBrowse(Type $type, Request $request)
     {
@@ -240,6 +242,7 @@ class CrudController extends Controller
     /**
      * @param Type $type
      * @param Request $request
+     * @return boolean
      */
     protected function userCanCreate(Type $type, Request $request)
     {
@@ -318,10 +321,9 @@ class CrudController extends Controller
     }
 
     /**
-     *
-     *
      * @param Type $type
      * @param Request $request
+     * @return boolean
      */
     protected function userCanUpdate(Type $type, Request $request)
     {
@@ -397,14 +399,42 @@ class CrudController extends Controller
     }
 
     /**
-     *
-     *
      * @param Type $type
      * @param Request $request
+     * @return boolean
      */
     protected function userCanDelete(Type $type, Request $request)
     {
         return $this->user()->can("delete {$type->slug}");
+    }
+
+    public function destroyMany(Request $request)
+    {
+        $type = $this->getTypeBySlug($request);
+
+        $this->validate($request, [
+            'ids' => 'required|array'
+        ]);
+
+        if(! $this->userCanDelete($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
+        /** @var Model $model */
+        $model = app($type->model);
+        /** @var Collection $models */
+        $models = $model->whereIn($model->getKeyName(), $request->input('ids'))->get();
+
+        try {
+            $models->each->delete();
+        } catch (\Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+
+        return $this->response([
+            'redirect' => null,
+            'deleted' => $models->count()
+        ]);
     }
 
     /**

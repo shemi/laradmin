@@ -36,6 +36,10 @@ export default {
         this.fetchData();
     },
 
+    watch: {
+
+    },
+
     methods: {
 
         fetchData() {
@@ -77,8 +81,16 @@ export default {
             }.bind(this), 300);
         },
 
-        afterDelete(res, typeName) {
-            this.$toast.open(`${typeName} deleted!`);
+        afterDelete(res, typeName, many = false) {
+            if(many) {
+                this.checkedRows = [];
+            }
+
+            this.$toast.open(
+                (many && res.data.deleted ? res.data.deleted + ' ' : '') +
+                `${typeName} deleted!`
+            );
+
             this.fetchData();
         }
 

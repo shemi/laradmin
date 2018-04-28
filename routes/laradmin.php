@@ -93,6 +93,12 @@ Route::group(
                 "middleware" => "laradmin.user.admin"
             ]);
 
+            Route::delete("/{$type->slug}/destroy-many", [
+                "uses" => "{$type->controller}@destroyMany",
+                "as" => "{$type->slug}.destroyMany",
+                "middleware" => "laradmin.user.admin"
+            ]);
+
             Route::resource($type->slug, $type->controller, [
                 "middleware" => "laradmin.user.admin"
             ]);
