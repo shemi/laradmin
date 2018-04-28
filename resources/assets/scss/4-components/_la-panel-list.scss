@@ -3,6 +3,14 @@
 
   > div {
 	padding: 1em;
+
+	> div > div:not(:last-child) {
+	  .la-options-list,
+	  .la-panel-header{
+		border-bottom: 0;
+	  }
+	}
+
   }
 
 }

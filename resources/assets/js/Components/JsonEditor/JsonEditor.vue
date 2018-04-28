@@ -35,6 +35,7 @@
             value: {
                 handler: function (value) {
                     this.setJson(value);
+                    this.validate();
                 },
                 deep: true,
                 immediate: false
@@ -42,6 +43,7 @@
             schema: {
                 handler: function (value) {
                     this.setSchema(value);
+                    this.validate();
                 },
                 deep: true,
                 immediate: false
@@ -79,6 +81,16 @@
                 this.editor.setSchema(schema);
             },
 
+            validate() {
+                this.$nextTick(() => {
+                    if(! this.editor.validateSchema) {
+                        return;
+                    }
+
+                    this.$emit('has-errors', ! this.editor.validateSchema(this.editor.get()));
+                });
+            },
+
             onEditorChange() {
                 try {
                     this.newValue = this.editor.get();
@@ -88,6 +100,7 @@
 
                 this.$emit('input', this.newValue);
                 this.selfChange = true;
+                this.validate();
             }
 
         }

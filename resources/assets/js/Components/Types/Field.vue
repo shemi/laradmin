@@ -13,6 +13,9 @@
                         <b-icon icon="arrows"></b-icon>
                     </vddl-handle>
                 </div>
+                <div class="level-item" v-if="hasErrors">
+                    <b-icon icon="exclamation-circle" type="is-danger"></b-icon>
+                </div>
                 <div class="level-item" @click.stop.prevent>
                     <b-dropdown>
                         <button class="button is-small" slot="trigger" @click.prevent>
@@ -79,6 +82,7 @@
 
             <json-editor v-model="editorObject"
                          @input="updateValueFromEditorObject"
+                         @has-errors="handelErrors"
                          :on-editable="isNodeEditable"
                          :schema="schema">
             </json-editor>
@@ -87,6 +91,7 @@
                      class="field-la-fields-list"
                      v-if="data.supportSubFields">
                 <la-fields-list v-model="newValue.fields"
+                                @has-errors="handelErrors"
                                 :form-key="formKey + '.fields'">
                 </la-fields-list>
             </b-field>
@@ -123,6 +128,7 @@
                 editorObject: {},
                 newType: null,
                 newSubType: null,
+                hasErrors: false,
                 builderData: cloneDeep(window.laradmin.builderData.fields)
             }
         },
@@ -276,6 +282,12 @@
                 }
 
                 return roles;
+            },
+
+            handelErrors(hasErrors) {
+                this.hasErrors = hasErrors;
+
+                this.$emit('has-errors', this.hasErrors);
             }
 
         },

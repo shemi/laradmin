@@ -14,6 +14,11 @@
                     </vddl-handle>
                 </div>
 
+                <div class="level-item" v-if="hasErrors">
+                    <b-icon icon="exclamation-circle"
+                            type="is-danger"></b-icon>
+                </div>
+
                 <div class="level-item" @click.stop.prevent v-if="! panel.is_main_meta">
                     <b-dropdown>
                         <button class="button is-small" slot="trigger" @click.prevent>
@@ -33,7 +38,7 @@
                             <b-tooltip label="Main meta panel"
                                        position="is-right"
                                        v-if="panel.is_main_meta">
-                                <b-icon icon="star"></b-icon>
+                                <b-icon icon="star" size="is-small"></b-icon>
                             </b-tooltip>
                         </p>
                     </div>
@@ -70,6 +75,7 @@
                         :form-key="formKey"
                         :options="options"
                         v-model="panel"
+                        @has-errors="handelErrors"
                         v-show="isOpen">
         </la-options-set>
 
@@ -96,7 +102,8 @@
         data() {
             return {
                 isOpen: false,
-                options: cloneDeep(window.laradmin.builderData.panels.panel.options)
+                options: cloneDeep(window.laradmin.builderData.panels.panel.options),
+                hasErrors: false,
             }
         },
 
@@ -112,6 +119,11 @@
 
                 this.$emit('delete');
             },
+
+            handelErrors(hasErrors) {
+                this.hasErrors = hasErrors;
+            }
+
         },
 
         components: {

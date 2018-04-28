@@ -100,7 +100,7 @@ class TypesBuilderController extends Controller
                 'structure' => [
                     'id' => null,
                     'title' => 'New Panel',
-                    'position' => null,
+                    'position' => 'main',
                     'is_main_meta' => false,
                     'fields' => (array) [],
                     'has_container' => true,

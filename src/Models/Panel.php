@@ -23,6 +23,8 @@ class Panel extends Model
 
     protected $_fields;
 
+    protected $keyType = 'string';
+
     protected $fillable = [
         'id',
         'title',
@@ -136,6 +138,8 @@ class Panel extends Model
             $array['fields'] = $this->fields->map(function ($field) {
                 return $field->toBuilder();
             });
+        } else {
+            $array['fields'] = (array) [];
         }
 
         return $array;

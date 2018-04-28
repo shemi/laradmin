@@ -12,6 +12,7 @@
                            :form-key="(formKey ? formKey + '.' : '') + option.key"
                            :option="option"
                            v-if="! isSubOption(option.key)"
+                           @has-errors="$emit('has-errors', $event)"
                            @input="input"
                            v-model="newValue[option.key]">
                 </la-option>
@@ -19,6 +20,7 @@
                 <la-options-set v-else
                                 :key="index"
                                 :type="type"
+                                @has-errors="$emit('has-errors', $event)"
                                 :form-key="(formKey ? formKey + '.' : '') + getSubOptionKeys(option.key)[0]"
                                 :options="[fixSubOptionKey(option)]"
                                 v-model="newValue[getSubOptionKeys(option.key)[0]]">
@@ -46,7 +48,7 @@
             value: Object,
             type: String,
             formKey: String,
-            options: [Array, Object]
+            options: [Array, Object],
         },
 
         data() {

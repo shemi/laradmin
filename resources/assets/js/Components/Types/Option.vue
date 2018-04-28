@@ -10,6 +10,7 @@
                    v-model="newValue"
                    :form-key="formKey"
                    @input="input"
+                   @has-errors="$emit('has-errors', $event)"
                    @blur="$emit('blur', $event)"
                    @focus="$emit('focus', $event)">
 

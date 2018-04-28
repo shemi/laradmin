@@ -21,7 +21,8 @@
 
                     <la-field :form-key="formKey + '.' + index"
                               @clone="cloneField(index, field)"
-                              @delete="deleteField(index, field)"
+                              @delete="deleteField(index, field, formKey + '.' + index)"
+                              @has-errors="handelErrors($event, formKey + '.' + index)"
                               v-model="newValue[index]">
                     </la-field>
 
@@ -67,7 +68,8 @@
         data() {
             return {
                 newValue: this.value,
-                builderData: window.laradmin.builderData
+                builderData: window.laradmin.builderData,
+                errors: {},
             }
         },
 
@@ -101,7 +103,9 @@
                 this.input(this.newValue);
             },
 
-            deleteField(index, field) {
+            deleteField(index, field, key) {
+                this.handelErrors(false, key);
+
                 this.$delete(this.newValue, index);
                 this.input(this.newValue);
             },
@@ -117,6 +121,12 @@
                 const { index, list } = item;
                 list.splice(index, 1);
             },
+
+            handelErrors(hasErrors, key) {
+                this.errors[key] = hasErrors;
+
+                this.$emit('has-errors', Object.values(this.errors).indexOf(true) >= 0);
+            }
 
         },
 
