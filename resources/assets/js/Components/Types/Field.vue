@@ -13,9 +13,6 @@
                         <b-icon icon="arrows"></b-icon>
                     </vddl-handle>
                 </div>
-                <div class="level-item" v-if="hasErrors">
-                    <b-icon icon="exclamation-circle" type="is-danger"></b-icon>
-                </div>
                 <div class="level-item" @click.stop.prevent>
                     <b-dropdown>
                         <button class="button is-small" slot="trigger" @click.prevent>
@@ -31,6 +28,9 @@
                     <p class="la-panel-header-title title is-4">
                         {{ newValue.label || 'New Field' }}
                     </p>
+                </div>
+                <div class="level-item" v-if="hasErrors">
+                    <b-icon icon="exclamation-circle" type="is-danger"></b-icon>
                 </div>
                 <div class="level-item">
                     <p class="la-panel-header-extra">
@@ -91,7 +91,6 @@
                      class="field-la-fields-list"
                      v-if="data.supportSubFields">
                 <la-fields-list v-model="newValue.fields"
-                                @has-errors="handelErrors"
                                 :form-key="formKey + '.fields'">
                 </la-fields-list>
             </b-field>
@@ -142,6 +141,12 @@
 
         created() {
             this.initField();
+
+            if(! this.value.forceUpdate) {
+                this.value.forceUpdate = () => {
+                    this.updateEditorObject();
+                }
+            }
         },
 
         watch: {
@@ -284,10 +289,8 @@
                 return roles;
             },
 
-            handelErrors(hasErrors) {
-                this.hasErrors = hasErrors;
-
-                this.$emit('has-errors', this.hasErrors);
+            handelErrors(errors) {
+                this.hasErrors = errors && errors.length;
             }
 
         },

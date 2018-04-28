@@ -95,6 +95,37 @@
                             </div>
                         </section>
 
+                        <section class="section la-browse-columns">
+
+                            <div class="columns">
+                                <div class="column browse-column-list">
+                                    <div>
+                                        <div class="level browse-column-header">
+                                            <div class="level-left">
+                                                <h3 class="level-item title is-5">
+                                                    @lang('laradmin::type-builder.builder.columns')
+                                                </h3>
+                                            </div>
+                                            <div class="level-right">
+                                                <div class="level-item">
+                                                    <button type="button"
+                                                            @click.prevent="addPanel('main')"
+                                                            class="button is-primary">
+                                                        @lang('laradmin::type-builder.builder.add_column')
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <la-columns-editor :fields="allFields" view="browse"></la-columns-editor>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </section>
+
                         <section class="section panels">
 
                             <div class="columns">

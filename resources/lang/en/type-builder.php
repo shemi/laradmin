@@ -22,6 +22,8 @@ return [
         'panels' => 'Panels',
         'side_panels' => 'Side Panels',
         'add_panel' => 'Add Panel',
+        'columns' => 'Browse Columns',
+        'add_column' => 'Add Column'
     ]
 
 ];

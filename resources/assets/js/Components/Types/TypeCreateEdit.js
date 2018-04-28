@@ -1,9 +1,11 @@
 import LaForm from '../../Forms/LaForm';
 import IconSelectModal from '../IconSelectModal/IconSelectModal.vue';
 import LaPanelList from './PanelsList.vue';
+import LaColumnsEditor from './ColumnsEditor';
 import MixinsLoader from '../../Helpers/MixinsLoader';
 import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
+import {sortBy} from 'lodash';
 
 export default {
 
@@ -31,7 +33,7 @@ export default {
 
             this.form[method](window.laradmin.routs.save)
                 .then((res) => {
-                    if(res.data.redirect) {
+                    if (res.data.redirect) {
                         window.location.href = res.data.redirect;
                     } else {
                         this.$toast.open({
@@ -40,7 +42,7 @@ export default {
                         });
 
                         //POC
-                        if(this.form.updated_at) {
+                        if (this.form.updated_at) {
                             this.form.updated_at = new Date();
                         }
                     }
@@ -53,7 +55,7 @@ export default {
 
                     let code = err.status ? err.status : err.code;
 
-                    if(code !== 422) {
+                    if (code !== 422) {
                         this.alertServerError(err);
                     }
                 });
@@ -65,13 +67,52 @@ export default {
 
         openIconSelectModal(toUpdate) {
             this.isIconSelectModalActive = true;
+        },
+
+        flatFields(items, fields = []) {
+            let item;
+
+            for (item of items) {
+                if (item.fields) {
+                    if (item.fields.length > 0) {
+                        this.flatFields(item.fields, fields);
+                    }
+
+                    continue;
+                }
+
+                fields.push(item);
+            }
+
+            return fields;
         }
+
+    },
+
+    computed: {
+
+        allFields() {
+            return this.flatFields(this.form.panels);
+        },
+
+        browseColumns() {
+            const columns = this.allFields
+                .filter((column) => {
+                    return !column.visibility || column.visibility.indexOf('browse') >= 0;
+                });
+
+            return sortBy(columns, function (column) {
+                return column.browse_settings.order;
+            });
+        }
+
 
     },
 
     components: {
         IconSelectModal,
-        LaPanelList
+        LaPanelList,
+        LaColumnsEditor
     }
 
 }

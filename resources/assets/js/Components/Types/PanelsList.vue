@@ -96,7 +96,7 @@
             handleDrop(data) {
                 const { index, list, item } = data;
 
-                item.id = Helpers.makeId();
+                this.$set(item, 'id', Helpers.makeId());
                 list.splice(index, 0, item);
             },
 

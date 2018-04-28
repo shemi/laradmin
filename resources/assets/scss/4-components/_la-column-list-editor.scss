@@ -1,0 +1,39 @@
+.la-column-list-editor {
+  padding: 1em;
+
+  .la-columns-list-container {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    flex-wrap: wrap;
+
+    > div {
+      flex-grow: 1;
+    }
+
+    .placeholder {
+      opacity: 0.5;
+    }
+
+  }
+
+  .la-column {
+    padding: 0.2em;
+
+    .label {
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    > div {
+      padding: 0.2em;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      background-color: white;
+    }
+  }
+
+}

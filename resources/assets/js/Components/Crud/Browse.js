@@ -81,6 +81,14 @@ export default {
             }.bind(this), 300);
         },
 
+        onExport() {
+            this.$dialog.alert('SOON!');
+        },
+
+        onImport() {
+            this.$dialog.alert('SOON!');
+        },
+
         afterDelete(res, typeName, many = false) {
             if(many) {
                 this.checkedRows = [];

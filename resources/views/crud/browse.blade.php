@@ -26,13 +26,13 @@
                             </a>
                         </p>
                         <p class="control">
-                            <a class="button">
+                            <a class="button" @click.prevent="onExport">
                                 <b-icon icon="download"></b-icon>
                                 <span>Export @{{ checkedRows.length ? '('+ checkedRows.length +')' : 'All' }}</span>
                             </a>
                         </p>
                         <p class="control">
-                            <a class="button">
+                            <a class="button" @click.prevent="onImport">
                                 <b-icon icon="upload"></b-icon>
                                 <span>Import</span>
                             </a>

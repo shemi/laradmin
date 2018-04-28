@@ -1,0 +1,19 @@
+.la-browse-columns {
+  .browse-column-list {
+	> div {
+	  background-color: $white-ter;
+	}
+  }
+
+  .browse-column-header {
+	@extend .hero.is-twitter.is-bold;
+	padding: 1em;
+	margin: 0;
+
+	.title {
+	  color: white;
+	}
+
+  }
+
+}
