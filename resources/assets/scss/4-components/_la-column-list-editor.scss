@@ -36,4 +36,36 @@
     }
   }
 
+  .la-columns-delete-container {
+    margin-top: 1em;
+    min-height: 0;
+
+    > div {
+      display: none !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    > div.label {
+      display: block !important;
+      height: auto !important;
+      padding: 0.2em;
+      border: 1px solid red;
+      text-align: center;
+      width: 100%;
+      cursor: pointer;
+      background-color: white;
+      transition: background-color 0.2s ease-in-out, border-color 0.3s ease, color 0.2s ease-in-out;
+    }
+
+    &.vddl-dragover {
+      > div {
+        background-color: red;
+        border-color: black;
+        color: white;
+      }
+    }
+
+  }
+
 }

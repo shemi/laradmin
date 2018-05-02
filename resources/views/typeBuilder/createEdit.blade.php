@@ -108,11 +108,20 @@
                                             </div>
                                             <div class="level-right">
                                                 <div class="level-item">
-                                                    <button type="button"
-                                                            @click.prevent="addPanel('main')"
-                                                            class="button is-primary">
-                                                        @lang('laradmin::type-builder.builder.add_column')
-                                                    </button>
+                                                    <b-dropdown position="is-bottom-left"
+                                                                :disabled="! notBrowseColumns.length">
+                                                        <button type="button"
+                                                                slot="trigger"
+                                                                class="button is-primary">
+                                                            <span>@lang('laradmin::type-builder.builder.add_column')</span>
+                                                            <b-icon icon="caret-down"></b-icon>
+                                                        </button>
+
+                                                        <b-dropdown-item v-for="column in notBrowseColumns"
+                                                                         @click="addColumn(column)">
+                                                            @{{ column.label }}
+                                                        </b-dropdown-item>
+                                                    </b-dropdown>
                                                 </div>
                                             </div>
                                         </div>

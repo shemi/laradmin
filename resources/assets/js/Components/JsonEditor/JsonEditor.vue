@@ -1,6 +1,6 @@
 <template>
 
-    <div class="la-json-editor" style="height: 600px">
+    <div class="la-json-editor">
 
     </div>
 

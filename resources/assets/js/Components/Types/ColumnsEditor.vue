@@ -16,6 +16,8 @@
                                 :index="index"
                                 :wrapper="columns"
                                 type="column"
+                                :dragstart="() => {dragging = true}"
+                                :dragend="() => {dragging = false}"
                                 :moved="handleMoved"
                                 class="la-column-list-item"
                                 effect-allowed="move">
@@ -34,6 +36,15 @@
             </vddl-placeholder>
 
         </div>
+
+        <vddl-list class="la-columns-delete-container"
+                   :list="[]"
+                   v-show="dragging"
+                   :drop="handelDelete"
+                   :allowed-types="['column']">
+            <div class="label">Drop here to delete</div>
+        </vddl-list>
+
     </div>
 
 </template>
@@ -57,7 +68,8 @@
         data() {
             return {
                 builderData: window.laradmin.builderData,
-                columns: []
+                columns: [],
+                dragging: false,
             }
         },
 
@@ -101,6 +113,30 @@
                 list.splice(index, 1);
 
                 this.updateColumnsOrder();
+            },
+
+            handelDelete({event, index, item, type, external}) {
+                let column = item,
+                    viewIndex,
+                    field,
+                    id = column.originalId || column.id;
+
+                for (field of this.fields) {
+                    viewIndex = Array.isArray(field.visibility) ? field.visibility.indexOf(this.view) : -1;
+
+                    if (id !== field.id || viewIndex < 0) {
+                        continue;
+                    }
+
+
+                    this.$delete(field.visibility, viewIndex);
+
+                    if(field.forceUpdate) {
+                        field.forceUpdate();
+                    }
+                }
+
+                return false;
             },
 
             update() {

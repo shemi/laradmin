@@ -290,7 +290,9 @@
             },
 
             handelErrors(errors) {
-                this.hasErrors = errors && errors.length;
+                this.hasErrors = errors;
+
+                this.$emit('has-errors', this.hasErrors);
             }
 
         },

@@ -85,6 +85,18 @@ export default {
             }
 
             return fields;
+        },
+
+        addColumn(column) {
+            if(! column) {
+                return;
+            }
+
+            if(! column.visibility) {
+                this.$set(column, 'visibility', []);
+            }
+
+            column.visibility.push('browse');
         }
 
     },
@@ -104,8 +116,18 @@ export default {
             return sortBy(columns, function (column) {
                 return column.browse_settings.order;
             });
-        }
+        },
 
+        notBrowseColumns() {
+            const columns = this.allFields
+                .filter((column) => {
+                    return !column.visibility || column.visibility.indexOf('browse') < 0;
+                });
+
+            return sortBy(columns, function (column) {
+                return column.browse_settings.order;
+            });
+        }
 
     },
 
