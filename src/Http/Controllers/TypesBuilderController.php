@@ -150,6 +150,11 @@ class TypesBuilderController extends Controller
         return view('laradmin::typeBuilder.createEdit', compact('model'));
     }
 
+    protected function validateClassExistsAndExtends($test, $base)
+    {
+        return ! class_exists($test) || ! is_subclass_of($test, $base);
+    }
+
     protected function storeUpdateType(Request $request, Type $type)
     {
         $data = $this->validate($request, [
@@ -157,18 +162,30 @@ class TypesBuilderController extends Controller
             'model' => 'required|string',
             'controller' => 'required|string',
             'icon' => 'string|nullable',
+            'support_export' => 'nullable|boolean',
+            'export_controller' => 'required_if:support_export,true',
+            'support_import' => 'nullable|boolean',
+            'import_controller' => 'required_if:support_import,true',
             'records_per_page' => 'required|numeric',
             'panels' => 'required|array'
         ]);
 
         $errors = [];
 
-        if(! class_exists($data['controller']) || ! is_subclass_of($data['controller'], BaseController::class)) {
+        if($this->validateClassExistsAndExtends($data['controller'], BaseController::class)) {
             $errors['controller'] = ['The controller class most be subclass of "' . BaseController::class . '"'];
         }
 
-        if(! class_exists($data['model']) || ! is_subclass_of($data['model'], Model::class)) {
+        if($this->validateClassExistsAndExtends($data['model'], Model::class)) {
             $errors['model'] = ['The model class most be subclass of "' . Model::class . '"'];
+        }
+
+        if($data['support_export'] && $this->validateClassExistsAndExtends($data['export_controller'], BaseController::class)) {
+            $errors['export_controller'] = ['The export controller class most be subclass of "' . BaseController::class . '"'];
+        }
+
+        if($data['support_import'] && $this->validateClassExistsAndExtends($data['import_controller'], BaseController::class)) {
+            $errors['import_controller'] = ['The import controller class most be subclass of "' . BaseController::class . '"'];
         }
 
         foreach ($this->validatePanelsJsonSchema($data['panels']) as $path => $error) {
@@ -191,6 +208,10 @@ class TypesBuilderController extends Controller
         $type->controller = $data['controller'];
         $type->panels = $data['panels'];
         $type->records_per_page = $data['records_per_page'];
+        $type->support_export = (boolean) $data['support_export'];
+        $type->export_controller = $data['export_controller'];
+        $type->support_import = (boolean) $data['support_import'];
+        $type->import_controller = $data['import_controller'];
 
         $data['saved'] = $type->save();
 

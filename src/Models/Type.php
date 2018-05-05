@@ -7,6 +7,8 @@ use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Http\Controllers\CrudController;
+use Shemi\Laradmin\Http\Controllers\ExportController;
+use Shemi\Laradmin\Http\Controllers\ImportController;
 
 /**
  * Shemi\Laradmin\Models\Type
@@ -26,6 +28,10 @@ use Shemi\Laradmin\Http\Controllers\CrudController;
  * @property Collection $searchable_fields
  * @property Collection $side_panels
  * @property Collection $main_panels
+ * @property boolean $support_export
+ * @property string $export_controller
+ * @property boolean $support_import
+ * @property string $import_controller
  */
 class Type extends Model
 {
@@ -42,6 +48,10 @@ class Type extends Model
         'panels',
         'icon',
         'records_per_page',
+        'support_export',
+        'export_controller',
+        'support_import',
+        'import_controller'
     ];
 
     /**
@@ -62,6 +72,24 @@ class Type extends Model
     {
         if(is_null($value)) {
             return CrudController::class;
+        }
+
+        return $value;
+    }
+
+    public function getExportControllerAttribute($value)
+    {
+        if(is_null($value)) {
+            return ExportController::class;
+        }
+
+        return $value;
+    }
+
+    public function getImportControllerAttribute($value)
+    {
+        if(is_null($value)) {
+            return ImportController::class;
         }
 
         return $value;
@@ -256,7 +284,11 @@ class Type extends Model
             'side_panels',
             'icon',
             'exists',
-            'records_per_page'
+            'records_per_page',
+            'support_export',
+            'export_controller',
+            'support_import',
+            'import_controller'
         ];
 
         $array = [];

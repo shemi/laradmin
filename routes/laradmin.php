@@ -85,6 +85,7 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        /** @var \Shemi\Laradmin\Models\Type $type */
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 
             Route::get("/{$type->slug}/query", [
@@ -98,6 +99,20 @@ Route::group(
                 "as" => "{$type->slug}.destroyMany",
                 "middleware" => "laradmin.user.admin"
             ]);
+
+            if($type->support_export) {
+                Route::post("/{$type->slug}/export", [
+                    "uses" => "{$type->export_controller}@prepare",
+                    "as" => "{$type->slug}.export",
+                    "middleware" => "laradmin.user.admin"
+                ]);
+
+                Route::get("/{$type->slug}/export", [
+                    "uses" => "{$type->export_controller}@export",
+                    "as" => "{$type->slug}.export",
+                    "middleware" => "laradmin.user.admin"
+                ]);
+            }
 
             Route::resource($type->slug, $type->controller, [
                 "middleware" => "laradmin.user.admin"

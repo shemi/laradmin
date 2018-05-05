@@ -10,6 +10,7 @@ use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeRequestValidatorRepository;
 use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Repositories\QueryRepository;
 
 class CrudController extends Controller
 {
@@ -72,103 +73,7 @@ class CrudController extends Controller
             return $this->responseUnauthorized($request);
         }
 
-
-        $orderBy = $request->input('order_by');
-        $orderDirection = $request->input('order', 'desc');
-        $search = $request->input('search');
-
-        $model = app($type->model);
-        $query = $model::select('*');
-        $primaryKey = $model->getKeyName();
-
-        if ($model->timestamps && ! $orderBy) {
-            $orderBy = 'created_at';
-        }
-
-        $relationships = $type->relationships;
-        $relationshipsSearch = [];
-
-        if($search && ! empty($search)) {
-            foreach ($type->searchable_fields as $index => $field) {
-                $s = $field->search_comparison === 'like' ? "%{$search}%" : $search;
-
-                if(count(explode('.', $field->key)) > 1) {
-                    $keyParts = explode('.', $field->key);
-                    $relationKey = array_shift($keyParts);
-
-                    if(! array_key_exists($relationKey, $relationshipsSearch)) {
-                        $relationshipsSearch[$relationKey] = [];
-                    }
-
-                    $relationshipsSearch[$relationKey][] = $field;
-                } else {
-                    if($index === 0) {
-                        $query->where($field->key, $field->search_comparison, $s);
-                    } else {
-                        $query->orWhere($field->key, $field->search_comparison, $s);
-                    }
-                }
-            }
-
-            if($type->has_relationships) {
-                if(count($relationshipsSearch)) {
-                    foreach ($relationshipsSearch as $key => $fields) {
-                        if(in_array($key, $relationships)) {
-                            unset($relationships[array_search($key, $relationships)]);
-                        }
-
-                        $relationships[$key] = function($query) use ($fields, $search) {
-                            foreach ($fields as $index => $field) {
-                                $s = $field->search_comparison === 'like' ? "%{$search}%" : $search;
-                                $key = $field->key;//preg_replace("/([^\.]*)(\.)(\S*)/", "roles.$3", $field->key);
-
-                                if($index === 0) {
-                                    $query->where($key, $field->search_comparison, $s);
-                                } else {
-                                    $query->orWhere($key, $field->search_comparison, $s);
-                                }
-                            }
-                        };
-                    }
-                }
-            }
-        }
-
-
-        if($type->has_relationships) {
-            $query->with((array) $relationships);
-        }
-
-        $query->orderBy($orderBy ?: $primaryKey, $orderDirection);
-
-        try {
-            $results = $query
-                ->paginate($type->records_per_page);
-        } catch (\Exception $exception) {
-            dd($exception->getMessage());
-        }
-
-        $primaryKey = $model->getKeyName();
-
-        $hasPrimaryKeyField = (bool) $type->browse_columns
-            ->where('key', $primaryKey)
-            ->count();
-
-        $results->getCollection()
-            ->transform(function ($model) use ($type, $hasPrimaryKeyField, $primaryKey) {
-                $return = [];
-
-                foreach ($type->browse_columns as $column) {
-                    $return[$column->key] = $column->getBrowseValue($model);
-                }
-
-                if(! $hasPrimaryKeyField) {
-                    $return[$primaryKey] = $model->getKey();
-                }
-
-                return $return;
-            });
-
+        $results = QueryRepository::query($request, $type);
 
         return $this->response($results->toArray());
     }

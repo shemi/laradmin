@@ -48,7 +48,7 @@ trait HasBrowseSettings
 
     public function getSearchableAttribute()
     {
-        return data_get($this->browse_settings, 'searchable', false) && ! $this->is_relationship;
+        return data_get($this->browse_settings, 'searchable', false);
     }
 
     public function getSearchComparisonAttribute()
@@ -80,7 +80,13 @@ trait HasBrowseSettings
             case 'select':
             case 'radio':
                 if($this->is_relationship && $rModel = $model->{$this->key}) {
-                    return $rModel->getAttribute($this->relationship['label']);
+                    $labels = "";
+
+                    foreach ($this->relation_labels as $label) {
+                        $labels .= $rModel->getAttribute($label).', ';
+                    }
+
+                    return trim($labels, ', ');
                 }
 
                 return $model->getAttribute($this->key);
@@ -120,8 +126,16 @@ trait HasBrowseSettings
                     }
 
                     return $model->{$this->key}
-                        ->pluck($this->relationship['label'])
-                        ->implode(', ');
+                        ->map(function($model) {
+                            $labels = "";
+
+                            foreach ($this->relation_labels as $label) {
+                                $labels .= $model->getAttribute($label).', ';
+                            }
+
+                            return trim($labels, ', ');
+                        })
+                        ->implode(' <b>|</b> ');
                 }
 
                 return $model->getAttribute($this->key);

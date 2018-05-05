@@ -37,12 +37,21 @@ class TypesBuilderControllerTest extends AbstractControllerTest
             ->assertStatus(403);
     }
 
-    protected function getValidTypeArray($name = 'new type', $controller = null, $model = null, $panels = null)
+    protected function getValidTypeArray($name = 'new type',
+                                         $controller = null,
+                                         $model = null,
+                                         $panels = null,
+                                         $export_controller = null,
+                                         $import_controller = null)
     {
         return [
             'name' => $name,
             'model' => $model ?: TestUser::class,
             'controller' => $controller ?: CrudController::class,
+            'support_export' => $export_controller ? true : false,
+            'export_controller' => $export_controller,
+            'support_import' => $import_controller ? true : false,
+            'import_controller' => $import_controller,
             'icon' => null,
             'records_per_page' => 25,
             'panels' => $panels ?: [
@@ -124,6 +133,49 @@ class TypesBuilderControllerTest extends AbstractControllerTest
     }
 
     /** @test */
+    public function is_making_sure_that_the_import_controller_class_exists_and_valid()
+    {
+        $this->actingAs($this->createUser([], 'admin_with_types_access'));
+
+        $this->postJson(
+            route('laradmin.types.store'),
+            $this->getValidTypeArray(
+                'new type',
+                null,
+                null,
+                null,
+                null,
+                '\App\DoesNotExistsController'
+            )
+        )
+        ->assertStatus(422)
+        ->assertJsonValidationErrors([
+            'import_controller'
+        ]);
+    }
+
+    /** @test */
+    public function is_making_sure_that_the_export_controller_class_exists_and_valid()
+    {
+        $this->actingAs($this->createUser([], 'admin_with_types_access'));
+
+        $this->postJson(
+            route('laradmin.types.store'),
+            $this->getValidTypeArray(
+                'new type',
+                null,
+                null,
+                null,
+                '\App\DoesNotExistsController'
+            )
+        )
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'export_controller'
+            ]);
+    }
+
+    /** @test */
     public function a_user_can_crate_type_if_have_permission()
     {
         $this->actingAs($this->createUser([], 'admin_with_types_access'));
@@ -178,23 +230,17 @@ class TypesBuilderControllerTest extends AbstractControllerTest
 
         $this->putJson(
             route('laradmin.types.update', ['type' => $type->slug]),
-            [
-                'name' => 'New Test',
-                'controller' => TestCrudController::class,
-                'model' => User::class,
-                'panels' => (array) [
-                    [
-                        'id' => '123456',
-                        'has_container' => true,
-                        'is_main_meta' => false,
-                        'position' => 'main',
-                        'style' => (object) [],
-                        'title' => 'cool',
-                        'fields' => (array) []
-                    ]
-                ],
-                'records_per_page' => 10
-            ]
+            $this->getValidTypeArray('New Test', TestCrudController::class, User::class, (array) [
+                [
+                    'id' => '123456',
+                    'has_container' => true,
+                    'is_main_meta' => false,
+                    'position' => 'main',
+                    'style' => (object) [],
+                    'title' => 'cool',
+                    'fields' => (array) []
+                ]
+            ])
         )
         ->assertStatus(200);
 
@@ -204,7 +250,6 @@ class TypesBuilderControllerTest extends AbstractControllerTest
         $this->assertEquals(str_slug('New Test'), $type->slug);
         $this->assertEquals(TestCrudController::class, $type->controller);
         $this->assertEquals(User::class, $type->model);
-        $this->assertEquals(10, $type->records_per_page);
         $this->assertCount(1, $type->panels);
     }
 

@@ -23,7 +23,11 @@ return [
         'side_panels' => 'Side Panels',
         'add_panel' => 'Add Panel',
         'columns' => 'Browse Columns',
-        'add_column' => 'Add Column'
+        'add_column' => 'Add Column',
+        'support_export' => 'Support Export',
+        'export_controller' => 'Export Controller',
+        'support_import' => 'Support Import',
+        'import_controller' => 'Import Controller',
     ]
 
 ];
