@@ -73,6 +73,12 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::get('relationship-all/{typeSlug}/{fieldKey}', [
+            "uses" => "{$namespacePrefix}RelationshipController@getAll",
+            "as" => "relationship.all",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         Route::get('relationship-query/{typeSlug}/{fieldKey}', [
             "uses" => "{$namespacePrefix}RelationshipController@query",
             "as" => "relationship.query",

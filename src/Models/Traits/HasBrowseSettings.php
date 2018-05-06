@@ -21,6 +21,7 @@ use Shemi\Laradmin\Contracts\FieldHasBrowseValue;
  * @property boolean $sortable
  * @property boolean $searchable
  * @property boolean $search_comparison
+ * @property boolean $filterable
  */
 
 trait HasBrowseSettings
@@ -54,6 +55,13 @@ trait HasBrowseSettings
     public function getSearchComparisonAttribute()
     {
         return data_get($this->browse_settings, 'search_comparison', '=');
+    }
+
+    public function getFilterableAttribute()
+    {
+        return $this->is_relationship &&
+            $this->searchable &&
+            $this->search_comparison !== 'like';
     }
 
     public function getBrowseValue(EloquentModel $model)

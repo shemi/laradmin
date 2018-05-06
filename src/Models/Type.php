@@ -26,6 +26,7 @@ use Shemi\Laradmin\Http\Controllers\ImportController;
  * @property Collection $edit_fields
  * @property Collection $create_fields
  * @property Collection $searchable_fields
+ * @property Collection $filterable_fields
  * @property Collection $side_panels
  * @property Collection $main_panels
  * @property boolean $support_export
@@ -187,7 +188,17 @@ class Type extends Model
     {
         return $this->fields
             ->reject(function($field) {
-                return ! $field->searchable;
+                return ! $field->searchable||$field->filterable;
+            })
+            ->sortBy('browse_order')
+            ->values();
+    }
+
+    public function getFilterableFieldsAttribute()
+    {
+        return $this->fields
+            ->reject(function($field) {
+                return ! $field->filterable;
             })
             ->sortBy('browse_order')
             ->values();

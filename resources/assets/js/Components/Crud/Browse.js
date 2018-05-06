@@ -11,7 +11,7 @@ export default {
         [FormatDate, deleteMixin, ServerError]
     ),
 
-    props: ['typeName', 'typeSlug'],
+    props: ['typeName', 'typeSlug', 'filterableFields'],
 
     data() {
         return {
@@ -20,9 +20,11 @@ export default {
             selected: {},
             search: "",
             searchClock: null,
+            filtersData: {},
             query: {
                 order_by: null,
                 order: null,
+                filters: {},
                 page: 1,
                 search: ""
             },
@@ -33,6 +35,15 @@ export default {
     },
 
     created() {
+        for(let key of this.filterableFields) {
+            this.$set(this.query.filters, key, null);
+            this.$set(this.filtersData, key, {
+                data: {},
+                loaded: false,
+                loading: false
+            });
+        }
+
         this.fetchData();
     },
 
@@ -81,6 +92,11 @@ export default {
             }.bind(this), 300);
         },
 
+        onFilter() {
+            this.$set(this.query, 'page', 1);
+            this.fetchData();
+        },
+
         onExport() {
             this.$dialog.alert('SOON!');
         },
@@ -100,6 +116,25 @@ export default {
             );
 
             this.fetchData();
+        },
+
+        fetchFilterData(fieldKey) {
+            if(this.filtersData[fieldKey]['loaded']) {
+                return;
+            }
+
+            this.$set(this.filtersData[fieldKey], 'loading', true);
+
+            LaHttp.get(`relationship-all/${this.typeSlug}/${fieldKey}`)
+                .then(({data}) => {
+                    this.$set(this.filtersData[fieldKey], 'data', data.data);
+                    this.$set(this.filtersData[fieldKey], 'loading', false);
+                    this.$set(this.filtersData[fieldKey], 'loaded', true);
+                })
+                .catch(err => {
+                    this.alertServerError(err);
+                    this.$set(this.filtersData[fieldKey], 'loading', false);
+                });
         }
 
     },

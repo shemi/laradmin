@@ -14,10 +14,10 @@ class QueryRepository implements QueryRepositoryContract
 
     const ORDER_BY_REQUEST_KEY = 'order_by';
     const ORDER_DIRECTION_REQUEST_KEY = 'order';
-    const DEFAULT_ORDER_DIRECTION = 'desc';
 
     const SEARCH_TERM_REQUEST_KEY = 'search';
 
+    const FILTERS_REQUEST_KEY = 'filters';
 
     /**
      * @var Type
@@ -73,10 +73,32 @@ class QueryRepository implements QueryRepositoryContract
     public static function query(Request $request, Type $type)
     {
         return (new static($request, $type))
+            ->filter()
             ->search()
             ->order()
             ->load()
             ->paginate();
+    }
+
+    protected function filter()
+    {
+        if($this->type->filterable_fields->isEmpty() || ! $this->hasFilters()) {
+            return $this;
+        }
+
+        $this->query->where(function($query) {
+            /** @var Field $field */
+            foreach ($this->type->filterable_fields as $index => $field) {
+                $filterKeys = $this->getFilter($field->key);
+                $relationModel = $field->getRelationModelClass($this->model);
+
+                $query->whereHas($field->key, function($query) use ($field, $filterKeys, $relationModel) {
+                    $query->whereIn($relationModel->getKeyName(), $filterKeys);
+                });
+            }
+        });
+
+        return $this;
     }
 
     protected function search()
@@ -96,19 +118,21 @@ class QueryRepository implements QueryRepositoryContract
             }
         }
 
-        $this->addWhere()
-            ->addWhereHas();
+        $this->query->where(function($query) {
+            $this->addWhere($query)
+                ->addWhereHas($query);
+        });
 
         return $this;
     }
 
-    protected function addWhere()
+    protected function addWhere($query)
     {
         if($this->whereFields->isEmpty()) {
             return $this;
         }
 
-        $this->query->where(function($query) {
+        $query->where(function($query) {
             foreach ($this->whereFields as $index => $field) {
                 $term = $this->getSearchTerm();
                 $term = $field->search_comparison === 'like' ? "%{$term}%" : $term;
@@ -121,7 +145,7 @@ class QueryRepository implements QueryRepositoryContract
         return $this;
     }
 
-    protected function addWhereHas()
+    protected function addWhereHas($query)
     {
         if($this->whereHasFields->isEmpty()) {
             return $this;
@@ -129,7 +153,7 @@ class QueryRepository implements QueryRepositoryContract
 
         $method = $this->whereFields->isEmpty() ? 'where' : 'orWhere';
 
-        $this->query->{$method}(function($query) {
+        $query->{$method}(function($query) {
             /** @var Field $field */
             foreach ($this->whereHasFields as $index => $field) {
                 $term = $this->getSearchTerm();
@@ -197,6 +221,18 @@ class QueryRepository implements QueryRepositoryContract
             });
 
         return $results;
+    }
+
+    protected function getFilter($for = null)
+    {
+        $key = $for ? static::FILTERS_REQUEST_KEY.'.'.$for : static::FILTERS_REQUEST_KEY;
+
+        return array_filter(array_values((array) $this->request->input($key, [])));
+    }
+
+    protected function hasFilters()
+    {
+        return ! empty($this->getFilter());
     }
 
     protected function getOrderBy()

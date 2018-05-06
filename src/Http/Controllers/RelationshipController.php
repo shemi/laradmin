@@ -11,13 +11,40 @@ use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 class RelationshipController extends Controller
 {
 
+    public function getAll($typeSlug, $fieldKey, Request $request)
+    {
+        $type = $this->getTypeBySlug($typeSlug);
+        /** @var Field $field */
+        $field = $this->findFieldByKey($type, $fieldKey);
+
+        if(! $field) {
+            return $this->responseNotFound();
+        }
+
+        $typeModel = app($type->model);
+        /** @var Model $relationModel */
+        $relationModel = $field->getRelationModelClass($typeModel);
+        $label = $field->relation_labels[0];
+
+        $results = $relationModel->select($relationModel->getKeyName(), $label)
+            ->latest()
+            ->get();
+
+        $data = [];
+
+        /** @var Model $model */
+        foreach ($results as $model) {
+            $data[$model->getKey()] = $model->getAttribute($label);
+        }
+
+        return $this->response($data);
+    }
+
     public function query($typeSlug, $fieldKey, Request $request)
     {
         $type = $this->getTypeBySlug($typeSlug);
         /** @var Field $field */
-        $field = $type->fields->first(function(Field $field) use ($fieldKey) {
-            return $field->key === $fieldKey;
-        });
+        $field = $this->findFieldByKey($type, $fieldKey);
 
         if(! $field) {
             return $this->responseNotFound();
@@ -64,9 +91,7 @@ class RelationshipController extends Controller
     {
         $type = $this->getTypeBySlug($typeSlug);
         /** @var Field $field */
-        $field = $type->fields->first(function(Field $field) use ($fieldKey) {
-            return $field->key === $fieldKey;
-        });
+        $field = $this->findFieldByKey($type, $fieldKey);
 
         if(! $field) {
             return $this->responseNotFound();
@@ -98,6 +123,13 @@ class RelationshipController extends Controller
         return $this->response(
             $field->transformRelationModel($relationModel->fresh())
         );
+    }
+
+    protected function findFieldByKey(Type $type, $fieldKey)
+    {
+        return $type->fields->first(function(Field $field) use ($fieldKey) {
+            return $field->key === $fieldKey;
+        });
     }
 
 }

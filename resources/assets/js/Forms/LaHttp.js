@@ -1,3 +1,4 @@
+import qs from 'qs';
 
 class LaHttp {
 
@@ -20,7 +21,12 @@ class LaHttp {
      * Helper method for making GET HTTP requests.
      */
     get(uri, params) {
-        return this.axios.get(this.uri(uri), {params});
+        return this.axios.get(this.uri(uri), {
+            params,
+            paramsSerializer(params) {
+                return qs.stringify(params, {arrayFormat: 'repeat'});
+            }
+        });
     }
 
 

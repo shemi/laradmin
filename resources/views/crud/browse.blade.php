@@ -8,9 +8,52 @@
 
     <crud-browse type-name="{{ $type->name }}"
                  type-slug="{{ $type->slug }}"
+                 :filterable-fields="{{ json_encode($type->filterable_fields->pluck('key'), JSON_UNESCAPED_UNICODE) }}"
                  inline-template>
 
         <section class="section">
+
+            <div class="level">
+                <div class="level-left">
+                    @foreach($type->filterable_fields as $field)
+                        <b-field>
+                            <b-select placeholder="Filter by {{ $field->browse_label }}"
+                                      v-model="query.filters['{{ $field->key }}']"
+                                      @focus="fetchFilterData('{{ $field->key }}')"
+                                      @input="onFilter"
+                                      :loading="filtersData['{{ $field->key }}']['loading']">
+
+                                <option :value="null" disabled v-if="filtersData['{{ $field->key }}']['loading']">
+                                    Loading...
+                                </option>
+
+                                <option :value="null" v-if="filtersData['{{ $field->key }}']['loaded']">
+                                    Filter by {{ $field->browse_label }}
+                                </option>
+
+                                <option v-for="(label, key) in filtersData['{{ $field->key }}']['data']"
+                                        :key="key"
+                                        :value="key">
+                                    @{{ label }}
+                                </option>
+
+                            </b-select>
+                        </b-field>
+                    @endforeach
+                </div>
+
+                <div class="level-right">
+                    @if($type->searchable_fields->isNotEmpty())
+                        <b-field>
+                            <b-input placeholder="Search..."
+                                     v-model="search"
+                                     @input="onSearch"
+                                     type="search" icon="search">
+                            </b-input>
+                        </b-field>
+                    @endif
+                </div>
+            </div>
 
             <div class="level">
                 <div class="level-left">
@@ -25,6 +68,10 @@
                                 </span>
                             </a>
                         </p>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="field has-addons">
                         <p class="control">
                             <a class="button" @click.prevent="onExport">
                                 <b-icon icon="download"></b-icon>
@@ -38,15 +85,6 @@
                             </a>
                         </p>
                     </div>
-                </div>
-                <div class="level-right">
-                    <b-field>
-                        <b-input placeholder="Search..."
-                                 v-model="search"
-                                 @input="onSearch"
-                                 type="search" icon="search">
-                        </b-input>
-                    </b-field>
                 </div>
             </div>
 
@@ -64,6 +102,7 @@
                      default-sort="{{ $type->default_sort }}"
                      default-sort-direction="{{ $type->default_sort_direction }}"
                      @sort="onSort"
+                     :current-page="query.page"
                      @page-change="onPageChange"
                      :checked-rows.sync="checkedRows">
 
