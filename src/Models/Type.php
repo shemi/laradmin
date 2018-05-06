@@ -32,6 +32,8 @@ use Shemi\Laradmin\Http\Controllers\ImportController;
  * @property string $export_controller
  * @property boolean $support_import
  * @property string $import_controller
+ * @property string $default_sort
+ * @property string $default_sort_direction
  */
 class Type extends Model
 {
@@ -51,7 +53,9 @@ class Type extends Model
         'support_export',
         'export_controller',
         'support_import',
-        'import_controller'
+        'import_controller',
+        'default_sort',
+        'default_sort_direction'
     ];
 
     /**
@@ -72,6 +76,32 @@ class Type extends Model
     {
         if(is_null($value)) {
             return CrudController::class;
+        }
+
+        return $value;
+    }
+
+    public function getDefaultSortAttribute($value)
+    {
+        if(is_null($value)) {
+            $field = $this->browse_columns
+                ->where('sortable', '===', true)
+                ->first();
+
+            if($field) {
+                return $field->key;
+            }
+
+            return $this->model ? app($this->model)->getKeyName() : null;
+        }
+
+        return $value;
+    }
+
+    public function getDefaultSortDirectionAttribute($value)
+    {
+        if(is_null($value)) {
+            return 'DESC';
         }
 
         return $value;
@@ -288,7 +318,9 @@ class Type extends Model
             'support_export',
             'export_controller',
             'support_import',
-            'import_controller'
+            'import_controller',
+            'default_sort',
+            'default_sort_direction'
         ];
 
         $array = [];

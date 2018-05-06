@@ -26,7 +26,9 @@ export default {
             this.isActive = value;
 
             if(value) {
-                this.fetchIcons();
+                this.$nextTick(function() {
+                    this.fetchIcons();
+                });
             }
         }
     },
@@ -61,10 +63,18 @@ export default {
                 return;
             }
 
+            const loadingComponent = this.$loading.open({
+                container: this.$refs.element
+            });
+
             LaHttp.get('/icons')
                 .then(({ data }) => {
                     this.icons = data.data.icons;
                     icons = data.data.icons;
+                    loadingComponent.close();
+                })
+                .catch(err => {
+                    loadingComponent.close();
                 });
 
         }

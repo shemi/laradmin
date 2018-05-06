@@ -203,8 +203,8 @@ class QueryRepository implements QueryRepositoryContract
     {
         $orderBy = $this->request->input(static::ORDER_BY_REQUEST_KEY);
 
-        if ($this->model->timestamps && ! $orderBy) {
-            $orderBy = $this->model->getCreatedAtColumn();
+        if (! $orderBy) {
+            $orderBy = $this->type->default_sort;
         }
 
         return $orderBy;
@@ -214,7 +214,7 @@ class QueryRepository implements QueryRepositoryContract
     {
         return $this->request->input(
             static::ORDER_DIRECTION_REQUEST_KEY,
-            static::DEFAULT_ORDER_DIRECTION
+            $this->type->default_sort_direction
         );
     }
 

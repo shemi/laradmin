@@ -103,11 +103,9 @@
                          :message="itemForm.errors.has('icon') ? itemForm.errors.get('icon') : ''">
 
                     <b-field>
-                        <p class="control icon-only-addon">
-                            <b-icon :icon="itemForm.icon"></b-icon>
-                        </p>
                         <b-input type="text"
                                  expanded
+                                 :icon="itemForm.icon"
                                  v-model="itemForm.icon">
                         </b-input>
                         <p class="control">

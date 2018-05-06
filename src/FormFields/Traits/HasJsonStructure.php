@@ -18,7 +18,7 @@ trait HasJsonStructure
             'default_value' => null,
             'validation' => [],
             'relationship' => null,
-            'visibility' => ["browse", "create", "edit"],
+            'visibility' => ["create", "edit"],
             'template_options' => [
                 'show_if' => null
             ],

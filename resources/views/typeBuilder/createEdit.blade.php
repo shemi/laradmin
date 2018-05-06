@@ -39,6 +39,7 @@
                                             </b-field>
                                         </div>
                                     </div>
+
                                     <div class="columns">
                                         <div class="column">
                                             <b-field :type="form.errors.has('controller') ? 'is-danger' : ''"
@@ -58,6 +59,7 @@
                                             </b-field>
                                         </div>
                                     </div>
+
                                     <div class="columns">
                                         <div class="column">
                                             <b-field :type="form.errors.has('records_per_page') ? 'is-danger' : ''"
@@ -72,11 +74,9 @@
                                                      label="@lang('laradmin::menus.builder.item_icon')"
                                                      :message="form.errors.has('icon') ? form.errors.get('icon') : ''">
                                                 <b-field>
-                                                    <p class="control icon-only-addon">
-                                                        <b-icon :icon="form.icon"></b-icon>
-                                                    </p>
                                                     <b-input type="text"
                                                              expanded
+                                                             :icon="form.icon"
                                                              v-model="form.icon">
                                                     </b-input>
                                                     <p class="control">
@@ -87,6 +87,37 @@
                                                         </button>
                                                     </p>
                                                 </b-field>
+                                            </b-field>
+                                        </div>
+                                    </div>
+
+                                    <div class="columns" v-if="browseColumns.length > 0">
+                                        <div class="column">
+                                            <b-field :type="form.errors.has('default_sort') ? 'is-danger' : ''"
+                                                     :message="form.errors.has('default_sort') ? form.errors.get('default_sort') : ''"
+                                                     label="@lang('laradmin::type-builder.builder.default_sort')">
+                                                <b-select v-model="form.default_sort"
+                                                          icon="sort"
+                                                          expanded>
+                                                    <option v-for="option in browseColumns"
+                                                            :disabled="! option.browse_settings.sortable"
+                                                            :key="option.id"
+                                                            :value="option.key">
+                                                        @{{ option.browse_settings.label || option.label }}
+                                                    </option>
+                                                </b-select>
+                                            </b-field>
+                                        </div>
+                                        <div class="column">
+                                            <b-field :type="form.errors.has('default_sort_direction') ? 'is-danger' : ''"
+                                                     :message="form.errors.has('default_sort_direction') ? form.errors.get('default_sort_direction') : ''"
+                                                     label="@lang('laradmin::type-builder.builder.default_sort_direction')">
+                                                <b-select v-model="form.default_sort_direction"
+                                                          :icon="'sort-amount-' + form.default_sort_direction.toLowerCase()"
+                                                          expanded>
+                                                    <option value="ASC">ASC</option>
+                                                    <option value="DESC">DESC</option>
+                                                </b-select>
                                             </b-field>
                                         </div>
                                     </div>

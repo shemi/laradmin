@@ -167,7 +167,9 @@ class TypesBuilderController extends Controller
             'support_import' => 'nullable|boolean',
             'import_controller' => 'required_if:support_import,true',
             'records_per_page' => 'required|numeric',
-            'panels' => 'required|array'
+            'panels' => 'required|array',
+            'default_sort' => 'nullable',
+            'default_sort_direction' => 'nullable|in:DESC,ASC'
         ]);
 
         $errors = [];
@@ -212,6 +214,8 @@ class TypesBuilderController extends Controller
         $type->export_controller = $data['export_controller'];
         $type->support_import = (boolean) $data['support_import'];
         $type->import_controller = $data['import_controller'];
+        $type->default_sort = $data['default_sort'];
+        $type->default_sort_direction = $data['default_sort_direction'];
 
         $data['saved'] = $type->save();
 

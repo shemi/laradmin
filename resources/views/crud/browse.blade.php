@@ -58,13 +58,12 @@
                      mobile-cards
                      paginated
                      backend-pagination
-
                      :total="data.total"
                      :per-page="{{ $type->records_per_page }}"
                      backend-sorting
-                     default-sort="id"
+                     default-sort="{{ $type->default_sort }}"
+                     default-sort-direction="{{ $type->default_sort_direction }}"
                      @sort="onSort"
-
                      @page-change="onPageChange"
                      :checked-rows.sync="checkedRows">
 

@@ -136,11 +136,11 @@
 
             </form>
 
-            @include('laradmin::menus.blade.createEditModal')
-
             <icon-select-modal :active.sync="isIconSelectModalActive"
                                :selected-icon.sync="itemForm.icon">
             </icon-select-modal>
+
+            @include('laradmin::menus.blade.createEditModal')
 
         </div>
 
