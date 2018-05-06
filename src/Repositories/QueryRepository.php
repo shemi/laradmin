@@ -90,6 +90,11 @@ class QueryRepository implements QueryRepositoryContract
             /** @var Field $field */
             foreach ($this->type->filterable_fields as $index => $field) {
                 $filterKeys = $this->getFilter($field->key);
+
+                if(empty($filterKeys)) {
+                    continue;
+                }
+
                 $relationModel = $field->getRelationModelClass($this->model);
 
                 $query->whereHas($field->key, function($query) use ($field, $filterKeys, $relationModel) {

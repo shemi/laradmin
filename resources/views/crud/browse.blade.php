@@ -15,31 +15,31 @@
 
             <div class="level">
                 <div class="level-left">
-                    @foreach($type->filterable_fields as $field)
-                        <b-field>
-                            <b-select placeholder="Filter by {{ $field->browse_label }}"
-                                      v-model="query.filters['{{ $field->key }}']"
-                                      @focus="fetchFilterData('{{ $field->key }}')"
-                                      @input="onFilter"
-                                      :loading="filtersData['{{ $field->key }}']['loading']">
+                    <b-field>
+                        @foreach($type->filterable_fields as $field)
+                                <b-select placeholder="Filter by {{ $field->browse_label }}"
+                                          v-model="query.filters['{{ $field->key }}']"
+                                          @focus="fetchFilterData('{{ $field->key }}')"
+                                          @input="onFilter"
+                                          :loading="filtersData['{{ $field->key }}']['loading']">
 
-                                <option :value="null" disabled v-if="filtersData['{{ $field->key }}']['loading']">
-                                    Loading...
-                                </option>
+                                    <option :value="null" disabled v-if="filtersData['{{ $field->key }}']['loading']">
+                                        Loading...
+                                    </option>
 
-                                <option :value="null" v-if="filtersData['{{ $field->key }}']['loaded']">
-                                    Filter by {{ $field->browse_label }}
-                                </option>
+                                    <option :value="null" v-if="filtersData['{{ $field->key }}']['loaded']">
+                                        Filter by {{ $field->browse_label }}
+                                    </option>
 
-                                <option v-for="(label, key) in filtersData['{{ $field->key }}']['data']"
-                                        :key="key"
-                                        :value="key">
-                                    @{{ label }}
-                                </option>
+                                    <option v-for="(label, key) in filtersData['{{ $field->key }}']['data']"
+                                            :key="key"
+                                            :value="key">
+                                        @{{ label }}
+                                    </option>
 
-                            </b-select>
-                        </b-field>
-                    @endforeach
+                                </b-select>
+                        @endforeach
+                    </b-field>
                 </div>
 
                 <div class="level-right">

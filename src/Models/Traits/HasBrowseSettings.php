@@ -128,6 +128,7 @@ trait HasBrowseSettings
             case 'select_multiple':
             case 'checkboxes':
             case 'repeater':
+            case 'relationship':
                 if($this->is_relationship) {
                     if(! $model->{$this->key}) {
                         return 'Relation error!';
