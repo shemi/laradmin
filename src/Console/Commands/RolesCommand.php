@@ -41,9 +41,6 @@ class RolesCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
-
-
     }
 
     public function handle()
@@ -74,7 +71,7 @@ class RolesCommand extends Command
 
         $types = Type::all();
         foreach ($types as $type) {
-            $slug = str_plural($type->slug);
+            $slug = $type->slug;
 
             foreach ($this->permissions as $permission) {
                 $this->createPermission("{$permission} {$slug}", $adminRole);
