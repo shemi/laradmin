@@ -12,7 +12,7 @@
                  :form.sync="{{ trim($field->form_prefix, '.') }}">
 
         <template slot-scope="props">
-            @foreach($field->fields as $repeaterField)
+            @foreach($field->getSubFields() as $repeaterField)
                 <la-repeater-row field="{{ $repeaterField->key }}"
                                  label="{{ $repeaterField->label }}">
                     {{ $repeaterField->render($fieldsType, $fieldsModel, $fieldsData) }}

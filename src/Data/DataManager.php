@@ -265,12 +265,12 @@ class DataManager
 
     public function __call($name, $arguments)
     {
-        return $this->dir()->$name(...$arguments);
+        return $this->dir()->{$name}(...$arguments);
     }
 
     public static function __callStatic($name, $arguments)
     {
-        return (new static)->$name(...$arguments);
+        return (new static)->{$name}(...$arguments);
     }
 
 }

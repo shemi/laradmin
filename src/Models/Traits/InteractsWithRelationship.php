@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\HasMediaContract;
+use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
 /**
@@ -121,6 +122,12 @@ trait InteractsWithRelationship
             return $collection->pluck($this->relation_key);
         }
 
+        if($this->getSubFields() && $this->getSubFields()->isNotEmpty()) {
+            return $collection->transform(function($model) {
+                return $this->transformRepeaterRelationModel($model);
+            });
+        }
+
         return $collection->transform(function($model) {
             return $this->transformRelationModel($model);
         });
@@ -164,6 +171,22 @@ trait InteractsWithRelationship
             $return['edit_link'] = route("laradmin.{$type->slug}.edit", [
                 "{$type->slug}" => $model->id
             ]);
+        }
+
+        return $return;
+    }
+
+    public function transformRepeaterRelationModel(EloquentModel $model)
+    {
+        if(! $this->fields) {
+            return [];
+        }
+
+        $return = [];
+
+        /** @var Field $field */
+        foreach ($this->getSubFields() as $field) {
+            $return[$field->key] = $field->getModelValue($model);
         }
 
         return $return;

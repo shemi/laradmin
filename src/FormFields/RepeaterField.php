@@ -44,7 +44,7 @@ class RepeaterField extends FormFormField
 
     public function getValidationRoles(Field $field)
     {
-        $fields = $field->fields;
+        $fields = $field->getSubFields();
 
         $roles = [];
 
@@ -90,7 +90,7 @@ class RepeaterField extends FormFormField
 
         foreach ($data as $row) {
             /** @var Field $childField */
-            foreach ($field->fields as $childField) {
+            foreach ($field->getSubFields() as $childField) {
                 $value = array_get($row, $childField->key, $childField->getDefaultValue());
                 $row[$childField->key] = $childField->transformRequest($value);
             }
@@ -110,7 +110,7 @@ class RepeaterField extends FormFormField
         }
 
         $values->transform(function($row) use ($field) {
-            foreach ($field->fields as $field) {
+            foreach ($field->getSubFields() as $field) {
                 $value = array_get($row, $field->key, $field->getDefaultValue());
 
                 $row[$field->key] = $field->transformResponse($value);
