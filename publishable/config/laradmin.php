@@ -4,6 +4,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Style config
+    |--------------------------------------------------------------------------
+    |
+    | Here you can customize the admin style
+    |
+    */
+
+    'style' => [
+        'name' => 'Laradmin',
+        'logo' => null,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Auth config
     |--------------------------------------------------------------------------
     |
@@ -25,7 +40,7 @@ return [
     'user' => [
         'default_role' => 'user',
         'model' => 'App\\User',
-        'default_avatar' => 'users/default.png'
+        'default_avatar' => '/vendor/laradmin/images/avatar.png'
     ],
 
     /*

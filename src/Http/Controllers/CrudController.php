@@ -9,6 +9,7 @@ use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeRequestValidatorRepository;
+use Laradmin;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Repositories\QueryRepository;
 
@@ -35,13 +36,11 @@ class CrudController extends Controller
         $columns = $type->browse_columns;
         $primaryKey = $model->getKeyName();
 
-        $editRoute = route("laradmin.{$type->slug}.edit", ["{$type->slug}" => "__primaryKey__"]);
-        $editRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $editRoute);
+        $editRoute = Laradmin::editLink($type, $primaryKey);
 
-        $deleteRoute = route("laradmin.{$type->slug}.destroy", ["{$type->slug}" => "__primaryKey__"]);
-        $deleteRoute = str_replace('__primaryKey__', "'+ props.row.{$primaryKey} +'", $deleteRoute);
+        $deleteRoute = Laradmin::destroyLink($type, $primaryKey);
 
-        $deleteManyRoute = route("laradmin.{$type->slug}.destroyMany");
+        $deleteManyRoute = Laradmin::destroyManyLink($type);
 
         return view(
             'laradmin::crud.browse',

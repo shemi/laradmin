@@ -202,6 +202,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function syncRelationData()
     {
         $this->relationFields->each(function(Field $field) {
+
             $relation = $field->getRelationClass($this->model);
             $value = $this->getFieldValue($field);
 

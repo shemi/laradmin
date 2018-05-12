@@ -1,3 +1,7 @@
+html, body {
+  @include scrollbars(0.8rem, $grey-light);
+}
+
 .page {
 
   .content-area {
@@ -6,10 +10,10 @@
   }
 
   .side-menu-holder {
-    position: absolute;
+    position: fixed;
     width: $side-menu-width;
     left: 0;
-    top: 0;
+    top: $navbar-height;
     bottom: 0;
 
     @include scrollbars(0.3rem, $grey-lighter);

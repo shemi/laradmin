@@ -4,7 +4,7 @@
 @endphp
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="has-navbar-fixed-top">
 
 <head>
     <meta charset="utf-8">
@@ -18,7 +18,6 @@
         window.laradmin = {!! app('laradmin')->jsObject() !!}
     </script>
 
-    <script src="https://use.fontawesome.com/a89966cad4.js"></script>
     <link rel="stylesheet" href="{{ laradmin_asset('/css/app.css') }}">
     @yield('styles')
 
