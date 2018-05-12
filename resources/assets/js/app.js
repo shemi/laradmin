@@ -32,6 +32,14 @@ Vue.use(Vddl);
 const app = new Vue({
     el: '#app',
 
+    data: {
+        isLoading: true
+    },
+
+    mounted() {
+        this.isLoading = false;
+    },
+
     components: {
         Login,
         TopBar,
@@ -41,6 +49,11 @@ const app = new Vue({
         BrowseTypes,
         TypeCreateEdit,
         Crud
+    },
+
+    beforeDestroy() {
+        this.isLoading = true;
     }
+
 });
 

@@ -12,6 +12,8 @@ return [
 
     'remember' => 'Remember me',
 
-    'login' => 'Login'
+    'login' => 'Login',
+
+    'subtitle' => 'It gonna blow your mind'
 
 ];

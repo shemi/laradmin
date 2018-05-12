@@ -37,7 +37,7 @@ class QueryRepository implements QueryRepositoryContract
     /**
      * @var Builder
      */
-    protected $query;
+    public $query;
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class QueryRepository implements QueryRepositoryContract
      */
     protected $whereHasFields;
 
-    public function __construct(Request $request, Type $type)
+    public function __construct(Request $request = null, Type $type = null)
     {
         $this->request = $request;
         $this->type = $type;
@@ -78,6 +78,17 @@ class QueryRepository implements QueryRepositoryContract
             ->order()
             ->load()
             ->paginate();
+    }
+
+    public static function customQuery(Type $type, callable $callback)
+    {
+        $inst = (new static(null, $type));
+
+        $callback($inst);
+
+        $inst->load();
+
+        return $inst->get();
     }
 
     protected function filter()
@@ -198,6 +209,13 @@ class QueryRepository implements QueryRepositoryContract
         return $this;
     }
 
+    protected function hasPrimaryKeyField()
+    {
+        return (bool) $this->type->browse_columns
+            ->where('key', $this->primaryKey)
+            ->count();
+    }
+
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -206,26 +224,39 @@ class QueryRepository implements QueryRepositoryContract
         $results = $this->query
             ->paginate($this->type->records_per_page);
 
-        $hasPrimaryKeyField = (bool) $this->type->browse_columns
-            ->where('key', $this->primaryKey)
-            ->count();
+        $hasPrimaryKeyField = $this->hasPrimaryKeyField();
 
         $results->getCollection()
             ->transform(function ($model) use ($hasPrimaryKeyField) {
-                $return = [];
-
-                foreach ($this->type->browse_columns as $column) {
-                    $return[$column->key] = $column->getBrowseValue($model);
-                }
-
-                if(! $hasPrimaryKeyField) {
-                    $return[$this->primaryKey] = $model->getKey();
-                }
-
-                return $return;
+                return $this->transformModel($model, $hasPrimaryKeyField);
             });
 
         return $results;
+    }
+
+    public function get()
+    {
+        $hasPrimaryKeyField = $this->hasPrimaryKeyField();
+
+        return $this->query->get()
+            ->transform(function ($model) use ($hasPrimaryKeyField) {
+                return $this->transformModel($model, $hasPrimaryKeyField);
+            });
+    }
+
+    protected function transformModel($model, $hasPrimaryKeyField)
+    {
+        $return = [];
+
+        foreach ($this->type->browse_columns as $column) {
+            $return[$column->key] = $column->getBrowseValue($model);
+        }
+
+        if(! $hasPrimaryKeyField) {
+            $return[$this->primaryKey] = $model->getKey();
+        }
+
+        return $return;
     }
 
     protected function getFilter($for = null)

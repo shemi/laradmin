@@ -50,9 +50,11 @@
 @section('content')
 
     <div class="content">
-        <h1 class="title is-1">Welcome To Laradmin</h1>
+        <h1 class="title is-1 la-logo">
+            @include('laradmin::layouts.blade.logo')
+        </h1>
         <p class="subtitle is-3">
-            It gonna blow your mind
+            {{ config('laradmin.style.login_subtitle') ?: trans('laradmin::login.subtitle') }}
         </p>
     </div>
 

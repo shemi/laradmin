@@ -14,7 +14,7 @@ return [
     'style' => [
         'name' => 'Laradmin',
         'logo' => null,
-
+        'login_subtitle' => null
     ],
 
     /*

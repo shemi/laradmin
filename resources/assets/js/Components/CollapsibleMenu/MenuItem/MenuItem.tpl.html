@@ -7,7 +7,7 @@
        :class="{'is-active': isActive}">
         <b-icon v-if="item.icon" :icon="item.icon"></b-icon>
         <span class="item-label">{{ item.title }}</span>
-        <b-icon v-if="hasItems" class="collapsible-icon" icon="keyboard_arrow_down"></b-icon>
+        <b-icon v-if="hasItems" class="collapsible-icon" icon="angle-down"></b-icon>
     </a>
 
     <collapsible-menu-group ref="group"

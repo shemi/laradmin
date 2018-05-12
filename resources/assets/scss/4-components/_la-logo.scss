@@ -1,0 +1,30 @@
+.la-logo {
+  font-weight: 600;
+  font-size: 1.6em;
+  color: $primary;
+  display: flex;
+  align-items: flex-end;
+
+  span {
+	line-height: 0.8em;
+	display: inline-block;
+  }
+
+  .logo-art {
+	vertical-align: middle;
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+
+
+	svg {
+	  display: inline-block;
+
+	  path {
+		fill: $primary
+	  }
+
+	}
+
+  }
+}

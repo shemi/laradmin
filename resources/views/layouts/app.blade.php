@@ -1,10 +1,11 @@
 @php
     $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
     $pageTitle = isset($pageTitle) ? ' - '.$pageTitle : '';
+    $hasNavbar = isset($hasNavbar) ? $hasNavbar : true;
 @endphp
 
 <!doctype html>
-<html lang="en" class="has-navbar-fixed-top">
+<html lang="en" class="{{ $hasNavbar ? 'has-navbar-fixed-top' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -28,6 +29,13 @@
     <div id="app">
 
         @yield('main-content')
+
+        <div class="la-page-loading" v-cloak :class="{'is-active': isLoading}">
+            <div class="la-logo">
+                @include('laradmin::layouts.blade.logo')
+            </div>
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
 
     </div>
 

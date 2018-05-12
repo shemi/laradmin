@@ -2,7 +2,7 @@
 $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
 @endphp
 
-@extends('laradmin::layouts.app', ['bodyClass' => 'auth-template' . $bodyClass])
+@extends('laradmin::layouts.app', ['bodyClass' => 'auth-template' . $bodyClass, 'hasNavbar' => false])
 
 @section('main-content')
 

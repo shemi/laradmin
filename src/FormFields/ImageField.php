@@ -68,7 +68,7 @@ class ImageField extends FormFormField implements FieldHasBrowseValue
         ]);
 
 
-        return "<div class='image' style='max-width: 96px'><img src='{$src}'></div>";
+        return "<img src='{$src}'>";
     }
 
     public function structure()

@@ -113,7 +113,14 @@
                                         custom-key="{{ $column->key.$index }}"
                                         {{ $column->sortable ? 'sortable' : '' }}>
 
-                            <div v-html="props.row.{{ $column->key }}"></div>
+                            @switch($column->type)
+                                @case('image')
+                                    <div v-html="props.row.{{ $column->key }}" class="image is-64x64"></div>
+                                    @break
+
+                                @default
+                                    <div v-html="props.row.{{ $column->key }}"></div>
+                            @endswitch
 
                         </b-table-column>
                     @endforeach
