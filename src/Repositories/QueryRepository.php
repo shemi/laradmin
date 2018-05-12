@@ -202,6 +202,16 @@ class QueryRepository implements QueryRepositoryContract
             ->where('is_relationship', '===', true)
             ->pluck('key');
 
+        $this->type->browse_columns->first(function(Field $field) use ($columns) {
+            if($field->is_media) {
+                $columns->push('media');
+
+                return true;
+            }
+
+            return false;
+        });
+
         if($columns->isNotEmpty()) {
             $this->query->with($columns->toArray());
         }

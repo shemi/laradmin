@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\Media;
  * @property int $id
  * @property array|null $relationship
  * @property array $media
+ * @property boolean $is_media
  * @property array $media_disc
  * @property boolean $is_relationship
  * @property string $key
