@@ -8,28 +8,30 @@ use Illuminate\View\View;
 use Shemi\Laradmin\Models\Panel;
 use Shemi\Laradmin\Models\Type;
 
-interface PanelContract
+interface FormPanelContract
 {
 
     /**
      * @param Panel $panel
      * @param Type $type
      * @param Model $model
+     * @param string $viewType
      * @param $data
      *
      * @return HtmlString
      */
-    public function handle(Panel $panel, Type $type, Model $model, $data);
+    public function handle(Panel $panel, Type $type, Model $model, $viewType, $data);
 
     /**
      * @param Panel $panel
      * @param Type $type
      * @param Model $model
+     * @param string $viewType
      * @param $data
      *
      * @return View
      */
-    public function createContent(Panel $panel, Type $type, Model $model, $data);
+    public function createContent(Panel $panel, Type $type, Model $model, $viewType, $data);
 
     /**
      * @return string

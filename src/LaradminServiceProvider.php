@@ -35,7 +35,8 @@ class LaradminServiceProvider extends ServiceProvider
         $this->app->register(\Spatie\MediaLibrary\MediaLibraryServiceProvider::class);
 
         $this->loadHelpers();
-        $this->registerFormFields();
+
+        LaradminFacade::init();
 
         if ($this->app->runningInConsole()) {
             $this->registerPublishableResources();
@@ -104,34 +105,6 @@ class LaradminServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             dirname(__DIR__) . '/publishable/config/medialibrary.php', 'medialibrary'
         );
-    }
-
-    protected function registerFormFields()
-    {
-        $formFields = [
-            'input',
-            'select_multiple',
-            'checkboxes',
-            'repeater',
-            'switch',
-            'files',
-            'date',
-            'select',
-            'message',
-            'relationship',
-            'image',
-            'file',
-            'tags',
-            'time'
-        ];
-
-        foreach ($formFields as $formField) {
-            $class = studly_case("{$formField}_Field");
-
-            LaradminFacade::addFormField("Shemi\\Laradmin\\FormFields\\{$class}");
-        }
-
-        event('laradmin::form-fields.registered');
     }
 
     /**

@@ -12,6 +12,7 @@ trait Renderable
      * @param $content
      *
      * @return HtmlString
+     * @throws \Throwable
      */
     public function render($content)
     {

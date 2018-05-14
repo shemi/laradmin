@@ -33,6 +33,7 @@ abstract class FormFormField implements FormFieldContract
      * @param $data
      *
      * @return HtmlString
+     * @throws \Throwable
      */
     public function handle(Field $field, Type $type, Model $model, $data)
     {

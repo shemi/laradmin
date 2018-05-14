@@ -1,6 +1,6 @@
 <?php
 
-namespace Shemi\Laradmin\Panels\Traits;
+namespace Shemi\Laradmin\FormPanels\Traits;
 
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;

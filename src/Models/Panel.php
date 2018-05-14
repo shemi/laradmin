@@ -29,11 +29,21 @@ class Panel extends Model
         'id',
         'title',
         'position',
+        'type',
         'is_main_meta',
         'has_container',
         'style',
         'fields'
     ];
+
+    public function getTypeAttribute($value)
+    {
+        if(! $value) {
+            return $this->is_main_meta ? 'main-meta' : 'simple';
+        }
+
+        return $value;
+    }
 
     public function getStyleAttribute($value)
     {
@@ -117,11 +127,14 @@ class Panel extends Model
             ->values();
     }
 
+
+
     public function toBuilder()
     {
         $fields = [
             'id',
             'title',
+            'type',
             'position',
             'is_main_meta',
             'has_container',

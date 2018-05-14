@@ -59,7 +59,7 @@
                                 @endif
 
                                 @if($panel->is_main_meta)
-                                    @component('laradmin::components.meta-box', ['model' => $model])
+                                    @component('laradmin::components.meta-box', ['model' => $model, 'typeSlug' => $type->slug])
 
                                         @foreach($panel->fieldsFor($viewType) as $field)
                                             @component('laradmin::components.meta-line', [

@@ -1,16 +1,16 @@
 <?php
 
-namespace Shemi\Laradmin\Panels;
+namespace Shemi\Laradmin\FormPanels;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
-use Shemi\Laradmin\Contracts\PanelContract;
+use Shemi\Laradmin\Contracts\FormPanelContract;
 use Shemi\Laradmin\Models\Type;
-use Shemi\Laradmin\Panels\Traits\Buildable;
+use Shemi\Laradmin\FormPanels\Traits\Buildable;
 use Shemi\Laradmin\Traits\Renderable;
-use Shemi\Laradmin\Models\Panel as PanelModel;
+use Shemi\Laradmin\Models\Panel;
 
-abstract class Panel implements PanelContract
+abstract class FormPanel implements FormPanelContract
 {
     use Buildable, Renderable;
 
@@ -19,18 +19,20 @@ abstract class Panel implements PanelContract
     protected $codename;
 
     /**
-     * @param PanelModel $panel
+     * @param Panel $panel
      * @param Type $type
      * @param Model $model
+     * @param $viewType
      * @param $data
      *
      * @return HtmlString
+     * @throws \Throwable
      */
-    public function handle(PanelModel $panel, Type $type, Model $model, $data)
+    public function handle(Panel $panel, Type $type, Model $model, $viewType, $data)
     {
-        $content = $this->createContent($panel, $type, $model, $data);
-
-        return $this->render($content);
+        return $this->render(
+            $this->createContent($panel, $type, $model, $viewType, $data)
+        );
     }
 
     public function getCodename()

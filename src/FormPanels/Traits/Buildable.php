@@ -1,6 +1,6 @@
 <?php
 
-namespace Shemi\Laradmin\Panels\Traits;
+namespace Shemi\Laradmin\FormPanels\Traits;
 
 trait Buildable
 {
@@ -11,9 +11,7 @@ trait Buildable
         return [
             'schema' => $this->schema()->toArray(),
             'structure' => $this->structure(),
-            'subTypes' => $this->getSubTypes(),
-            'name' => $this->getName(),
-            'supportSubFields' => $this->isSupportingSubFields()
+            'name' => $this->getName()
         ];
     }
 

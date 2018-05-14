@@ -1,6 +1,6 @@
 <?php
 
-namespace Shemi\Laradmin\Panels\Traits;
+namespace Shemi\Laradmin\FormPanels\Traits;
 
 trait HasJsonStructure
 {
