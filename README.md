@@ -15,7 +15,7 @@ composer require shemi/laradmin
 2. Run the install artisan command
 - It published the assets, migrations, data and config files
 ```shell
-php artisan laradmin::install
+php artisan laradmin:install
 ```
 
 3. Run migrate
@@ -25,12 +25,12 @@ php artisan migrate
 
 4. Make roles and permissions, run the following command 
 ```shell
-php artisan laradmin::roles
+php artisan laradmin:roles
 ```
 
 5. Grant "Super Admin" role to a user, run the following command 
 ```shell
-php artisan laradmin::admin your@email.com
+php artisan laradmin:admin your@email.com
 ```
 
 ## Roles and permissions
@@ -38,14 +38,14 @@ Laradmin uses the grate [spatie/laravel-permission](https://github.com/spatie/la
 creating roles and permissions
 
 ## Widgets
-You can register widgets that will be displayed on the dashboard
-
+You can register widgets that will be displayed on the dashboard,
 to do so you need to register widgets at you AppServiceProvider.php
 
 ```php
 use Illuminate\Support\ServiceProvider;
 use Laradmin;
-use Shemi\Laradmin\Widgets;
+use Shemi\Laradmin\Widgets\CounterWidget;
+use Shemi\Laradmin\Widgets\LatestWidget;
 
 class AppServiceProvider extends ServiceProvider
 {
