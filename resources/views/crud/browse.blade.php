@@ -75,7 +75,7 @@
                 <div class="level-right">
 
                     <div class="field has-addons">
-                        @if(Laradmin::user()->can('export ' . $type->slug))
+                        @if($type->support_export && Laradmin::user()->can('export ' . $type->slug))
                             <p class="control">
                                 <a class="button" @click.prevent="onExport">
                                     <b-icon icon="download"></b-icon>
@@ -83,7 +83,7 @@
                                 </a>
                             </p>
                         @endif
-                        @if(Laradmin::user()->can('import ' . $type->slug))
+                        @if($type->support_import && Laradmin::user()->can('import ' . $type->slug))
                             <p class="control">
                                 <a class="button" @click.prevent="onImport">
                                     <b-icon icon="upload"></b-icon>
