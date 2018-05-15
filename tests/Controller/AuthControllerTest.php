@@ -14,7 +14,7 @@ class AuthControllerTest extends AbstractControllerTest
     public function is_serve_login_page()
     {
         $this->get(route('laradmin.login'))
-            ->assertSee('Welcome To Laradmin');
+            ->assertSee('Login');
     }
 
     /** @test */

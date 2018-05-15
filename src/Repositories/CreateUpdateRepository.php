@@ -4,6 +4,8 @@ namespace Shemi\Laradmin\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -84,28 +86,31 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $this->warnings = Collection::make([]);
     }
 
-    public function initCreateOrUpdate($data, Model $model, Type $type)
+    public function initCreateOrUpdate($data, Model $model, Type $type, Collection $fields = null)
     {
         $this->data = $data;
         $this->model = $model;
         $this->type = $type;
-        $this->setFields();
+
+        $this->setFields($fields);
 
         $this->setModelData();
 
         $this->syncBelongsToRelationData();
+
+        return $this->model;
     }
 
     /**
      * @param array $data
      * @param Model $model
      * @param Type $type
-     *
+     * @param Collection|null $fields
      * @return $this
      */
-    public function createOrUpdate($data, Model $model, Type $type)
+    public function createOrUpdate($data, Model $model, Type $type, Collection $fields = null)
     {
-        $this->initCreateOrUpdate($data, $model, $type);
+        $this->initCreateOrUpdate($data, $model, $type, $fields);
 
         if(! $this->model->exists) {
             $this->saveModel();
@@ -115,23 +120,29 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             return $this;
         }
 
+
         $this->syncRelationData();
         $this->syncMedia();
 
-        event('laradmin::before-save-model', $model, $type);
+        event('laradmin::before-save-model', $this->model, $this->type);
 
         $this->saveModel();
 
-        event('laradmin::after-model-saved', $model, $type);
+        event('laradmin::after-model-saved', $this->model, $this->type);
 
         return $this;
     }
 
-    protected function setFields()
+    protected function setFields(Collection $fields = null)
     {
-        $this->fields = $this->model->exists ?
-            $this->type->edit_fields :
-            $this->type->create_fields;
+
+        if($fields) {
+            $this->fields = $fields;
+        } else {
+            $this->fields = $this->model->exists ?
+                $this->type->edit_fields :
+                $this->type->create_fields;
+        }
 
         $this->fields->each(function(Field $field) {
 
@@ -199,7 +210,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         });
     }
 
-    protected function syncRelationData()
+    public function syncRelationData()
     {
         $this->relationFields->each(function(Field $field) {
 
@@ -273,24 +284,82 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function createUpdateDeleteRepeaterRows(Field $field, $relation, $rows)
     {
         $type = $field->relationship_type;
+
         /** @var Model $model */
         $model = app($type->model);
-        $currentRows = $this->model->refresh()->{$field->key};
+        $primaryKey = $model->getKeyName();
+        $relation = $field->getRelationClass($this->model);
+
+        /** @var Collection $currentRows */
+        $currentRows = $this->model->{$field->key};
+
         $rows = Collection::make($rows);
-
-        $rowsIds = $rows->pluck($model->getKeyName())->values()->toArray();
-
-        $rowsToCreateUpdate = $rows;
+        $rowsIds = $rows->pluck($primaryKey)->values()->toArray();
 
         $rowsToDelete = $currentRows->reject(function(Model $row) use ($rowsIds) {
             return in_array($row->getKey(), $rowsIds);
         });
 
+        if($rowsToDelete->isNotEmpty()) {
+            if ($relation instanceof BelongsToMany) {
+                $this->model->{$field->key}()
+                    ->detach($rowsToDelete->pluck('id')->values()->toArray());
+            }
 
+            else {
+                $rowsToDelete->each->delete();
+            }
+        }
+
+        foreach ($rows as $row) {
+            $id = $row[$primaryKey];
+            $exists = $currentRows->where($primaryKey, $id)->first();
+
+            if($exists) {
+                $model = $exists;
+            } else {
+                $model = app($type->model);
+            }
+
+            $this->createUpdateSubModel($type, $field, $model, $relation, $row);
+        }
 
     }
 
-    protected function saveModel()
+    protected function createUpdateSubModel(Type $type, Field $field, Model $model, $relation, $data)
+    {
+        $inst = new static();
+        $exists = $model->exists;
+        $model = $inst->initCreateOrUpdate($data, $model, $type, $field->getSubFields());
+
+
+        try {
+            if ($relation instanceof BelongsToMany) {
+                $inst->saveModel();
+
+                if(! $exists) {
+                    $this->model->{$field->key}()->attach($model->getKey());
+                }
+            }
+
+            else {
+                $this->model->{$field->key}()->save($model);
+            }
+        }
+
+        catch (\Throwable $exception) {
+            $this->warnings->push($exception->getMessage());
+
+            return $model;
+        }
+
+        $inst->syncRelationData();
+        $inst->syncMedia();
+
+        return $model;
+    }
+
+    public function saveModel()
     {
         $exists = $this->model->exists;
 
@@ -312,7 +381,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         return true;
     }
 
-    protected function syncMedia()
+    public function syncMedia()
     {
         $this->mediaFields->each(function(Field $field) {
             /** @var Collection $media */

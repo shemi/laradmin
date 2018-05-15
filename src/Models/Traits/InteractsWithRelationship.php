@@ -122,9 +122,9 @@ trait InteractsWithRelationship
             return $collection->pluck($this->relation_key);
         }
 
-        if($this->getSubFields() && $this->getSubFields()->isNotEmpty()) {
+        if($this->getSubFields()->isNotEmpty()) {
             return $collection->transform(function($model) {
-                return $this->transformRepeaterRelationModel($model);
+                return $this->transformSubModel($model);
             });
         }
 
@@ -176,13 +176,15 @@ trait InteractsWithRelationship
         return $return;
     }
 
-    public function transformRepeaterRelationModel(EloquentModel $model)
+    public function transformSubModel(EloquentModel $model)
     {
-        if(! $this->fields) {
-            return [];
-        }
+        $return = [
+            $model->getKeyName() => $model->getKey()
+        ];
 
-        $return = [];
+        if(! $this->getSubFields()) {
+            return $return;
+        }
 
         /** @var Field $field */
         foreach ($this->getSubFields() as $field) {

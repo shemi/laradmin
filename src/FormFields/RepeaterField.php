@@ -81,6 +81,7 @@ class RepeaterField extends FormFormField
     public function transformRequest(Field $field, $data)
     {
         $data = parent::transformRequest($field, $data);
+        $primaryKey = null;
 
         if(! is_array($data) || empty($data)) {
             return [];
@@ -88,11 +89,21 @@ class RepeaterField extends FormFormField
 
         $newData = [];
 
+        if($field->relationship_type) {
+            $relationshipTypeModel = app($field->relationship_type->model);
+            $primaryKey = $relationshipTypeModel->getKeyName();
+        }
+
         foreach ($data as $row) {
+
             /** @var Field $childField */
             foreach ($field->getSubFields() as $childField) {
                 $value = array_get($row, $childField->key, $childField->getDefaultValue());
                 $row[$childField->key] = $childField->transformRequest($value);
+            }
+
+            if($field->relationship_type) {
+                $row[$primaryKey] = array_get($row, $primaryKey, null);
             }
 
             $newData[] = $row;
@@ -104,16 +115,26 @@ class RepeaterField extends FormFormField
     public function transformResponse(Field $field, $values)
     {
         $values = collect($values);
+        $primaryKey = null;
 
         if($values->isEmpty()) {
             return $values;
         }
 
-        $values->transform(function($row) use ($field) {
-            foreach ($field->getSubFields() as $field) {
-                $value = array_get($row, $field->key, $field->getDefaultValue());
+        if($field->relationship_type) {
+            $relationshipTypeModel = app($field->relationship_type->model);
+            $primaryKey = $relationshipTypeModel->getKeyName();
+        }
 
-                $row[$field->key] = $field->transformResponse($value);
+        $values->transform(function($row) use ($field, $primaryKey) {
+
+            foreach ($field->getSubFields() as $childField) {
+                $value = array_get($row, $childField->key, $childField->getDefaultValue());
+                $row[$childField->key] = $childField->transformResponse($value);
+            }
+
+            if($field->relationship_type) {
+                $row[$primaryKey] = array_get($row, $primaryKey, null);
             }
 
             return $row;

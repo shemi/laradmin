@@ -1,5 +1,6 @@
 import LaFormErrors from './LaFormErrors';
 import LaHttp from './LaHttp';
+import Vue from 'vue';
 
 import File from 'vue-clip/src/File';
 import Helpers from '../Helpers/Helpers';
@@ -35,7 +36,7 @@ class LaForm {
             value = data[key];
             value = this.transformValue(data, key);
 
-            this[key] = value;
+            Vue.set(this, key, value);
 
             if(this.lifetimeKeys.indexOf(key) < 0) {
                 this.lifetimeKeys.push(key);

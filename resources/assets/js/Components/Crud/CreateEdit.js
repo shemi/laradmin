@@ -46,10 +46,7 @@ export default {
                             type: 'is-success'
                         });
 
-                        //POC
-                        if(this.form.updated_at) {
-                            this.form.updated_at = new Date();
-                        }
+                        this.form.rebuild(res.data.model);
                     }
                 })
                 .catch(err => {

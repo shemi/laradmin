@@ -277,10 +277,10 @@ class Type extends Model
         foreach ($fields as $field) {
             $fieldTypes[$parent.$field->key] = $field->type;
 
-            if($field->fields && $field->fields->isNotEmpty()) {
+            if($field->getSubFields()->isNotEmpty()) {
                 $fieldTypes = array_merge(
                     $fieldTypes,
-                    static::getAllFieldTypes($field->fields, "{$parent}{$field->key}.")
+                    static::getAllFieldTypes($field->getSubFields(), "{$parent}{$field->key}.")
                 );
             }
         }

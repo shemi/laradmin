@@ -276,6 +276,7 @@ class CrudController extends Controller
         app(TypeRequestValidatorRepository::class)
             ->validate($request, $type, $model, $fields);
 
+
         /** @var CreateUpdateRepository $updateRepository */
         $updateRepository = app(CreateUpdateRepository::class)
             ->createOrUpdate(

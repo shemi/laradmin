@@ -161,26 +161,26 @@ class Field extends Model
     {
         $localFields = $this->fields;
 
-        if($this->type === 'repeater' && $this->has_relationship_type) {
-            $relationType = $this->relationship_type;
-            $exclude = array_get($this->relationship, 'exclude', []);
-
-            return $relationType->fields
-                ->reject(function(Field $field) use ($exclude) {
-                    return in_array($field->key, $exclude) || $field->read_only;
-                })
-                ->map(function(Field $field) use ($localFields) {
-                    $field = $localFields->where('key', $field->key)->first() ?: $field;
-
-                    $field->is_repeater_field = true;
-                    $field->parent = $this;
-                    $field->form_prefix = 'props.row.';
-
-                    return $field;
-                });
+        if($this->type !== 'repeater' || ! $this->has_relationship_type) {
+            return $localFields;
         }
 
-        return $localFields;
+        $relationType = $this->relationship_type;
+        $exclude = array_get($this->relationship, 'exclude', []);
+
+        return $relationType->fields
+            ->reject(function(Field $field) use ($exclude) {
+                return in_array($field->key, $exclude) || $field->read_only;
+            })
+            ->map(function(Field $field) use ($localFields) {
+                $field = $localFields->where('key', $field->key)->first() ?: $field;
+
+                $field->is_repeater_field = true;
+                $field->parent = $this;
+                $field->form_prefix = 'props.row.';
+
+                return $field;
+            });
     }
 
     public function getOptionsAttribute($value)
