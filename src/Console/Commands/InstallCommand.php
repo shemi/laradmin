@@ -78,13 +78,15 @@ class InstallCommand extends Command
     {
         $this->line('Creating symlink to laradmin assets files');
 
-        if (! file_exists(public_path('/vendor/laradmin'))) {
-            mkdir(public_path('/vendor/laradmin'), 0777, true);
+        $ds = DIRECTORY_SEPARATOR;
+        $laradminVendorPath = public_path($ds.'vendor'.$ds.'laradmin');
+
+        if (! file_exists($laradminVendorPath)) {
+            mkdir($laradminVendorPath, 0777, true);
         }
 
-        symlink(
-            __DIR__ . '/../../../publishable/public',
-            public_path('/vendor/laradmin/assets')
+        $this->laravel->make('files')->link(
+            __DIR__ . '/../../../publishable/public', public_path('/vendor/laradmin/assets')
         );
     }
 

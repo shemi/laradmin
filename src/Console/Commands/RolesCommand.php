@@ -12,31 +12,7 @@ class RolesCommand extends Command
 
     protected $signature = "laradmin:roles";
 
-    protected $description = "Create Roles And Permissions";
-
-    protected $adminPermissions = [
-        'access backend',
-        'browse options',
-        'update options',
-        'browse menus',
-        'update menus',
-        'create menus',
-        'delete menus',
-        'browse types',
-        'update types',
-        'create types',
-        'delete types'
-    ];
-
-    protected $permissions = [
-        'import',
-        'export',
-        'create',
-        'delete',
-        'update',
-        'browse',
-        'view'
-    ];
+    protected $description = "Create Laradmin Roles And Permissions";
 
     public function __construct()
     {
@@ -45,64 +21,20 @@ class RolesCommand extends Command
 
     public function handle()
     {
-        app()['cache']->forget('spatie.permission.cache');
+        $this->line('Creating Laradmin roles and permissions...');
 
-        $this->line('Creating "admin" role');
+        $manager = app('laradmin')->manager('roles');
 
-        $adminRole = Role::firstOrNew([
-            'name' => 'admin',
-            'guard_name' => config('laradmin.guard')
-        ]);
+        $this->line('Clearing cache...');
+        $manager->clearCache();
 
-        $line = 'The "admin" Role Exists.';
+        $this->line('Creating Laradmin default roles and permissions...');
+        $manager->createDefaultPermissionsAndAssign();
 
-        if(! $adminRole->exists) {
-            $adminRole->save();
-            $line = '"admin" Role Created.';
-        }
+        $this->line('Creating types permissions...');
+        $manager->createPermissionsForAllTypes();
 
-        $this->line($line);
-
-        $this->line('Setting default admin permissions');
-
-        foreach ($this->adminPermissions as $permission) {
-            $this->createPermission($permission, $adminRole);
-        }
-
-        $types = Type::all();
-        foreach ($types as $type) {
-            $slug = $type->slug;
-
-            foreach ($this->permissions as $permission) {
-                $this->createPermission("{$permission} {$slug}", $adminRole);
-            }
-        }
-
-    }
-
-    protected function createPermission($name, Role $role)
-    {
-        $this->line('***********************************************');
-
-        $this->line('Creating "'. $name .'" permission');
-        $permission = Permission::firstOrNew([
-            'name' => $name,
-            'guard_name' => config('laradmin.guard')
-        ]);
-        $line = 'The "'. $name .'" permission Exists.';
-
-        if(! $permission->exists) {
-            $permission->save();
-            $line = '"'. $name .'" permission Created.';
-        }
-
-        $this->line($line);
-
-        if(! $role->hasPermissionTo($permission)) {
-            $this->line('Role "'. $role->name .'" give permission to "'. $name .'"');
-            $role->givePermissionTo($permission);
-        }
-
+        $this->line('DONE.');
     }
 
 }

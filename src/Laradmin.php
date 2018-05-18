@@ -12,6 +12,7 @@ use Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException;
 use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Managers\FormPanelsManager;
 use Shemi\Laradmin\Managers\LinksManager;
+use Shemi\Laradmin\Managers\RolesManager;
 use Shemi\Laradmin\Managers\WidgetsManager;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Models\User;
@@ -164,7 +165,8 @@ class Laradmin
             LinksManager::class,
             FormFieldsManager::class,
             FormPanelsManager::class,
-            WidgetsManager::class
+            WidgetsManager::class,
+            RolesManager::class
         ];
 
         foreach ($managers as $manager) {
