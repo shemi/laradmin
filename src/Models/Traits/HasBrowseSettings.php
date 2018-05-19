@@ -70,7 +70,7 @@ trait HasBrowseSettings
             return "";
         }
 
-        if(app('laradmin')->formFieldExists($this->type)) {
+        if($this->formFieldsManager()->exists($this->type)) {
             $formField = $this->formField();
 
             if($formField instanceof FieldHasBrowseValue) {

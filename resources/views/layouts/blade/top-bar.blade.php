@@ -31,7 +31,7 @@
 
                     @if(Laradmin::getUserType())
                         <b-dropdown-item has-link>
-                            <a href="{{ Laradmin::editLink(Laradmin::getUserType(), Laradmin::user()) }}">
+                            <a href="{{ Laradmin::manager('links')->edit(Laradmin::getUserType(), Laradmin::user()) }}">
                                 <b-icon icon="user"></b-icon>
                                 Profile
                             </a>

@@ -9,23 +9,22 @@ class FormFieldsManager implements ManagerContract
 {
     protected $bucket = [];
 
-    public function formFieldExists($type)
+    public function exists($type)
     {
         return isset($this->bucket[$type]);
     }
 
-    public function formFields()
+    public function all()
     {
-        return $this->bucket;
+        return collect($this->bucket);
     }
 
-    public function getFormFieldNames()
+    public function allNames()
     {
-        return collect($this->bucket)
-            ->keys();
+        return $this->all()->keys();
     }
 
-    public function formField($type)
+    public function get($type)
     {
         return $this->bucket[$type];
     }

@@ -34,7 +34,11 @@ trait HasJsonSchema
                 ->required();
 
             $this->string('type')
-                ->enum(app('laradmin')->getFormFieldNames());
+                ->enum(
+                    app('laradmin')
+                        ->manager('formFields')
+                        ->allNames()
+                );
 
             $this->string('id')
                 ->minLength(5);

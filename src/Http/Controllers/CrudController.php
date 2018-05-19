@@ -36,15 +36,25 @@ class CrudController extends Controller
         $columns = $type->browse_columns;
         $primaryKey = $model->getKeyName();
 
-        $editRoute = Laradmin::editLink($type, $primaryKey);
+        $linksManager = app('laradmin')->manager('links');
 
-        $deleteRoute = Laradmin::destroyLink($type, $primaryKey);
+        $editRoute = $linksManager->edit($type, $primaryKey);
 
-        $deleteManyRoute = Laradmin::destroyManyLink($type);
+        $deleteRoute = $linksManager->destroy($type, $primaryKey);
+
+        $deleteManyRoute = $linksManager->destroyMany($type);
 
         return view(
             'laradmin::crud.browse',
-            compact('type', 'model', 'columns', 'primaryKey', 'editRoute', 'deleteRoute', 'deleteManyRoute')
+            compact(
+                'type',
+                'model',
+                'columns',
+                'primaryKey',
+                'editRoute',
+                'deleteRoute',
+                'deleteManyRoute'
+            )
         );
     }
 

@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Models\Traits;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\FormFields\FormFormField;
+use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Models\Type;
 
 /**
@@ -17,13 +18,21 @@ use Shemi\Laradmin\Models\Type;
 
 trait InteractsWithFormField
 {
+    /**
+     * @return FormFieldsManager
+     */
+    protected function formFieldsManager()
+    {
+        return app('laradmin')->manager('formFields');
+    }
 
     /**
      * @return FormFormField
      */
     public function formField()
     {
-        return app('laradmin')->formField($this->type);
+        return $this->formFieldsManager()
+            ->get($this->type);
     }
 
     public function getValidationRoles()
@@ -42,7 +51,7 @@ trait InteractsWithFormField
 
     public function transformResponse($value)
     {
-        if(! app('laradmin')->formFieldExists($this->type)) {
+        if(! $this->formFieldsManager()->exists($this->type)) {
             return $value;
         }
 

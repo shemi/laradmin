@@ -12,6 +12,15 @@ use Illuminate\Routing\Controller as BaseController;
 class TypesBuilderController extends Controller
 {
 
+    protected $formFieldsManager;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->formFieldsManager = app('laradmin')->manager('formFields');
+    }
+
     public function index(Request $request)
     {
         if($this->user()->cant("browse types")) {
@@ -138,7 +147,7 @@ class TypesBuilderController extends Controller
         $fields = [];
 
         /** @var FormFormField $formField */
-        foreach (app('laradmin')->formFields() as $formField) {
+        foreach ($this->formFieldsManager->all() as $formField) {
             $fields[$formField->getCodename()] = $formField->getBuilderData();
         }
 
@@ -260,12 +269,12 @@ class TypesBuilderController extends Controller
             return ['.type' => ['the type property is required']];
         }
 
-        if(! app('laradmin')->formFieldExists($data['type'])) {
+        if(! app('laradmin')->manager('formFields')->exists($data['type'])) {
             return ['.type' => ['the type: "'.$data['type'].'" not exists']];
         }
 
         /** @var FormFormField $formField */
-        $formField = app('laradmin')->formField($data['type']);
+        $formField = $this->formFieldsManager->get($data['type']);
 
         $validator = $formField->schema()->validate($data, '.');
 

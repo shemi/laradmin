@@ -51,7 +51,7 @@ class LatestWidget extends Widget
             $repository->query->latest()->take($this->items);
         })
         ->transform(function($item) use ($model) {
-            $item['la_edit_link'] = Laradmin::editLink($this->type, $item[$model->getKeyName()]);
+            $item['la_edit_link'] = Laradmin::manager('links')->edit($this->type, $item[$model->getKeyName()]);
 
             return $item;
         });

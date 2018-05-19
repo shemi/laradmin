@@ -10,17 +10,17 @@ use Shemi\Laradmin\Models\Type;
 class LinksManager implements ManagerContract
 {
 
-    public function editLink(Type $type, $model = null)
+    public function edit(Type $type, $model = null)
     {
         return $this->typeLink($type, 'edit', $model);
     }
 
-    public function destroyLink(Type $type, $model = null)
+    public function destroy(Type $type, $model = null)
     {
         return $this->typeLink($type, 'destroy', $model);
     }
 
-    public function destroyManyLink(Type $type)
+    public function destroyMany(Type $type)
     {
         return $this->typeLink($type, 'destroyMany');
     }

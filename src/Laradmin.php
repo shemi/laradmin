@@ -219,14 +219,6 @@ class Laradmin
 
     public function __call($name, $arguments)
     {
-        if(ends_with(strtolower($name), 'link')) {
-            return $this->manager('links')->{$name}(...$arguments);
-        }
-
-        if(str_contains(strtolower($name), 'formfield')) {
-            return $this->manager('formFields')->{$name}(...$arguments);
-        }
-
         if(str_contains(strtolower($name), 'widget')) {
             return $this->manager('widgets')->{$name}(...$arguments);
         }
