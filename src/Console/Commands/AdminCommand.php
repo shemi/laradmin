@@ -4,10 +4,8 @@ namespace Shemi\Laradmin\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
-use Shemi\Laradmin\Exceptions\InvalidArgumentException;
 use Shemi\Laradmin\Models\User;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Models\Role;
 
 class AdminCommand extends Command
 {
@@ -48,10 +46,12 @@ class AdminCommand extends Command
             return;
         }
 
+        $role = app('laradmin')->manager('roles')->getDefaultRole();
+
         try {
-            $user->assignRole('admin');
+            $user->assignRole($role);
         } catch (RoleDoesNotExist $e) {
-            $this->alert("The role 'admin' dose not exists, run the laradmin:roles commend.");
+            $this->alert("The role '{$role}' dose not exists, run the laradmin:roles commend.");
 
             return;
         }

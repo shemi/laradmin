@@ -14,6 +14,7 @@ return [
     'style' => [
         'name' => 'Laradmin',
         'logo' => null,
+        'login_bg' => null,
         'login_subtitle' => null
     ],
 

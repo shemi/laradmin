@@ -12,15 +12,21 @@ $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
             @yield('form')
         </div>
 
-        <div class="auth-content">
+        <div class="auth-content"
+             @if(config('laradmin.style.login_bg'))
+             style="background-image: url({{ config('laradmin.style.login_bg') }})"
+             @endif>
+
             @yield('content')
 
-            <div class="credit">
-                Photo by
-                <a target="_blank" href="https://unsplash.com/@andy_brunner">Andy Brunner</a>
-                on
-                <a target="_blank" href="https://unsplash.com">Unsplash</a>
-            </div>
+            @if(! config('laradmin.style.login_bg'))
+                <div class="credit">
+                    Photo by
+                    <a target="_blank" href="https://unsplash.com/@andy_brunner">Andy Brunner</a>
+                    on
+                    <a target="_blank" href="https://unsplash.com">Unsplash</a>
+                </div>
+            @endif
         </div>
 
     </div>
