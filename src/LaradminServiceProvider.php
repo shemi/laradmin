@@ -61,7 +61,7 @@ class LaradminServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/laradmin.php');
 
-        LaradminFacade::initJsObject();
+        LaradminFacade::jsVars()->init();
 
         if ($this->app->runningInConsole()) {
             $this->commands([

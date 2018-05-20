@@ -11,6 +11,7 @@ use Shemi\Laradmin\Exceptions\InvalidManagerException;
 use Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException;
 use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Managers\FormPanelsManager;
+use Shemi\Laradmin\Managers\JsVarsManager;
 use Shemi\Laradmin\Managers\LinksManager;
 use Shemi\Laradmin\Managers\RolesManager;
 use Shemi\Laradmin\Managers\WidgetsManager;
@@ -22,8 +23,6 @@ class Laradmin
     const VERSION = "0.6.5";
 
     protected $managers = [];
-
-    protected $jsObject = [];
 
     public function init()
     {
@@ -58,41 +57,6 @@ class Laradmin
         $disk = $disk ?: config('laradmin.storage.data_disk');
 
         return Storage::disk($disk);
-    }
-
-
-    public function initJsObject()
-    {
-        $this->jsObject = [
-            'api_base' => route('laradmin.dashboard', [], false),
-            'routs' => [
-                'icons' => route('laradmin.icons', [], false)
-            ],
-            'mixins' => []
-        ];
-
-        return $this;
-    }
-
-    public function publishJs($key, $value)
-    {
-        array_set($this->jsObject, $key, $value);
-
-        return $this;
-    }
-
-    public function publishManyJs($array)
-    {
-        foreach ($array as $key => $value) {
-            $this->publishJs($key, $value);
-        }
-
-        return $this;
-    }
-
-    public function jsObject()
-    {
-        return json_encode($this->jsObject, JSON_UNESCAPED_UNICODE);
     }
 
     protected function registerFormPanels()
@@ -152,7 +116,8 @@ class Laradmin
             FormFieldsManager::class,
             FormPanelsManager::class,
             WidgetsManager::class,
-            RolesManager::class
+            RolesManager::class,
+            JsVarsManager::class
         ];
 
         foreach ($managers as $manager) {

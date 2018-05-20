@@ -28,10 +28,10 @@ class LinksManager implements ManagerContract
     public function typeLink(Type $type, $action, $modelOrKey = null)
     {
         if($modelOrKey === null) {
-            return route("laradmin.{$type->slug}.{$action}");
+            return $this->route("laradmin.{$type->slug}.{$action}");
         }
 
-        $link = route("laradmin.{$type->slug}.{$action}", ["{$type->slug}" => "__primaryKey__"]);
+        $link = $this->route("laradmin.{$type->slug}.{$action}", ["{$type->slug}" => "__primaryKey__"]);
 
         if($modelOrKey && $modelOrKey instanceof Model) {
             return str_replace('__primaryKey__', $modelOrKey->getKey(), $link);
@@ -42,6 +42,11 @@ class LinksManager implements ManagerContract
         }
 
         return str_replace('__primaryKey__', "'+ props.row.{$modelOrKey} +'", $link);
+    }
+
+    public function route($name, $parameters = [])
+    {
+        return route($name, $parameters, false);
     }
 
     public function getManagerName()

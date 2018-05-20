@@ -15,9 +15,7 @@
 
     <title>{{ config('app.name') }}{{ $pageTitle }} - @lang('laradmin::template.name')</title>
 
-    <script>
-        window.laradmin = {!! app('laradmin')->jsObject() !!}
-    </script>
+    {{ app('laradmin')->jsVars()->render() }}
 
     <link rel="stylesheet" href="{{ laradmin_asset('/css/app.css') }}">
     @yield('styles')

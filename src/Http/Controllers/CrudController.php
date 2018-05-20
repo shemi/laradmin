@@ -148,7 +148,7 @@ class CrudController extends Controller
             $jsObject['routs.delete'] = route("laradmin.{$type->slug}.destroy", $saveRouteParameters);
         }
 
-        app('laradmin')->publishManyJs($jsObject);
+        app('laradmin')->jsVars()->set($jsObject);
 
         return view($view, compact('type', 'model', 'form', 'data', 'user'));
     }

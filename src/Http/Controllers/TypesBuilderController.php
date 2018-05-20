@@ -51,7 +51,8 @@ class TypesBuilderController extends Controller
 
         $model = new Type;
 
-        app('laradmin')->publishJs('routs.save', route('laradmin.types.store'));
+        app('laradmin')->jsVars()
+            ->set('routs.save', app('laradmin')->links()->route('laradmin.types.store'));
 
         return $this->getCreateEditResponse($model);
     }
@@ -77,9 +78,9 @@ class TypesBuilderController extends Controller
             throw new DataNotFoundException($slug);
         }
 
-        app('laradmin')->publishJs(
+        app('laradmin')->jsVars()->set(
             'routs.save',
-            route('laradmin.types.update', [
+            app('laradmin')->links()->route('laradmin.types.update', [
                 'type' => $slug
             ])
         );
@@ -151,7 +152,7 @@ class TypesBuilderController extends Controller
             $fields[$formField->getCodename()] = $formField->getBuilderData();
         }
 
-        app('laradmin')->publishManyJs([
+        app('laradmin')->jsVars()->set([
             'model' => $model->toBuilderArray(),
             'builderData' => compact('panels', 'fields')
         ]);
