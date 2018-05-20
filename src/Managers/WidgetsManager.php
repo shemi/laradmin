@@ -10,7 +10,7 @@ class WidgetsManager implements ManagerContract
 {
     protected $widgets = [];
 
-    public function registerWidgetsRow($widgets)
+    public function registerRow($widgets)
     {
         $row = count($this->widgets);
 
@@ -25,7 +25,7 @@ class WidgetsManager implements ManagerContract
         return $this;
     }
 
-    public function registerWidget($widgetClass, $row = 0)
+    public function register($widgetClass, $row = 0)
     {
         if(is_string($widgetClass)) {
             $widgetClass = $widgetClass::start();
@@ -43,7 +43,7 @@ class WidgetsManager implements ManagerContract
             $this->widgets[$row] = [];
         }
 
-        $rowCount = $this->getWidgetsRowTotal($row);
+        $rowCount = $this->getRowTotal($row);
 
         if($rowCount + $widgetClass->getSize() > Widget::MAX_WIDGETS_WIDTH_SIZE_PER_ROW) {
             return $this->registerWidget($widgetClass, $row + 1);
@@ -54,7 +54,7 @@ class WidgetsManager implements ManagerContract
         return $this;
     }
 
-    protected function getWidgetsRowTotal($row)
+    protected function getRowTotal($row)
     {
         $count = 0;
 

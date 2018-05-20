@@ -4,7 +4,7 @@
 
     <section class="section">
 
-        @foreach(\Laradmin::widgetsRows() as $widgets)
+        @foreach(app('laradmin')->widgets()->rows() as $widgets)
             <div class="columns">
                 @foreach($widgets as $key => $widget)
                     <div class="column {{ $widget->getCssClasses() }}">

@@ -23,7 +23,7 @@ trait InteractsWithFormField
      */
     protected function formFieldsManager()
     {
-        return app('laradmin')->manager('formFields');
+        return app('laradmin')->formFields();
     }
 
     /**
@@ -63,6 +63,7 @@ trait InteractsWithFormField
      * @param EloquentModel $model
      * @param array $data
      * @return string
+     * @throws \Throwable
      */
     public function render(Type $type, EloquentModel $model, $data)
     {

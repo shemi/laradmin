@@ -36,7 +36,7 @@ class CrudController extends Controller
         $columns = $type->browse_columns;
         $primaryKey = $model->getKeyName();
 
-        $linksManager = app('laradmin')->manager('links');
+        $linksManager = app('laradmin')->links();
 
         $editRoute = $linksManager->edit($type, $primaryKey);
 

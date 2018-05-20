@@ -21,10 +21,6 @@ class Laradmin
 {
     const VERSION = "0.6.5";
 
-    protected $models = [
-        'User' => User::class
-    ];
-
     protected $managers = [];
 
     protected $jsObject = [];
@@ -62,16 +58,6 @@ class Laradmin
         $disk = $disk ?: config('laradmin.storage.data_disk');
 
         return Storage::disk($disk);
-    }
-
-    public function model($name)
-    {
-        return app($this->models[studly_case($name)]);
-    }
-
-    public function modelClass($name)
-    {
-        return $this->models[$name];
     }
 
 
@@ -119,7 +105,7 @@ class Laradmin
         foreach ($types as $type) {
             $class = studly_case("{$type}_Panel");
 
-            $this->manager('formPanels')
+            $this->formPanels()
                 ->register("Shemi\\Laradmin\\FormPanels\\{$class}");
         }
 
@@ -150,7 +136,7 @@ class Laradmin
         foreach ($types as $type) {
             $class = studly_case("{$type}_Field");
 
-            $this->manager('formFields')
+            $this->formFields()
                 ->register("Shemi\\Laradmin\\FormFields\\{$class}");
         }
 
@@ -198,6 +184,11 @@ class Laradmin
         return $this;
     }
 
+    public function managerExists($name)
+    {
+        return isset($this->managers[$name]);
+    }
+
     /**
      * @param $name
      * @return ManagerContract
@@ -205,7 +196,7 @@ class Laradmin
      */
     public function manager($name)
     {
-        if(! isset($this->managers[$name])) {
+        if(! $this->managerExists($name)) {
             throw new ManagerDoesNotExistsException($name);
         }
 
@@ -219,8 +210,8 @@ class Laradmin
 
     public function __call($name, $arguments)
     {
-        if(str_contains(strtolower($name), 'widget')) {
-            return $this->manager('widgets')->{$name}(...$arguments);
+        if($this->managerExists($name)) {
+            return $this->manager($name);
         }
 
         throw new \BadMethodCallException("The Method {$name} not found");

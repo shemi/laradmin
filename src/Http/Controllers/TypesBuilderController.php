@@ -18,7 +18,7 @@ class TypesBuilderController extends Controller
     {
         parent::__construct();
 
-        $this->formFieldsManager = app('laradmin')->manager('formFields');
+        $this->formFieldsManager = app('laradmin')->formFields();
     }
 
     public function index(Request $request)
@@ -269,7 +269,7 @@ class TypesBuilderController extends Controller
             return ['.type' => ['the type property is required']];
         }
 
-        if(! app('laradmin')->manager('formFields')->exists($data['type'])) {
+        if(! app('laradmin')->formFields()->exists($data['type'])) {
             return ['.type' => ['the type: "'.$data['type'].'" not exists']];
         }
 
