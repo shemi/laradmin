@@ -23,7 +23,7 @@ class MainMetaPanel extends FormPanel
      */
     public function createContent(Panel $panel, Type $type, Model $model, $viewType, $data)
     {
-        return view('laradmin::panels.main-meta-panel', compact(
+        return view('laradmin::formPanels.main-meta-panel', compact(
             'panel',
             'type',
             'model',

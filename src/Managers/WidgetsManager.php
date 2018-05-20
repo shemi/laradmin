@@ -19,7 +19,7 @@ class WidgetsManager implements ManagerContract
         }
 
         foreach ($widgets as $widget) {
-            $this->registerWidget($widget, $row);
+            $this->register($widget, $row);
         }
 
         return $this;
@@ -46,7 +46,7 @@ class WidgetsManager implements ManagerContract
         $rowCount = $this->getRowTotal($row);
 
         if($rowCount + $widgetClass->getSize() > Widget::MAX_WIDGETS_WIDTH_SIZE_PER_ROW) {
-            return $this->registerWidget($widgetClass, $row + 1);
+            return $this->register($widgetClass, $row + 1);
         }
 
         $this->widgets[$row][$widgetClass->getCodename()] = $widgetClass;

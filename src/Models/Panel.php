@@ -135,7 +135,7 @@ class Panel extends Model
      */
     protected function formPanelsManager()
     {
-        return app('laradmin')->formFields();
+        return app('laradmin')->formPanels();
     }
 
     /**

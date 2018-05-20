@@ -35,7 +35,7 @@ class TabsPanel extends FormPanel
         $structure = parent::structure();
 
         $structure['tabs'] = (array) [
-            ['id' => 'new-tab', 'title' => 'First Tab']
+            ['id' => str_random(5), 'title' => 'First Tab', 'icon' => 'certificate']
         ];
 
         return $structure;
@@ -44,6 +44,12 @@ class TabsPanel extends FormPanel
     public function getOptions()
     {
         return array_merge(parent::getOptions(), [
+            [
+                'label' => 'Tabs',
+                'key' => 'tabs',
+                'type' => 'la-tabs-builder',
+                'validation' => []
+            ],
             [
                 'label' => 'Fields',
                 'key' => 'fields',

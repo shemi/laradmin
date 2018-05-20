@@ -21,7 +21,7 @@ class SimplePanel extends FormPanel
      */
     public function createContent(Panel $panel, Type $type, Model $model, $viewType, $data)
     {
-        return view('laradmin::panels.simple-panel', compact(
+        return view('laradmin::formPanels.simple-panel', compact(
             'panel',
             'type',
             'model',

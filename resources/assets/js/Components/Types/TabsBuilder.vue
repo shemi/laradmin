@@ -1,0 +1,134 @@
+<template>
+    <vddl-list class="tabs is-toggle"
+               :list="newValue"
+               :allowed-types="['tabs']"
+               :drop="handleDrop"
+               :horizontal="false">
+        <ul>
+            <vddl-draggable v-for="(tab, index) in newValue"
+                            :class="{'is-active': tab.id === selectedTab}"
+                            :key="tab.id"
+                            :draggable="tab"
+                            :index="index"
+                            :tag="'li'"
+                            :wrapper="newValue"
+                            type="tabs"
+                            :moved="handleMoved"
+                            effect-allowed="move">
+
+                <a @click="selectTab(tab)">
+                    <b-icon v-if="tab.icon" :icon="tab.icon"></b-icon>
+                    <span>{{ tab.title }}</span>
+                </a>
+
+            </vddl-draggable>
+
+            <li>
+                <a @click="make">
+                    <span>Add Tab</span>
+                    <b-icon icon="plus"></b-icon>
+                </a>
+            </li>
+        </ul>
+    </vddl-list>
+</template>
+
+<script>
+    import ParentFormMixin from '../../Mixins/ParentForm';
+    import {cloneDeep, find} from 'lodash';
+    import Helpers from '../../Helpers/Helpers';
+    import TabFormModal from './TabFormModal';
+
+    export default {
+
+        name: 'la-tabs-builder',
+
+        mixins: [ParentFormMixin],
+
+        props: {
+            value: Array
+        },
+
+        data() {
+            return {
+                newValue: this.value,
+                selectedTab: null
+            }
+        },
+
+        watch: {
+            value(value) {
+                this.newValue = value;
+            }
+        },
+
+        mounted() {
+            this.selectedTab = this.newValue[0] ? this.newValue[0].id : null;
+        },
+
+        methods: {
+            make() {
+                this.createUpdateModal({title: '', icon: null, id: null});
+            },
+
+            createUpdateModal(tab) {
+                const self = this;
+
+                return this.$modal.open({
+                    parent: this,
+                    component: TabFormModal,
+                    hasModalCard: true,
+                    props: {tab},
+                    events: {
+                        save(newTab) {
+                            if(newTab.id) {
+                                tab = find(self.newValue, {id: tab.id});
+
+                                if(tab) {
+                                    self.$set(tab, 'title', newTab.title);
+                                    self.$set(tab, 'icon', newTab.icon);
+                                }
+
+                                return;
+                            }
+
+                            self.createTab(newTab.title, newTab.icon);
+                        }
+                    },
+                    canCancel: false
+                });
+            },
+
+            createTab(title, icon = null) {
+                const id = Helpers.makeId();
+
+                this.newValue.push({id, title, icon});
+                this.$emit('input', this.newValue);
+            },
+
+            selectTab(tab) {
+                if(this.selectedTab === tab.id) {
+                    this.createUpdateModal(cloneDeep(tab));
+
+                    return;
+                }
+
+                this.selectedTab = tab.id;
+            },
+
+            handleDrop(data) {
+                const { index, list, item } = data;
+
+                // item.id = Helpers.makeId();
+                list.splice(index, 0, item);
+            },
+
+            handleMoved(item) {
+                const { index, list } = item;
+                list.splice(index, 1);
+            },
+        }
+
+    }
+
+</script>

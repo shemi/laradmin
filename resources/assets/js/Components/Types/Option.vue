@@ -112,6 +112,7 @@
 
         beforeCreate: function () {
             this.$options.components.LaFieldsList = require('./FieldsList.vue');
+            this.$options.components.LaTabsBuilder = require('./TabsBuilder.vue');
             this.$options.components.LaDynamicRender = require('./DynamicRender.vue');
         },
 
