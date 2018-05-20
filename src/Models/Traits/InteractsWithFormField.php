@@ -37,10 +37,8 @@ trait InteractsWithFormField
 
     public function getValidationRoles()
     {
-        $formField = $this->formField();
-
-        return $formField
-            ? $formField->getValidationRoles($this)
+        return $this->formField()
+            ? $this->formField()->getValidationRoles($this)
             : [];
     }
 

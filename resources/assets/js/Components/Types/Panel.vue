@@ -88,6 +88,8 @@
     import LaOptionsSet from './OptionsSet.vue';
     import { cloneDeep } from "lodash";
 
+
+
     export default {
 
         name: 'la-panel',
@@ -102,7 +104,7 @@
         data() {
             return {
                 isOpen: false,
-                options: cloneDeep(window.laradmin.builderData.panels.panel.options),
+                options: cloneDeep(window.laradmin.builderData.panels[this.panel.type].options),
                 hasErrors: false,
             }
         },

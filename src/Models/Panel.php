@@ -5,6 +5,9 @@ namespace Shemi\Laradmin\Models;
 
 use Shemi\Laradmin\Data\Collection;
 use Shemi\Laradmin\Data\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\FormPanels\FormPanel;
+use Shemi\Laradmin\Managers\FormPanelsManager;
 
 /**
  * Shemi\Laradmin\Models\Type
@@ -39,7 +42,7 @@ class Panel extends Model
     public function getTypeAttribute($value)
     {
         if(! $value) {
-            return $this->is_main_meta ? 'main-meta' : 'simple';
+            return $this->is_main_meta ? 'main_meta' : 'simple';
         }
 
         return $value;
@@ -127,7 +130,35 @@ class Panel extends Model
             ->values();
     }
 
+    /**
+     * @return FormPanelsManager
+     */
+    protected function formPanelsManager()
+    {
+        return app('laradmin')->formFields();
+    }
 
+    /**
+     * @return FormPanel
+     */
+    public function formPanel()
+    {
+        return $this->formPanelsManager()
+            ->panel($this->type);
+    }
+
+    /**
+     * @param Type $type
+     * @param EloquentModel $model
+     * @param $viewType
+     * @param array $data
+     * @return string
+     * @throws \Throwable
+     */
+    public function render(Type $type, EloquentModel $model, $viewType, $data)
+    {
+        return $this->formPanel()->handle($this, $type, $model, $viewType, $data);
+    }
 
     public function toBuilder()
     {

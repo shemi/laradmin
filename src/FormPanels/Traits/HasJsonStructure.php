@@ -9,9 +9,9 @@ trait HasJsonStructure
     {
         return [
             'id' => null,
-            'title' => 'New Panel',
+            'title' => "New {$this->getName()} Panel",
             'type' => $this->getCodename(),
-            'position' => null,
+            'position' => 'main',
             'is_main_meta' => false,
             'fields' => (array) [],
             'has_container' => true,

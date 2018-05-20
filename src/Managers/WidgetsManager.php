@@ -70,7 +70,7 @@ class WidgetsManager implements ManagerContract
         return $count;
     }
 
-    public function widgetsRows()
+    public function rows()
     {
         return $this->widgets;
     }

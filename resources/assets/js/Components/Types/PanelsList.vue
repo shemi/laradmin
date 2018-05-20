@@ -62,8 +62,8 @@
         },
 
         methods: {
-            createPanel() {
-                let panelStructure = cloneDeep(this.builderData.panels.panel.structure);
+            createPanel(type) {
+                let panelStructure = cloneDeep(this.builderData.panels[type]['structure']);
                 panelStructure.id = Helpers.makeId();
 
                 this.form[this.formKey]['push'](panelStructure);

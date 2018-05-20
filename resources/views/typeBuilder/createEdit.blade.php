@@ -16,7 +16,7 @@
 
         <div>
 
-            <form v-on:submit.prevent="save()" novalidate>
+            <form v-on:submit.prevent="save()" action="/" method="POST" novalidate>
                 <div class="columns">
 
                     <div class="column is-three-quarters">
@@ -218,11 +218,18 @@
                                             </div>
                                             <div class="level-right">
                                                 <div class="level-item">
-                                                    <button type="button"
-                                                            @click.prevent="addPanel('main')"
-                                                            class="button is-primary">
-                                                        @lang('laradmin::type-builder.builder.add_panel')
-                                                    </button>
+                                                    <b-dropdown>
+                                                        <button type="button" class="button is-primary" slot="trigger">
+                                                            <span>@lang('laradmin::type-builder.builder.add_panel')</span>
+                                                            <b-icon icon="caret-down"></b-icon>
+                                                        </button>
+
+                                                        <b-dropdown-item @click="addPanel(type)"
+                                                                         v-if="! panel.protected"
+                                                                         v-for="(panel, type) in panels">
+                                                            @{{ panel.name }}
+                                                        </b-dropdown-item>
+                                                    </b-dropdown>
                                                 </div>
                                             </div>
                                         </div>

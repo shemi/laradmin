@@ -10,6 +10,8 @@ use Shemi\Laradmin\Models\Type;
 class MainMetaPanel extends FormPanel
 {
 
+    protected $isProtected = true;
+
     /**
      * @param Panel $panel
      * @param Type $type
@@ -30,6 +32,29 @@ class MainMetaPanel extends FormPanel
         ));
     }
 
+    public function structure()
+    {
+        $structure = parent::structure();
 
+        $structure['is_main_meta'] = true;
+        $structure['position'] = 'side';
+        $structure['title'] = trans('laradmin::crud.publish');
+
+        return $structure;
+    }
+
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+
+        $options[] = [
+            'label' => 'Fields',
+            'key' => 'fields',
+            'type' => 'la-fields-list',
+            'validation' => []
+        ];
+
+        return $options;
+    }
 
 }

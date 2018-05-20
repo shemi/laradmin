@@ -63,7 +63,8 @@ class Laradmin
     {
         $types = [
             'simple',
-            'main_meta'
+            'main_meta',
+            'tabs'
         ];
 
         foreach ($types as $type) {

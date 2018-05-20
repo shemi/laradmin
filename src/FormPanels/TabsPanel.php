@@ -7,7 +7,7 @@ use Illuminate\View\View;
 use Shemi\Laradmin\Models\Panel;
 use Shemi\Laradmin\Models\Type;
 
-class SimplePanel extends FormPanel
+class TabsPanel extends FormPanel
 {
 
     /**
@@ -30,18 +30,20 @@ class SimplePanel extends FormPanel
         ));
     }
 
+    public function structure()
+    {
+        $structure = parent::structure();
+
+        $structure['tabs'] = (array) [
+            ['id' => 'new-tab', 'title' => 'First Tab']
+        ];
+
+        return $structure;
+    }
 
     public function getOptions()
     {
         return array_merge(parent::getOptions(), [
-            [
-                'label' => null,
-                'slot' => '<span>Has Container</span>',
-                'slot_el' => 'span',
-                'key' => 'has_container',
-                'type' => 'b-switch',
-                'validation' => []
-            ],
             [
                 'label' => 'Fields',
                 'key' => 'fields',

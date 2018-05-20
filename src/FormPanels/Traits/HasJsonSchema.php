@@ -23,16 +23,15 @@ trait HasJsonSchema
                 $schema->string();
             });
 
-            $schema->string('title');
+            $schema->string('title')->required();
 
-            $schema->string('type');
+            $schema->string('type')->required();
 
-            $schema->integer('position')
-                ->nullable();
+            $schema->string('position')->required();
 
             $schema->boolean('is_main_meta');
 
-            $schema->array('fields', ['object']);
+            $schema->array('fields', ['object'])->required();
 
             $schema->boolean('has_container');
 

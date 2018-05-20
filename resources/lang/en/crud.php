@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'publish' => 'Publish',
+
     'page_title' => [
         'browse' => 'All :name',
         'create' => 'New :name',

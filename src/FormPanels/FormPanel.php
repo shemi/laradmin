@@ -5,6 +5,8 @@ namespace Shemi\Laradmin\FormPanels;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FormPanelContract;
+use Shemi\Laradmin\FormPanels\Traits\HasJsonSchema;
+use Shemi\Laradmin\FormPanels\Traits\HasJsonStructure;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\FormPanels\Traits\Buildable;
 use Shemi\Laradmin\Traits\Renderable;
@@ -17,6 +19,19 @@ abstract class FormPanel implements FormPanelContract
     protected $name;
 
     protected $codename;
+
+    protected $defaultBuilderOptions = [
+        [
+            'label' => 'Title',
+            'type' => 'b-input',
+            'key' => 'title',
+            'props' => [
+                'type' => 'text',
+                'placeholder' => 'Enter Panel Name',
+            ],
+            'validation' => ['required']
+        ]
+    ];
 
     /**
      * @param Panel $panel
@@ -48,6 +63,11 @@ abstract class FormPanel implements FormPanelContract
         }
 
         return $this->codename;
+    }
+
+    public function getOptions()
+    {
+        return $this->defaultBuilderOptions;
     }
 
     public function getName()

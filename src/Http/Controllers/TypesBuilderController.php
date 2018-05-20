@@ -105,45 +105,11 @@ class TypesBuilderController extends Controller
 
     public function getCreateEditResponse(Type $model)
     {
-        $panels = [
-            'panel' => [
-                'structure' => [
-                    'id' => null,
-                    'title' => 'New Panel',
-                    'position' => 'main',
-                    'is_main_meta' => false,
-                    'fields' => (array) [],
-                    'has_container' => true,
-                    'style' => (object) []
-                ],
-                'options' => [
-                    [
-                        'label' => 'Title',
-                        'type' => 'b-input',
-                        'key' => 'title',
-                        'props' => [
-                            'type' => 'text',
-                            'placeholder' => 'Enter Panel Name',
-                        ],
-                        'validation' => ['required']
-                    ],
-                    [
-                        'label' => null,
-                        'slot' => '<span>Has Container</span>',
-                        'slot_el' => 'span',
-                        'key' => 'has_container',
-                        'type' => 'b-switch',
-                        'validation' => []
-                    ],
-                    [
-                        'label' => 'Fields',
-                        'key' => 'fields',
-                        'type' => 'la-fields-list',
-                        'validation' => []
-                    ]
-                ]
-            ]
-        ];
+        $panels = [];
+
+        foreach (app('laradmin')->formPanels()->all() as $formPanel) {
+            $panels[$formPanel->getCodeName()] = $formPanel->getBuilderData();
+        }
 
         $fields = [];
 

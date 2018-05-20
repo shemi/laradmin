@@ -18,6 +18,7 @@ export default {
     data() {
         return {
             form: new LaForm(window.laradmin.model),
+            panels: window.laradmin.builderData.panels,
             isIconSelectModalActive: false
         }
     },
@@ -61,8 +62,8 @@ export default {
                 });
         },
 
-        addPanel(position) {
-            this.$refs.panels.createPanel();
+        addPanel(type) {
+            this.$refs.panels.createPanel(type);
         },
 
         openIconSelectModal(toUpdate) {
