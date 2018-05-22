@@ -18,7 +18,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "buefy": "^0.6.5",
-    "bulma": "^0.6.2",
+    "bulma": "^0.7.1",
     "jsoneditor": "^5.14.1",
     "laravel-mix": "^2.1",
     "lodash": "^4.17.10",
@@ -28,6 +28,7 @@
     "vue": "^2.5.16",
     "vue-clip": "^1.0.0",
     "vue-multiselect": "^2.1.0",
+    "vue-smooth-dnd": "^0.1.7",
     "vue2-dragula": "^2.5.4",
     "vuedraggable": "^2.16.0"
   },

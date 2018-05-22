@@ -15,6 +15,7 @@
                                 :index="index"
                                 :wrapper="newValue"
                                 type="fields"
+                                v-show="! isHidden(field)"
                                 :moved="handleMoved"
                                 class="la-fields-list-item"
                                 effect-allowed="move">
@@ -22,7 +23,7 @@
                     <la-field :form-key="formKey + '.' + index"
                               @clone="cloneField(index, field)"
                               @delete="deleteField(index, field, formKey + '.' + index)"
-                              @has-errors="handelErrors($event, formKey + '.' + index)"
+                              @has-errors="handelErrors($event, formKey + '.' + index, field)"
                               v-model="newValue[index]">
                     </la-field>
 
@@ -60,7 +61,12 @@
 
         props: {
             value: Array,
-            formKey: String
+            formKey: String,
+            setStructureBeforeCreate: Function,
+            isHidden: {
+                type: Function,
+                default: (field) => false
+            }
         },
 
         mixins: [ParentFormMixin],
@@ -83,6 +89,10 @@
             createField() {
                 let structure = cloneDeep(this.builderData.fields.input.structure);
                 structure.id = Helpers.makeId();
+
+                if(typeof this.setStructureBeforeCreate === 'function') {
+                    this.setStructureBeforeCreate(structure);
+                }
 
                 this.newValue.push(structure);
                 this.$emit('input', this.newValue);
@@ -114,6 +124,11 @@
                 const { index, list, item } = data;
 
                 item.id = Helpers.makeId();
+
+                if(typeof this.setStructureBeforeCreate === 'function') {
+                    this.setStructureBeforeCreate(item);
+                }
+
                 list.splice(index, 0, item);
             },
 
@@ -122,10 +137,11 @@
                 list.splice(index, 1);
             },
 
-            handelErrors(hasErrors, key) {
+            handelErrors(hasErrors, key, field) {
                 this.errors[key] = hasErrors;
 
                 this.$emit('has-errors', Object.values(this.errors).indexOf(true) >= 0);
+                this.$emit('field-has-errors', {field, hasErrors});
             }
 
         },

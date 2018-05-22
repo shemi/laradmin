@@ -12,7 +12,7 @@ import Crud from './Components/Crud/Crud';
 import { Vue2Dragula } from 'vue2-dragula';
 import VueClip from 'vue-clip'
 import Multiselect from 'vue-multiselect/src/index';
-import Vddl from 'vddl';
+import Vddl from './Plugins/vddl/install';
 import LaIconInput from './Components/IconInput/IconInput.vue';
 
 import './Filters/Slugify';

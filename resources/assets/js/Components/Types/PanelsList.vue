@@ -22,7 +22,7 @@
                     <la-panel :form-key="formKey + '.' + index"
                               @clone="clonePanel(index, panel)"
                               @delete="deletePanel(index, panel)"
-                              :panel="panel">
+                              v-model="panels[index]">
                     </la-panel>
 
                 </vddl-draggable>

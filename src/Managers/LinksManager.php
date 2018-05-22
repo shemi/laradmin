@@ -46,7 +46,7 @@ class LinksManager implements ManagerContract
 
     public function route($name, $parameters = [])
     {
-        return route($name, $parameters, false);
+        return route($name, $parameters);
     }
 
     public function getManagerName()

@@ -48,6 +48,11 @@ class Panel extends Model
         return $value;
     }
 
+    public function getTabsAttribute($value)
+    {
+        return (array) $value ?: [];
+    }
+
     public function getStyleAttribute($value)
     {
         if (is_string($value)) {
@@ -167,9 +172,9 @@ class Panel extends Model
             'title',
             'type',
             'position',
-            'is_main_meta',
             'has_container',
-            'style'
+            'style',
+            'tabs'
         ];
 
         $array = [];

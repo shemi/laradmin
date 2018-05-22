@@ -323,7 +323,8 @@ class Field extends Model
             'read_only' => 'bool',
             'browse_settings' => 'object',
             'relationship' => 'object',
-            'media' => 'object'
+            'media' => 'object',
+            'tab_id' => null
         ];
 
         $array = [];

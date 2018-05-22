@@ -1,10 +1,11 @@
 <template>
-    <vddl-list class="tabs is-toggle"
-               :list="newValue"
-               :allowed-types="['tabs']"
-               :drop="handleDrop"
-               :horizontal="false">
-        <ul>
+    <div class="tabs is-toggle">
+        <vddl-list :list="newValue"
+                   :tag="'ul'"
+                   :allowed-types="['tabs']"
+                   :drop="handleDrop"
+                   :horizontal="false">
+
             <vddl-draggable v-for="(tab, index) in newValue"
                             :class="{'is-active': tab.id === selectedTab}"
                             :key="tab.id"
@@ -16,12 +17,17 @@
                             :moved="handleMoved"
                             effect-allowed="move">
 
-                <a @click="selectTab(tab)">
+                <a @click="selectTab(tab)"
+                   :class="{'has-text-white-bis has-background-danger': errors[tab.id]}"
+                   @dragenter="onDragOver($event, tab)">
                     <b-icon v-if="tab.icon" :icon="tab.icon"></b-icon>
                     <span>{{ tab.title }}</span>
                 </a>
-
             </vddl-draggable>
+
+            <vddl-placeholder :tag="'li'">
+                <a>Drop here</a>
+            </vddl-placeholder>
 
             <li>
                 <a @click="make">
@@ -29,8 +35,8 @@
                     <b-icon icon="plus"></b-icon>
                 </a>
             </li>
-        </ul>
-    </vddl-list>
+        </vddl-list>
+    </div>
 </template>
 
 <script>
@@ -46,7 +52,8 @@
         mixins: [ParentFormMixin],
 
         props: {
-            value: Array
+            value: Array,
+            errors: Object
         },
 
         data() {
@@ -63,12 +70,22 @@
         },
 
         mounted() {
-            this.selectedTab = this.newValue[0] ? this.newValue[0].id : null;
+            if(this.newValue[0]) {
+                this.selectTab(this.newValue[0]);
+            }
         },
 
         methods: {
             make() {
                 this.createUpdateModal({title: '', icon: null, id: null});
+            },
+
+            onDragOver($event, tab) {
+                if(tab.id === this.selectedTab) {
+                    return;
+                }
+
+                this.selectTab(tab);
             },
 
             createUpdateModal(tab) {
@@ -104,9 +121,14 @@
 
                 this.newValue.push({id, title, icon});
                 this.$emit('input', this.newValue);
+                this.selectTab(this.newValue[this.newValue.length - 1]);
             },
 
             selectTab(tab) {
+                if(! tab || ! tab.id) {
+                    return;
+                }
+
                 if(this.selectedTab === tab.id) {
                     this.createUpdateModal(cloneDeep(tab));
 
@@ -114,6 +136,7 @@
                 }
 
                 this.selectedTab = tab.id;
+                this.$emit('tab-selected', this.selectedTab);
             },
 
             handleDrop(data) {

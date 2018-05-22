@@ -19,7 +19,7 @@
                             type="is-danger"></b-icon>
                 </div>
 
-                <div class="level-item" @click.stop.prevent v-if="! panel.is_main_meta">
+                <div class="level-item" @click.stop.prevent v-if="! isProtected">
                     <b-dropdown>
                         <button class="button is-small" slot="trigger" @click.prevent>
                             <b-icon icon="ellipsis-v" size="is-small"></b-icon>
@@ -50,13 +50,13 @@
                     <b-tooltip label="Select The Panel Position" position="is-left">
                         <b-field>
                             <b-radio-button v-model="panel.position"
-                                            :disabled="panel.is_main_meta"
+                                            :disabled="isProtected"
                                             native-value="main">
                                 <span>Main</span>
                             </b-radio-button>
 
                             <b-radio-button v-model="panel.position"
-                                            :disabled="panel.is_main_meta"
+                                            :disabled="isProtected"
                                             native-value="side">
                                 <span>Side</span>
                             </b-radio-button>
@@ -71,13 +71,23 @@
             </div>
         </div>
 
-        <la-options-set type="panel"
-                        :form-key="formKey"
-                        :options="options"
-                        v-model="panel"
-                        @has-errors="handelErrors"
-                        v-show="isOpen">
-        </la-options-set>
+        <!--<la-options-set type="panel"-->
+                        <!--:form-key="formKey"-->
+                        <!--:options="options"-->
+                        <!--v-model="panel"-->
+                        <!--@has-errors="handelErrors"-->
+                        <!--v-show="isOpen">-->
+        <!--</la-options-set>-->
+
+        <div class="la-options-list la-panel-form"
+             :is="formComponent"
+             :options="options"
+             :form-key="formKey"
+             v-model="panel"
+             @input="input"
+             @has-errors="handelErrors"
+             v-show="isOpen">
+        </div>
 
     </vddl-nodrag>
 
@@ -88,7 +98,9 @@
     import LaOptionsSet from './OptionsSet.vue';
     import { cloneDeep } from "lodash";
 
-
+    import LaMainMetaPanelForm from './Panels/MainMetaPanelForm';
+    import LaSimplePanelForm from './Panels/SimplePanelForm';
+    import LaTabsPanelForm from './Panels/TabsPanelForm';
 
     export default {
 
@@ -97,19 +109,26 @@
         mixins: [ParentFormMixin],
 
         props: {
-            panel: Object,
+            value: Object,
             formKey: String,
         },
 
         data() {
             return {
                 isOpen: false,
-                options: cloneDeep(window.laradmin.builderData.panels[this.panel.type].options),
+                panel: this.value,
+                type: this.value.type,
+                builderData: cloneDeep(window.laradmin.builderData.panels[this.value.type]),
                 hasErrors: false,
             }
         },
 
         methods: {
+            input(value) {
+                this.panel = value;
+                this.$emit('input', value);
+            },
+
             clonePanel() {
                 this.isOpen = false;
 
@@ -128,8 +147,29 @@
 
         },
 
+        computed: {
+            options() {
+                return this.builderData.options;
+            },
+
+            isProtected() {
+                return this.builderData.protected;
+            },
+
+            formComponent() {
+                return [
+                    'la',
+                    this.type.replace(/\_/g, '-'),
+                    'panel-form'
+                ].join('-');
+            }
+        },
+
         components: {
-            LaOptionsSet
+            LaOptionsSet,
+            LaMainMetaPanelForm,
+            LaSimplePanelForm,
+            LaTabsPanelForm
         }
 
     }
