@@ -3,6 +3,9 @@
 namespace Shemi\Laradmin\Tests\Controller;
 
 use Shemi\Laradmin\Http\Controllers\CrudController;
+use Shemi\Laradmin\Http\Controllers\ExportController;
+use Shemi\Laradmin\Http\Controllers\ImportController;
+use Shemi\Laradmin\Models\Panel;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Models\User;
 use Shemi\Laradmin\Tests\Controller\Fakes\TestCrudController;
@@ -52,6 +55,8 @@ class TypesBuilderControllerTest extends AbstractControllerTest
             'export_controller' => $export_controller,
             'support_import' => $import_controller ? true : false,
             'import_controller' => $import_controller,
+            'default_sort' => 'id',
+            'default_sort_direction' => 'DESC',
             'icon' => null,
             'records_per_page' => 25,
             'panels' => $panels ?: [
@@ -62,6 +67,7 @@ class TypesBuilderControllerTest extends AbstractControllerTest
                     'position' => 'main',
                     'style' => (object) [],
                     'title' => 'cool',
+                    'object_type' => Panel::OBJECT_TYPE,
                     'fields' => (array) []
                 ]
             ]
@@ -222,7 +228,13 @@ class TypesBuilderControllerTest extends AbstractControllerTest
             'controller' => CrudController::class,
             'model' => TestUser::class,
             'panels' => (array) [],
-            'records_per_page' => 25
+            'records_per_page' => 25,
+            'support_export' => false,
+            'export_controller' => ExportController::class,
+            'support_import' => false,
+            'default_sort' => 'id',
+            'import_controller' => ImportController::class,
+            'icon' => null,
         ]);
 
         $this->get(route('laradmin.types.edit', ['type' => $type->slug]))

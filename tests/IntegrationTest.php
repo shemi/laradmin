@@ -183,6 +183,7 @@ abstract class IntegrationTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('app.env', 'test');
+        $app['config']->set('app.debug', true);
         $app['config']->set('filesystems.disks.test', [
             'driver' => 'local',
             'root' => __DIR__.DIRECTORY_SEPARATOR.'data',
