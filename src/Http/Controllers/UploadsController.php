@@ -33,7 +33,7 @@ class UploadsController extends Controller
 
         if($type) {
             $path = $path."types/{$type->id}/";
-            $field = $type->fields
+            $field = Type::extractAllFields(collect($type->fields))
                 ->first(function($field) use ($key) {
                     return $field->key === $key;
                 });

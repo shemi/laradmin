@@ -100,4 +100,26 @@ abstract class FormFormField implements FormFieldContract
         return (boolean) $this->subFieldsSupported;
     }
 
+    public function getFormPrefix(Field $field)
+    {
+        if($field->is_repeater_sub_field) {
+            return "props.row.";
+        }
+
+        if($field->parent) {
+            return rtrim("{$field->parent->form_prefix}{$field->parent->key}.", '.').'.';
+        }
+
+        return "form.";
+    }
+
+    public function getValidationKey(Field $field, Field $parent = null)
+    {
+        if($parent) {
+            return "{$parent->key}.{$field->key}";
+        }
+
+        return $field->key;
+    }
+
 }

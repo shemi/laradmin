@@ -29,7 +29,6 @@
         <la-image-card v-if="value"
                        @on-delete="deleteFile"
                        :file="value">
-
         </la-image-card>
 
     </div>

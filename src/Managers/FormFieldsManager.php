@@ -7,6 +7,24 @@ use Shemi\Laradmin\Contracts\Managers\ManagerContract;
 
 class FormFieldsManager implements ManagerContract
 {
+    const DEFAULT_TYPES = [
+        'input',
+        'select_multiple',
+        'checkboxes',
+        'repeater',
+        'switch',
+        'files',
+        'date',
+        'select',
+        'message',
+        'relationship',
+        'image',
+        'file',
+        'tags',
+        'time',
+        'group'
+    ];
+
     protected $bucket = [];
 
     public function exists($type)

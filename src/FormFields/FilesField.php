@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\FormFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Testing\File;
+use Illuminate\Support\Collection;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
@@ -24,15 +25,19 @@ class FilesField extends FormFormField
         ));
     }
 
-    public function transformRequest(Field $field, $value)
+    public function transformRequest(Field $field, $data)
     {
-        $value = collect($value);
-
-        if($value->isEmpty()) {
-            return $value;
+        if($data instanceof Collection) {
+            return $data;
         }
 
-        return $value->transform(function($file, $index) {
+        $data = collect($data);
+
+        if($data->isEmpty()) {
+            return $data;
+        }
+
+        return $data->transform(function($file, $index) {
             $id = array_get($file, 'customAttributes.id', 0);
 
             return (object) [

@@ -116,18 +116,18 @@
 
                 <template slot-scope="props">
                     @foreach($columns as $index => $column)
-                        <b-table-column field="{{ $column->key }}"
+                        <b-table-column field="{{ $column->browse_key }}"
                                         label="{{ $column->browse_label }}"
-                                        custom-key="{{ $column->key.$index }}"
+                                        custom-key="{{ $column->browse_key.$index }}"
                                         {{ $column->sortable ? 'sortable' : '' }}>
 
                             @switch($column->type)
                                 @case('image')
-                                    <div v-html="props.row.{{ $column->key }}" class="image is-64x64"></div>
+                                    <div v-html="props.row.{{ $column->browse_key }}" class="image is-64x64"></div>
                                     @break
 
                                 @default
-                                    <div v-html="props.row.{{ $column->key }}"></div>
+                                    <div v-html="props.row.{{ $column->browse_key }}"></div>
                             @endswitch
 
                         </b-table-column>

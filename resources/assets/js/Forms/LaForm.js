@@ -133,6 +133,25 @@ class LaForm {
         return newValue;
     }
 
+    transformGroupValue(value, parentKey) {
+        if(Array.isArray(value)) {
+            return this.transformGroupValue(value[0]);
+        }
+
+        if(typeof value !== 'object') {
+            return {};
+        }
+
+        let newObject = {};
+        let keys = Object.keys(value);
+
+        for(let key of keys) {
+            newObject[key] = this.transformValue(value, key, parentKey + '.');
+        }
+
+        return newObject;
+    }
+
     transformFileValue(file) {
         if(! file || typeof file === File) {
             return file;

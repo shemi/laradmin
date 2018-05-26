@@ -135,7 +135,7 @@
                 newSubType: null,
                 hasOunErrors: false,
                 hasSubFieldsErrors: false,
-                leaveOutKeys: ['id', 'type', 'fields', 'tab_id'],
+                leaveOutKeys: ['id', 'type', 'fields', 'tab_id', 'object_type'],
                 builderData: cloneDeep(window.laradmin.builderData.fields)
             }
         },
@@ -174,6 +174,7 @@
                 this.$nextTick(function() {
                     if(this.isOpen && this.$refs.editor.getMonaco()) {
                         this.$refs.editor.getMonaco().layout();
+                        this.$refs.editor.getMonaco().focus();
                     }
                 }.bind(this));
             },

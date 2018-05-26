@@ -10,6 +10,7 @@ use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeRequestValidatorRepository;
 use Laradmin;
+use Shemi\Laradmin\Exceptions\CreateUpdateException;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Repositories\QueryRepository;
 
@@ -201,26 +202,22 @@ class CrudController extends Controller
             ->validate($request, $type, $model, $fields);
 
         /** @var CreateUpdateRepository $createRepository */
-        $createRepository = app(CreateUpdateRepository::class)
-            ->createOrUpdate(
-                $request->only($fields->pluck('key')->toArray()),
-                $model,
-                $type
-            );
-
-        if($createRepository->failed()) {
-            return $this->responseBadRequest(
-                $createRepository->errors()->first()
-            );
+        try {
+            $createRepository = app(CreateUpdateRepository::class)
+                ->createOrUpdate(
+                    $request->only($fields->pluck('key')->toArray()),
+                    $model,
+                    $type
+                );
+        } catch (CreateUpdateException $exception) {
+            return $this->responseInternalError($exception->getMessage());
         }
-
-        $warnings = $createRepository->warnings();
 
         $redirect = route("laradmin.{$type->slug}.edit", [
             'id' => $model->getKey()
         ]);
 
-        return $this->response(compact('model', 'redirect', 'warnings'));
+        return $this->response(compact('model', 'redirect'));
     }
 
     /**
@@ -287,21 +284,17 @@ class CrudController extends Controller
             ->validate($request, $type, $model, $fields);
 
 
-        /** @var CreateUpdateRepository $updateRepository */
-        $updateRepository = app(CreateUpdateRepository::class)
-            ->createOrUpdate(
-                $request->only($fields->pluck('key')->toArray()),
-                $model,
-                $type
-            );
-
-        if($updateRepository->failed()) {
-            return $this->responseBadRequest(
-                $updateRepository->errors()->first()
-            );
+        /** @var CreateUpdateRepository $createRepository */
+        try {
+            $createRepository = app(CreateUpdateRepository::class)
+                ->createOrUpdate(
+                    $request->only($fields->pluck('key')->toArray()),
+                    $model,
+                    $type
+                );
+        } catch (CreateUpdateException $exception) {
+            return $this->responseInternalError($exception->getMessage());
         }
-
-        $warnings = $updateRepository->warnings();
 
         $model = app(TransformTypeModelDataRepository::class)
             ->transform($type, $model->refresh());
@@ -309,7 +302,7 @@ class CrudController extends Controller
         $redirect = false;
 
         return $this->response(
-            compact('model', 'redirect', 'warnings')
+            compact('model', 'redirect')
         );
     }
 

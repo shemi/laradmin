@@ -28,6 +28,7 @@ trait HasJsonStructure
                 'order' => null,
                 'sortable' => false,
                 'searchable' => false,
+                'horizontal' => false,
                 'search_comparison' => 'like'
             ],
             'object_type' => Field::OBJECT_TYPE

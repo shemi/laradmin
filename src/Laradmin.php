@@ -61,11 +61,7 @@ class Laradmin
 
     protected function registerFormPanels()
     {
-        $types = [
-            'simple',
-            'main_meta',
-            'tabs'
-        ];
+        $types = FormPanelsManager::DEFAULT_TYPES;
 
         foreach ($types as $type) {
             $class = studly_case("{$type}_Panel");
@@ -81,22 +77,7 @@ class Laradmin
 
     protected function registerFormFields()
     {
-        $types = [
-            'input',
-            'select_multiple',
-            'checkboxes',
-            'repeater',
-            'switch',
-            'files',
-            'date',
-            'select',
-            'message',
-            'relationship',
-            'image',
-            'file',
-            'tags',
-            'time'
-        ];
+        $types = FormFieldsManager::DEFAULT_TYPES;
 
         foreach ($types as $type) {
             $class = studly_case("{$type}_Field");

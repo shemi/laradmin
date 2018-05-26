@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JsonSerializable;
 
@@ -299,15 +300,31 @@ class Model implements Arrayable, Jsonable, JsonSerializable
             return $value;
         }
 
+        $types = explode('|', $type);
+        $type = array_shift($types);
+        $subType = empty($types) ? null : implode('|', $types);
+
         switch ($type) {
 
             case 'array':
+                if($subType && ! Arr::accessible($value)) {
+                    return $this->castBuilderAttribute($value, $subType);
+                }
+
                 return (array) $value;
 
             case 'object':
+                if($subType && ! Arr::accessible($value)) {
+                    return $this->castBuilderAttribute($value, $subType);
+                }
+
                 return (object) $value;
 
             case 'string':
+                if($subType && ! is_string($value)) {
+                    return $this->castBuilderAttribute($value, $subType);
+                }
+
                 return (string) $value;
 
             case 'bool':

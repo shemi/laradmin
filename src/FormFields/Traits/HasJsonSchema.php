@@ -118,6 +118,8 @@ trait HasJsonSchema
 
                 $schema->boolean('group_multiline');
 
+                $schema->boolean('horizontal');
+
                 $schema->number('max_length')->nullable();
 
             })->required();
@@ -187,6 +189,8 @@ trait HasJsonSchema
             return $this->oneOf('relationship', function (Blueprint $schema) {
 
                 $schema->null();
+
+                $schema->boolean();
 
                 $schema->object(null, function(Blueprint $schema) {
 

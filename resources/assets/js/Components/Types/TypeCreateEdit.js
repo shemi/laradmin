@@ -27,6 +27,10 @@ export default {
 
     mounted() {
         MonacoLoader.load().then(() => {this.isLoading = false});
+
+        if(! this.form.exists) {
+            this.addPanel('main_meta', 'Publish');
+        }
     },
 
     methods: {
@@ -64,8 +68,8 @@ export default {
                 });
         },
 
-        addPanel(type) {
-            this.$refs.panels.createPanel(type);
+        addPanel(type, name = null) {
+            this.$refs.panels.createPanel(type, name);
         },
 
         openIconSelectModal(toUpdate) {

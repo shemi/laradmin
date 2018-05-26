@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\Models\Traits;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\FormFields\FormFormField;
 use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Models\Type;

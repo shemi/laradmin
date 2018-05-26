@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\Media;
  * @property array|null $relationship
  * @property array $media
  * @property boolean $is_media
- * @property array $media_disc
+ * @property array $media_disk
  * @property boolean $is_relationship
  * @property string $key
  * @property string $type
@@ -45,7 +45,7 @@ trait InteractsWithMedia
         return $value;
     }
 
-    public function getMediaDiscAttribute()
+    public function getMediaDisKAttribute()
     {
         return $this->media['disk'];
     }

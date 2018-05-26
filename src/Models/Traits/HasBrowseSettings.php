@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Models\Traits;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\FieldHasBrowseValue;
+use Shemi\Laradmin\Models\Field;
 
 /**
  * Shemi\Laradmin\Models\Traits\FieldHasBrowseSettings
@@ -34,7 +35,13 @@ trait HasBrowseSettings
 
     public function getBrowseKeyAttribute()
     {
-        return data_get($this->browse_settings, 'key', $this->key);
+        $prefix = "";
+
+        if($this->is_sub_field && $this->parent && ! $this->is_repeater_sub_field) {
+            $prefix = "{$this->parent->browse_key}.";
+        }
+
+        return $prefix.data_get($this->browse_settings, 'key', $this->key);
     }
 
     public function getBrowseLabelAttribute()
@@ -64,46 +71,47 @@ trait HasBrowseSettings
             $this->search_comparison !== 'like';
     }
 
+    /**
+     * @param EloquentModel $model
+     * @return array|bool|string
+     */
     public function getBrowseValue(EloquentModel $model)
     {
-        if(in_array($this->key, $model->getHidden())) {
+        if($model instanceof EloquentModel && in_array($this->key, $model->getHidden())) {
             return "";
         }
 
-        if($this->formFieldsManager()->exists($this->type)) {
-            $formField = $this->formField();
+        if($model instanceof EloquentModel) {
+            if($this->formFieldsManager()->exists($this->type)) {
+                $formField = $this->formField();
 
-            if($formField instanceof FieldHasBrowseValue) {
-                return $formField->renderBrowseValue($this, $model);
+                if($formField instanceof FieldHasBrowseValue) {
+                    return $formField->renderBrowseValue($this, $model);
+                }
             }
         }
 
-        switch ($this->type) {
+        $modelValue = data_get($model, $this->browse_key);
 
-            case 'text':
-            case 'text_area':
-            case 'number':
-                return $model->getAttribute($this->key);
+        switch ($this->type) {
 
             case 'select':
             case 'radio':
-                if($this->is_relationship && $rModel = $model->{$this->key}) {
+                if($this->is_relationship && $modelValue) {
                     $labels = "";
 
                     foreach ($this->relation_labels as $label) {
-                        $labels .= $rModel->getAttribute($label).', ';
+                        $labels .= $modelValue->getAttribute($label).', ';
                     }
 
                     return trim($labels, ', ');
                 }
 
-                return $model->getAttribute($this->key);
+                return $modelValue;
 
             case 'time':
             case 'date':
             case 'datetime':
-                $value = $model->getAttribute($this->key);
-
                 if($this->type === 'time') {
                     $format = "H:i";
                 } else {
@@ -111,30 +119,30 @@ trait HasBrowseSettings
                 }
 
                 try {
-                    $value = \Carbon\Carbon::parse($value);
-                    $value->tz(config('app.timezone'));
+                    $modelValue = \Carbon\Carbon::parse($modelValue);
+                    $modelValue->tz(config('app.timezone'));
                 } catch (\Exception $e) {}
 
                 if(isset($this->browse_settings['date_format']) && $this->browse_settings['date_format']) {
                     $format = addslashes($this->browse_settings['date_format']);
                 }
 
-                if($value instanceof \DateTime) {
-                    $value = $value->format($format);
+                if($modelValue instanceof \DateTime) {
+                    $modelValue = $modelValue->format($format);
                 }
 
-                return $value;
+                return $modelValue;
 
             case 'select_multiple':
             case 'checkboxes':
             case 'repeater':
             case 'relationship':
                 if($this->is_relationship) {
-                    if(! $model->{$this->key}) {
+                    if(! $modelValue) {
                         return 'Relation error!';
                     }
 
-                    return $model->{$this->key}
+                    return $modelValue
                         ->map(function($model) {
                             $labels = "";
 
@@ -151,12 +159,10 @@ trait HasBrowseSettings
 
             case 'checkbox':
             case 'switch':
-                return (bool) $model->getAttribute($this->key);
-
-                break;
+                return (bool) $modelValue;
 
             default:
-                return $model->getAttribute($this->key);
+                return $modelValue;
 
         }
     }

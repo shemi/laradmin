@@ -23,6 +23,11 @@ namespace Shemi\Laradmin\Models\Traits;
 trait HasTemplateOptions
 {
 
+    public static $uninheritableOptions = [
+        'show_if', 'max_length', 'placeholder',
+        'type', 'icon'
+    ];
+
     static public $forceGroupedTypes = ['checkboxes'];
 
     public function getFieldTypeAttribute()
@@ -54,7 +59,7 @@ trait HasTemplateOptions
     }
 
     public function getIsGroupMultilineAttribute() {
-        if(in_array($this->type, ['checkboxes'])) {
+        if(in_array($this->type, static::$forceGroupedTypes)) {
             return true;
         }
 
@@ -75,11 +80,40 @@ trait HasTemplateOptions
 
     public function getIsHorizontalAttribute()
     {
+        if($this->is_repeater_sub_field) {
+            return false;
+        }
+
         return $this->getTemplateOption('horizontal', false);
+    }
+
+    public function canInheritFromParent()
+    {
+        return $this->is_sub_field && $this->parent;
+    }
+
+    public function canInherit($key)
+    {
+        return $this->canInheritFromParent() &&
+            ! isset($this->template_options[$key]) &&
+            ! in_array($key, static::$uninheritableOptions);
+    }
+
+    public function isHeirToChildren($key)
+    {
+        return $this->formField()->isSupportingSubFields() && ! in_array($key, static::$uninheritableOptions);
     }
 
     public function getTemplateOption($key, $default = null)
     {
+        if($this->isHeirToChildren($key)) {
+            return $default;
+        }
+
+        if($this->canInherit($key)) {
+            return data_get($this->parent->template_options, $key, $default);
+        }
+
         return data_get($this->template_options, $key, $default);
     }
 

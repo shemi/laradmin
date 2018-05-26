@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\HasMediaContract;
+use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -31,6 +32,10 @@ trait InteractsWithRelationship
 
     public function getIsRelationshipAttribute()
     {
+        if($this->relationship === true) {
+            return true;
+        }
+
         return $this->relationship &&
             is_array($this->relationship) &&
             ! empty($this->relationship);
@@ -43,12 +48,30 @@ trait InteractsWithRelationship
 
     public function getRelationLabelsAttribute()
     {
-        return (array) array_get($this->relationship, 'label', 'id');
+        $labels = (array) array_get($this->relationship, 'label', null) ?: [];
+
+        if(empty($labels) && $this->is_support_sub_fields) {
+            /** @var Field $field */
+            foreach ($this->getSubFields() as $field) {
+                if($field->isVisibleOn('browse')) {
+                    $labels[] = $field->key;
+                }
+            }
+        }
+
+        return $labels;
     }
 
     public function getRelationKeyAttribute()
     {
-        return array_get($this->relationship, 'key', 'id');
+        return array_get($this->relationship, 'key');
+    }
+
+    public function getRelationKeyName(EloquentModel $model)
+    {
+        $model = $this->getRelationModelClass($model);
+
+        return $this->relation_key ?: $model->getKeyName();
     }
 
     public function getRelationImageAttribute()
@@ -94,11 +117,13 @@ trait InteractsWithRelationship
      */
     public function getRelationClass(EloquentModel $model)
     {
-        if(! $this->is_relationship || ! method_exists($model, $this->key)) {
+        $key = camel_case($this->key);
+
+        if(! $this->is_relationship || ! method_exists($model, $key)) {
             return false;
         }
 
-        $relation = $model->{$this->key}();
+        $relation = $model->{$key}();
 
         if(! ($relation instanceof Relation)) {
             return false;

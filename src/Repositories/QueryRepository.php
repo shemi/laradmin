@@ -59,7 +59,7 @@ class QueryRepository implements QueryRepositoryContract
         $this->request = $request;
         $this->type = $type;
         $this->model = app($type->model);
-        $this->query = $this->model::select('*');
+        $this->query = $this->model::select($this->model->getTable() . '.*');
         $this->primaryKey = $this->model->getKeyName();
         $this->whereFields = collect([]);
         $this->whereHasFields = collect([]);
@@ -93,22 +93,22 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function filter()
     {
-        if($this->type->filterable_fields->isEmpty() || ! $this->hasFilters()) {
+        if ($this->type->filterable_fields->isEmpty() || ! $this->hasFilters()) {
             return $this;
         }
 
-        $this->query->where(function($query) {
+        $this->query->where(function ($query) {
             /** @var Field $field */
             foreach ($this->type->filterable_fields as $index => $field) {
                 $filterKeys = $this->getFilter($field->key);
 
-                if(empty($filterKeys)) {
+                if (empty($filterKeys)) {
                     continue;
                 }
 
                 $relationModel = $field->getRelationModelClass($this->model);
 
-                $query->whereHas($field->key, function($query) use ($field, $filterKeys, $relationModel) {
+                $query->whereHas($field->key, function ($query) use ($field, $filterKeys, $relationModel) {
                     $query->whereIn($relationModel->getKeyName(), $filterKeys);
                 });
             }
@@ -121,20 +121,22 @@ class QueryRepository implements QueryRepositoryContract
     {
         $term = $this->getSearchTerm();
 
-        if(empty($term)) {
+        if (empty($term)) {
             return $this;
         }
 
         /** @var Field $field */
         foreach ($this->type->searchable_fields as $field) {
-            if($field->is_relationship) {
+            if ($field->is_relationship) {
                 $this->whereHasFields->push($field);
+            } elseif ($field->is_sub_field && $field->parent->is_relationship) {
+                $this->whereHasFields->push($field->parent);
             } else {
                 $this->whereFields->push($field);
             }
         }
 
-        $this->query->where(function($query) {
+        $this->query->where(function ($query) {
             $this->addWhere($query)
                 ->addWhereHas($query);
         });
@@ -144,17 +146,23 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function addWhere($query)
     {
-        if($this->whereFields->isEmpty()) {
+        if ($this->whereFields->isEmpty()) {
             return $this;
         }
 
-        $query->where(function($query) {
+        $query->where(function ($query) {
+            /** @var Field $field */
             foreach ($this->whereFields as $index => $field) {
                 $term = $this->getSearchTerm();
                 $term = $field->search_comparison === 'like' ? "%{$term}%" : $term;
                 $method = $index === 0 ? 'where' : 'orWhere';
+                $key = $field->browse_key;
 
-                $query->{$method}($field->key, $field->search_comparison, $term);
+                if ($field->is_sub_field) {
+                    $key = $this->transformJsonKey($key);
+                }
+
+                $query->{$method}($key, $field->search_comparison, $term);
             }
         });
 
@@ -163,20 +171,20 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function addWhereHas($query)
     {
-        if($this->whereHasFields->isEmpty()) {
+        if ($this->whereHasFields->isEmpty()) {
             return $this;
         }
 
         $method = $this->whereFields->isEmpty() ? 'where' : 'orWhere';
 
-        $query->{$method}(function($query) {
+        $query->{$method}(function ($query) {
             /** @var Field $field */
             foreach ($this->whereHasFields as $index => $field) {
                 $term = $this->getSearchTerm();
                 $term = $field->search_comparison === 'like' ? "%{$term}%" : $term;
                 $method = $index === 0 ? 'whereHas' : 'orWhereHas';
 
-                $query->{$method}($field->key, function($query) use ($field, $term) {
+                $query->{$method}($field->key, function ($query) use ($field, $term) {
                     foreach ($field->relation_labels as $index => $label) {
                         $method = $index === 0 ? 'where' : 'orWhere';
 
@@ -198,12 +206,21 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function load()
     {
-        $columns = $this->type->browse_columns
-            ->where('is_relationship', '===', true)
-            ->pluck('key');
+        $columns = collect([]);
 
-        $this->type->browse_columns->first(function(Field $field) use ($columns) {
-            if($field->is_media) {
+        /** @var Field $column */
+        foreach ($this->type->browse_columns as $column) {
+            if ($column->is_relationship) {
+                $columns->push($column->key);
+            }
+
+            if ($column->is_sub_field && $column->parent->is_relationship) {
+                $columns->push($column->parent->key);
+            }
+        }
+
+        $this->type->browse_columns->first(function (Field $field) use ($columns) {
+            if ($field->is_media) {
                 $columns->push('media');
 
                 return true;
@@ -212,8 +229,8 @@ class QueryRepository implements QueryRepositoryContract
             return false;
         });
 
-        if($columns->isNotEmpty()) {
-            $this->query->with($columns->toArray());
+        if ($columns->isNotEmpty()) {
+            $this->query->with($columns->unique()->toArray());
         }
 
         return $this;
@@ -258,11 +275,12 @@ class QueryRepository implements QueryRepositoryContract
     {
         $return = [];
 
+        /** @var Field $column */
         foreach ($this->type->browse_columns as $column) {
-            $return[$column->key] = $column->getBrowseValue($model);
+            array_set($return, $column->browse_key, $column->getBrowseValue($model));
         }
 
-        if(! $hasPrimaryKeyField) {
+        if (! $hasPrimaryKeyField) {
             $return[$this->primaryKey] = $model->getKey();
         }
 
@@ -271,7 +289,7 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function getFilter($for = null)
     {
-        $key = $for ? static::FILTERS_REQUEST_KEY.'.'.$for : static::FILTERS_REQUEST_KEY;
+        $key = $for ? static::FILTERS_REQUEST_KEY . '.' . $for : static::FILTERS_REQUEST_KEY;
 
         return array_filter(array_values((array) $this->request->input($key, [])));
     }
@@ -289,7 +307,39 @@ class QueryRepository implements QueryRepositoryContract
             $orderBy = $this->type->default_sort;
         }
 
-        return $orderBy;
+        if (str_contains($orderBy, '.')) {
+            /** @var Field|null $field */
+            $field = $this->type->browse_columns->first(function (Field $field) use ($orderBy) {
+                return $field->browse_key === $orderBy;
+            });
+
+            if ($field && $field->is_sub_field && $field->parent->is_relationship) {
+                return $this->addOrderJoin($field, $field->parent);
+            }
+        }
+
+        return $this->transformJsonKey($orderBy);
+    }
+
+    protected function addOrderJoin(Field $field, Field $parent)
+    {
+        $relationClass = $parent->getRelationClass($this->model);
+        $relationKey = $relationClass->getExistenceCompareKey();
+        $relationKey = explode('.', $relationKey);
+        $relationTable = array_shift($relationKey);
+        $relationKey = "la_order.".implode('.', $relationKey);
+        $orderingKey = "la_order.{$field->key} AS la_order_field";
+
+
+        $this->query
+            ->addSelect($orderingKey)
+            ->leftJoin(
+                $relationTable . ' AS la_order',
+                $relationKey,
+                $relationClass->getQualifiedParentKeyName()
+            );
+
+        return "la_order_field";
     }
 
     protected function getOrderDirection()
@@ -305,6 +355,11 @@ class QueryRepository implements QueryRepositoryContract
         return trim(
             $this->request->input(static::SEARCH_TERM_REQUEST_KEY, '')
         );
+    }
+
+    protected function transformJsonKey($key)
+    {
+        return str_replace('.', '->', $key);
     }
 
 }

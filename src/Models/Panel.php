@@ -30,6 +30,11 @@ class Panel extends Model
 
     protected $_fields;
 
+    /**
+     * @var Type $_type
+     */
+    protected $_type;
+
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -80,12 +85,12 @@ class Panel extends Model
             return true;
         }
 
-        if (is_array($panel) && array_get($panel, 'type') === 'repeater') {
-            return false;
+        if(isset($panel['object_type'])) {
+            return $panel['object_type'] === static::OBJECT_TYPE;
         }
 
-        if(array_get($panel, 'object_type') === static::OBJECT_TYPE) {
-            return true;
+        if (is_array($panel) && array_get($panel, 'type') === 'repeater') {
+            return false;
         }
 
         return is_array($panel) &&
@@ -93,9 +98,15 @@ class Panel extends Model
             ! empty($panel['fields']);
     }
 
-    public static function fromArray($rawField)
+    /**
+     * @param $rawPanel
+     * @param Type $type
+     * @return mixed
+     */
+    public static function fromArray($rawPanel, Type $type)
     {
-        $inst = (new static)->newFromManager($rawField);
+        /** @var Panel $inst */
+        $inst = (new static)->newFromManager($rawPanel);
 
         $inst->fields = new Collection((array) $inst->fields);
 
@@ -104,12 +115,12 @@ class Panel extends Model
                 return ! Field::isValidField($field) &&
                        ! static::isValidPanel($field);
             })
-            ->transform(function ($field) {
+            ->transform(function ($field) use ($inst, $type) {
                 if (static::isValidPanel($field)) {
-                    return static::fromArray($field);
+                    return static::fromArray($field, $type);
                 }
 
-                return Field::fromArray($field);
+                return Field::fromArray($field, $inst, $type);
             });
 
         return $inst;
@@ -203,6 +214,25 @@ class Panel extends Model
         $array['object_type'] = static::OBJECT_TYPE;
 
         return $array;
+    }
+
+    /**
+     * @param mixed $type
+     * @return Panel
+     */
+    public function setType(Type $type)
+    {
+        $this->_type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Type
+     */
+    public function getType(): Type
+    {
+        return $this->_type;
     }
 
 }

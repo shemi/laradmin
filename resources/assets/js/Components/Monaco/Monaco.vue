@@ -57,7 +57,6 @@
 
             value(newValue) {
                 if (this.editor) {
-                    console.log('update');
                     if (newValue !== this.editor.getValue()) {
                         this.editor.setValue(newValue)
                     }
@@ -110,8 +109,12 @@
                     ...this.options
                 };
 
-                if(this.fileName) {
-                    options.model = window.monaco.editor.createModel(this.value, this.language, this.filePath);
+                if(this.instId && this.fileName) {
+                    try {
+                        options.model = window.monaco.editor.createModel(this.value, this.language, this.filePath);
+                    } catch (err) {
+
+                    }
                 }
 
                 this.editorLoaded = true;

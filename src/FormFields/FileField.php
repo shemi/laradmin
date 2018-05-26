@@ -26,26 +26,26 @@ class FileField extends FormFormField implements FieldHasBrowseValue
         ));
     }
 
-    public function transformRequest(Field $field, $value)
+    public function transformRequest(Field $field, $data)
     {
-        if(! $value) {
+        if(! $data) {
             return collect([]);
         }
 
-        $id = array_get($value, 'customAttributes.id', 0);
+        $id = array_get($data, 'customAttributes.id', 0);
 
-        $value = (object) [
+        $data = (object) [
             'is_new' => ! ((bool) $id),
             'id' => $id,
             'order' => 0,
-            'temp_path' => array_get($value, 'customAttributes.temp_path', ""),
-            'name' => array_get($value, 'name', ""),
-            'hash_name' => array_get($value, 'customAttributes.md5_name', ""),
-            'caption' => array_get($value, 'customAttributes.caption', ""),
-            'alt' => array_get($value, 'customAttributes.alt', ""),
+            'temp_path' => array_get($data, 'customAttributes.temp_path', ""),
+            'name' => array_get($data, 'name', ""),
+            'hash_name' => array_get($data, 'customAttributes.md5_name', ""),
+            'caption' => array_get($data, 'customAttributes.caption', ""),
+            'alt' => array_get($data, 'customAttributes.alt', ""),
         ];
 
-        return collect([$value]);
+        return collect([$data]);
     }
 
     public function getValidationRoles(Field $field)

@@ -17,6 +17,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  *
  * @property string $label
  * @property string $key
+ * @property string $validation_key
  * @property Field|null $parent
  * @property boolean $show_label
  * @property mixed $default_value
@@ -28,8 +29,10 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  * @property array $template_options
  * @property array $browse_settings
  * @property array $relationship
- * @property boolean $is_repeater_field
+ * @property boolean $is_sub_field
  * @property boolean $is_password
+ * @property boolean $is_support_sub_fields
+ * @property boolean $is_repeater_sub_field
  * @property Collection|null $fields
  * @property string $form_prefix
  * @property boolean $read_only
@@ -54,11 +57,19 @@ class Field extends Model
         'parent'
     ];
 
+    /**
+     * @var Panel $_panel
+     */
+    protected $_panel;
+
+    /**
+     * @var Type $_type
+     */
+    protected $_type;
+
     public $parent = null;
 
-    public $form_prefix = "form.";
-
-    public $is_repeater_field = false;
+    public $is_sub_field = false;
 
     protected $fillable = [
         'id',
@@ -79,14 +90,16 @@ class Field extends Model
         'media'
     ];
 
-    public static function fromArray($attributes)
+    public static function fromArray($attributes, Panel $panel, Type $type)
     {
         $model = new static;
 
+        $model->setPanel($panel);
+        $model->setType($type);
+
         $localAttributes = [
             'parent' => null,
-            'form_prefix' => "form.",
-            'is_repeater_field' => false
+            'is_sub_field' => false
 
         ];
 
@@ -122,22 +135,26 @@ class Field extends Model
 
     public function getShowLabelAttribute($value)
     {
-        if($this->is_repeater_field || in_array($this->type, ['switch', 'checkbox'])) {
+        if($this->is_repeater_sub_field || in_array($this->type, ['switch', 'checkbox'])) {
             return false;
         }
 
         return $value !== null ? $value : true;
     }
 
+    public function getIsRepeaterSubFieldAttribute()
+    {
+        return $this->is_sub_field && $this->parent && $this->parent->type === 'repeater';
+    }
+
+    public function getIsSupportSubFieldsAttribute()
+    {
+        return $this->formField()->isSupportingSubFields();
+    }
+
     public function getValidationKeyAttribute()
     {
-        if($this->is_repeater_field) {
-            $parent = $this->parent;
-
-            return "{$parent->validation_key}.'+ props.index +'.{$this->key}";
-        }
-
-        return $this->key;
+        return $this->formField()->getValidationKey($this, $this->parent);
     }
 
     public function getIsPasswordAttribute()
@@ -145,14 +162,18 @@ class Field extends Model
         return $this->field_type === 'password';
     }
 
+    public function getFormPrefixAttribute()
+    {
+        return $this->formField()->getFormPrefix($this);
+    }
+
     public function getFieldsAttribute($value)
     {
         return collect($value)->transform(function($rawField) {
-            $rawField['is_repeater_field'] = true;
+            $rawField['is_sub_field'] = true;
             $rawField['parent'] = $this;
-            $rawField['form_prefix'] = "props.row.";
 
-            return static::fromArray($rawField);
+            return static::fromArray($rawField, $this->getPanel(), $this->getType());
         });
     }
 
@@ -177,9 +198,8 @@ class Field extends Model
             ->map(function(Field $field) use ($localFields) {
                 $field = $localFields->where('key', $field->key)->first() ?: $field;
 
-                $field->is_repeater_field = true;
+                $field->is_sub_field = true;
                 $field->parent = $this;
-                $field->form_prefix = 'props.row.';
 
                 return $field;
             });
@@ -234,7 +254,16 @@ class Field extends Model
 
             case 'object':
             case 'group':
-                return (object) [];
+                $object = [];
+
+                if($this->is_support_sub_fields) {
+                    /** @var Field $subField */
+                    foreach ($this->getSubFields() as $subField) {
+                        $object[$subField->key] = $subField->getDefaultValue();
+                    }
+                }
+
+                return $object;
 
             case 'select_multiple':
             case 'checkboxes':
@@ -265,8 +294,21 @@ class Field extends Model
 
             if ($value instanceof Collection) {
                 $value = $this->transformRelationCollection($value, $model);
-            } elseif ($value instanceof EloquentModel) {
-                $value = $value->getAttribute($this->relationship['key']);
+            }
+            elseif (! $this->is_support_sub_fields && $value instanceof EloquentModel) {
+                $value = $value->getAttribute($this->getRelationKeyName($model));
+            }
+            elseif ($this->is_support_sub_fields && $value instanceof EloquentModel) {
+                $newValue = [];
+
+                /** @var Field $subField */
+                foreach ($this->getSubFields() as $subField) {
+                    $newValue[$subField->key] = $subField->getModelValue($value);
+                }
+
+                $newValue[$value->getKeyName()] = $value->getKey();
+
+                $value = $newValue;
             }
 
         } elseif($this->is_media) {
@@ -307,13 +349,11 @@ class Field extends Model
 
         $field = (array) $field;
 
-        if(array_get($field, 'object_type') === static::OBJECT_TYPE) {
-            return true;
+        if(isset($field['object_type'])) {
+            return $field['object_type'] === static::OBJECT_TYPE;
         }
 
-        return is_array($field) &&
-            array_key_exists('key', $field) &&
-            ! empty($field['key']);
+        return is_array($field) && array_key_exists('key', $field) && ! empty($field['key']);
     }
 
     public function toBuilder()
@@ -332,7 +372,7 @@ class Field extends Model
             'template_options' => 'object',
             'read_only' => 'bool',
             'browse_settings' => 'object',
-            'relationship' => 'object',
+            'relationship' => 'object|bool',
             'media' => 'object',
             'tab_id' => null
         ];
@@ -354,6 +394,43 @@ class Field extends Model
         return $array;
     }
 
+    /**
+     * @return Panel
+     */
+    public function getPanel(): Panel
+    {
+        return $this->_panel;
+    }
+
+    /**
+     * @param Panel $panel
+     * @return Field
+     */
+    public function setPanel(Panel $panel)
+    {
+        $this->_panel = $panel;
+
+        return $this;
+    }
+
+    /**
+     * @return Type
+     */
+    public function getType(): Type
+    {
+        return $this->_type;
+    }
+
+    /**
+     * @param Type $type
+     * @return Field
+     */
+    public function setType(Type $type)
+    {
+        $this->_type = $type;
+
+        return $this;
+    }
 
 
 }

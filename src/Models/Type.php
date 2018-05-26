@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
@@ -135,7 +136,7 @@ class Type extends Model
         $this->_panels = collect($value);
 
         $this->_panels->transform(function($panelArray) {
-            return Panel::fromArray($panelArray);
+            return Panel::fromArray($panelArray, $this);
         });
 
         return $this->_panels;
@@ -156,12 +157,36 @@ class Type extends Model
         return collect($this->_fields);
     }
 
+    public static function extractAllFields(Collection $fields, Closure $callback = null)
+    {
+        $newFields = collect([]);
+
+        /** @var Field $field */
+        foreach ($fields as $field) {
+            if(! $callback || $callback($field)) {
+                $newFields->push($field);
+            }
+
+            if($field->is_support_sub_fields) {
+                $newFields = $newFields->merge(
+                    static::extractAllFields($field->getSubFields(), $callback)
+                );
+            }
+        }
+
+        return $newFields;
+    }
+
+    public static function extractBrowseColumns(Collection $fields)
+    {
+        return static::extractAllFields($fields, function(Field $field) {
+            return $field->isVisibleOn('browse');
+        });
+    }
+
     public function getBrowseColumnsAttribute()
     {
-        return $this->fields
-            ->reject(function(Field $field) {
-                return ! $field->isVisibleOn('browse');
-            })
+        return static::extractBrowseColumns(collect($this->fields))
             ->sortBy('browse_order')
             ->values();
     }
@@ -186,22 +211,20 @@ class Type extends Model
 
     public function getSearchableFieldsAttribute()
     {
-        return $this->fields
-            ->reject(function($field) {
-                return ! $field->searchable||$field->filterable;
-            })
-            ->sortBy('browse_order')
-            ->values();
+        return static::extractAllFields(collect($this->fields), function(Field $field) {
+            return $field->searchable;
+        })
+        ->sortBy('browse_order')
+        ->values();
     }
 
     public function getFilterableFieldsAttribute()
     {
-        return $this->fields
-            ->reject(function($field) {
-                return ! $field->filterable;
-            })
-            ->sortBy('browse_order')
-            ->values();
+        return static::extractAllFields(collect($this->fields), function(Field $field) {
+            return $field->filterable;
+        })
+        ->sortBy('browse_order')
+        ->values();
     }
 
     public function getSidePanelsAttribute()
@@ -345,8 +368,7 @@ class Type extends Model
                 return $panel->toBuilder();
             });
         } else {
-            //POC ONLY
-            $array['panels'] = json_decode('[{"id":0,"title":"Publish","position":"side","is_main_meta":true,"has_container":true,"style":"null","fields":[]}]');
+            $array['panels'] = (array) [];
         }
 
         return $array;

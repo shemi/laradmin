@@ -16,14 +16,18 @@ if (! function_exists('menu')) {
     }
 }
 
+if (! function_exists('option')) {
+    function option($key = null)
+    {
+        $manager = app('laradmin')->manager('options');
+
+        return $key ? $manager->get($key) : $manager;
+    }
+}
+
 function la_str_slug($title, $separator = '-')
 {
     $slugger = new \Easybook\SeoUtf8Slugger($separator);
 
     return $slugger->slugify($title);
-}
-
-function ddd(...$args){
-    http_response_code(500);
-    call_user_func_array('dd', $args);
 }

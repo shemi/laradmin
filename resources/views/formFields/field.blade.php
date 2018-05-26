@@ -16,12 +16,14 @@
 
     if($field->is_horizontal) {
         $properties[] = 'horizontal';
-        $properties[] = 'label="' . $field->label . '"';
 
+        if(! $field->show_label) {
+            $properties[] = 'label="'. $field->label .'"';
+        }
     }
 
     if($field->is_group_multiline) {
-        $properties[] = 'class=is-grouped-multiline';
+        $properties[] = 'class="is-grouped-multiline"';
     }
 
     if($field->show_if) {

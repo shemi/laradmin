@@ -7,6 +7,12 @@ use Shemi\Laradmin\Contracts\Managers\ManagerContract;
 
 class FormPanelsManager implements ManagerContract
 {
+    const DEFAULT_TYPES = [
+        'simple',
+        'main_meta',
+        'tabs'
+    ];
+
     protected $bucket = [];
 
     public function typeExists($type)
