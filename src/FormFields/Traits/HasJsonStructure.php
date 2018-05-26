@@ -2,6 +2,8 @@
 
 namespace Shemi\Laradmin\FormFields\Traits;
 
+use Shemi\Laradmin\Models\Field;
+
 trait HasJsonStructure
 {
 
@@ -27,7 +29,8 @@ trait HasJsonStructure
                 'sortable' => false,
                 'searchable' => false,
                 'search_comparison' => 'like'
-            ]
+            ],
+            'object_type' => Field::OBJECT_TYPE
         ];
     }
 

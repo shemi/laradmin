@@ -44,6 +44,8 @@ class Field extends Model
         HasTemplateOptions,
         InteractsWithFormField;
 
+    const OBJECT_TYPE = 'field';
+
     protected $dataable = false;
 
     protected $keyType = 'string';
@@ -299,7 +301,15 @@ class Field extends Model
 
     public static function isValidField($field)
     {
+        if ($field instanceof Field) {
+            return true;
+        }
+
         $field = (array) $field;
+
+        if(array_get($field, 'object_type') === static::OBJECT_TYPE) {
+            return true;
+        }
 
         return is_array($field) &&
             array_key_exists('key', $field) &&
@@ -338,6 +348,8 @@ class Field extends Model
                 return $field->toBuilder();
             });
         }
+
+        $array['object_type'] = static::OBJECT_TYPE;
 
         return $array;
     }

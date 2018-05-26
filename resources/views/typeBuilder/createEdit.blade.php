@@ -295,6 +295,13 @@
                                :selected-icon.sync="form.icon">
             </icon-select-modal>
 
+            <div class="la-page-loading" :class="{'is-active': isLoading}">
+                <div class="la-logo">
+                    @include('laradmin::layouts.blade.logo')
+                </div>
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+
         </div>
 
     </type-create-edit>

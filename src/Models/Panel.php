@@ -15,6 +15,7 @@ use Shemi\Laradmin\Managers\FormPanelsManager;
  * @property integer $id
  * @property string $title
  * @property string $position
+ * @property string $object_type
  * @property boolean $is_main_meta
  * @property boolean $has_container
  * @property array $style
@@ -22,6 +23,9 @@ use Shemi\Laradmin\Managers\FormPanelsManager;
  */
 class Panel extends Model
 {
+
+    const OBJECT_TYPE = 'panel';
+
     protected $dataable = false;
 
     protected $_fields;
@@ -36,7 +40,8 @@ class Panel extends Model
         'is_main_meta',
         'has_container',
         'style',
-        'fields'
+        'fields',
+        'object_type'
     ];
 
     public function getTypeAttribute($value)
@@ -77,6 +82,10 @@ class Panel extends Model
 
         if (is_array($panel) && array_get($panel, 'type') === 'repeater') {
             return false;
+        }
+
+        if(array_get($panel, 'object_type') === static::OBJECT_TYPE) {
+            return true;
         }
 
         return is_array($panel) &&
@@ -190,6 +199,8 @@ class Panel extends Model
         } else {
             $array['fields'] = (array) [];
         }
+
+        $array['object_type'] = static::OBJECT_TYPE;
 
         return $array;
     }

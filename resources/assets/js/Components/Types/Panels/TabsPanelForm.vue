@@ -57,7 +57,7 @@
 
         methods: {
             onErrors({field, hasErrors}) {
-                if(! field.tab_id) {
+                if(!field || ! field.tab_id) {
                     return;
                 }
 

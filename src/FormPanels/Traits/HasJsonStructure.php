@@ -2,6 +2,8 @@
 
 namespace Shemi\Laradmin\FormPanels\Traits;
 
+use Shemi\Laradmin\Models\Panel;
+
 trait HasJsonStructure
 {
 
@@ -15,7 +17,8 @@ trait HasJsonStructure
             'is_main_meta' => false,
             'fields' => (array) [],
             'has_container' => true,
-            'style' => (object) []
+            'style' => (object) [],
+            'object_type' => Panel::OBJECT_TYPE
         ];
     }
 

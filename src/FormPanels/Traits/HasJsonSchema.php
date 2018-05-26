@@ -5,6 +5,7 @@ namespace Shemi\Laradmin\FormPanels\Traits;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\JsonSchema\Schema;
+use Shemi\Laradmin\Models\Panel;
 
 trait HasJsonSchema
 {
@@ -24,6 +25,9 @@ trait HasJsonSchema
             });
 
             $schema->string('title')->required();
+
+            $schema->string('object_type')
+                ->enum([Panel::OBJECT_TYPE]);
 
             $schema->string('type')->required();
 

@@ -163,6 +163,8 @@ class RepeaterField extends FormFormField
 
             $schema->object(null, function(Blueprint $schema) {
 
+
+
                 $schema->array('exclude', function(Blueprint $schema) {
                     $schema->string();
                 })->required();
@@ -186,9 +188,9 @@ class RepeaterField extends FormFormField
         });
 
         $schema->template_options->properties(function(Blueprint $schema) {
-            $schema->string('repeater_items_label')->nullable();
-            $schema->string('repeater_item_label')->nullable();
-            $schema->string('repeater_add_text')->nullable();
+            $schema->string('repeater_items_label')->nullable()->required();
+            $schema->string('repeater_item_label')->nullable()->required();
+            $schema->string('repeater_add_text')->nullable()->required();
         });
     }
 

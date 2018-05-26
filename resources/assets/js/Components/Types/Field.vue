@@ -3,7 +3,7 @@
     <vddl-nodrag class="no-drag la-field"
                  :class="{'is-open': isOpen}">
 
-        <div class="level la-field-header" @click.prevent="isOpen = ! isOpen">
+        <div class="level la-field-header" @click.prevent="toggleOpen">
             <div class="level-left">
                 <div class="level-item">
                     <vddl-handle
@@ -70,6 +70,7 @@
                     <b-field label="Field Sub Type" v-if="subTypes">
                         <b-select v-model="newValue.template_options.type"
                                   expanded
+                                  @input="updateEditorObject"
                                   placeholder="Select a type">
                             <option v-for="key in subTypes"
                                     :value="key">
@@ -80,17 +81,21 @@
                 </div>
             </div>
 
-            <json-editor v-model="editorObject"
-                         @input="updateValueFromEditorObject"
-                         @has-errors="handelErrors"
-                         :on-editable="isNodeEditable"
-                         :schema="schema">
-            </json-editor>
+            <monaco-editor v-model="editorObject"
+                           @input="updateValueFromEditorObject"
+                           @has-errors="handelErrors"
+                           language="json"
+                           ref="editor"
+                           :inst-id="newValue.id"
+                           :file-name="'fields-'+ type"
+                           style="width: 100%;height: 400px">
+            </monaco-editor>
 
             <b-field label="Fields"
                      class="field-la-fields-list"
                      v-if="data.supportSubFields">
                 <la-fields-list v-model="newValue.fields"
+                                @has-errors="handelSubFieldsErrors"
                                 :form-key="formKey + '.fields'">
                 </la-fields-list>
             </b-field>
@@ -106,6 +111,7 @@
     import ParentFormMixin from '../../Mixins/ParentForm';
     import Helpers from '../../Helpers/Helpers';
     import JsonEditor from '../JsonEditor/JsonEditor.vue';
+    import MonacoEditor from '../Monaco/Monaco';
 
 
     export default {
@@ -124,10 +130,12 @@
                 isField: true,
                 isOpen: false,
                 newValue: this.value,
-                editorObject: {},
+                editorObject: '',
                 newType: null,
                 newSubType: null,
-                hasErrors: false,
+                hasOunErrors: false,
+                hasSubFieldsErrors: false,
+                leaveOutKeys: ['id', 'type', 'fields', 'tab_id'],
                 builderData: cloneDeep(window.laradmin.builderData.fields)
             }
         },
@@ -159,6 +167,16 @@
         },
 
         methods: {
+
+            toggleOpen() {
+                this.isOpen = ! this.isOpen;
+
+                this.$nextTick(function() {
+                    if(this.isOpen && this.$refs.editor.getMonaco()) {
+                        this.$refs.editor.getMonaco().layout();
+                    }
+                }.bind(this));
+            },
 
             initField() {
                 this.newType = this.type;
@@ -214,15 +232,14 @@
             },
 
             updateEditorObject() {
-                let leaveOutKeys = ['id', 'type', 'fields'],
-                    newValueKeys = Object.keys(this.newValue),
+                let newValueKeys = Object.keys(this.newValue),
                     i, key,
                     editorObject = {};
 
                 for(i in newValueKeys) {
                     key = newValueKeys[i];
 
-                    if(leaveOutKeys.indexOf(key) >= 0) {
+                    if(this.leaveOutKeys.indexOf(key) >= 0) {
                         continue;
                     }
 
@@ -230,26 +247,30 @@
                 }
 
                 this.$nextTick(function () {
-                    this.editorObject = editorObject;
+                    this.editorObject = JSON.stringify(editorObject, undefined, 2);
                 });
             },
 
-            updateValueFromEditorObject() {
-                let leaveOutKeys = ['id', 'type', 'fields'],
-                    editorObjectKeys = Object.keys(this.editorObject),
-                    i, key;
+            updateValueFromEditorObject(value) {
+                try {
+                    let editorObject = JSON.parse(this.editorObject),
+                        editorObjectKeys = Object.keys(editorObject),
+                        i, key;
 
-                for (i in editorObjectKeys) {
-                    key = editorObjectKeys[i];
+                    for (i in editorObjectKeys) {
+                        key = editorObjectKeys[i];
 
-                    if(leaveOutKeys.indexOf(key) >= 0) {
-                        continue;
+                        if(this.leaveOutKeys.indexOf(key) >= 0) {
+                            continue;
+                        }
+
+                        this.newValue[key] = editorObject[key];
                     }
 
-                    this.newValue[key] = this.editorObject[key];
+                    this.$emit('input', this.newValue);
+                } catch (err) {
+                    console.log(err);
                 }
-
-                this.$emit('input', this.newValue);
             },
 
             cloneField() {
@@ -289,15 +310,23 @@
                 return roles;
             },
 
-            handelErrors(errors) {
-                this.hasErrors = errors;
+            handelSubFieldsErrors(errors) {
+                this.hasSubFieldsErrors = errors;
+                this.$emit('has-errors', this.hasErrors);
+            },
 
+            handelErrors(errors) {
+                this.hasOunErrors = errors;
                 this.$emit('has-errors', this.hasErrors);
             }
 
         },
 
         computed: {
+            hasErrors() {
+                return this.hasOunErrors || this.hasSubFieldsErrors;
+            },
+
             type() {
                 return this.newValue.type;
             },
@@ -364,7 +393,8 @@
         },
 
         components: {
-            JsonEditor
+            JsonEditor,
+            MonacoEditor
         }
 
     }

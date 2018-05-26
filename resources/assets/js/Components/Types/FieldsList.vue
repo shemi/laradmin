@@ -114,7 +114,7 @@
             },
 
             deleteField(index, field, key) {
-                this.handelErrors(false, key);
+                this.handelErrors(false, key, field);
 
                 this.$delete(this.newValue, index);
                 this.input(this.newValue);

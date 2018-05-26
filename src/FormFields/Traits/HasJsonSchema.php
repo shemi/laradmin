@@ -5,6 +5,7 @@ namespace Shemi\Laradmin\FormFields\Traits;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\JsonSchema\Schema;
+use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
 trait HasJsonSchema
@@ -40,6 +41,9 @@ trait HasJsonSchema
                         ->allNames()
                 );
 
+            $this->string('object_type')
+                ->enum([Field::OBJECT_TYPE]);
+
             $this->string('id')
                 ->minLength(5);
 
@@ -55,13 +59,7 @@ trait HasJsonSchema
                 ->required()
                 ->nullable();
 
-            $this->anyOf('default_value', function(Blueprint $schema) {
-                $schema->null();
-                $schema->string();
-                $schema->object();
-                $schema->boolean();
-                $schema->array();
-            })->required();
+            $this->anyOf('default_value', ['null', 'string', 'object', 'number', 'boolean', 'array'])->required();
         });
     }
 

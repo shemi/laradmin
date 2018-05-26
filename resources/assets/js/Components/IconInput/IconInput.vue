@@ -1,25 +1,26 @@
 <template>
 
-    <b-field>
-        <p class="control icon-only-addon">
-            <b-icon :icon="newValue"></b-icon>
-        </p>
-        <b-input type="text"
-                 expanded
-                 v-model="newValue">
-        </b-input>
-        <p class="control">
-            <button type="button"
-                    @click="openIconSelectModal"
-                    class="button is-primary">
-                <b-icon icon="smile-o"></b-icon>
-            </button>
-        </p>
+    <div>
+        <b-field :label="label">
+            <b-field>
+                <b-input type="text" expanded
+                         :icon="newValue"
+                         v-model="newValue">
+                </b-input>
+                <p class="control">
+                    <button type="button"
+                            @click="openIconSelectModal"
+                            class="button is-primary">
+                        <b-icon icon="smile-o"></b-icon>
+                    </button>
+                </p>
+            </b-field>
+        </b-field>
 
         <icon-select-modal :active.sync="isIconSelectModalActive"
                            :selected-icon.sync="newValue">
         </icon-select-modal>
-    </b-field>
+    </div>
 
 </template>
 
@@ -30,7 +31,9 @@
         name: 'la-icon-input',
 
         props: [
-            'value'
+            'value',
+            'label',
+
         ],
 
         data() {

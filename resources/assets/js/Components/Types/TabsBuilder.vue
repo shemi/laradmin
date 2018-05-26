@@ -13,6 +13,8 @@
                             :index="index"
                             :tag="'li'"
                             :wrapper="newValue"
+                            :dragstart="dragStart"
+                            :dragend="dragEnd"
                             type="tabs"
                             :moved="handleMoved"
                             effect-allowed="move">
@@ -59,7 +61,8 @@
         data() {
             return {
                 newValue: this.value,
-                selectedTab: null
+                selectedTab: null,
+                draggingTab: false
             }
         },
 
@@ -81,11 +84,21 @@
             },
 
             onDragOver($event, tab) {
-                if(tab.id === this.selectedTab) {
+                if(tab.id === this.selectedTab || this.draggingTab) {
                     return;
                 }
 
+                console.log($event);
+
                 this.selectTab(tab);
+            },
+
+            dragStart() {
+                this.draggingTab = true;
+            },
+
+            dragEnd() {
+                this.draggingTab = false;
             },
 
             createUpdateModal(tab) {

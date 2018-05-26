@@ -55,13 +55,13 @@ class AppServiceProvider extends ServiceProvider
     {
         ...
         
-        Laradmin::registerWidgetsRow([
+        Laradmin::widrets()->registerRow([
             CounterWidget::start('users', 'Users', 'users', '#8c67ef'),
             CounterWidget::start('roles', 'Roles', 'hand-stop-o', '#ff3860'),
             CounterWidget::start('permissions', 'Permissions', 'check-square-o', '#23d160')
         ]);
 
-        Laradmin::registerWidgetsRow([
+        Laradmin::widrets()->registerRow([
             LatestWidget::start('users', null, ['id', 'updated_at', 'roles'])
         ]);
     }

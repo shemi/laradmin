@@ -6,6 +6,7 @@ import MixinsLoader from '../../Helpers/MixinsLoader';
 import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
 import {sortBy} from 'lodash';
+import MonacoLoader from '../Monaco/Loader';
 
 export default {
 
@@ -17,6 +18,7 @@ export default {
 
     data() {
         return {
+            isLoading: true,
             form: new LaForm(window.laradmin.model),
             panels: window.laradmin.builderData.panels,
             isIconSelectModalActive: false
@@ -24,7 +26,7 @@ export default {
     },
 
     mounted() {
-
+        MonacoLoader.load().then(() => {this.isLoading = false});
     },
 
     methods: {

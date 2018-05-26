@@ -18,14 +18,12 @@
             </div>
         </b-collapse>
     @else
-        <b-panel :collapsible="true">
-            <span slot="header">{{ $panel->title }}</span>
+        <div class="panel">
             <div class="content">
                 @foreach($panel->fieldsFor($viewType) as $field)
                     {{ $field->render($type, $model, $data) }}
                 @endforeach
-
             </div>
-        </b-panel>
+        </div>
     @endif
 @endcomponent
