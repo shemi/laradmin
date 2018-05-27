@@ -4,11 +4,12 @@ import LaHttp from '../../Forms/LaHttp';
 import {LaTable, LaTableColumn} from '../Table';
 import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
+import SimpleRouter from '../../Mixins/SimpleRouter';
 
 export default {
     mixins: MixinsLoader.load(
         'crudBrowse',
-        [FormatDate, deleteMixin, ServerError]
+        [FormatDate, deleteMixin, ServerError, SimpleRouter]
     ),
 
     props: ['typeName', 'typeSlug', 'filterableFields'],
@@ -34,6 +35,10 @@ export default {
         }
     },
 
+    mounted() {
+        this.usePushState();
+    },
+
     created() {
         for(let key of this.filterableFields) {
             this.$set(this.query.filters, key, null);
@@ -43,8 +48,6 @@ export default {
                 loading: false
             });
         }
-
-        this.fetchData();
     },
 
     watch: {
@@ -71,13 +74,15 @@ export default {
 
         onPageChange(page) {
             this.query.page = page;
-            this.fetchData();
+
+            this.pushState(this.query);
         },
 
         onSort(key, order) {
             this.query.order_by = key;
             this.query.order = order;
-            this.fetchData();
+
+            this.pushState(this.query);
         },
 
         onSearch() {
@@ -87,14 +92,14 @@ export default {
 
             this.searchClock = setTimeout(function() {
                 this.query.search = this.search;
-                this.fetchData();
+                this.pushState(this.query);
                 this.searchClock = null;
             }.bind(this), 300);
         },
 
         onFilter() {
             this.$set(this.query, 'page', 1);
-            this.fetchData();
+            this.pushState(this.query);
         },
 
         onExport() {
@@ -115,7 +120,7 @@ export default {
                 `${typeName} deleted!`
             );
 
-            this.fetchData();
+            this.pushState(this.query);
         },
 
         fetchFilterData(fieldKey) {
