@@ -13,7 +13,7 @@
                         <figure class="media-left">
                             @if($item[$image->key])
                                 <p class="image is-64x64">
-                                    {!! $item[$image->key] !!}
+                                    {!! data_get($item, $image->browse_key) !!}
                                 </p>
                             @else
                                 <p class="image is-64x64">
@@ -28,9 +28,9 @@
                                 @foreach($fields as $field)
 
                                     @if($loop->first)
-                                        <strong>{!! $item[$field->key] !!}</strong>
+                                        <strong>{!! data_get($item, $field->browse_key) !!}</strong>
                                     @else
-                                        <br><strong>{{ $field->browse_label }}: </strong>{!! $item[$field->key] !!}
+                                        <br><strong>{{ $field->browse_label }}: </strong>{!! data_get($item, $field->browse_key) !!}
                                     @endif
 
                                 @endforeach
