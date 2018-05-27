@@ -17,6 +17,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  *
  * @property string $label
  * @property string $key
+ * @property string $full_key
  * @property string $validation_key
  * @property Field|null $parent
  * @property boolean $show_label
@@ -140,6 +141,17 @@ class Field extends Model
         }
 
         return $value !== null ? $value : true;
+    }
+
+    public function getFullKeyAttribute()
+    {
+        $prefix = "";
+
+        if($this->parent) {
+            $prefix = $this->parent->full_key.".";
+        }
+
+        return $prefix.$this->key;
     }
 
     public function getIsRepeaterSubFieldAttribute()

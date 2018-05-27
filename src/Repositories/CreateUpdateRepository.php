@@ -124,10 +124,6 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                 $this->saveModel();
             }
 
-            if($this->failed) {
-                return $this;
-            }
-
             $this->syncRelationData();
             $this->syncMedia();
 
@@ -181,7 +177,6 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function setModelData()
     {
         $this->modelFields->each(function(Field $field) {
-
             $value = array_get($this->data, $field->key);
 
             if($this->model->exists && $field->is_password && ! $value) {
