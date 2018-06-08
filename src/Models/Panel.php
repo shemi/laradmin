@@ -103,7 +103,7 @@ class Panel extends Model
      * @param Type $type
      * @return mixed
      */
-    public static function fromArray($rawPanel, Type $type)
+    public static function fromArray($rawPanel, Model $type)
     {
         /** @var Panel $inst */
         $inst = (new static)->newFromManager($rawPanel);

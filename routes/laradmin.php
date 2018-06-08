@@ -54,6 +54,15 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::get('/settings-builder/query', [
+            "uses" => "{$namespacePrefix}SettingsBuilderController@query",
+            "as" => "settings-builder.query",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
+        Route::resource('settings-builder', "{$namespacePrefix}SettingsBuilderController", [
+            "middleware" => "laradmin.user.admin"
+        ]);
 
         Route::get('/icons', [
             "uses" => "{$namespacePrefix}IconsController@index",

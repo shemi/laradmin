@@ -91,7 +91,7 @@ class Field extends Model
         'media'
     ];
 
-    public static function fromArray($attributes, Panel $panel, Type $type)
+    public static function fromArray($attributes, Panel $panel, Model $type)
     {
         $model = new static;
 
@@ -434,10 +434,10 @@ class Field extends Model
     }
 
     /**
-     * @param Type $type
+     * @param Model $type
      * @return Field
      */
-    public function setType(Type $type)
+    public function setType(Model $type)
     {
         $this->_type = $type;
 
