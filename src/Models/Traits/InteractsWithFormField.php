@@ -15,6 +15,7 @@ use Shemi\Laradmin\Models\Type;
  * @property string $key
  * @property string $type
  * @property boolean $is_relationship
+ * @property string $setting_type
  */
 
 trait InteractsWithFormField
@@ -58,19 +59,24 @@ trait InteractsWithFormField
     }
 
     /**
-     * @param Type $type
-     * @param EloquentModel $model
+     * @param Model $type
      * @param array $data
      * @return string
      * @throws \Throwable
      */
-    public function render(Type $type, EloquentModel $model, $data)
+    public function render(Model $type, $data)
     {
         if($this->is_relationship && array_key_exists($this->key, $data)) {
             $this->options = $data[$this->key];
         }
 
-        return $this->formField()->handle($this, $type, $model, $data);
+        return $this->formField()->handle($this, $type, $data);
+    }
+
+    public function getSettingTypeAttribute()
+    {
+        return optional($this->formField())
+            ->getSettingsValueType($this);
     }
 
 }

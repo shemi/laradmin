@@ -19,7 +19,7 @@
                 @lang('laradmin::template.save')
             </button>
 
-            @if(isset($typeSlug) && $model->exists && Laradmin::user()->can('delete ' . $typeSlug))
+            @if($model && isset($typeSlug) && $model->exists && Laradmin::user()->can('delete ' . $typeSlug))
                 <a class="button is-link is-small is-danger is-outlined"
                    @click.prevent="deleteModel">
                     @lang('laradmin::template.delete')

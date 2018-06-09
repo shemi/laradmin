@@ -42,6 +42,15 @@
 
                                     <div class="columns">
                                         <div class="column">
+                                            <b-field :type="form.errors.has('bucket') ? 'is-danger' : ''"
+                                                     label="@lang('laradmin::type-builder.builder.bucket')"
+                                                     :message="form.errors.has('bucket') ? form.errors.get('bucket') : ''">
+                                                <b-input type="text"
+                                                         v-model="form.bucket">
+                                                </b-input>
+                                            </b-field>
+                                        </div>
+                                        <div class="column">
                                             <b-field :type="form.errors.has('icon') ? 'is-danger' : ''"
                                                      label="@lang('laradmin::menus.builder.item_icon')"
                                                      :message="form.errors.has('icon') ? form.errors.get('icon') : ''">

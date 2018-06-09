@@ -2,23 +2,22 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Models\Setting;
 
 class SelectMultipleField extends FormFormField
 {
 
     protected $codename = "select_multiple";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.selectMultiple', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -66,6 +65,15 @@ class SelectMultipleField extends FormFormField
             })->required();
         });
 
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        if($field->is_relationship) {
+            return Setting::TYPE_RELATIONSHIP;
+        }
+
+        return Setting::TYPE_ARRAY;
     }
 
 }

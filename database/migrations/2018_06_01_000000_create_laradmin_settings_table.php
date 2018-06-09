@@ -22,6 +22,7 @@ class CreateLaradminSettingsTable extends Migration
             $table->timestamps();
 
             $table->index(['key']);
+            $table->index(['bucket']);
             $table->index(['key', 'bucket']);
         });
     }
@@ -30,6 +31,6 @@ class CreateLaradminSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('la_settings');
     }
 }

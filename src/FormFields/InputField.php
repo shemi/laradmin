@@ -2,13 +2,10 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Shemi\Laradmin\JsonSchema\Blueprint;
-use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
-use Shemi\Laradmin\JsonSchema\Schema;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 
 class InputField extends FormFormField
 {
@@ -25,12 +22,11 @@ class InputField extends FormFormField
         'textarea'
     ];
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.input', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -69,5 +65,13 @@ class InputField extends FormFormField
         ]);
     }
 
+    public function getSettingsValueType(Field $field)
+    {
+        if($field->field_type === 'number') {
+            return Setting::TYPE_NUMERIC;
+        }
+
+        return Setting::TYPE_STRING;
+    }
 
 }

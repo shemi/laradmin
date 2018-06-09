@@ -21,7 +21,7 @@
 
 @if($viewName && view()->exists($viewName))
     <b-message {!! implode(' ', $properties) !!}>
-        @include($viewName, compact('field', 'type', 'model', 'data'))
+        @include($viewName, compact('field', 'type', 'data'))
     </b-message>
 
 @else

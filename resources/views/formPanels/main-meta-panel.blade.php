@@ -1,6 +1,6 @@
-@component('laradmin::formPanels.panel', compact('panel', 'type', 'model', 'viewType', 'data'))
+@component('laradmin::formPanels.panel', compact('panel', 'type', 'viewType', 'data'))
 
-    @component('laradmin::components.meta-box', ['model' => $model, 'typeSlug' => $type->slug])
+    @component('laradmin::components.meta-box', ['model' => $model ?? null, 'typeSlug' => $type->slug])
 
         @foreach($panel->fieldsFor($viewType) as $field)
             @component('laradmin::components.meta-line', [

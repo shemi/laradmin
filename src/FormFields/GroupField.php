@@ -2,12 +2,11 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 
 class GroupField extends FormFormField
 {
@@ -20,12 +19,11 @@ class GroupField extends FormFormField
         'fields' => []
     ];
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.group', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -134,6 +132,15 @@ class GroupField extends FormFormField
         $schema->array('fields', function(Blueprint $schema) {
             $schema->object();
         });
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        if($field->is_relationship) {
+            return Setting::TYPE_SINGLE_RELATIONSHIP;
+        }
+
+        return Setting::TYPE_OBJECT;
     }
 
 }

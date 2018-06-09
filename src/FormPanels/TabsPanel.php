@@ -2,29 +2,26 @@
 
 namespace Shemi\Laradmin\FormPanels;
 
-use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Data\Model;
 use Illuminate\View\View;
 use Shemi\Laradmin\Models\Panel;
-use Shemi\Laradmin\Models\Type;
 
 class TabsPanel extends FormPanel
 {
 
     /**
      * @param Panel $panel
-     * @param Type $type
-     * @param Model $model
+     * @param Model $type
      * @param string $viewType
      * @param $data
      *
      * @return View
      */
-    public function createContent(Panel $panel, Type $type, Model $model, $viewType, $data)
+    public function createContent(Panel $panel, Model $type, $viewType, $data)
     {
         return view('laradmin::formPanels.tabs-panel', compact(
             'panel',
             'type',
-            'model',
             'data',
             'viewType'
         ));

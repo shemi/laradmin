@@ -11,6 +11,7 @@ import TypeCreateEdit from './Components/Types/TypeCreateEdit';
 import BrowseSettingsBuilders from './Components/SettingsBuilder/BrowseSettingsBuilders';
 import SettingsBuilderCreateEdit from './Components/SettingsBuilder/SettingsBuilderCreateEdit';
 import Crud from './Components/Crud/Crud';
+import Settings from './Components/Settings/Settings';
 import { Vue2Dragula } from 'vue2-dragula';
 import VueClip from 'vue-clip'
 import Multiselect from 'vue-multiselect/src/index';
@@ -51,6 +52,7 @@ const app = new Vue({
         BrowseTypes,
         TypeCreateEdit,
         Crud,
+        Settings,
         BrowseSettingsBuilders,
         SettingsBuilderCreateEdit
     },

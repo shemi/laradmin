@@ -2,36 +2,33 @@
 
 namespace Shemi\Laradmin\Contracts;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\View;
 use Shemi\Laradmin\Models\Panel;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
 
 interface FormPanelContract
 {
 
     /**
      * @param Panel $panel
-     * @param Type $type
-     * @param Model $model
+     * @param Model $type
      * @param string $viewType
      * @param $data
      *
      * @return HtmlString
      */
-    public function handle(Panel $panel, Type $type, Model $model, $viewType, $data);
+    public function handle(Panel $panel, Model $type, $viewType, $data);
 
     /**
      * @param Panel $panel
-     * @param Type $type
-     * @param Model $model
+     * @param Model $type
      * @param string $viewType
      * @param $data
      *
      * @return View
      */
-    public function createContent(Panel $panel, Type $type, Model $model, $viewType, $data);
+    public function createContent(Panel $panel, Model $type, $viewType, $data);
 
     /**
      * @return string

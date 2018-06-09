@@ -1,4 +1,4 @@
-@component('laradmin::formPanels.panel', compact('panel', 'type', 'model', 'viewType', 'data'))
+@component('laradmin::formPanels.panel', compact('panel', 'type', 'viewType', 'data'))
     @if($panel->has_container)
         <b-collapse class="panel">
             <div slot="trigger"
@@ -12,7 +12,7 @@
             <div class="panel-content panel-block">
                 <div class="content">
                     @foreach($panel->fieldsFor($viewType) as $field)
-                        {{ $field->render($type, $model, $data) }}
+                        {{ $field->render($type, $data) }}
                     @endforeach
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <div class="panel">
             <div class="content">
                 @foreach($panel->fieldsFor($viewType) as $field)
-                    {{ $field->render($type, $model, $data) }}
+                    {{ $field->render($type, $data) }}
                 @endforeach
             </div>
         </div>

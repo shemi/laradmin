@@ -132,8 +132,14 @@ trait InteractsWithRelationship
         return $relation;
     }
 
-    public function getRelationModelClass(EloquentModel $model)
+    public function getRelationModelClass(EloquentModel $model = null)
     {
+        if(! $model && ($this->has_relationship_type || isset($this->relationship['model']))) {
+            return app($this->has_relationship_type ? $this->relationship_type->model : $this->relationship['model']);
+        } elseif (! $model) {
+            return false;
+        }
+
         if(! $relation = $this->getRelationClass($model)) {
             return false;
         }
@@ -141,7 +147,7 @@ trait InteractsWithRelationship
         return $relation->getRelated();
     }
 
-    protected function transformRelationCollection(Collection $collection, EloquentModel $model)
+    protected function transformRelationCollection(Collection $collection)
     {
         if(in_array($this->type, ['checkboxes'])) {
             return $collection->pluck($this->relation_key);

@@ -289,20 +289,22 @@ class Field extends Model
 
     }
 
-    public function getModelValue(EloquentModel $model)
+    public function getModelValue(EloquentModel $model, $key = null)
     {
-        if($this->is_password || in_array($this->key, $model->getHidden())) {
+        $key = $key ?: $this->key;
+
+        if($this->is_password || in_array($key, $model->getHidden())) {
             return "";
         }
 
-        if(! $model->exists || (! $model->offsetExists($this->key) && ! $this->is_media)) {
+        if(! $model->exists || (! $model->offsetExists($key) && ! $this->is_media)) {
             $value = $this->getDefaultValue();
 
             return $this->transformResponse($value);
         }
 
         if($this->is_relationship) {
-            $value = $model->getAttribute($this->key);
+            $value = $model->getAttribute($key);
 
             if ($value instanceof Collection) {
                 $value = $this->transformRelationCollection($value, $model);
@@ -324,7 +326,11 @@ class Field extends Model
             }
 
         } elseif($this->is_media) {
-            $value = $model->getMedia($this->key);
+            if($this->getType() instanceof SettingsPage) {
+                $value = $model->getMedia();
+            } else {
+                $value = $model->getMedia($this->key);
+            }
 
             if($this->is_single_media) {
                 $value = $value->isEmpty() ? null : $this->transformMediaModel($value->first());
@@ -333,7 +339,7 @@ class Field extends Model
             }
 
         } else {
-            $value = $model->getAttribute($this->key);
+            $value = $model->getAttribute($key);
         }
 
         return $this->transformResponse($value);
@@ -428,7 +434,7 @@ class Field extends Model
     /**
      * @return Type
      */
-    public function getType(): Type
+    public function getType(): Model
     {
         return $this->_type;
     }

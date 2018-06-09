@@ -2,11 +2,10 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
 
 class MessageField extends FormFormField
 {
@@ -31,12 +30,11 @@ class MessageField extends FormFormField
         'is-danger'
     ];
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.message', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }

@@ -100,7 +100,7 @@ class Panel extends Model
 
     /**
      * @param $rawPanel
-     * @param Type $type
+     * @param Model $type
      * @return mixed
      */
     public static function fromArray($rawPanel, Model $type)
@@ -146,8 +146,12 @@ class Panel extends Model
         return $fields;
     }
 
-    public function fieldsFor($view)
+    public function fieldsFor($view = "any")
     {
+        if($view === "any") {
+            return $this->fields->values();
+        }
+
         return $this->fields
             ->reject(function ($field) use ($view) {
                 return ! $field->isVisibleOn($view);
@@ -173,16 +177,15 @@ class Panel extends Model
     }
 
     /**
-     * @param Type $type
-     * @param EloquentModel $model
+     * @param Model $type
      * @param $viewType
      * @param array $data
      * @return string
      * @throws \Throwable
      */
-    public function render(Type $type, EloquentModel $model, $viewType, $data)
+    public function render(Model $type, $viewType, $data)
     {
-        return $this->formPanel()->handle($this, $type, $model, $viewType, $data);
+        return $this->formPanel()->handle($this, $type, $viewType, $data);
     }
 
     public function toBuilder()
@@ -220,7 +223,7 @@ class Panel extends Model
      * @param mixed $type
      * @return Panel
      */
-    public function setType(Type $type)
+    public function setType(Model $type)
     {
         $this->_type = $type;
 
@@ -228,9 +231,9 @@ class Panel extends Model
     }
 
     /**
-     * @return Type
+     * @return Model
      */
-    public function getType(): Type
+    public function getType(): Model
     {
         return $this->_type;
     }

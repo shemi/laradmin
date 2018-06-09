@@ -2,27 +2,25 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Testing\File;
+use Shemi\Laradmin\Data\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FieldHasBrowseValue;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\Models\Setting;
 
 class ImageField extends FormFormField implements FieldHasBrowseValue
 {
 
     protected $codename = "image";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.image', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -58,7 +56,7 @@ class ImageField extends FormFormField implements FieldHasBrowseValue
         return false;
     }
 
-    public function renderBrowseValue(Field $field, Model $model)
+    public function renderBrowseValue(Field $field, EloquentModel $model)
     {
         $media = $model->getMedia($field->key)->first();
 
@@ -101,6 +99,11 @@ class ImageField extends FormFormField implements FieldHasBrowseValue
                 ->nullable()
                 ->required();
         });
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        return Setting::TYPE_SINGLE_MEDIA;
     }
 
 }

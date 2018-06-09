@@ -30,6 +30,7 @@ return [
         'import_controller' => 'Import Controller',
         'default_sort' => 'Default Sort Column',
         'default_sort_direction' => 'Default Sort Direction',
+        'bucket' => 'Settings Bucket',
     ]
 
 ];

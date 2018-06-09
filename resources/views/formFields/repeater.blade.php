@@ -1,6 +1,5 @@
 @php
     $fieldsType = $field->has_relationship_type ? $field->relationship_type : $type;
-    $fieldsModel = $field->has_relationship_type ? app($field->relationship_type->model) : $model;
     $fieldsData = $field->has_relationship_type ? $data[$field->key] : $data;
 @endphp
 
@@ -15,7 +14,7 @@
             @foreach($field->getSubFields() as $repeaterField)
                 <la-repeater-row field="{{ $repeaterField->key }}"
                                  label="{{ $repeaterField->label }}">
-                    {{ $repeaterField->render($fieldsType, $fieldsModel, $fieldsData) }}
+                    {{ $repeaterField->render($fieldsType, $fieldsData) }}
                 </la-repeater-row>
             @endforeach
         </template>

@@ -2,23 +2,22 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Models\Setting;
 
 class TagsField extends FormFormField
 {
 
     protected $codename = "tags";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.tags', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -52,6 +51,11 @@ class TagsField extends FormFormField
             $schema->string('items_label')->nullable();
             $schema->string('item_label')->nullable();
         });
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        return Setting::TYPE_RELATIONSHIP;
     }
 
 }

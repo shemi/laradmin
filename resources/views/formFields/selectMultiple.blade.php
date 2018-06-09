@@ -1,7 +1,7 @@
 @component('laradmin::formFields.field', ['field' => $field])
 
     @php
-        $options = json_encode($field->options, JSON_UNESCAPED_UNICODE);
+        $options = json_encode($field->options, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 
         $closeOnSelect = $field->getTemplateOption('multiselect.closeOnSelect', 'true');
         $closeOnSelect = is_string($closeOnSelect) ? $closeOnSelect : ($closeOnSelect ? 'true' : 'false');

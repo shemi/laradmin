@@ -2,12 +2,12 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FormFieldContract;
 use Shemi\Laradmin\FormFields\Traits\Buildable;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 use Shemi\Laradmin\Traits\Renderable;
 
 abstract class FormFormField implements FormFieldContract
@@ -28,16 +28,15 @@ abstract class FormFormField implements FormFieldContract
 
     /**
      * @param Field $field
-     * @param Type $type
-     * @param Model $model
+     * @param Model $type
      * @param $data
      *
      * @return HtmlString
      * @throws \Throwable
      */
-    public function handle(Field $field, Type $type, Model $model, $data)
+    public function handle(Field $field, Model $type, $data)
     {
-        $content = $this->createContent($field, $type, $model, $data);
+        $content = $this->createContent($field, $type, $data);
 
         return $this->render($content);
     }
@@ -115,11 +114,20 @@ abstract class FormFormField implements FormFieldContract
 
     public function getValidationKey(Field $field, Field $parent = null)
     {
+        if($field->is_repeater_sub_field) {
+            return "{$parent->validation_key}.'+ props.index +'.{$field->key}";
+        }
+
         if($parent) {
             return "{$parent->key}.{$field->key}";
         }
 
         return $field->key;
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        return Setting::TYPE_STRING;
     }
 
 }

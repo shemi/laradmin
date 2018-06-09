@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Shemi\Laradmin\Models\Media;
+use Shemi\Laradmin\Models\SettingsPage;
 use Shemi\Laradmin\Models\Type;
 use Spatie\Image\Image;
 
@@ -16,10 +17,17 @@ class UploadsController extends Controller
 
     public function upload($typeSlug, Request $request)
     {
-        $type = Type::where('slug', $typeSlug)->first();
+        if(starts_with($typeSlug, "settings__")) {
+            $modelClass = SettingsPage::class;
+            $typeSlug = str_replace("settings__", "", $typeSlug);
+        } else {
+            $modelClass = Type::class;
+        }
+
+        $model = $modelClass::where('slug', $typeSlug)->first();
         $key = $request->input('field_form_key');
-        $date = Carbon::now()->toDateString();
-        $path = "laradmin_temp/{$date}/";
+        $sessionId = $request->session()->getId();
+        $path = "laradmin_temp/{$sessionId}/";
 
         $roles = [
             'field_form_key' => [
@@ -31,9 +39,8 @@ class UploadsController extends Controller
             ]
         ];
 
-        if($type) {
-            $path = $path."types/{$type->id}/";
-            $field = Type::extractAllFields(collect($type->fields))
+        if($model) {
+            $field = $modelClass::extractAllFields(collect($model->fields))
                 ->first(function($field) use ($key) {
                     return $field->key === $key;
                 });
@@ -43,8 +50,6 @@ class UploadsController extends Controller
             }
 
             $roles['file'] = array_merge($roles['file'], $field->validation);
-        } else {
-            $path = $path."{$typeSlug}/";
         }
 
         $path = $path."{$key}";

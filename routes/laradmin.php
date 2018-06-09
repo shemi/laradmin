@@ -100,6 +100,18 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::get('settings/{pageSlug}', [
+            "uses" => "{$namespacePrefix}SettingsPageController@edit",
+            "as" => "settings.edit",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
+        Route::put('settings/{pageSlug}', [
+            "uses" => "{$namespacePrefix}SettingsPageController@update",
+            "as" => "settings.update",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         /** @var \Shemi\Laradmin\Models\Type $type */
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 

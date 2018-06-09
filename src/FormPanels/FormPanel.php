@@ -2,12 +2,9 @@
 
 namespace Shemi\Laradmin\FormPanels;
 
-use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Data\Model;
 use Illuminate\Support\HtmlString;
 use Shemi\Laradmin\Contracts\FormPanelContract;
-use Shemi\Laradmin\FormPanels\Traits\HasJsonSchema;
-use Shemi\Laradmin\FormPanels\Traits\HasJsonStructure;
-use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\FormPanels\Traits\Buildable;
 use Shemi\Laradmin\Traits\Renderable;
 use Shemi\Laradmin\Models\Panel;
@@ -35,18 +32,17 @@ abstract class FormPanel implements FormPanelContract
 
     /**
      * @param Panel $panel
-     * @param Type $type
-     * @param Model $model
+     * @param Model $type
      * @param $viewType
      * @param $data
      *
      * @return HtmlString
      * @throws \Throwable
      */
-    public function handle(Panel $panel, Type $type, Model $model, $viewType, $data)
+    public function handle(Panel $panel, Model $type, $viewType, $data)
     {
         return $this->render(
-            $this->createContent($panel, $type, $model, $viewType, $data)
+            $this->createContent($panel, $type, $viewType, $data)
         );
     }
 

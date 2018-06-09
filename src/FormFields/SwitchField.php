@@ -2,21 +2,20 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 
 class SwitchField extends FormFormField
 {
 
     protected $codename = "switch";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.switch', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -47,6 +46,11 @@ class SwitchField extends FormFormField
                 'show_if' => null
             ]
         ]);
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        return Setting::TYPE_BOOLEAN;
     }
 
 }

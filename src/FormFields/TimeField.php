@@ -3,23 +3,22 @@
 namespace Shemi\Laradmin\FormFields;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 
 class TimeField extends FormFormField
 {
 
     protected $codename = "time";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.time', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -68,6 +67,12 @@ class TimeField extends FormFormField
             ->format('time')
             ->nullable()
             ->required();
+    }
+
+
+    public function getSettingsValueType(Field $field)
+    {
+        return Setting::TYPE_TIME;
     }
 
 }

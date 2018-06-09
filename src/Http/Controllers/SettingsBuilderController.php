@@ -127,15 +127,11 @@ class SettingsBuilderController extends Controller
         return view('laradmin::settingsBuilder.createEdit', compact('model'));
     }
 
-    protected function validateClassExistsAndExtends($test, $base)
-    {
-        return ! class_exists($test) || ! is_subclass_of($test, $base);
-    }
-
     protected function storeUpdatePage(Request $request, SettingsPage $page)
     {
         $data = $this->validate($request, [
             'name' => 'required|string',
+            'bucket' => 'required|string',
             'icon' => 'string|nullable',
             'panels' => 'required|array'
         ]);
@@ -159,6 +155,7 @@ class SettingsBuilderController extends Controller
         $page->name = $data['name'];
         $page->slug = $slug;
         $page->panels = $data['panels'];
+        $page->bucket = $data['bucket'];
 
         $data['saved'] = $page->save();
 

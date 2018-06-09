@@ -25,7 +25,7 @@
                                     @continue
                                 @endif
 
-                                {{ $panel->render($type, $model, $viewType, $data) }}
+                                {{ $panel->render($type, $viewType, $data) }}
 
                             @endforeach
                         </section>
@@ -39,7 +39,7 @@
                                     @continue
                                 @endif
 
-                                {{ $panel->render($type, $model, $viewType, $data) }}
+                                {{ $panel->render($type, $viewType, $data) }}
 
                             @endforeach
                         </section>

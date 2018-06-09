@@ -2,23 +2,22 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Setting;
 
 class SelectField extends FormFormField
 {
 
     protected $codename = "select";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.select', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -42,6 +41,15 @@ class SelectField extends FormFormField
     protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
     {
         $schema->options();
+    }
+
+    public function getSettingsValueType(Field $field)
+    {
+        if($field->is_relationship) {
+            return Setting::TYPE_SINGLE_RELATIONSHIP;
+        }
+
+        return Setting::TYPE_STRING;
     }
 
 }

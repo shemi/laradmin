@@ -2,25 +2,22 @@
 
 namespace Shemi\Laradmin\FormFields;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Testing\File;
+use Shemi\Laradmin\Data\Model;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\JsonSchema\Blueprint;
 use Shemi\Laradmin\JsonSchema\ObjectBlueprint;
 use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Models\Type;
 
 class FilesField extends FormFormField
 {
 
     protected $codename = "files";
 
-    public function createContent(Field $field, Type $type, Model $model, $data)
+    public function createContent(Field $field, Model $type, $data)
     {
         return view('laradmin::formFields.files', compact(
             'field',
             'type',
-            'model',
             'data'
         ));
     }
@@ -85,5 +82,9 @@ class FilesField extends FormFormField
         });
     }
 
+    public function getSettingsValueType(Field $field)
+    {
+        return "media";
+    }
 
 }

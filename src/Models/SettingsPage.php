@@ -5,6 +5,20 @@ namespace Shemi\Laradmin\Models;
 use Closure;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+
+/**
+ * Shemi\Laradmin\Models\Type
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $slug
+ * @property string $bucket
+ * @property Collection $panels
+ * @property Collection $fields
+ * @property Collection $side_panels
+ * @property Collection $main_panels
+ */
 
 class SettingsPage extends Model
 {
@@ -20,7 +34,8 @@ class SettingsPage extends Model
         'slug',
         'public',
         'panels',
-        'icon'
+        'icon',
+        'bucket'
     ];
 
     /**
@@ -45,6 +60,11 @@ class SettingsPage extends Model
         });
 
         return $this->_panels;
+    }
+
+    public function getBucketAttribute($value = null)
+    {
+        return $value ?: $this->slug;
     }
 
     public function getFieldsAttribute()
@@ -107,26 +127,12 @@ class SettingsPage extends Model
             ->values();
     }
 
-    public function getModelArray(EloquentModel $model)
-    {
-        $array = [];
-
-        /** @var Field $field */
-        foreach ($this->fields as $field) {
-            $array[$field->key] = $field->getModelValue($model);
-        }
-
-        return $array;
-    }
-
-    public function getRelationData(EloquentModel $model)
+    public function getRelationData()
     {
         $data = [];
 
-        $fields = $model->exists ? $this->edit_fields : $this->create_fields;
-
         /** @var Field $field */
-        foreach ($fields as $field) {
+        foreach ($this->fields as $field) {
             if(! $field->is_relationship || $field->is_ajax_powered_relationship) {
                 continue;
             }
@@ -139,7 +145,16 @@ class SettingsPage extends Model
             }
 
             $data[$field->key] = [];
-            $relation = $field->getRelationModelClass($model);
+
+            if (! isset($field->relationship['model']) && ! $field->has_relationship_type) {
+                continue;
+            }
+
+            if($field->has_relationship_type) {
+                $relation = app($field->relationship_type->model);
+            } else {
+                $relation = app($field->relationship['model']);
+            }
 
             foreach ($relation->all() as $relationInst) {
                 $data[$field->key][] = $field->transformRelationModel($relationInst);
@@ -179,10 +194,10 @@ class SettingsPage extends Model
                 'id' => $page->id,
                 'name' => $page->name,
                 'slug' => $page->slug,
-                'updated_at' => $type->updated_at,
-                'created_at' => $type->created_at,
-                'panels_count' => $type->panels->count(),
-                'fields_count' => $type->fields->count()
+                'updated_at' => $page->updated_at,
+                'created_at' => $page->created_at,
+                'panels_count' => $page->panels->count(),
+                'fields_count' => $page->fields->count()
             ];
         });
 
@@ -197,7 +212,8 @@ class SettingsPage extends Model
             'updated_at',
             'created_at',
             'icon',
-            'exists'
+            'exists',
+            'bucket'
         ];
 
         $array = [];
