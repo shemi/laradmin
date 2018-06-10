@@ -131,8 +131,10 @@ class SettingsPage extends Model
     {
         $data = [];
 
+        $fields = static::extractAllFields($this->fields);
+
         /** @var Field $field */
-        foreach ($this->fields as $field) {
+        foreach ($fields as $field) {
             if(! $field->is_relationship || $field->is_ajax_powered_relationship) {
                 continue;
             }

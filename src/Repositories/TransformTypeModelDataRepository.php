@@ -50,4 +50,9 @@ class TransformTypeModelDataRepository implements TransformTypeModelDataReposito
         return $data;
     }
 
+    public function fresh()
+    {
+        return new static;
+    }
+
 }

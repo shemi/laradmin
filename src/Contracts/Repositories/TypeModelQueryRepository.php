@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Models\Type;
 
-interface TypeModelQueryRepository
+interface TypeModelQueryRepository extends Repository
 {
 
     public function find($id, Type $type, Collection $fields = null);

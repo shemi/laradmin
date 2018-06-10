@@ -362,4 +362,9 @@ class QueryRepository implements QueryRepositoryContract
         return str_replace('.', '->', $key);
     }
 
+    public function fresh()
+    {
+        return new static;
+    }
+
 }

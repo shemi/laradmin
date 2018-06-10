@@ -81,6 +81,8 @@ class LaradminServiceProvider extends ServiceProvider
             'Contracts\Repositories\TypeRequestValidatorRepository' => 'Repositories\TypeRequestValidatorRepository',
             'Contracts\Repositories\SettingsRequestValidatorRepository' => 'Repositories\SettingsRequestValidatorRepository',
             'Contracts\Repositories\TransformSettingsDataRepository' => 'Repositories\TransformSettingsDataRepository',
+            'Contracts\Repositories\SyncMediaRepository' => 'Repositories\SyncMediaRepository',
+            'Contracts\Repositories\ComplexFieldValueTransformerRepository' => 'Repositories\ComplexFieldValueTransformerRepository',
         ];
 
         foreach ($services as $key => $value) {

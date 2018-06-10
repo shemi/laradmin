@@ -175,4 +175,9 @@ class TypeRequestValidatorRepository implements TypeRequestValidatorRepositoryCo
         return app(Factory::class);
     }
 
+    public function fresh()
+    {
+        return new static;
+    }
+
 }

@@ -64,6 +64,8 @@ class Setting extends Model implements HasMediaConversionsContract
             }
         }
 
+        $field = $this->getSettingPageField();
+
         switch ($type) {
             case 'int':
             case 'integer':
@@ -86,9 +88,6 @@ class Setting extends Model implements HasMediaConversionsContract
             case 'json':
                 $value = $this->fromJson($value);
                 break;
-            case 'collection':
-                $value = collect($this->fromJson($value));
-                break;
             case 'date':
                 $value = $this->asDate($this->fromJson($value));
                 break;
@@ -100,8 +99,6 @@ class Setting extends Model implements HasMediaConversionsContract
                 break;
             case static::TYPE_SINGLE_RELATIONSHIP:
             case static::TYPE_RELATIONSHIP:
-                $field = $this->getSettingPageField();
-
                 if($field) {
                     /** @var Model $model */
                     $model = app(
@@ -110,7 +107,8 @@ class Setting extends Model implements HasMediaConversionsContract
                             $field->relationship['model']
                     );
 
-                    $value = $model->find($this->fromJson($value));
+                    $value = $model->whereIn($field->getRelationKeyName($model), (array) $this->fromJson($value))
+                        ->get();
 
                     if($type === static::TYPE_SINGLE_RELATIONSHIP && $value instanceof Collection) {
                         $value = $value->first();
@@ -118,13 +116,6 @@ class Setting extends Model implements HasMediaConversionsContract
                 }
 
                 break;
-            case static::TYPE_MEDIA:
-            case static::TYPE_SINGLE_MEDIA:
-                $value = $this->getMedia();
-
-                if($type === static::TYPE_SINGLE_MEDIA) {
-                    $value = $value->first();
-                }
         }
 
         $this->_value = $value;

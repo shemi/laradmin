@@ -24,7 +24,9 @@ class TransformSettingsDataRepository
     public function transform(SettingsPage $page)
     {
         $this->page = $page;
-        $this->settings = Setting::where('bucket', $page->bucket)->get();
+        $this->settings = Setting::where('bucket', $page->bucket)
+            ->with(['media'])
+            ->get();
 
         return $this->getTransformedData();
     }
@@ -48,6 +50,11 @@ class TransformSettingsDataRepository
             ->first();
 
         return $model ?: new Setting(['bucket' => $this->page->bucket, 'key' => $key]);
+    }
+
+    public function fresh()
+    {
+        return new static;
     }
 
 }

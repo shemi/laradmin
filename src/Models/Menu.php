@@ -46,7 +46,7 @@ class Menu extends Model
 
         if ($type === 'route') {
             $routeParts = explode('|', $routeName);
-            $routeName = array_shift($routeParts);
+            $newRouteName = array_shift($routeParts);
             $parameters = [];
 
             foreach ($routeParts as $part) {
@@ -60,7 +60,7 @@ class Menu extends Model
             }
 
             try {
-                $url = route($routeName, $parameters, false);
+                $url = route($newRouteName, $parameters, false);
             } catch (UrlGenerationException | InvalidArgumentException $e) {
                 if(! $throw) {
                     return false;

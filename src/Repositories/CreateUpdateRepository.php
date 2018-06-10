@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository as CreateUpdateRepositoryContract;
 
+use Shemi\Laradmin\Contracts\Repositories\SyncMediaRepository;
 use Shemi\Laradmin\Exceptions\CreateUpdateRelationModelNotFoundException;
 use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeException;
-use Shemi\Laradmin\Exceptions\CreateUpdateDeleteMediaException;
-use Shemi\Laradmin\Exceptions\CreateUpdateMediaModelNotFoundException;
-use Shemi\Laradmin\Exceptions\CreateUpdateUnableToClearMediaException;
-use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveMediaException;
+use Shemi\Laradmin\Exceptions\CantDeleteMediaException;
+use Shemi\Laradmin\Exceptions\MediaModelNotFoundException;
+use Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException;
+use Shemi\Laradmin\Exceptions\UnableToClearMediaException;
+use Shemi\Laradmin\Exceptions\UnableToSaveMediaException;
 use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveModelException;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
@@ -38,9 +39,9 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected $model;
 
     /**
-     * @var Type $type
+     * @var Type|null $type
      */
-    protected $type;
+    protected $type = null;
 
     /**
      * @var Collection $fields
@@ -62,38 +63,15 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      */
     protected $modelFields;
 
-    /**
-     * @var boolean $saved
-     */
-    protected $saved = false;
-
-    /**
-     * @var bool $failed
-     */
-    protected $failed = false;
-
-    /**
-     * @var Collection $errors
-     */
-    protected $errors;
-
-
-    /**
-     * @var Collection $warnings
-     */
-    protected $warnings;
-
 
     public function __construct()
     {
         $this->mediaFields = Collection::make([]);
         $this->relationFields = Collection::make([]);
         $this->modelFields = Collection::make([]);
-        $this->errors = Collection::make([]);
-        $this->warnings = Collection::make([]);
     }
 
-    public function initCreateOrUpdate($data, Model $model, Type $type, Collection $fields = null)
+    public function initCreateOrUpdate($data, Model $model, Type $type = null, Collection $fields = null)
     {
         $this->data = $data;
         $this->model = $model;
@@ -115,11 +93,12 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      * @param Collection|null $fields
      * @return $this
      */
-    public function createOrUpdate($data, Model $model, Type $type, Collection $fields = null)
+    public function createOrUpdate($data, Model $model, Type $type = null, Collection $fields = null)
     {
         $this->initCreateOrUpdate($data, $model, $type, $fields);
 
         DB::transaction(function () {
+
             if(! $this->model->exists) {
                 $this->saveModel();
             }
@@ -133,8 +112,9 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
 
             event('laradmin::after-model-saved', $this->model, $this->type);
 
-            return $this;
         });
+
+        return $this;
     }
 
     protected function setFields(Collection $fields = null)
@@ -183,7 +163,11 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                 return;
             }
 
-            $this->model->setAttribute($field->key, $this->getFieldValue($field));
+            $value = $this->getFieldValue($field);
+
+
+
+            $this->model->setAttribute($field->key, $value);
         });
 
         return $this;
@@ -217,7 +201,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             $value = $this->getFieldValue($field);
 
             if($field->type === 'repeater' && $field->has_relationship_type) {
-                $this->createUpdateDeleteRepeaterRows($field, $relation, $value);
+                $this->createUpdateDeleteRepeaterRows($field, $value);
 
                 return;
             }
@@ -234,7 +218,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                     $model = $model->find($id);
                 }
 
-                $this->createUpdateSubModel($type, $field, $model, $relation, $value);
+                $this->createUpdateSubModel($field, $model, $relation, $value, $type);
             }
 
             elseif ($relation instanceof HasOneOrMany) {
@@ -287,12 +271,13 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
 
     /**
      * @param Field $field
-     * @param MorphMany $relation
      * @param $rows
      * @return void
+     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws CreateUpdateUnableToSaveModelException
+     * @throws SyncMediaException
      */
-    protected function createUpdateDeleteRepeaterRows(Field $field, $relation, $rows)
+    protected function createUpdateDeleteRepeaterRows(Field $field, $rows)
     {
         $type = $field->relationship_type;
 
@@ -332,21 +317,23 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                 $model = app($type->model);
             }
 
-            $this->createUpdateSubModel($type, $field, $model, $relation, $row);
+            $this->createUpdateSubModel($field, $model, $relation, $row, $type);
         }
 
     }
 
     /**
-     * @param Type $type
      * @param Field $field
      * @param Model $model
      * @param $relation
      * @param $data
+     * @param Type|null $type
      * @return Model
+     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws CreateUpdateUnableToSaveModelException
+     * @throws SyncMediaException
      */
-    protected function createUpdateSubModel(Type $type, Field $field, Model $model, $relation, $data)
+    protected function createUpdateSubModel(Field $field, Model $model, $relation, $data, Type $type = null)
     {
         $inst = new static();
         $exists = $model->exists;
@@ -400,159 +387,21 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         return true;
     }
 
+    /**
+     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
+     * @throws SyncMediaException
+     */
     public function syncMedia()
     {
-        $this->mediaFields->each(function(Field $field) {
-            /** @var Collection $media */
-            $media = $this->getFieldValue($field);
-
-            /** @var Collection $modelMedia */
-            $modelMedia = $this->model->getMedia($field->key);
-
-            if($media->isEmpty() && $modelMedia->isNotEmpty()) {
-
-                try {
-                    $this->model->clearMediaCollection($field->key);
-                }
-                catch (\Exception $exception) {
-                    throw CreateUpdateUnableToClearMediaException::create($exception);
-                }
-
-                return;
-            }
-
-            $toUpdate = $media->reject(function($media) {
-                return $media->is_new;
-            });
-
-            $toInsert = $media->reject(function($media) {
-                return ! $media->is_new;
-            });
-
-
-            if($modelMedia->isNotEmpty()) {
-                $modelMedia = $this->deleteUnusedMedia($modelMedia, $toUpdate, $field);
-            }
-
-            if($toUpdate->isNotEmpty()) {
-                $this->updateMedia($toUpdate, $modelMedia);
-            }
-
-            if($toInsert->isNotEmpty()) {
-                $this->insertMedia($toInsert, $field);
-            }
-
-        });
-    }
-
-    /**
-     * @param Collection $modelMedia
-     * @param Collection $toUpdate
-     * @param Field $field
-     * @return Collection
-     */
-    protected function deleteUnusedMedia(Collection $modelMedia, Collection $toUpdate, Field $field)
-    {
-        return $modelMedia->reject(function($media) use ($toUpdate, $field) {
-            if(! $toUpdate->pluck('id')->contains($media->id)) {
-                try {
-                    $media->delete();
-                }
-
-                catch (\Exception $exception) {
-                    throw CreateUpdateDeleteMediaException::create($media->id, $field->key, $exception);
-                }
-
-                return true;
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @param Collection $toUpdate
-     * @param Collection $modelMediaCollection
-     * @return $this
-     */
-    protected function updateMedia(Collection $toUpdate, Collection $modelMediaCollection)
-    {
-        $toUpdate->each(function($media) use ($modelMediaCollection) {
-
-            $mediaModel = $modelMediaCollection->first(function($mediaModel) use ($media) {
-                return $media->id === $mediaModel->id;
-            });
-
-            if(! $mediaModel) {
-                throw CreateUpdateMediaModelNotFoundException::create();
-            }
-
-            $mediaModel->name = $media->name ?: $mediaModel->name;
-            $mediaModel->order_column = $media->order;
-            $mediaModel->setCustomProperty('alt', $media->alt);
-            $mediaModel->setCustomProperty('caption', $media->caption);
-
-            $this->saveMediaModel($mediaModel);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param Collection $toInsert
-     * @param Field $field
-     * @return $this
-     */
-    protected function insertMedia(Collection $toInsert, Field $field)
-    {
-        $toInsert->each(function($media) use ($field) {
-            try {
-                $mediaModel = $this->model
-                    ->addMedia(storage_path('app/'.$media->temp_path))
-                    ->usingName($media->name)
-                    ->withCustomProperties([
-                        'alt' => $media->alt,
-                        'caption' => $media->caption
-                    ])
-                    ->toMediaCollection($field->key, $field->media_disk);
-            }
-            catch (\Exception $exception) {
-                throw CreateUpdateUnableToSaveMediaException::create(
-                    $media->name,
-                    $field->key,
-                    $field->media_disk,
-                    $exception
+        /** @var Field $field */
+        foreach ($this->mediaFields as $field) {
+            $this->getSyncMediaRepo()
+                ->sync(
+                    $this->getFieldValue($field),
+                    $this->model,
+                    $field
                 );
-            }
-
-            $mediaModel->order_column = $media->order;
-            $this->saveMediaModel($mediaModel);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param Media $media
-     * @return bool
-     * @throws CreateUpdateUnableToSaveMediaException
-     */
-    protected function saveMediaModel(Media $media)
-    {
-        try {
-            $media->saveOrFail();
         }
-
-        catch (\Throwable $exception) {
-            throw CreateUpdateUnableToSaveMediaException::create(
-                $media->name,
-                $media->collection_name,
-                $media->disk,
-                $exception
-            );
-        }
-
-        return true;
     }
 
     /**
@@ -601,35 +450,17 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         return call_user_func($transform[0], $value);
     }
 
-
-    public function saved()
+    /**
+     * @return SyncMediaRepository
+     */
+    protected function getSyncMediaRepo()
     {
-        return $this->saved;
+        return app(SyncMediaRepository::class)
+            ->fresh();
     }
 
-    public function failed()
+    public function fresh()
     {
-        return $this->failed;
+        return new static;
     }
-
-    public function errors()
-    {
-        return $this->errors;
-    }
-
-    public function hasErrors()
-    {
-        return $this->errors->isNotEmpty();
-    }
-
-    public function warnings()
-    {
-        return $this->warnings;
-    }
-
-    public function hasWarnings()
-    {
-        return $this->warnings->isNotEmpty();
-    }
-
 }

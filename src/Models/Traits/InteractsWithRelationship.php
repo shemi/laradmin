@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\HasMediaContract;
 use Shemi\Laradmin\Data\Model;
+use \Laradmin;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
 
@@ -67,7 +68,7 @@ trait InteractsWithRelationship
         return array_get($this->relationship, 'key');
     }
 
-    public function getRelationKeyName(EloquentModel $model)
+    public function getRelationKeyName(EloquentModel $model = null)
     {
         $model = $this->getRelationModelClass($model);
 
@@ -136,7 +137,8 @@ trait InteractsWithRelationship
     {
         if(! $model && ($this->has_relationship_type || isset($this->relationship['model']))) {
             return app($this->has_relationship_type ? $this->relationship_type->model : $this->relationship['model']);
-        } elseif (! $model) {
+        }
+        elseif (! $model) {
             return false;
         }
 
@@ -187,7 +189,6 @@ trait InteractsWithRelationship
                 ->first();
 
             if($media) {
-
                 $return['image'] = route('laradmin.serve', [
                     'mediaId' => $media->id,
                     'fileName' => $media->name,
@@ -199,9 +200,8 @@ trait InteractsWithRelationship
         if($this->has_relationship_type) {
             $type = $this->relationship_type;
 
-            $return['edit_link'] = route("laradmin.{$type->slug}.edit", [
-                "{$type->slug}" => $model->id
-            ]);
+            $return['edit_link'] = Laradmin::manager('links')
+                ->edit($type, $model);
         }
 
         return $return;

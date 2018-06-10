@@ -67,12 +67,21 @@
 
 <script>
     import Helpers from '../../Helpers/Helpers';
+    import LaForm from '../../Forms/LaForm';
 
     export default {
 
         props: {
             value: {
                 type: Array,
+                required: true
+            },
+            formKey: {
+                type: String,
+                required: true
+            },
+            initColumns: {
+                type: Object,
                 required: true
             },
             form: {
@@ -100,11 +109,11 @@
             }
         },
 
-        created() {
+        mounted() {
             if(this.value.length === 0) {
                 this.addRow();
 
-                this.$nextTick(function() {
+                this.$nextTick(() => {
                     this.deleteRow(0);
                 });
             }
@@ -112,9 +121,15 @@
 
         methods: {
             addRow() {
-                this.value.push({
+                let row = {
                     'jsId': Helpers.makeId()
-                });
+                };
+
+                for (let key of Object.keys(this.initColumns)) {
+                    row[key] = (new LaForm({})).transformValue(row, key, this.formKey + ".");
+                }
+
+                this.value.push(row);
             },
 
             deleteRow(index) {

@@ -89,4 +89,10 @@ class TypeModelQueryRepository implements TypeModelQueryRepositoryContract
 
         return $this;
     }
+
+    public function fresh()
+    {
+        return new static;
+    }
+
 }

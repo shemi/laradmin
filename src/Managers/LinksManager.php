@@ -44,6 +44,11 @@ class LinksManager implements ManagerContract
         return str_replace('__primaryKey__', "'+ props.row.{$modelOrKey} +'", $link);
     }
 
+    public function serveMedia($mediaId, $fileName, $pc = null)
+    {
+        return $this->route('laradmin.serve', compact('mediaId', 'fileName', 'pc'));
+    }
+
     public function route($name, $parameters = [])
     {
         return route($name, $parameters);

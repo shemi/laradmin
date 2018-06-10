@@ -6,17 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\DB;
+use Shemi\Laradmin\Contracts\Repositories\ComplexFieldValueTransformerRepository;
 use Shemi\Laradmin\Exceptions\CreateUpdateRelationModelNotFoundException;
 use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeException;
-use Shemi\Laradmin\Exceptions\CreateUpdateDeleteMediaException;
-use Shemi\Laradmin\Exceptions\CreateUpdateMediaModelNotFoundException;
-use Shemi\Laradmin\Exceptions\CreateUpdateUnableToClearMediaException;
-use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveMediaException;
 use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveModelException;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Setting;
 use Shemi\Laradmin\Models\SettingsPage;
-use Spatie\MediaLibrary\Media;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 
 class SetSettingsRepository
@@ -82,14 +78,13 @@ class SetSettingsRepository
         DB::transaction(function () {
             $this->setRegularFields();
             $this->syncRelationData();
+            $this->syncMedia();
 
             event('laradmin::before-save-settings', $this->models, $this->page);
 
             $this->save();
 
             event('laradmin::after-settings-saved', $this->models, $this->page);
-
-            $this->syncMedia();
         });
 
         return $this;
@@ -100,16 +95,16 @@ class SetSettingsRepository
         $this->models = Setting::where('bucket', $this->page->bucket)
             ->get();
 
-        // add missing/new models
+        // add missing models
         foreach ($this->fields as $field) {
-            $this->getModel($field->key);
+            $this->getModel($field);
         }
     }
 
-    protected function getModel($key)
+    protected function getModel(Field $field)
     {
         $model = $this->models
-            ->where('key', $key)
+            ->where('key', $field->key)
             ->first();
 
         if($model) {
@@ -117,8 +112,9 @@ class SetSettingsRepository
         }
 
         $model = new Setting([
-            'key' => $key,
-            'bucket' => $this->page->bucket
+            'key' => $field->key,
+            'bucket' => $this->page->bucket,
+            'type' => $field->setting_type
         ]);
 
         $this->models->add($model);
@@ -164,14 +160,21 @@ class SetSettingsRepository
     protected function setRegularFields()
     {
         $this->modelFields->each(function(Field $field) {
-            $model = $this->getModel($field->key);
+            $model = $this->getModel($field);
             $value = data_get($this->data, $field->key);
 
             if($model->exists && $field->is_password && ! $value) {
                 return;
             }
 
-            $model->setAttribute("value", $this->getFieldValue($field));
+            $value = $this->getFieldValue($field);
+
+            if($field->is_support_sub_fields) {
+                $value = $this->getComplexRepo()
+                    ->transform($value, $field, $model, "value");
+            }
+
+            $model->setAttribute("value", $value);
         });
 
         return $this;
@@ -186,9 +189,9 @@ class SetSettingsRepository
                 $this->createUpdateDeleteRepeaterRows($field, $value);
             }
 
-            elseif ($field->has_relationship_type && $field->is_support_sub_fields) {
-                $type = $field->relationship_type;
-                $model = app($type->model);
+            elseif ($field->is_support_sub_fields && ($field->has_relationship_type || isset($field->relationship['model']))) {
+                $type = $field->relationship_type ?: null;
+                $model = app($type ?: $field->relationship['model']);
                 
                 if($id = array_get($value, $model->getKeyName())) {
                     $model = $model->find($id);
@@ -197,11 +200,11 @@ class SetSettingsRepository
                 app(CreateUpdateRepository::class)
                     ->createOrUpdate($value, $model, $type, $field->getSubFields());
 
-                $this->getModel($field->key)->setAttribute("value", $model->getKey());
+                $this->getModel($field)->setAttribute("value", $model->getKey());
             }
 
             else {
-                $this->getModel($field->key)->setAttribute("value", $value);
+                $this->getModel($field)->setAttribute("value", $value);
             }
 
         });
@@ -223,7 +226,7 @@ class SetSettingsRepository
         $primaryKey = $model->getKeyName();
 
         $rows = Collection::make($rows);
-        $setting = $this->getModel($field->key);
+        $setting = $this->getModel($field);
         $currentRows = $setting->value;
 
         if(empty($currentRows) || ! $currentRows instanceof Collection) {
@@ -242,7 +245,7 @@ class SetSettingsRepository
                 $model = app($type->model);
             }
 
-            app(CreateUpdateRepository::class)
+            $this->getCreateUpdateRepo()
                 ->createOrUpdate($row, $model, $type, $field->getSubFields());
 
             $newIds[] = $model->getKey();
@@ -275,163 +278,21 @@ class SetSettingsRepository
         return true;
     }
 
+    /**
+     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
+     * @throws \Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException
+     */
     public function syncMedia()
     {
-        $this->mediaFields->each(function(Field $field) {
-            /** @var Collection $media */
-            $media = $this->getFieldValue($field);
-            $model = $this->getModel($field->key);
-
-            /** @var Collection $modelMedia */
-            $modelMedia = $model->getMedia();
-
-            if($media->isEmpty() && $modelMedia->isNotEmpty()) {
-
-                try {
-                    $model->clearMediaCollection();
-                }
-                catch (\Exception $exception) {
-                    throw CreateUpdateUnableToClearMediaException::create($exception);
-                }
-
-                return;
-            }
-
-            $toUpdate = $media->reject(function($media) {
-                return $media->is_new;
-            });
-
-            $toInsert = $media->reject(function($media) {
-                return ! $media->is_new;
-            });
-
-
-            if($modelMedia->isNotEmpty()) {
-                $modelMedia = $this->deleteUnusedMedia($modelMedia, $toUpdate, $field);
-            }
-
-            if($toUpdate->isNotEmpty()) {
-                $this->updateMedia($toUpdate, $modelMedia);
-            }
-
-            if($toInsert->isNotEmpty()) {
-                $this->insertMedia($toInsert, $field);
-            }
-
-        });
-    }
-
-    /**
-     * @param Collection $modelMedia
-     * @param Collection $toUpdate
-     * @param Field $field
-     * @return Collection
-     */
-    protected function deleteUnusedMedia(Collection $modelMedia, Collection $toUpdate, Field $field)
-    {
-        return $modelMedia->reject(function($media) use ($toUpdate, $field) {
-            if(! $toUpdate->pluck('id')->contains($media->id)) {
-                try {
-                    $media->delete();
-                }
-
-                catch (\Exception $exception) {
-                    throw CreateUpdateDeleteMediaException::create($media->id, $field->key, $exception);
-                }
-
-                return true;
-            }
-
-            return false;
-        });
-    }
-
-    /**
-     * @param Collection $toUpdate
-     * @param Collection $modelMediaCollection
-     * @return $this
-     */
-    protected function updateMedia(Collection $toUpdate, Collection $modelMediaCollection)
-    {
-        $toUpdate->each(function($media) use ($modelMediaCollection) {
-
-            $mediaModel = $modelMediaCollection->first(function($mediaModel) use ($media) {
-                return $media->id === $mediaModel->id;
-            });
-
-            if(! $mediaModel) {
-                throw CreateUpdateMediaModelNotFoundException::create();
-            }
-
-            $mediaModel->name = $media->name ?: $mediaModel->name;
-            $mediaModel->order_column = $media->order;
-            $mediaModel->setCustomProperty('alt', $media->alt);
-            $mediaModel->setCustomProperty('caption', $media->caption);
-
-            $this->saveMediaModel($mediaModel);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param Collection $toInsert
-     * @param Field $field
-     * @return $this
-     */
-    protected function insertMedia(Collection $toInsert, Field $field)
-    {
-        $model = $this->getModel($field->key);
-
-        $toInsert->each(function($media) use ($field, $model) {
-
-            try {
-                $mediaModel = $model
-                    ->addMedia(storage_path('app/'.$media->temp_path))
-                    ->usingName($media->name)
-                    ->withCustomProperties([
-                        'alt' => $media->alt,
-                        'caption' => $media->caption
-                    ])
-                    ->toMediaCollection('default', $field->media_disk);
-            }
-            catch (\Throwable $exception) {
-                throw CreateUpdateUnableToSaveMediaException::create(
-                    $media->name,
-                    $field->key,
-                    $field->media_disk,
-                    $exception
+        /** @var Field $field */
+        foreach ($this->mediaFields as $field) {
+            $this->getSyncMediaRepo()
+                ->sync(
+                    $this->getFieldValue($field),
+                    $this->getModel($field),
+                    $field
                 );
-            }
-
-            $mediaModel->order_column = $media->order;
-            $this->saveMediaModel($mediaModel);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param Media $media
-     * @return bool
-     * @throws CreateUpdateUnableToSaveMediaException
-     */
-    protected function saveMediaModel(Media $media)
-    {
-        try {
-            $media->saveOrFail();
         }
-
-        catch (\Throwable $exception) {
-            throw CreateUpdateUnableToSaveMediaException::create(
-                $media->name,
-                $media->collection_name,
-                $media->disk,
-                $exception
-            );
-        }
-
-        return true;
     }
 
     /**
@@ -474,6 +335,35 @@ class SetSettingsRepository
         }
 
         return call_user_func($transform[0], $value);
+    }
+
+    /**
+     * @return CreateUpdateRepository
+     */
+    protected function getCreateUpdateRepo()
+    {
+        return app(CreateUpdateRepository::class)->fresh();
+    }
+
+    /**
+     * @return ComplexFieldValueTransformerRepository
+     */
+    protected function getComplexRepo()
+    {
+        return app(ComplexFieldValueTransformerRepository::class)->fresh();
+    }
+
+    /**
+     * @return SyncMediaRepository
+     */
+    protected function getSyncMediaRepo()
+    {
+        return app(SyncMediaRepository::class)->fresh();
+    }
+
+    public function fresh()
+    {
+        return new static;
     }
 
 }

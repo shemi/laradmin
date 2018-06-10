@@ -137,4 +137,9 @@ class SettingsRequestValidatorRepository implements SettingsRequestValidatorRepo
         return app(Factory::class);
     }
 
+    public function fresh()
+    {
+        return new static;
+    }
+
 }

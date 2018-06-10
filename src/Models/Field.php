@@ -11,6 +11,7 @@ use Shemi\Laradmin\Models\Traits\InteractsWithFormField;
 use Shemi\Laradmin\Models\Traits\InteractsWithMedia;
 use Shemi\Laradmin\Models\Traits\InteractsWithRelationship;
 use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
+use Shemi\Laradmin\Repositories\ModelValueTransformerRepository;
 
 /**
  * Shemi\Laradmin\Models\Field
@@ -21,6 +22,7 @@ use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
  * @property string $validation_key
  * @property Field|null $parent
  * @property boolean $show_label
+ * @property boolean $is_repeater_like
  * @property mixed $default_value
  * @property mixed $nullable
  * @property string $type
@@ -226,6 +228,11 @@ class Field extends Model
         return [];
     }
 
+    public function getIsRepeaterLikeAttribute()
+    {
+        return in_array($this->type, ['repeater']);
+    }
+
     public function getIsNumericAttribute()
     {
         return in_array($this->field_type, ['number', 'float']);
@@ -238,109 +245,15 @@ class Field extends Model
 
     public function getDefaultValue()
     {
-        if($this->default_value !== null) {
-            return $this->default_value;
-        }
-
-        if($this->nullable) {
-            return null;
-        }
-
-        switch ($this->type) {
-            case 'number':
-            case 'text':
-            case 'text_area':
-            case 'date':
-            case 'datetime':
-                return "";
-
-            case 'switch':
-            case 'checkbox':
-                return false;
-
-            case 'select':
-            case 'radio':
-            case 'image':
-            case 'file':
-                return null;
-
-            case 'object':
-            case 'group':
-                $object = [];
-
-                if($this->is_support_sub_fields) {
-                    /** @var Field $subField */
-                    foreach ($this->getSubFields() as $subField) {
-                        $object[$subField->key] = $subField->getDefaultValue();
-                    }
-                }
-
-                return $object;
-
-            case 'select_multiple':
-            case 'checkboxes':
-            case 'repeater':
-            case 'files':
-                return (array) [];
-
-            default:
-                return null;
-        }
-
+        return ModelValueTransformerRepository::getDefaultValue($this);
     }
 
     public function getModelValue(EloquentModel $model, $key = null)
     {
         $key = $key ?: $this->key;
 
-        if($this->is_password || in_array($key, $model->getHidden())) {
-            return "";
-        }
-
-        if(! $model->exists || (! $model->offsetExists($key) && ! $this->is_media)) {
-            $value = $this->getDefaultValue();
-
-            return $this->transformResponse($value);
-        }
-
-        if($this->is_relationship) {
-            $value = $model->getAttribute($key);
-
-            if ($value instanceof Collection) {
-                $value = $this->transformRelationCollection($value, $model);
-            }
-            elseif (! $this->is_support_sub_fields && $value instanceof EloquentModel) {
-                $value = $value->getAttribute($this->getRelationKeyName($model));
-            }
-            elseif ($this->is_support_sub_fields && $value instanceof EloquentModel) {
-                $newValue = [];
-
-                /** @var Field $subField */
-                foreach ($this->getSubFields() as $subField) {
-                    $newValue[$subField->key] = $subField->getModelValue($value);
-                }
-
-                $newValue[$value->getKeyName()] = $value->getKey();
-
-                $value = $newValue;
-            }
-
-        } elseif($this->is_media) {
-            if($this->getType() instanceof SettingsPage) {
-                $value = $model->getMedia();
-            } else {
-                $value = $model->getMedia($this->key);
-            }
-
-            if($this->is_single_media) {
-                $value = $value->isEmpty() ? null : $this->transformMediaModel($value->first());
-            } else {
-                $value = $this->transformMediaCollection($value);
-            }
-
-        } else {
-            $value = $model->getAttribute($key);
-        }
+        $value = (new ModelValueTransformerRepository)
+            ->transform($this, $key, $model, true);
 
         return $this->transformResponse($value);
     }

@@ -25,6 +25,22 @@ if (! function_exists('option')) {
     }
 }
 
+if (! function_exists('laradmin')) {
+    /**
+     * @param $manager
+     * @return \Illuminate\Foundation\Application|mixed|\Shemi\Laradmin\Contracts\Managers\ManagerContract|\Shemi\Laradmin\Laradmin
+     * @throws \Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException
+     */
+    function laradmin($manager = null)
+    {
+        if(! $manager) {
+            return app('laradmin');
+        }
+
+        return app('laradmin')->manager($manager);
+    }
+}
+
 function la_str_slug($title, $separator = '-')
 {
     $slugger = new \Easybook\SeoUtf8Slugger($separator);

@@ -28,9 +28,9 @@ class SettingsBuilderController extends Controller
             return $this->responseUnauthorized($request);
         }
 
-        $types = SettingsPage::all();
+        $pages = SettingsPage::all();
 
-        return view('laradmin::settingsBuilder.browse', compact('types'));
+        return view('laradmin::settingsBuilder.browse', compact('pages'));
     }
 
     public function query(Request $request)

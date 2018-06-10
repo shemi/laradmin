@@ -4,8 +4,8 @@
 ])
 
 @php
-    $editRoute = route('laradmin.types.edit', ['menu' => "__type__"]);
-    $editRoute = str_replace('__type__', '\'+ props.row.slug +\'', $editRoute);
+    $editRoute = route('laradmin.settings-builder.edit', ['menu' => "__page__"]);
+    $editRoute = str_replace('__page__', '\'+ props.row.slug +\'', $editRoute);
 @endphp
 
 @include('laradmin::settingsBuilder.blade.page-header')

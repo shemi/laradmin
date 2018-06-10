@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Models\Type;
 
-interface TypeRequestValidatorRepository
+interface TypeRequestValidatorRepository extends Repository
 {
 
     public function validate(Request $request, Type $type,

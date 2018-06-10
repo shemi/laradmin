@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin\Models\Traits;
 
 use Illuminate\Support\Collection;
+use Shemi\Laradmin\Models\SettingsPage;
 use Spatie\MediaLibrary\Media;
 
 /**
@@ -12,10 +13,12 @@ use Spatie\MediaLibrary\Media;
  * @property array|null $relationship
  * @property array $media
  * @property boolean $is_media
+ * @property boolean $is_single_media
  * @property array $media_disk
  * @property boolean $is_relationship
  * @property string $key
  * @property string $type
+ * @property string $media_collection
  */
 trait InteractsWithMedia
 {
@@ -48,6 +51,19 @@ trait InteractsWithMedia
     public function getMediaDisKAttribute()
     {
         return $this->media['disk'];
+    }
+
+    public function getMediaCollectionAttribute()
+    {
+        if($this->getType() instanceof SettingsPage && ! $this->is_sub_field) {
+            return "default";
+        }
+
+        if($this->is_sub_field && ! $this->parent->is_relationship) {
+            return "{$this->parent->media_collection}.{$this->key}";
+        }
+        
+        return $this->key;
     }
 
     public function transformMediaCollection(Collection $collection)
