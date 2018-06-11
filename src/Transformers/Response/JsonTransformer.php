@@ -1,14 +1,15 @@
 <?php
 
-namespace Shemi\Laradmin\Repositories;
+namespace Shemi\Laradmin\Transformers\Response;
 
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Repositories\MediaTransformer;
 
-class JsonValueTransformerRepository
+class JsonTransformer extends Transformer
 {
     /**
      * @var Field $field
@@ -132,7 +133,7 @@ class JsonValueTransformerRepository
             }
 
             elseif($field->is_support_sub_fields) {
-                $value = $this->fresh()
+                $value = (new static)
                     ->transform($field, $value, $this->model, $this->internal);
             }
 
@@ -202,35 +203,6 @@ class JsonValueTransformerRepository
     protected function getValue($key)
     {
         return data_get($this->currentRow, $key);
-    }
-
-    /**
-     * @return MediaValueTransformerRepository
-     */
-    protected function getMediaTransformer()
-    {
-        return new MediaValueTransformerRepository();
-    }
-
-    /**
-     * @return RelationshipValueTransformerRepository
-     */
-    protected function getRelationshipTransformer()
-    {
-        return new RelationshipValueTransformerRepository();
-    }
-
-    /**
-     * @return ModelValueTransformerRepository
-     */
-    protected function getModelValueTransformer()
-    {
-        return new ModelValueTransformerRepository();
-    }
-
-    public function fresh()
-    {
-        return new static;
     }
 
 }

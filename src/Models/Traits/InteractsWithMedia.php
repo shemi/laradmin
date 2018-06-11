@@ -23,14 +23,20 @@ use Spatie\MediaLibrary\Media;
 trait InteractsWithMedia
 {
 
+    public static $mediaTypes = ['images', 'files', 'file', 'image'];
+
+    public static $singleMediaTypes = ['file', 'image'];
+
+    public static $defaultMediaCollection = "default";
+
     public function getIsMediaAttribute()
     {
-        return in_array($this->type, ['images', 'files', 'file', 'image']);
+        return in_array($this->type, static::$mediaTypes);
     }
 
     public function getIsSingleMediaAttribute()
     {
-        return in_array($this->type, ['file', 'image']);
+        return in_array($this->type, static::$singleMediaTypes);
     }
 
     public function getMediaAttribute($value)
@@ -56,7 +62,7 @@ trait InteractsWithMedia
     public function getMediaCollectionAttribute()
     {
         if($this->getType() instanceof SettingsPage && ! $this->is_sub_field) {
-            return "default";
+            return static::$defaultMediaCollection;
         }
 
         if($this->is_sub_field && ! $this->parent->is_relationship) {
@@ -64,29 +70,6 @@ trait InteractsWithMedia
         }
         
         return $this->key;
-    }
-
-    public function transformMediaCollection(Collection $collection)
-    {
-        return $collection->transform(function(Media $media) {
-            return $this->transformMediaModel($media);
-        })->toArray();
-    }
-
-    public function transformMediaModel(Media $media)
-    {
-        return [
-            'id' => $media->id,
-            'name' => $media->name,
-            'size' => $media->size,
-            'ext' => $media->extension,
-            'uri' => route('laradmin.serve', [
-                'mediaId' => $media->id,
-                'fileName' => $media->name
-            ]),
-            'alt' => $media->getCustomProperty('alt'),
-            'caption' => $media->getCustomProperty('caption'),
-        ];
     }
 
 }

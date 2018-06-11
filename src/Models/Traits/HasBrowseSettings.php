@@ -77,17 +77,15 @@ trait HasBrowseSettings
      */
     public function getBrowseValue(EloquentModel $model)
     {
-        if($model instanceof EloquentModel && in_array($this->key, $model->getHidden())) {
+        if(in_array($this->key, $model->getHidden())) {
             return "";
         }
 
-        if($model instanceof EloquentModel) {
-            if($this->formFieldsManager()->exists($this->type)) {
-                $formField = $this->formField();
+        if($this->formFieldsManager()->exists($this->type)) {
+            $formField = $this->formField();
 
-                if($formField instanceof FieldHasBrowseValue) {
-                    return $formField->renderBrowseValue($this, $model);
-                }
+            if($formField instanceof FieldHasBrowseValue) {
+                return $formField->renderBrowseValue($this, $model);
             }
         }
 
@@ -161,10 +159,9 @@ trait HasBrowseSettings
             case 'switch':
                 return (bool) $modelValue;
 
-            default:
-                return $modelValue;
-
         }
+
+        return $modelValue;
     }
 
 }

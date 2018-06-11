@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
@@ -10,6 +11,7 @@ use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Http\Controllers\CrudController;
 use Shemi\Laradmin\Http\Controllers\ExportController;
 use Shemi\Laradmin\Http\Controllers\ImportController;
+use Shemi\Laradmin\Transformers\Builder\TypeTransformer;
 
 /**
  * Shemi\Laradmin\Models\Type
@@ -18,6 +20,8 @@ use Shemi\Laradmin\Http\Controllers\ImportController;
  * @property string $name
  * @property string $model
  * @property string $slug
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property boolean $public
  * @property string $controller
  * @property Collection $panels
@@ -250,6 +254,11 @@ class Type extends Model
         return $key ?: 15;
     }
 
+    /**
+     * @param EloquentModel $model
+     * @return array
+     * @throws \Exception
+     */
     public function getModelArray(EloquentModel $model)
     {
         $array = [];
@@ -337,41 +346,7 @@ class Type extends Model
 
     public function toBuilderArray()
     {
-        $fields = [
-            'name',
-            'model',
-            'slug',
-            'public',
-            'controller',
-            'updated_at',
-            'created_at',
-            'side_panels',
-            'icon',
-            'exists',
-            'records_per_page',
-            'support_export',
-            'export_controller',
-            'support_import',
-            'import_controller',
-            'default_sort',
-            'default_sort_direction'
-        ];
-
-        $array = [];
-
-        foreach ($fields as $key) {
-            $array[$key] = $this->$key;
-        }
-
-        if($this->exists) {
-            $array['panels'] = $this->panels->map(function($panel) {
-                return $panel->toBuilder();
-            });
-        } else {
-            $array['panels'] = (array) [];
-        }
-
-        return $array;
+        return TypeTransformer::transform($this);
     }
 
     public function refresh()

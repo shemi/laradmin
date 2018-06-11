@@ -5,7 +5,7 @@ namespace Shemi\Laradmin\Models;
 use Closure;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\Transformers\Builder\SettingsPageTransformer;
 
 /**
  * Shemi\Laradmin\Models\Type
@@ -206,33 +206,12 @@ class SettingsPage extends Model
         return $all;
     }
 
+    /**
+     * @return mixed
+     */
     public function toBuilderArray()
     {
-        $fields = [
-            'name',
-            'slug',
-            'updated_at',
-            'created_at',
-            'icon',
-            'exists',
-            'bucket'
-        ];
-
-        $array = [];
-
-        foreach ($fields as $key) {
-            $array[$key] = $this->$key;
-        }
-
-        if($this->exists) {
-            $array['panels'] = $this->panels->map(function($panel) {
-                return $panel->toBuilder();
-            });
-        } else {
-            $array['panels'] = (array) [];
-        }
-
-        return $array;
+        return SettingsPageTransformer::transform($this);
     }
 
     public function refresh()

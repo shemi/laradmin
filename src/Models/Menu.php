@@ -19,11 +19,22 @@ class Menu extends Model
         return static::where('slug', $slug)->first();
     }
 
-    public function getItemsAttribute($key)
+    /**
+     * @param $value
+     * @return array
+     * @throws UrlGenerationException
+     */
+    public function getItemsAttribute($value)
     {
-        return $this->transformItems($key);
+        return $this->transformItems($value);
     }
 
+    /**
+     * @param $items
+     * @param bool $throw
+     * @return array
+     * @throws UrlGenerationException
+     */
     public function transformItems($items, $throw = false)
     {
         $newItems = [];
@@ -37,6 +48,12 @@ class Menu extends Model
         return $newItems;
     }
 
+    /**
+     * @param $item
+     * @param bool $throw
+     * @return array|boolean
+     * @throws UrlGenerationException
+     */
     public function transformItem($item, $throw = false)
     {
         $type = array_get($item, 'type', 'url');
@@ -61,7 +78,7 @@ class Menu extends Model
 
             try {
                 $url = route($newRouteName, $parameters, false);
-            } catch (UrlGenerationException | InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 if(! $throw) {
                     return false;
                 } else {

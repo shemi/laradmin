@@ -11,7 +11,9 @@ use Shemi\Laradmin\Models\Traits\InteractsWithFormField;
 use Shemi\Laradmin\Models\Traits\InteractsWithMedia;
 use Shemi\Laradmin\Models\Traits\InteractsWithRelationship;
 use Shemi\Laradmin\Models\Traits\HasTemplateOptions;
-use Shemi\Laradmin\Repositories\ModelValueTransformerRepository;
+use Shemi\Laradmin\Transformers\Builder\FieldTransformer;
+use Shemi\Laradmin\Transformers\FieldDefaultValueTransformer;
+use Shemi\Laradmin\Transformers\Response\ModelTransformer;
 
 /**
  * Shemi\Laradmin\Models\Field
@@ -56,9 +58,15 @@ class Field extends Model
 
     protected $keyType = 'string';
 
-    protected $jsonIgnore = [
-        'parent'
-    ];
+    protected $jsonIgnore = ['parent'];
+
+    public static $dateTypes = ['date', 'datetime', 'time'];
+
+    public static $forcedHiddenLabelTypes = ['switch', 'checkbox'];
+
+    public static $repeaterTypes = ['repeater'];
+
+    public static $numericTypes = ['number', 'float'];
 
     /**
      * @var Panel $_panel
@@ -138,7 +146,7 @@ class Field extends Model
 
     public function getShowLabelAttribute($value)
     {
-        if($this->is_repeater_sub_field || in_array($this->type, ['switch', 'checkbox'])) {
+        if($this->is_repeater_sub_field || in_array($this->type, static::$forcedHiddenLabelTypes)) {
             return false;
         }
 
@@ -158,7 +166,9 @@ class Field extends Model
 
     public function getIsRepeaterSubFieldAttribute()
     {
-        return $this->is_sub_field && $this->parent && $this->parent->type === 'repeater';
+        return $this->is_sub_field &&
+            $this->parent &&
+            $this->parent->is_repeater_like;
     }
 
     public function getIsSupportSubFieldsAttribute()
@@ -198,7 +208,7 @@ class Field extends Model
     {
         $localFields = $this->fields;
 
-        if($this->type !== 'repeater' || ! $this->has_relationship_type) {
+        if($this->is_repeater_like || ! $this->has_relationship_type) {
             return $localFields;
         }
 
@@ -230,12 +240,12 @@ class Field extends Model
 
     public function getIsRepeaterLikeAttribute()
     {
-        return in_array($this->type, ['repeater']);
+        return in_array($this->type, static::$repeaterTypes);
     }
 
     public function getIsNumericAttribute()
     {
-        return in_array($this->field_type, ['number', 'float']);
+        return in_array($this->field_type, static::$numericTypes);
     }
 
     public function getModelCastType(EloquentModel $model)
@@ -245,14 +255,20 @@ class Field extends Model
 
     public function getDefaultValue()
     {
-        return ModelValueTransformerRepository::getDefaultValue($this);
+        return FieldDefaultValueTransformer::transform($this);
     }
 
+    /**
+     * @param EloquentModel $model
+     * @param null $key
+     * @return mixed
+     * @throws \Exception
+     */
     public function getModelValue(EloquentModel $model, $key = null)
     {
         $key = $key ?: $this->key;
 
-        $value = (new ModelValueTransformerRepository)
+        $value = (new ModelTransformer)
             ->transform($this, $key, $model, true);
 
         return $this->transformResponse($value);
@@ -260,7 +276,7 @@ class Field extends Model
 
     public function isDate()
     {
-        return in_array($this->type, ['date', 'datetime', 'time']);
+        return in_array($this->type, static::$dateTypes);
     }
 
     public function getVueFilter()
@@ -289,40 +305,7 @@ class Field extends Model
 
     public function toBuilder()
     {
-        $fields = [
-            'id' => 'string',
-            'label' => 'string',
-            'key' => 'string',
-            'show_label' => 'bool',
-            'default_value' => null,
-            'nullable' => null,
-            'type' => 'string',
-            'validation' => 'array',
-            'visibility' => 'array',
-            'options' => 'array',
-            'template_options' => 'object',
-            'read_only' => 'bool',
-            'browse_settings' => 'object',
-            'relationship' => 'object|bool',
-            'media' => 'object',
-            'tab_id' => null
-        ];
-
-        $array = [];
-
-        foreach ($fields as $key => $cast) {
-            $array[$key] = $this->castBuilderAttribute($this->{$key}, $cast);
-        }
-
-        if($this->fields->isNotEmpty()) {
-            $array['fields'] = $this->fields->map(function($field) {
-                return $field->toBuilder();
-            });
-        }
-
-        $array['object_type'] = static::OBJECT_TYPE;
-
-        return $array;
+        return FieldTransformer::transform($this);
     }
 
     /**

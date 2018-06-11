@@ -1,14 +1,15 @@
 <?php
 
-namespace Shemi\Laradmin\Repositories;
+namespace Shemi\Laradmin\Transformers\Response;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Contracts\HasMediaContract;
 use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Transformers\Response\Transformer;
 use Spatie\MediaLibrary\Media;
 
-class MediaValueTransformerRepository
+class MediaTransformer extends Transformer
 {
     /**
      * @var Field $field
@@ -40,14 +41,31 @@ class MediaValueTransformerRepository
         $value = $this->model->getMedia($this->field->media_collection);
 
         if(! $internal) {
-            return $this->field->is_single_media ? $value->first() : $value;
+            return $this->expectCollection() ? $value : $value->first();
         }
 
-        if($this->field->is_single_media && ! $this->field->is_repeater_sub_field) {
+        if(! $this->expectCollection()) {
             return $value->isEmpty() ? null : $this->asMediaModel($value->first());
         }
 
         return $this->asMediaCollection($value);
+    }
+
+    protected function expectCollection()
+    {
+        if(! $this->field->is_single_media) {
+            return true;
+        }
+
+        if($this->field->parent && $this->field->parent->is_relationship) {
+            return false;
+        }
+
+        if($this->field->is_repeater_sub_field) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -77,11 +95,6 @@ class MediaValueTransformerRepository
             'alt' => $media->getCustomProperty('alt'),
             'caption' => $media->getCustomProperty('caption'),
         ];
-    }
-
-    public function fresh()
-    {
-        return new static;
     }
 
 }

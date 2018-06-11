@@ -148,6 +148,6 @@ class Setting extends Model implements HasMediaConversionsContract
 
     public function registerMediaConversions(Media $media = null)
     {
-        // TODO: Implement registerMediaConversions() method.
+
     }
 }

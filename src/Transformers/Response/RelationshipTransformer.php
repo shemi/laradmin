@@ -1,6 +1,6 @@
 <?php
 
-namespace Shemi\Laradmin\Repositories;
+namespace Shemi\Laradmin\Transformers\Response;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -8,7 +8,7 @@ use Shemi\Laradmin\Contracts\HasMediaContract;
 use Shemi\Laradmin\Models\Field;
 use Spatie\MediaLibrary\Media;
 
-class RelationshipValueTransformerRepository
+class RelationshipTransformer extends Transformer
 {
     /**
      * @var Field $field
@@ -135,7 +135,7 @@ class RelationshipValueTransformerRepository
                     ->serveMedia(
                         $media->id,
                         $media->name,
-                        $this->field->relation_image['conversion']
+                        $this->field->relation_image_conversion
                     );
             }
         }
@@ -146,11 +146,6 @@ class RelationshipValueTransformerRepository
         }
 
         return $return;
-    }
-
-    public function fresh()
-    {
-        return new static;
     }
 
 }

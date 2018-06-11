@@ -1,14 +1,15 @@
 <?php
 
-namespace Shemi\Laradmin\Repositories;
+namespace Shemi\Laradmin\Transformers\Response;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Contracts\HasMediaContract;
 use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Transformers\FieldDefaultValueTransformer;
 use Spatie\MediaLibrary\Media;
 
-class ModelValueTransformerRepository
+class ModelTransformer extends Transformer
 {
     /**
      * @var Field $field
@@ -50,7 +51,7 @@ class ModelValueTransformerRepository
         }
 
         if(! $model->exists || (! $model->offsetExists($key) && ! $field->is_media)) {
-            return static::getDefaultValue($field);
+            return FieldDefaultValueTransformer::transform($field);
         }
 
         if($this->field->is_relationship) {
@@ -85,6 +86,11 @@ class ModelValueTransformerRepository
             ->transform($this->field, $this->model, $this->internal);
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     * @throws \Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException
+     */
     protected function asJson()
     {
         return $this->getJsonTransformer()
@@ -94,88 +100,6 @@ class ModelValueTransformerRepository
     protected function asModelValue()
     {
         return $this->model->getAttribute($this->modelKey);
-    }
-
-    public static function getDefaultValue(Field $field)
-    {
-        if($field->default_value !== null) {
-            return $field->default_value;
-        }
-
-        if($field->nullable) {
-            return null;
-        }
-
-        switch ($field->type) {
-            case 'number':
-            case 'text':
-            case 'text_area':
-            case 'date':
-            case 'datetime':
-                return "";
-
-            case 'switch':
-            case 'checkbox':
-                return false;
-
-            case 'select':
-            case 'radio':
-            case 'image':
-            case 'file':
-                return null;
-
-            case 'object':
-            case 'group':
-                $object = [];
-
-                if($field->is_support_sub_fields) {
-                    /** @var Field $subField */
-                    foreach ($field->getSubFields() as $subField) {
-                        $object[$subField->key] = $subField->getDefaultValue();
-                    }
-                }
-
-                return $object;
-
-            case 'select_multiple':
-            case 'checkboxes':
-            case 'repeater':
-            case 'files':
-                return (array) [];
-
-            default:
-                return null;
-        }
-
-    }
-
-    /**
-     * @return MediaValueTransformerRepository
-     */
-    protected function getMediaTransformer()
-    {
-        return new MediaValueTransformerRepository();
-    }
-
-    /**
-     * @return RelationshipValueTransformerRepository
-     */
-    protected function getRelationshipTransformer()
-    {
-        return new RelationshipValueTransformerRepository();
-    }
-
-    /**
-     * @return JsonValueTransformerRepository
-     */
-    protected function getJsonTransformer()
-    {
-        return new JsonValueTransformerRepository();
-    }
-
-    public function fresh()
-    {
-        return new static;
     }
 
 }

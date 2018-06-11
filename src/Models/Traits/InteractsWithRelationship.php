@@ -10,6 +10,7 @@ use Shemi\Laradmin\Data\Model;
 use \Laradmin;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Transformers\Response\RelationshipTransformer;
 
 /**
  * Shemi\Laradmin\Models\Traits\FieldHasRelationshipAttributes
@@ -23,6 +24,7 @@ use Shemi\Laradmin\Models\Type;
  * @property array $relation_labels
  * @property string $relation_key
  * @property array $relation_image
+ * @property string|null $relation_image_conversion
  * @property boolean $is_ajax_powered_relationship
  * @property string $key
  * @property string $type
@@ -84,11 +86,16 @@ trait InteractsWithRelationship
 
             $image = [
                 'collection' => $image[0],
-                'conversion' => isset($image[1]) ? $image[1] : ''
+                'conversion' => isset($image[1]) ? $image[1] : null
             ];
         }
 
         return $image;
+    }
+
+    public function getRelationImageConversionAttribute()
+    {
+        return data_get($this->relation_image, 'conversion', null);
     }
 
     public function getRelationshipTypeSlugAttribute()
@@ -149,80 +156,16 @@ trait InteractsWithRelationship
         return $relation->getRelated();
     }
 
-    protected function transformRelationCollection(Collection $collection)
-    {
-        if(in_array($this->type, ['checkboxes'])) {
-            return $collection->pluck($this->relation_key);
-        }
-
-        if($this->getSubFields()->isNotEmpty()) {
-            return $collection->transform(function($model) {
-                return $this->transformSubModel($model);
-            });
-        }
-
-        return $collection->transform(function($model) {
-            return $this->transformRelationModel($model);
-        });
-    }
-
+    /**
+     * @param EloquentModel $model
+     * @return array
+     * @throws \Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException
+     */
     public function transformRelationModel(EloquentModel $model)
     {
-        $labels = $this->relation_labels;
-        $labelKey = array_shift($labels);
-
-        $return = [
-            'key' => $model->getAttribute($this->relation_key),
-            'label' => $model->getAttribute($labelKey)
-        ];
-
-        if(! empty($labels)) {
-            $return['extra_labels'] = [];
-
-            foreach ($labels as $label) {
-                $return['extra_labels'][$label] = $model->getAttribute($label);
-            }
-        }
-
-        if($this->relation_image && $model instanceof HasMediaContract) {
-            $media = $model->getMedia($this->relation_image['collection'])
-                ->first();
-
-            if($media) {
-                $return['image'] = route('laradmin.serve', [
-                    'mediaId' => $media->id,
-                    'fileName' => $media->name,
-                    'pc' => $this->relation_image['conversion']
-                ]);
-            }
-        }
-
-        if($this->has_relationship_type) {
-            $type = $this->relationship_type;
-
-            $return['edit_link'] = Laradmin::manager('links')
-                ->edit($type, $model);
-        }
-
-        return $return;
-    }
-
-    public function transformSubModel(EloquentModel $model)
-    {
-        $return = [
-            $model->getKeyName() => $model->getKey()
-        ];
-
-        if(! $this->getSubFields()) {
-            return $return;
-        }
-
-        /** @var Field $field */
-        foreach ($this->getSubFields() as $field) {
-            $return[$field->key] = $field->getModelValue($model);
-        }
-
-        return $return;
+        return (new RelationshipTransformer())
+            ->init($this, $this->key, $model)
+            ->asRelationModel($model);
     }
 
 }

@@ -36,7 +36,7 @@ class WidgetsManager implements ManagerContract
         }
 
         if($widgetClass->getSize() > Widget::MAX_WIDGETS_WIDTH_SIZE_PER_ROW) {
-            throw new InvalidArgumentException("The widget width cannot be greater than " . Widget::MAX_WIDGETS_WIDTH_SIZE_PER_ROW);
+            throw new InvalidArgumentException("The widget width cannot be greater than: " . Widget::MAX_WIDGETS_WIDTH_SIZE_PER_ROW);
         }
 
         if(! isset($this->widgets[$row]) || ! is_array($this->widgets[$row])) {

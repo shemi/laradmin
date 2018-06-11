@@ -8,6 +8,7 @@ use Shemi\Laradmin\Data\Model;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\FormPanels\FormPanel;
 use Shemi\Laradmin\Managers\FormPanelsManager;
+use Shemi\Laradmin\Transformers\Builder\PanelTransformer;
 
 /**
  * Shemi\Laradmin\Models\Type
@@ -26,8 +27,14 @@ class Panel extends Model
 
     const OBJECT_TYPE = 'panel';
 
+    /**
+     * @var bool $dataable
+     */
     protected $dataable = false;
 
+    /**
+     * @var Collection $_fields
+     */
     protected $_fields;
 
     /**
@@ -35,8 +42,14 @@ class Panel extends Model
      */
     protected $_type;
 
+    /**
+     * @var string $keyType
+     */
     protected $keyType = 'string';
 
+    /**
+     * @var array $fillable
+     */
     protected $fillable = [
         'id',
         'title',
@@ -190,33 +203,7 @@ class Panel extends Model
 
     public function toBuilder()
     {
-        $fields = [
-            'id',
-            'title',
-            'type',
-            'position',
-            'has_container',
-            'style',
-            'tabs'
-        ];
-
-        $array = [];
-
-        foreach ($fields as $key) {
-            $array[$key] = $this->{$key};
-        }
-
-        if ($this->fields->isNotEmpty()) {
-            $array['fields'] = $this->fields->map(function ($field) {
-                return $field->toBuilder();
-            });
-        } else {
-            $array['fields'] = (array) [];
-        }
-
-        $array['object_type'] = static::OBJECT_TYPE;
-
-        return $array;
+        return PanelTransformer::transform($this);
     }
 
     /**

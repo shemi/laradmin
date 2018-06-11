@@ -127,6 +127,10 @@ class ComplexFieldValueTransformerRepository implements Contract
             $this->value->push($this->currentValue);
         }
 
+        foreach ($this->mediaFields as $field) {
+            $this->getSyncMediaRepo()->deletePending($field);
+        }
+
         return $this->expectSingle ? $this->value->first() : $this->value->all();
     }
 
@@ -207,7 +211,7 @@ class ComplexFieldValueTransformerRepository implements Contract
         foreach ($this->relationFields as $field) {
             $value = $this->getFieldValue($field);
 
-            if($field->type === 'repeater' && $field->has_relationship_type) {
+            if($field->is_repeater_like && $field->has_relationship_type) {
                 $this->syncRepeaterRows($field, $value);
             }
 
@@ -286,7 +290,8 @@ class ComplexFieldValueTransformerRepository implements Contract
                 ->sync(
                     $this->getFieldValue($field),
                     $this->model,
-                    $field
+                    $field,
+                    false
                 );
 
             $ids = $mediaRepo->getCurrentIds();
