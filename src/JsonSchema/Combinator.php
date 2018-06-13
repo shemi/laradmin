@@ -19,6 +19,8 @@ class Combinator implements Schemable
 
     protected $required;
 
+    protected $title;
+
     /**
      * @param string $type
      * @param Closure $callback
@@ -62,6 +64,16 @@ class Combinator implements Schemable
     }
 
     /**
+     * @return $this
+     */
+    public function title($title = null)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
      * Get the instance as an array.
      *
      * @return array
@@ -74,6 +86,10 @@ class Combinator implements Schemable
 
         if($this->required) {
             $array['required'] = true;
+        }
+
+        if($this->title) {
+            $array['title'] = $this->title;
         }
 
         return $array;

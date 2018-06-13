@@ -19,6 +19,8 @@ class ArrayBlueprint implements Schemable
 
     protected $required = null;
 
+    protected $title = null;
+
     /**
      * @var null|Blueprint
      */
@@ -99,9 +101,9 @@ class ArrayBlueprint implements Schemable
         return $this;
     }
 
-    public function nullable()
+    public function nullable($nullable = true)
     {
-        $this->nullable = true;
+        $this->nullable = $nullable;
 
         return $this;
     }
@@ -116,6 +118,13 @@ class ArrayBlueprint implements Schemable
     public function minItems(int $number = 0)
     {
         $this->minItems = $number;
+
+        return $this;
+    }
+
+    public function title($title = "")
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -166,6 +175,10 @@ class ArrayBlueprint implements Schemable
 
         if($this->required) {
            $schema['required'] = $this->required;
+        }
+
+        if($this->title) {
+           $schema['title'] = $this->title;
         }
 
         return $schema;

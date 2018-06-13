@@ -162,6 +162,10 @@ class ObjectBlueprint implements Schemable
             $schema['isRequired'] = $this->isRequired;
         }
 
+        if($this->title) {
+            $schema['title'] = $this->title;
+        }
+
         return $schema;
     }
 

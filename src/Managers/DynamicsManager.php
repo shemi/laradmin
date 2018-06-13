@@ -11,8 +11,14 @@ class DynamicsManager implements ManagerContract
 {
     use Macroable;
 
-    const REGEX = '/^(?P<function>\S+?)(:|$)(?P<params>\S+?)?(({(?P<keys>.*)})|$)/m';
+    const REGEX = '^(\*)(?<function>\S+?)(:|$)(?<params>.+?)?(({(?<keys>.*)})|$)';
 
+    /**
+     * @param $dynamic
+     * @param bool $keyLabel
+     * @return array
+     * @throws \Exception
+     */
     public function call($dynamic, $keyLabel = false)
     {
         if(! $this->validate($dynamic)) {
@@ -95,9 +101,10 @@ class DynamicsManager implements ManagerContract
 
     public function extract($dynamic)
     {
+        $pattern = static::REGEX;
         $matches = [];
 
-        preg_match_all(static::REGEX, $dynamic, $matches, PREG_SET_ORDER, 0);
+        preg_match_all("/{$pattern}/m", $dynamic, $matches, PREG_SET_ORDER, 0);
 
         $function = array_get($matches, '0.function');
         $params = array_get($matches, '0.params');

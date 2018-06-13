@@ -412,7 +412,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function getFieldValue(Field $field)
     {
         return $this->transformValue(
-            $field->transformRequest(data_get($this->data, $field->key)),
+            $field->transformRequest(data_get($this->data, $field->full_key)),
             $field
         );
     }
