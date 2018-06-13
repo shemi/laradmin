@@ -9,6 +9,7 @@ use Shemi\Laradmin\Contracts\Managers\ManagerContract;
 use Shemi\Laradmin\Exceptions\InvalidArgumentException;
 use Shemi\Laradmin\Exceptions\InvalidManagerException;
 use Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException;
+use Shemi\Laradmin\Managers\DynamicsManager;
 use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Managers\FormPanelsManager;
 use Shemi\Laradmin\Managers\JsVarsManager;
@@ -99,7 +100,8 @@ class Laradmin
             FormPanelsManager::class,
             WidgetsManager::class,
             RolesManager::class,
-            JsVarsManager::class
+            JsVarsManager::class,
+            DynamicsManager::class,
         ];
 
         foreach ($managers as $manager) {

@@ -98,13 +98,17 @@ class SyncMediaRepository implements SyncMediaRepositoryContract
 
         if(! $model->exists) {
             $model->save();
-        } elseif(! $deleteImmediately && isset(static::$pendingDeleteCache[$this->field->id])) {
+        }
+
+        elseif(! $deleteImmediately && isset(static::$pendingDeleteCache[$this->field->id])) {
             $this->current = new Collection(static::$pendingDeleteCache[$this->field->id]['current']);
-        } else {
+        }
+
+        else {
             $this->current = $model->getMedia($this->collection);
         }
 
-        if($this->new->isEmpty() && $this->current->isNotEmpty()) {
+        if($deleteImmediately && $this->new->isEmpty() && $this->current->isNotEmpty()) {
             $this->clearAll();
 
             return $this;
@@ -120,44 +124,56 @@ class SyncMediaRepository implements SyncMediaRepositoryContract
 
         $updateIds = $this->update->pluck('id');
 
-        if(! $deleteImmediately) {
-            if(! isset(static::$pendingDeleteCache[$this->field->id])) {
-                static::$pendingDeleteCache[$this->field->id] = [
-                    'current' => new Collection($this->current),
-                    'update' => new Collection()
-                ];
-            }
-
-            static::$pendingDeleteCache[$this->field->id]['update'] = static::$pendingDeleteCache[$this->field->id]['update']->merge($updateIds);
-        }
-
         if($deleteImmediately) {
-            foreach ($this->current as $media) {
-                if(! $updateIds->contains($media->id)) {
-                    $this->delete->push($media);
-                }
-            }
-
-            $this->delete();
+            $this->setToDelete($this->current, $updateIds)
+                ->delete();
+        } else {
+            $this->pushToPendingDeleteCache($updateIds);
         }
 
         return $this->update()
             ->create();
     }
 
+    protected function pushToPendingDeleteCache($updateIds)
+    {
+        if(! isset(static::$pendingDeleteCache[$this->field->id])) {
+            static::$pendingDeleteCache[$this->field->id] = [
+                'current' => new Collection($this->current),
+                'update' => new Collection()
+            ];
+        }
+
+        array_set(
+            static::$pendingDeleteCache,
+            "{$this->field->id}.update",
+            static::$pendingDeleteCache[$this->field->id]['update']->merge($updateIds)
+        );
+    }
+
     /**
+     * @param Field $field
+     * @return SyncMediaRepository
      * @throws CantDeleteMediaException
      */
     public function deletePending(Field $field)
     {
         if(! isset(static::$pendingDeleteCache[$field->id])) {
-            return;
+            return $this;
         }
 
-
-        $this->delete = new Collection();
         $current = static::$pendingDeleteCache[$field->id]['current'];
         $updateIds = static::$pendingDeleteCache[$field->id]['update'];
+
+        $this->setToDelete($current, $updateIds)
+            ->delete();
+
+        return $this;
+    }
+
+    protected function setToDelete(Collection $current, Collection $updateIds)
+    {
+        $this->delete = new Collection();
 
         foreach ($current as $media) {
             if(! $updateIds->contains($media->id)) {
@@ -165,7 +181,7 @@ class SyncMediaRepository implements SyncMediaRepositoryContract
             }
         }
 
-        $this->delete();
+        return $this;
     }
 
     /**
@@ -174,7 +190,7 @@ class SyncMediaRepository implements SyncMediaRepositoryContract
     protected function clearAll()
     {
         try {
-            $this->model->clearMediaCollection();
+            $this->model->clearMediaCollection($this->collection);
         }
         catch (\Exception $exception) {
             throw UnableToClearMediaException::create($exception);

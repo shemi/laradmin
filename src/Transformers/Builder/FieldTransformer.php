@@ -44,7 +44,7 @@ class FieldTransformer extends Transformer
         $return = [];
 
         foreach ($this->map as $key => $type) {
-            $return[$key] = $this->cast($this->{$key}, $type);
+            $return[$key] = $this->cast($field->{$key}, $type);
         }
 
         if($field->fields->isNotEmpty()) {
