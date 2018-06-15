@@ -23,10 +23,16 @@ use Shemi\Laradmin\Exceptions\UnableToSaveMediaException;
 use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveModelException;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Transformers\Request\RequestTransformer;
 use Spatie\MediaLibrary\Media;
 
 class CreateUpdateRepository implements CreateUpdateRepositoryContract
 {
+
+    /**
+     * @var array $data
+     */
+    protected $rawData;
 
     /**
      * @var array $data
@@ -63,21 +69,30 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      */
     protected $modelFields;
 
+    /**
+     * @var RequestTransformer $transformer
+     */
+    protected $transformer;
 
     public function __construct()
     {
         $this->mediaFields = Collection::make([]);
         $this->relationFields = Collection::make([]);
         $this->modelFields = Collection::make([]);
+        $this->transformer = new RequestTransformer();
     }
 
     public function initCreateOrUpdate($data, Model $model, Type $type = null, Collection $fields = null)
     {
-        $this->data = $data;
+        $this->rawData = $data;
         $this->model = $model;
         $this->type = $type;
 
         $this->setFields($fields);
+
+        $this->data = $this->transformer->transform($data, $this->fields);
+
+        dd($this->data);
 
         $this->setModelData();
 
@@ -157,13 +172,17 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function setModelData()
     {
         $this->modelFields->each(function(Field $field) {
-            $value = array_get($this->data, $field->key);
 
-            if($this->model->exists && $field->is_password && ! $value) {
+            if($this->model->exists && $field->is_password && ! array_get($this->rawData, $field->key)) {
                 return;
             }
 
             $value = $this->getFieldValue($field);
+
+            if($field->is_support_sub_fields) {
+                $value = $this->getComplexRepo()
+                    ->transform($value, $field, $this->model);
+            }
 
             $this->model->setAttribute($field->key, $value);
         });
@@ -198,8 +217,8 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             $relation = $field->getRelationClass($this->model);
             $value = $this->getFieldValue($field);
 
-            if($field->type === 'repeater' && $field->has_relationship_type) {
-                $this->createUpdateDeleteRepeaterRows($field, $value);
+            if($field->is_repeater_like && $field->has_relationship_type) {
+                $this->syncRelationRepeaterRows($field, $value);
 
                 return;
             }
@@ -271,11 +290,10 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      * @param Field $field
      * @param $rows
      * @return void
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws CreateUpdateUnableToSaveModelException
      * @throws SyncMediaException
      */
-    protected function createUpdateDeleteRepeaterRows(Field $field, $rows)
+    protected function syncRelationRepeaterRows(Field $field, $rows)
     {
         $type = $field->relationship_type;
 
@@ -327,7 +345,6 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      * @param $data
      * @param Type|null $type
      * @return Model
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws CreateUpdateUnableToSaveModelException
      * @throws SyncMediaException
      */
@@ -386,7 +403,6 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     }
 
     /**
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws SyncMediaException
      */
     public function syncMedia()
@@ -405,47 +421,10 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     /**
      * @param Field $field
      * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
     protected function getFieldValue(Field $field)
     {
-        return $this->transformValue(
-            $field->transformRequest(data_get($this->data, $field->full_key)),
-            $field
-        );
-    }
-
-    /**
-     * @param $value
-     * @param Field $field
-     * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
-     */
-    protected function transformValue($value, Field $field)
-    {
-        $transform = explode(':', $field->getTemplateOption('transform', 'value'));
-
-        if(! $value && count($transform) > 1) {
-            $copyKey = $transform[1];
-
-            $copyField = $this->fields
-                ->where('key', $copyKey)
-                ->first();
-
-            if($copyField) {
-                $value = $this->getFieldValue($copyField);
-            }
-
-            elseif ($this->model->offsetExists($copyKey)) {
-                $value = $this->model->getAttribute($copyKey);
-            }
-
-            else {
-                throw CreateUpdateTransformCantFindCopyFieldOrAttributeException::create($copyKey);
-            }
-        }
-
-        return call_user_func($transform[0], $value);
+        return data_get($this->data, $field->full_key);
     }
 
     /**
@@ -454,6 +433,15 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     protected function getSyncMediaRepo()
     {
         return app(SyncMediaRepository::class)
+            ->fresh();
+    }
+
+    /**
+     * @return ComplexFieldValueTransformerRepository
+     */
+    protected function getComplexRepo()
+    {
+        return app(ComplexFieldValueTransformerRepository::class)
             ->fresh();
     }
 

@@ -26,15 +26,13 @@ class RequestTransformer
      * @param $data
      * @param Collection $fields
      * @return array
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
     public function transform($data, Collection $fields)
     {
         $this->fields = $fields;
         $this->data = $data;
         $this->transformedData = $this->transformFields($this->fields);
-
-
+        $this->transformedData = $this->manipulateValues($this->fields);
 
         return $this->transformedData;
     }
@@ -103,32 +101,68 @@ class RequestTransformer
     }
 
     /**
-     * @param $value
-     * @param Field $field
+     * @param Collection $fields
+     * @param null $data
      * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
-    public function manipulateValues()
+    public function manipulateValues(Collection $fields = null, $data = null)
     {
-        
+        $fields = $fields ?: $this->fields;
+        $data = $data ?: $this->transformedData;
 
-        $transform = explode(':', $field->getTemplateOption('transform', 'value'));
+        /** @var Field $field */
+        foreach ($fields as $field) {
+            $manipulation = $field->value_manipulation;
 
-        if(! $value && count($transform) > 1) {
-            $copyKey = $transform[1];
+            if(! $manipulation || ! is_string($manipulation)) {
+                if($field->is_support_sub_fields) {
+                    array_set(
+                        $data,
+                        $field->key,
+                        $this->manipulateValues($field->getSubFields(), array_get($data, $field->key))
+                    );
+                }
 
-            $copyField = $this->fields
-                ->where('key', $copyKey)
-                ->first();
-
-            if(! $copyField) {
-                throw CreateUpdateTransformCantFindCopyFieldOrAttributeException::create($copyKey);
+                continue;
             }
 
-            $value = $this->getFieldValue($copyField);
+            $manipulation = explode(':', $manipulation);
+            $value = array_get($data, $fields);
+
+            if(! $value && count($manipulation) > 1) {
+                $value = $this->getCopyFieldValue($manipulation[1]);
+            }
+
+            array_set(
+                $data,
+                $field->key,
+                call_user_func($manipulation[0], $value)
+            );
         }
 
-        return call_user_func($transform[0], $value);
+        return $data;
+    }
+
+    protected function getCopyFieldValue($key)
+    {
+        $target = $this->transformedData;
+        $key = is_array($key) ? $key : explode('.', $key);
+
+        while (! is_null($segment = array_shift($key))) {
+            if(! Arr::isAssoc($target) && Arr::exists($target, 0)) {
+                $target = $target[0];
+            }
+
+            if (Arr::accessible($target) && Arr::exists($target, $segment)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return null;
+            }
+        }
+
+        return $target;
     }
 
 }

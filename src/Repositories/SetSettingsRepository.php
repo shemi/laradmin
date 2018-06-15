@@ -14,6 +14,7 @@ use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Setting;
 use Shemi\Laradmin\Models\SettingsPage;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
+use Shemi\Laradmin\Transformers\Request\RequestTransformer;
 
 class SetSettingsRepository
 {
@@ -22,6 +23,11 @@ class SetSettingsRepository
      * @var array $data
      */
     protected $data;
+
+    /**
+     * @var array $rawData
+     */
+    protected $rawData;
 
     /**
      * @var SettingsPage $page
@@ -53,11 +59,17 @@ class SetSettingsRepository
      */
     protected $models;
 
+    /**
+     * @var RequestTransformer $transformer
+     */
+    protected $transformer;
+
     public function __construct()
     {
         $this->mediaFields = Collection::make([]);
         $this->relationFields = Collection::make([]);
         $this->modelFields = Collection::make([]);
+        $this->transformer = new RequestTransformer();
     }
 
     /**
@@ -70,9 +82,12 @@ class SetSettingsRepository
     public function set($data, SettingsPage $page, Collection $fields = null)
     {
         $this->page = $page;
-        $this->data = $data;
+        $this->rawData = $data;
 
         $this->setFields($fields);
+
+        $this->data = $this->transformer->transform($data, $this->fields);
+
         $this->setModels();
 
         DB::transaction(function () {
@@ -161,9 +176,9 @@ class SetSettingsRepository
     {
         $this->modelFields->each(function(Field $field) {
             $model = $this->getModel($field);
-            $value = data_get($this->data, $field->key);
+            $rawValue = data_get($this->rawData, $field->key);
 
-            if($model->exists && $field->is_password && ! $value) {
+            if($model->exists && $field->is_password && ! $rawValue) {
                 return;
             }
 
@@ -279,7 +294,6 @@ class SetSettingsRepository
     }
 
     /**
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws \Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException
      */
     public function syncMedia()
@@ -298,43 +312,10 @@ class SetSettingsRepository
     /**
      * @param Field $field
      * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
     protected function getFieldValue(Field $field)
     {
-        return $this->transformValue(
-            $field->transformRequest(data_get($this->data, $field->key)),
-            $field
-        );
-    }
-
-    /**
-     * @param $value
-     * @param Field $field
-     * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
-     */
-    protected function transformValue($value, Field $field)
-    {
-        $transform = explode(':', $field->getTemplateOption('transform', 'value'));
-
-        if(! $value && count($transform) > 1) {
-            $copyKey = $transform[1];
-
-            $copyField = $this->fields
-                ->where('key', $copyKey)
-                ->first();
-
-            if($copyField) {
-                $value = $this->getFieldValue($copyField);
-            }
-
-            else {
-                throw CreateUpdateTransformCantFindCopyFieldOrAttributeException::create($copyKey);
-            }
-        }
-
-        return call_user_func($transform[0], $value);
+        return data_get($this->data, $field->key);
     }
 
     /**
