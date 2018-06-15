@@ -165,8 +165,6 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
 
             $value = $this->getFieldValue($field);
 
-
-
             $this->model->setAttribute($field->key, $value);
         });
 

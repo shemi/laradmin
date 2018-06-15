@@ -46,11 +46,11 @@ class ModelTransformer extends Transformer
         $this->model = $model;
         $this->internal = $internal;
 
-        if($field->is_password || in_array($key, $model->getHidden())) {
+        if($this->field->is_password || in_array($this->modelKey, $model->getHidden())) {
             return null;
         }
 
-        if(! $model->exists || (! $model->offsetExists($key) && ! $field->is_media)) {
+        if(! $model->exists || (! $model->offsetExists($this->modelKey) && ! $field->is_media)) {
             return FieldDefaultValueTransformer::transform($field);
         }
 

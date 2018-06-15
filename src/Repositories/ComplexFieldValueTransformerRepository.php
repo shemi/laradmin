@@ -2,14 +2,14 @@
 
 namespace Shemi\Laradmin\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Shemi\Laradmin\Models\Field;
 use Illuminate\Support\Collection;
-use Shemi\Laradmin\Contracts\Repositories\ComplexFieldValueTransformerRepository as Contract;
+use Illuminate\Database\Eloquent\Model;
+use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Exceptions\CreateUpdateRelationModelNotFoundException;
 use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeException;
-use Shemi\Laradmin\Models\Field;
-use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
+use Shemi\Laradmin\Contracts\Repositories\ComplexFieldValueTransformerRepository as Contract;
 
 class ComplexFieldValueTransformerRepository implements Contract
 {
@@ -79,7 +79,7 @@ class ComplexFieldValueTransformerRepository implements Contract
      * @param Field $field
      * @param Model $model
      * @param null $modelKey
-     * @return array
+     * @return mixed
      * @throws CreateUpdateRelationModelNotFoundException
      * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws \Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException
@@ -128,7 +128,8 @@ class ComplexFieldValueTransformerRepository implements Contract
         }
 
         foreach ($this->mediaFields as $field) {
-            $this->getSyncMediaRepo()->deletePending($field);
+            $this->getSyncMediaRepo()
+                ->deletePending($field);
         }
 
         return $this->expectSingle ? $this->value->first() : $this->value->all();

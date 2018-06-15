@@ -18,6 +18,7 @@ class FieldTransformer extends Transformer
         'show_label' => 'bool',
         'default_value' => null,
         'nullable' => null,
+        'value_manipulation' => 'string',
         'type' => 'string',
         'validation' => 'array',
         'visibility' => 'array',

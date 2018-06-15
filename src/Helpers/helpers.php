@@ -47,3 +47,4 @@ function la_str_slug($title, $separator = '-')
 
     return $slugger->slugify($title);
 }
+

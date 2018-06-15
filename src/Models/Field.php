@@ -22,6 +22,7 @@ use Shemi\Laradmin\Transformers\Response\ModelTransformer;
  * @property string $key
  * @property string $full_key
  * @property string $validation_key
+ * @property string|null $value_manipulation
  * @property Field|null $parent
  * @property boolean $show_label
  * @property boolean $is_repeater_like
@@ -162,6 +163,15 @@ class Field extends Model
         }
 
         return $prefix.$this->key;
+    }
+
+    public function getValueManipulationAttribute($value)
+    {
+        if($value) {
+            return $value;
+        }
+
+        return $this->getTemplateOption('transform');
     }
 
     public function getIsRepeaterSubFieldAttribute()
