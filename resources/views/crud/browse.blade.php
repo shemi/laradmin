@@ -127,7 +127,7 @@
                                     @break
 
                                 @default
-                                    <div v-html="props.row.{{ $column->browse_key }}"></div>
+                                    <div class="trim" v-html="props.row.{{ $column->browse_key }}"></div>
                             @endswitch
 
                         </b-table-column>

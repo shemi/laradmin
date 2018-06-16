@@ -21,7 +21,7 @@ use Shemi\Laradmin\Models\User;
 
 class Laradmin
 {
-    const VERSION = "0.7.0";
+    const VERSION = "0.7.2";
 
     protected $managers = [];
 

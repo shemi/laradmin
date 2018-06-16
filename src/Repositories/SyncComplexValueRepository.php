@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Exceptions\CreateUpdateRelationModelNotFoundException;
 use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeException;
-use Shemi\Laradmin\Contracts\Repositories\ComplexFieldValueTransformerRepository as Contract;
+use Shemi\Laradmin\Contracts\Repositories\SyncComplexValueRepository as Contract;
 
-class ComplexFieldValueTransformerRepository implements Contract
+class SyncComplexValueRepository implements Contract
 {
 
     /**

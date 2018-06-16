@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\DB;
-use Shemi\Laradmin\Contracts\Repositories\ComplexFieldValueTransformerRepository;
+use Shemi\Laradmin\Contracts\Repositories\SyncComplexValueRepository;
 use Shemi\Laradmin\Exceptions\CreateUpdateRelationModelNotFoundException;
 use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeException;
 use Shemi\Laradmin\Exceptions\CreateUpdateUnableToSaveModelException;
@@ -327,11 +327,11 @@ class SetSettingsRepository
     }
 
     /**
-     * @return ComplexFieldValueTransformerRepository
+     * @return SyncComplexValueRepository
      */
     protected function getComplexRepo()
     {
-        return app(ComplexFieldValueTransformerRepository::class)->fresh();
+        return app(SyncComplexValueRepository::class)->fresh();
     }
 
     /**

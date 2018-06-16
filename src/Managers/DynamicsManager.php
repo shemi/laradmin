@@ -79,6 +79,16 @@ class DynamicsManager implements ManagerContract
         return config($key, $default);
     }
 
+    protected function trans($key, $replace = [], $locale = null)
+    {
+        return __($key, $replace, $locale);
+    }
+
+    protected function trans_choice($key, $number, array $replace = [], $locale = null)
+    {
+        return trans_choice($key, $number, $replace, $locale);
+    }
+
     public function validate($dynamic)
     {
         $data = $this->extract($dynamic);

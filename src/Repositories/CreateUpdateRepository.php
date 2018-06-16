@@ -442,11 +442,11 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     }
 
     /**
-     * @return ComplexFieldValueTransformerRepository
+     * @return SyncComplexValueRepository
      */
     protected function getComplexRepo()
     {
-        return app(ComplexFieldValueTransformerRepository::class)
+        return app(SyncComplexValueRepository::class)
             ->fresh();
     }
 

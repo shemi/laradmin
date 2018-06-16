@@ -9,7 +9,7 @@ use Shemi\Laradmin\Exceptions\CreateUpdateTransformCantFindCopyFieldOrAttributeE
 use Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException;
 use Shemi\Laradmin\Models\Field;
 
-interface ComplexFieldValueTransformerRepository extends Repository
+interface SyncComplexValueRepository extends Repository
 {
 
     /**
