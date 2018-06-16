@@ -25,16 +25,19 @@
     "moment": "^2.22.1",
     "qs": "^6.5.2",
     "query-string-object": "^0.2.5",
+    "tinymce": "^4.7.13",
     "vddl": "^0.7.1",
     "vue": "^2.5.16",
     "vue-clip": "^1.0.0",
     "vue-multiselect": "^2.1.0",
-    "vue-quill-editor": "^3.0.6",
     "vue-smooth-dnd": "^0.1.7",
+    "vue-tinymce-editor": "^1.6.2",
     "vue2-dragula": "^2.5.4",
     "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-stage-2": "^6.24.1",
     "browser-sync": "^2.23.7",
     "browser-sync-webpack-plugin": "^1.2.0"
   }

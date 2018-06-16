@@ -4,6 +4,7 @@
         $properties = [
             "type=".$field->field_type,
             "v-model=".$field->form_prefix.$field->key,
+            ":readonly=".($field->read_only ? 'true' : 'false'),
             "expanded"
         ];
 

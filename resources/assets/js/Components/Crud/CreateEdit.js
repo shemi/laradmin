@@ -7,6 +7,7 @@ import {LaRepeater, LaRepeaterRow} from '../Repeater/index';
 import {LaRelationship, LaRelationshipRow} from '../Relationship/index';
 import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
 import LaImageUpload from '../ImageUpload/ImageUpload.vue';
+import LaEditor from '../Editor/Editor';
 import LaFileUpload from '../FileUpload/FileUpload.vue';
 import TagsField from '../TagsField/TagsField.vue';
 
@@ -84,7 +85,8 @@ export default {
         LaRelationshipRow,
         LaImageUpload,
         LaFileUpload,
-        TagsField
+        TagsField,
+        LaEditor
     }
 
 }

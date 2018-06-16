@@ -18,6 +18,7 @@ class JsVarsManager implements ManagerContract
     {
         $this->set([
             'api_base' => app('laradmin')->links()->route('laradmin.dashboard'),
+            'public_path' => "/vendor/laradmin/assets",
             'routs' => [
                 'icons' => app('laradmin')->links()->route('laradmin.icons')
             ],

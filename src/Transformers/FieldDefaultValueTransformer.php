@@ -23,6 +23,7 @@ class FieldDefaultValueTransformer
             case 'text_area':
             case 'date':
             case 'datetime':
+            case 'editor':
                 return "";
 
             case 'switch':

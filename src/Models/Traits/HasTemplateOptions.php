@@ -101,20 +101,22 @@ trait HasTemplateOptions
 
     public function isHeirToChildren($key)
     {
-        return $this->formField()->isSupportingSubFields() && ! in_array($key, static::$uninheritableOptions);
+        return $this->is_support_sub_fields && ! in_array($key, static::$uninheritableOptions);
     }
 
     public function getTemplateOption($key, $default = null)
     {
+        $parentValue = $default;
+
         if($this->isHeirToChildren($key)) {
             return $default;
         }
 
         if($this->canInherit($key)) {
-            return data_get($this->parent->template_options, $key, $default);
+            $parentValue = data_get($this->parent->template_options, $key, $default);
         }
 
-        return data_get($this->template_options, $key, $default);
+        return data_get($this->template_options, $key, $parentValue);
     }
 
 }

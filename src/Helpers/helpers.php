@@ -48,3 +48,11 @@ function la_str_slug($title, $separator = '-')
     return $slugger->slugify($title);
 }
 
+if (! function_exists('attr_json_encode')) {
+
+    function attr_json_encode($value)
+    {
+        return json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    }
+
+}

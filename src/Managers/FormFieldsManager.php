@@ -9,6 +9,7 @@ class FormFieldsManager implements ManagerContract
 {
     const DEFAULT_TYPES = [
         'input',
+        'editor',
         'select_multiple',
         'checkboxes',
         'repeater',

@@ -73,14 +73,14 @@ class ObjectBlueprint implements Schemable
     {
         $this->isRequired = $required;
 
-        return;
+        return $this;
     }
 
     public function nullable()
     {
         $this->nullable = true;
 
-        return;
+        return $this;
     }
 
     /**
