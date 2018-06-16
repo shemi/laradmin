@@ -184,13 +184,11 @@ class ComplexFieldValueTransformerRepository implements Contract
     {
         /** @var Field $field */
         foreach ($this->generalFields as $field) {
-            $value = $this->getFieldValue($field, true);
+            $value = $this->getFieldValue($field);
 
             if($field->is_password && ! $value) {
                 continue;
             }
-
-            $value = $this->getFieldValue($field);
 
             if($field->is_support_sub_fields) {
                 $value = $this->fresh()->transform($value, $field, $this->model);
@@ -204,7 +202,6 @@ class ComplexFieldValueTransformerRepository implements Contract
 
     /**
      * @return $this
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
     public function syncRelationData()
     {
@@ -280,7 +277,6 @@ class ComplexFieldValueTransformerRepository implements Contract
     }
 
     /**
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      * @throws \Shemi\Laradmin\Exceptions\SyncMedia\SyncMediaException
      */
     public function syncMedia()
@@ -308,51 +304,11 @@ class ComplexFieldValueTransformerRepository implements Contract
 
     /**
      * @param Field $field
-     * @param bool $plain
      * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
      */
-    protected function getFieldValue(Field $field, $plain = false)
+    protected function getFieldValue(Field $field)
     {
-        $value = data_get($this->currentRow, $field->key);
-
-        if($plain) {
-            return $value;
-        }
-
-        return $this->transformValue(
-            $field->transformRequest($value),
-            $field
-        );
-    }
-
-    /**
-     * @param $value
-     * @param Field $field
-     * @return mixed
-     * @throws CreateUpdateTransformCantFindCopyFieldOrAttributeException
-     */
-    protected function transformValue($value, Field $field)
-    {
-        $transform = explode(':', $field->getTemplateOption('transform', 'value'));
-
-        if(! $value && count($transform) > 1) {
-            $copyKey = $transform[1];
-
-            $copyField = $this->fields
-                ->where('key', $copyKey)
-                ->first();
-
-            if($copyField) {
-                $value = $this->getFieldValue($copyField);
-            }
-
-            else {
-                throw CreateUpdateTransformCantFindCopyFieldOrAttributeException::create($copyKey);
-            }
-        }
-
-        return call_user_func($transform[0], $value);
+        return data_get($this->currentRow, $field->key);
     }
 
     /**

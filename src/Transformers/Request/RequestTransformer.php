@@ -34,7 +34,7 @@ class RequestTransformer
         $this->transformedData = $this->transformFields($this->fields);
         $this->transformedData = $this->manipulateValues($this->fields);
 
-        return $this->transformedData;
+        return array_replace_recursive($data, $this->transformedData);
     }
 
     /**
@@ -82,7 +82,7 @@ class RequestTransformer
         }
 
         foreach ($value as $index => $row) {
-            $rows[] = $this->transformFields($row, $field->getSubFields());
+            $rows[] = $this->transformFields($field->getSubFields(), $row);
         }
 
         return $rows;
@@ -116,18 +116,35 @@ class RequestTransformer
 
             if(! $manipulation || ! is_string($manipulation)) {
                 if($field->is_support_sub_fields) {
-                    array_set(
-                        $data,
-                        $field->key,
-                        $this->manipulateValues($field->getSubFields(), array_get($data, $field->key))
-                    );
+                    if($field->is_repeater_like) {
+                        $rows = array_get($data, $field->key);
+
+                        if(Arr::isAssoc($rows)) {
+                           $rows = [$rows];
+                        }
+
+                        foreach ($rows as $index => $row) {
+                            array_set(
+                                $data,
+                                $field->key.'.'.$index,
+                                $this->manipulateValues($field->getSubFields(), $row)
+                            );
+                        }
+                    } else {
+                        array_set(
+                            $data,
+                            $field->key,
+                            $this->manipulateValues($field->getSubFields(), array_get($data, $field->key))
+                        );
+                    }
                 }
 
                 continue;
             }
 
             $manipulation = explode(':', $manipulation);
-            $value = array_get($data, $fields);
+            $value = array_get($data, $field->key);
+
 
             if(! $value && count($manipulation) > 1) {
                 $value = $this->getCopyFieldValue($manipulation[1]);

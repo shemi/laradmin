@@ -18,6 +18,7 @@ trait HasJsonStructure
             'read_only' => false,
             'nullable' => null,
             'default_value' => null,
+            'value_manipulation' => null,
             'validation' => [],
             'relationship' => null,
             'visibility' => ["create", "edit"],

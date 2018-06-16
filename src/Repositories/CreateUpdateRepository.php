@@ -82,7 +82,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $this->transformer = new RequestTransformer();
     }
 
-    public function initCreateOrUpdate($data, Model $model, Type $type = null, Collection $fields = null)
+    public function initCreateOrUpdate($data, Model $model, Type $type = null, Collection $fields = null, $transformed = false)
     {
         $this->rawData = $data;
         $this->model = $model;
@@ -90,9 +90,11 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
 
         $this->setFields($fields);
 
-        $this->data = $this->transformer->transform($data, $this->fields);
-
-        dd($this->data);
+        if($transformed) {
+            $this->data = $data;
+        } else {
+            $this->data = $this->transformer->transform($data, $this->fields);
+        }
 
         $this->setModelData();
 
@@ -306,6 +308,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         $currentRows = $this->model->{$field->key};
 
         $rows = Collection::make($rows);
+
         $rowsIds = $rows->pluck($primaryKey)->values()->toArray();
 
         $rowsToDelete = $currentRows->reject(function(Model $row) use ($rowsIds) {
@@ -324,8 +327,11 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
         }
 
         foreach ($rows as $row) {
-            $id = $row[$primaryKey];
-            $exists = $currentRows->where($primaryKey, $id)->first();
+            $exists = false;
+
+            if($id = array_get($row, $primaryKey)) {
+                $exists = $currentRows->where($primaryKey, $id)->first();
+            }
 
             if($exists) {
                 $model = $exists;
@@ -352,8 +358,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
     {
         $inst = new static();
         $exists = $model->exists;
-        $model = $inst->initCreateOrUpdate($data, $model, $type, $field->getSubFields());
-
+        $model = $inst->initCreateOrUpdate($data, $model, $type, $field->getSubFields(), true);
 
         try {
             if ($relation instanceof BelongsToMany) {
@@ -424,7 +429,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      */
     protected function getFieldValue(Field $field)
     {
-        return data_get($this->data, $field->full_key);
+        return data_get($this->data, $field->key);
     }
 
     /**

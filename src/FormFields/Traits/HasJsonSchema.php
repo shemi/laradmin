@@ -56,6 +56,11 @@ trait HasJsonSchema
                 ->required()
                 ->nullable();
 
+            $this->string('value_manipulation')
+                ->title("Manipulate the user value before saving")
+                ->required()
+                ->nullable();
+
             $this->boolean('read_only')
                 ->title("Is this field is read only field (e.g disabled)")
                 ->required()
@@ -114,10 +119,6 @@ trait HasJsonSchema
                 } else {
                     $type->nullable();
                 }
-
-                $schema->string('transform')
-                    ->title("Transform the user value before saving")
-                    ->nullable();
 
                 $schema->string('position')
                     ->title("Which position should the addons appear, optional")
