@@ -196,7 +196,7 @@ class RepeaterField extends FormFormField
 
     public function getValidationKey(Field $field, Field $parent = null)
     {
-        if($parent && $parent->type === 'repeater') {
+        if($parent && $parent->is_repeater_like) {
             return "{$parent->validation_key}.'+ props.index +'.{$field->key}";
         }
 

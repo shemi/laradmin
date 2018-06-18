@@ -200,7 +200,7 @@ class SetSettingsRepository
         $this->relationFields->each(function(Field $field) {
             $value = $this->getFieldValue($field);
 
-            if($field->type === 'repeater' && $field->has_relationship_type) {
+            if($field->is_repeater_like && $field->has_relationship_type) {
                 $this->createUpdateDeleteRepeaterRows($field, $value);
             }
 
