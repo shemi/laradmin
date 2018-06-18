@@ -34,7 +34,18 @@ class EditorField extends FormFormField
                     'plugins' => null,
                     'toolbar1' => null,
                     'toolbar2' => null,
-                    'otherOptions' => (object) []
+                    'otherOptions' => [
+                        'menubar' => 'edit insert view format table tools',
+                        'min_height' => 300,
+                        'autoresize_max_height' => 700,
+                        'templates' => [
+                            [
+                                'title' => 'Laradmin',
+                                'description' => "Laradmin sample",
+                                'content' => '<p><b>Laradmin</b> is so cool :)</p>'
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]);
@@ -52,8 +63,8 @@ class EditorField extends FormFormField
 
     protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
     {
-        $schema->template_options->properties(function(Blueprint $schema) {
-            $schema->object('mce', function(Blueprint $schema) {
+        $schema->template_options->properties(function (Blueprint $schema) {
+            $schema->object('mce', function (Blueprint $schema) {
                 $schema->array('plugins', ['string'])
                     ->nullable()
                     ->required();
@@ -66,10 +77,12 @@ class EditorField extends FormFormField
                     ->nullable()
                     ->required();
 
-                $schema->object('otherOptions', function (Blueprint $schema) {})
+                $schema->object('otherOptions', function (Blueprint $schema) {
+                })
                     ->required();
 
             })
+            ->title('more information at: https://www.tinymce.com/docs/')
             ->required();
         });
     }

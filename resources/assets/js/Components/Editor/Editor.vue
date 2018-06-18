@@ -4,6 +4,7 @@
 
         <tinymce v-model="newValue"
                  :id="id"
+                 @input="$emit('input', newValue)"
                  :plugins="plugins"
                  :toolbar1="toolbar1"
                  :toolbar2="toolbar2"
@@ -36,21 +37,23 @@
                 type: Array,
                 default: function() {
                     return [
-                        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-                        'searchreplace wordcount visualblocks visualchars code fullscreen',
-                        'insertdatetime media nonbreaking save table contextmenu directionality',
-                        'template paste textcolor colorpicker textpattern imagetools toc help emoticons hr codesample'
+                        'autoresize advlist autolink lists link image preview hr anchor pagebreak',
+                        'searchreplace wordcount code fullscreen',
+                        'insertdatetime media nonbreaking table contextmenu directionality',
+                        'template paste textcolor colorpicker textpattern toc emoticons hr codesample'
                     ];
                 }
             },
             toolbar1: {
                 type: String,
-                default: 'formatselect | bold italic  strikethrough  forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat'
+                default: 'formatselect  | bold italic  strikethrough  forecolor backcolor | link | image media | numlist bullist outdent indent | codesample code | searchreplace'
             },
+
             toolbar2: {
                 type: String,
-                default: ''
+                default: 'undo redo | ltr rtl | alignleft aligncenter alignright alignjustify | insertdatetime | removeformat | fullscreen | template'
             },
+
             otherOptions: {
                 type: Object,
                 default: function () {
@@ -61,6 +64,7 @@
         },
 
         data() {
+            console.log(this.otherOptions);
             return {
                 newValue: this.value
             }

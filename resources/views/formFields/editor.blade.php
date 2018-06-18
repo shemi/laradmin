@@ -28,7 +28,7 @@
         $otherOptions = $field->getTemplateOption('mce.otherOptions');
 
         if($otherOptions && is_array($otherOptions)) {
-            $properties[] = ':otherOptions=\''.attr_json_encode($otherOptions).'\'';
+            $properties[] = ':other-options=\''.attr_json_encode($otherOptions).'\'';
         }
 
     @endphp
