@@ -10,6 +10,7 @@ import LaImageUpload from '../ImageUpload/ImageUpload.vue';
 import LaEditor from '../Editor/Editor';
 import LaFileUpload from '../FileUpload/FileUpload.vue';
 import TagsField from '../TagsField/TagsField.vue';
+import laEditable from '../Editable/Editable';
 
 export default {
 
@@ -86,7 +87,8 @@ export default {
         LaImageUpload,
         LaFileUpload,
         TagsField,
-        LaEditor
+        LaEditor,
+        laEditable
     }
 
 }

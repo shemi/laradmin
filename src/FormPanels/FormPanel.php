@@ -17,6 +17,8 @@ abstract class FormPanel implements FormPanelContract
 
     protected $codename;
 
+    protected $supportFieldsLabels = true;
+
     protected $defaultBuilderOptions = [
         [
             'label' => 'Title',
@@ -73,6 +75,11 @@ abstract class FormPanel implements FormPanelContract
         }
 
         return $this->name;
+    }
+
+    public function isSupportingFieldsLabels()
+    {
+        return $this->supportFieldsLabels;
     }
 
 }

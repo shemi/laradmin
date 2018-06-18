@@ -147,6 +147,10 @@ class Field extends Model
 
     public function getShowLabelAttribute($value)
     {
+        if(! $this->getPanel()->is_supporting_fields_labels) {
+            return false;
+        }
+
         if($this->is_repeater_sub_field || in_array($this->type, static::$forcedHiddenLabelTypes)) {
             return false;
         }

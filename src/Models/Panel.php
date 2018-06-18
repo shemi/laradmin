@@ -19,6 +19,7 @@ use Shemi\Laradmin\Transformers\Builder\PanelTransformer;
  * @property string $object_type
  * @property boolean $is_main_meta
  * @property boolean $has_container
+ * @property boolean $is_supporting_fields_labels
  * @property array $style
  * @property Collection $fields
  */
@@ -90,6 +91,11 @@ class Panel extends Model
     public function getHasContainerAttribute($value)
     {
         return $value === null ? true : $value;
+    }
+
+    public function getIsSupportingFieldsLabelsAttribute()
+    {
+        return $this->formPanel()->isSupportingFieldsLabels();
     }
 
     public static function isValidPanel($panel)

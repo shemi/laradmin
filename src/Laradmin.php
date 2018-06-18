@@ -19,6 +19,20 @@ use Shemi\Laradmin\Managers\WidgetsManager;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Models\User;
 
+/**
+ * Class Laradmin
+ * @package Shemi\Laradmin
+ *
+ * @method LinksManager links
+ * @method WidgetsManager widgets
+ * @method FormFieldsManager formFields
+ * @method FormPanelsManager formPanels
+ * @method JsVarsManager jsVars
+ * @method RolesManager roles
+ * @method DynamicsManager dynamics
+ *
+ */
+
 class Laradmin
 {
     const VERSION = "0.7.2";

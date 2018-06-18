@@ -7,9 +7,7 @@ $filter = isset($filter) && $filter ? ' | ' . $filter : ' ';
 <div>
     @lang($langKey):
     <b>
-        <?php
-            echo '{{ (' . $slot . ' || \'' . __('laradmin::template.not_available') . '\')' . $filter . '}}';
-        ?>
+        <?php echo '{{ (' . $slot . ' || \'' . __('laradmin::template.not_available') . '\')' . $filter . '}}'; ?>
     </b>
 </div>
 

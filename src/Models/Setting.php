@@ -129,7 +129,6 @@ class Setting extends Model implements HasMediaConversionsContract
     protected function getSettingPageField()
     {
         $pages = SettingsPage::where('bucket', $this->bucket);
-        $field = null;
 
         /** @var SettingsPage $page */
         foreach ($pages as $page) {
@@ -139,11 +138,11 @@ class Setting extends Model implements HasMediaConversionsContract
                 ->first();
 
             if($field) {
-                break;
+                return $field;
             }
         }
 
-        return $field;
+        return null;
     }
 
     public function registerMediaConversions(Media $media = null)

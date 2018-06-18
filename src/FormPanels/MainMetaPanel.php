@@ -11,6 +11,8 @@ class MainMetaPanel extends FormPanel
 
     protected $isProtected = true;
 
+    protected $supportFieldsLabels = false;
+
     /**
      * @param Panel $panel
      * @param Model $type

@@ -151,6 +151,8 @@ class CrudController extends Controller
 
         app('laradmin')->jsVars()->set($jsObject);
 
+        view()->share(compact('model'));
+
         return view($view, compact('type', 'model', 'form', 'data', 'user'));
     }
 
