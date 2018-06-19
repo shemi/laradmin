@@ -6,7 +6,14 @@
             <p  v-if="! isInEditMode"
                 class="la-editable-text"
                 @click.prevent="toggleEditMode">
-                <span class="value">{{ value }}</span>
+                <la-field-renderer :form="form"
+                                   :type="type"
+                                   class="value"
+                                   :empty-string="emptyString"
+                                   :template-options="templateOptions"
+                                   :browse-settings="browseSettings"
+                                   :form-key="formKey">
+                </la-field-renderer>
             </p>
         </div>
         <b-field v-if="isInEditMode">
@@ -25,6 +32,7 @@
 <script>
 
     import MixinsLoader from '../../Helpers/MixinsLoader';
+    import LaFieldRenderer from '../FieldRenderer/FieldRenderer';
 
     export default {
 
@@ -51,6 +59,14 @@
             },
             emptyString: {
                 type: String,
+                required: true
+            },
+            templateOptions: {
+                type: Object,
+                required: true
+            },
+            browseSettings: {
+                type: Object,
                 required: true
             },
             disabled: {
@@ -87,6 +103,10 @@
 
                 return value;
             }
+        },
+
+        components: {
+            LaFieldRenderer
         }
 
     }
@@ -96,10 +116,14 @@
 <style lang="scss">
     .la-editable {
         .la-editable-text-label {
-            > p,
             > .label {
-                display: inline;
+                display: inline-block;
             }
+
+            .la-editable-text {
+                display: inline-block;
+            }
+
         }
 
         .is-in-edit-mode {

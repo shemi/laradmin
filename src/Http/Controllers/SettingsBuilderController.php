@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Shemi\Laradmin\Exceptions\DataNotFoundException;
 use Shemi\Laradmin\FormFields\FormFormField;
+use Shemi\Laradmin\Models\Setting;
 use Shemi\Laradmin\Models\SettingsPage;
 use Shemi\Laradmin\Models\Type;
 use Illuminate\Routing\Controller as BaseController;

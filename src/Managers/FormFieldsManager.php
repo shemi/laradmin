@@ -12,17 +12,18 @@ class FormFieldsManager implements ManagerContract
         'editor',
         'select_multiple',
         'checkboxes',
-        'repeater',
         'switch',
-        'files',
+        'datetime',
         'date',
+        'time',
         'select',
         'message',
-        'relationship',
         'image',
+        'files',
         'file',
         'tags',
-        'time',
+        'relationship',
+        'repeater',
         'group'
     ];
 

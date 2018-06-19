@@ -9,59 +9,27 @@ use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Data\Model;
 use Shemi\Laradmin\Models\Setting;
 
-class DateField extends FormFormField
+class DateField extends DatetimeField
 {
 
     protected $codename = "date";
-
-    public function createContent(Field $field, Model $type, $data)
-    {
-        return view('laradmin::formFields.date', compact(
-            'field',
-            'type',
-            'data'
-        ));
-    }
-
-    public function transformRequest(Field $field, $data)
-    {
-        $value = parent::transformRequest($field, $data);
-
-        if($value) {
-            $value = Carbon::parse($value, 'UTC');
-        }
-
-        return $value;
-    }
-
-    public function transformResponse(Field $field, $data)
-    {
-        $value = parent::transformResponse($field, $data);
-
-        if(is_array($value) && array_key_exists('date', $value)) {
-            $value = Carbon::parse($value['date'], 'UTC');
-        }
-
-        if(is_string($value)) {
-            $value = Carbon::parse($value);
-        }
-
-        return $value instanceof Carbon ? $value->toIso8601String() : null;
-    }
 
     public function structure()
     {
         return array_replace_recursive(parent::structure(), [
             'template_options' => [
-                'icon' => null,
-                'placeholder' => null,
-                'size' => null,
+                'datetime' => [
+                    'altFormat' => 'F j, Y',
+                    'ariaDateFormat' => 'F j, Y'
+                ]
             ]
         ]);
     }
 
     protected function customSchema(Blueprint $schema, ObjectBlueprint $root)
     {
+        parent::customSchema($schema, $root);
+
         $schema->string('default_value')
             ->format('date')
             ->nullable()

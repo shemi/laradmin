@@ -1,8 +1,14 @@
 @component('laradmin::formFields.field', ['field' => $field])
 
     @php
+        /** @var \Shemi\Laradmin\Models\Field $field */
+
         $properties = [
             "v-model=".$field->form_prefix.$field->key,
+            "form-key=".$field->form_prefix.$field->key,
+            "type=\"".$field->type."\"",
+            "timezone=\"".$field->getTemplateOption('datetime.timezone', 'local')."\"",
+            ":config='".attr_json_encode($field->getTemplateOption('datetime', (object) []))."'",
             "expanded"
         ];
 
@@ -11,11 +17,7 @@
         }
 
         if($field->icon) {
-            $properties[] = "icon=".($field->icon ?: 'calendar-o');
-        }
-
-        if($field->getTemplateOption('format')) {
-            $properties[] = "hour-format=".($field->getTemplateOption('format') ?: '24');
+            $properties[] = "icon=".$field->icon;
         }
 
         if($field->placeholder) {
@@ -24,7 +26,7 @@
 
     @endphp
 
-    <b-timepicker {!!  implode(' ', $properties)  !!}></b-timepicker>
+    <la-date-time {!!  implode(' ', $properties)  !!}></la-date-time>
 
 
 @endcomponent

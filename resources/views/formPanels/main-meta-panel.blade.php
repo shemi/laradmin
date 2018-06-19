@@ -14,7 +14,8 @@
                              type="{{ $field->type }}"
                              empty-string="---"
                              label="{{ $field->label }}"
-                             :trmplate-options="{{ attr_json_encode($field->template_options) }}"
+                             :template-options="{{ attr_json_encode($field->template_options) }}"
+                             :browse-settings="{{ attr_json_encode($field->browse_settings) }}"
                              :disabled="{{ $field->read_only ? 'true' : 'false' }}"
                              form-key="{{ $field->key }}">
                     {{ $field->render($type, $data) }}
@@ -29,7 +30,7 @@
             @lang('laradmin::template.save')
         </button>
 
-        @if($model->exists && Laradmin::user()->can('delete ' . $type->slug))
+        @if(isset($model) && $model->exists && Laradmin::user()->can('delete ' . $type->slug))
             <a class="button is-link is-small is-danger is-outlined"
                @click.prevent="deleteModel"
             >

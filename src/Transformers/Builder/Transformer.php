@@ -9,7 +9,7 @@ abstract class Transformer
 
     protected function cast($value, $type)
     {
-        if(is_null($value) || is_null($type)) {
+        if (is_null($value) || is_null($type)) {
             return $value;
         }
 
@@ -20,21 +20,21 @@ abstract class Transformer
         switch ($type) {
 
             case 'array':
-                if($subType && ! Arr::accessible($value)) {
+                if ($subType && ! Arr::accessible($value)) {
                     return $this->cast($value, $subType);
                 }
 
                 return (array) $value;
 
             case 'object':
-                if($subType && ! Arr::accessible($value)) {
+                if ($subType && ! Arr::accessible($value)) {
                     return $this->cast($value, $subType);
                 }
 
                 return (object) $value;
 
             case 'string':
-                if($subType && ! is_string($value)) {
+                if ($subType && ! is_string($value)) {
                     return $this->cast($value, $subType);
                 }
 
@@ -53,6 +53,21 @@ abstract class Transformer
         }
 
         return $value;
+    }
+
+    protected static function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
+    {
+        $merged = $array1;
+
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset ($merged [$key]) && is_array($merged [$key])) {
+                $merged[$key] = static::arrayMergeRecursiveDistinct($merged [$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
     }
 
 }

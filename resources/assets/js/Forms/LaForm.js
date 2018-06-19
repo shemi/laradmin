@@ -77,7 +77,7 @@ class LaForm {
         this.extend(this.original);
     }
 
-    transformDateValue(val) {
+    transformDateTimeValue(val) {
         if(val) {
             val = new Date(val);
         }
@@ -85,12 +85,12 @@ class LaForm {
         return val;
     }
 
-    transformTimeValue(val) {
-        if(val) {
-            val = new Date(val);
-        }
+    transformDateValue(val) {
+        return this.transformDateTimeValue(val);
+    }
 
-        return val;
+    transformTimeValue(val) {
+        return this.transformDateTimeValue(val);
     }
 
     transformFilesValue(files) {

@@ -11,6 +11,7 @@ import LaEditor from '../Editor/Editor';
 import LaFileUpload from '../FileUpload/FileUpload.vue';
 import TagsField from '../TagsField/TagsField.vue';
 import laEditable from '../Editable/Editable';
+import laDateTime from '../DateTime/DateTime';
 
 export default {
 
@@ -88,7 +89,8 @@ export default {
         LaFileUpload,
         TagsField,
         LaEditor,
-        laEditable
+        laEditable,
+        laDateTime
     }
 
 }

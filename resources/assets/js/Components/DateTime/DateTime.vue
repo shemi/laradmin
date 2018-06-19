@@ -8,7 +8,7 @@
                 class="input"
                 :class="inputClasses"
                 :placeholder="placeholder"
-                @input="$emit('input', this.newValue)"
+                @on-change="updateInput"
                 :name="formKey">
         </flat-pickr>
 
@@ -24,12 +24,16 @@
 <script>
     import flatPickr from 'vue-flatpickr-component';
     import l10n from 'flatpickr/dist/l10n/index.js';
+    import moment from 'moment-timezone';
+    import { cloneDeep, isArray } from 'lodash';
 
     export default {
+        name: 'la-date-time',
+
         props: {
             alignment: String,
             value: {
-                type: [Object, String]
+                type: [Object, String, Date]
             },
             size: String,
             expanded: Boolean,
@@ -38,10 +42,16 @@
             iconPack: String,
             formKey: String,
             type: String,
+            iconSize: String,
 
             placeholder: {
                 type: String,
                 default: 'Pick date'
+            },
+
+            timezone: {
+                type: String,
+                default: 'local'
             },
 
             config: {
@@ -64,29 +74,94 @@
         },
 
         watch: {
-            value(newValue) {
+            value(newValue, oldValue) {
                 this.setValue(newValue);
             }
         },
 
         methods: {
             setValue(value) {
-                if(value instanceof Date) {
-                    this.newValue = value.toString();
+                if(value instanceof Date || value instanceof moment || typeof value === 'string') {
+                    value = moment(value);
+                }
+
+                else if(typeof value === 'object') {
+                    if(value.timezone) {
+                        value = moment.tz(value.date, value.timezone).utc();
+                    } else {
+                        value = moment(value.date);
+                    }
+                }
+
+                if(! value || ! value.isValid()) {
+                    this.newValue = null;
 
                     return;
                 }
 
-                this.newValue = value;
+                if(this.timezone === 'local') {
+                    value.local();
+                } else if(this.timezone) {
+                    value.tz(this.timezone);
+                }
+
+                this.newValue = value.toISOString();
+            },
+
+            updateInput(value) {
+                if(! value || (isArray(value) && value.length <= 0)) {
+                    this.$emit('input', value);
+
+                    return;
+                }
+
+                let newValue = [],
+                    date;
+
+                for(date of value) {
+                    date = moment(date);
+
+                    if(! date.isValid()) {
+                        continue;
+                    }
+
+                    date.utc();
+
+                    newValue.push(date);
+                }
+
+                if(['datetime_range'].indexOf(this.type) < 0) {
+                    value = value[0];
+                }
+
+                this.$emit('input', value);
             },
 
             setConfig() {
-                let replace = {
-                    mode: "single",
-                    noCalendar: false,
-                    enableTime: true,
-                    inline: false,
+                let original = cloneDeep(this.config),
+                    replace = {
+                        mode: "single",
+                        noCalendar: this.type === 'time',
+                        enableTime: this.type !== 'date',
+                        inline: false,
+                        dateFormat: 'Z',
+                        altInput: true
+                    },
+                    replaceKey,
+                    replaceKeys = Object.keys(replace);
+
+                for (replaceKey of replaceKeys) {
+                    original[replaceKey] = replace[replaceKey];
                 }
+
+                if(original.locale && typeof l10n[original.locale] === 'undefined') {
+                    original.locale = l10n[original.locale];
+                } else {
+                    original.locale = l10n.default;
+                }
+
+                this.newConfig = original;
+                this.ready = true;
             }
         },
 

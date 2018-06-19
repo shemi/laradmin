@@ -54,6 +54,22 @@ class FieldTransformer extends Transformer
             });
         }
 
+        $originalStructure = $field->formField()->structure();
+
+        if(isset($return['template_options']) && isset($originalStructure['template_options'])) {
+            $original = (array) $originalStructure['template_options'];
+            $current = (array) $return['template_options'];
+
+            $return['template_options'] = static::arrayMergeRecursiveDistinct($original, $current);
+        }
+
+        if(isset($return['browse_settings']) && isset($originalStructure['browse_settings'])) {
+            $original = (array) $originalStructure['browse_settings'];
+            $current = (array) $return['browse_settings'];
+
+            $return['browse_settings'] = static::arrayMergeRecursiveDistinct($original, $current);
+        }
+
         $return['object_type'] = Field::OBJECT_TYPE;
 
         return $return;
