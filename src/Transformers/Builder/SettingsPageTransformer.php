@@ -2,7 +2,8 @@
 
 namespace Shemi\Laradmin\Transformers\Builder;
 
-
+use Shemi\Laradmin\Models\Contracts\Buildable;
+use Shemi\Laradmin\Models\Panel;
 use Shemi\Laradmin\Models\SettingsPage;
 
 class SettingsPageTransformer extends Transformer
@@ -42,8 +43,8 @@ class SettingsPageTransformer extends Transformer
         $return['panels'] = (array) [];
 
         if($page->exists) {
-            $return['panels'] = $page->panels->map(function($panel) {
-                return PanelTransformer::transform($panel);
+            $return['panels'] = $page->panels->map(function(Buildable $panel) {
+                return $panel->toBuilder();
             });
         }
 

@@ -11,7 +11,7 @@ use Shemi\Laradmin\Models\Field;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Models\Setting;
 
-class ImageField extends FormFormField implements FieldHasBrowseValue
+class ImageField extends FormFormField
 {
 
     protected $codename = "image";
@@ -54,24 +54,6 @@ class ImageField extends FormFormField implements FieldHasBrowseValue
     public function getValidationRoles(Field $field)
     {
         return false;
-    }
-
-    public function renderBrowseValue(Field $field, EloquentModel $model)
-    {
-        $media = $model->getMedia($field->key)->first();
-
-        if(! $media) {
-            return "";
-        }
-
-        $src = route('laradmin.serve', [
-            'mediaId' => $media->id,
-            'fileName' => $media->name,
-            'pc' => $field->getTemplateOption('preview_conversion', null)
-        ]);
-
-
-        return "<img src='{$src}'>";
     }
 
     public function structure()

@@ -22,7 +22,7 @@ class FieldTransformer extends Transformer
         'type' => 'string',
         'validation' => 'array',
         'visibility' => 'array',
-        'options' => 'array',
+        'options' => 'array|string',
         'template_options' => 'object',
         'read_only' => 'bool',
         'browse_settings' => 'object',

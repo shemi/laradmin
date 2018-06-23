@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models\Traits;
 
+use Carbon\Carbon;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Contracts\FieldHasBrowseValue;
 use Shemi\Laradmin\Models\Field;
@@ -18,6 +19,7 @@ use Shemi\Laradmin\Models\Field;
  * @property string $label
  * @property integer $order
  * @property string $browse_key
+ * @property string $full_browse_key
  * @property string $browse_label
  * @property boolean $sortable
  * @property boolean $searchable
@@ -37,8 +39,19 @@ trait HasBrowseSettings
     {
         $prefix = "";
 
-        if($this->is_sub_field && $this->parent && ! $this->is_repeater_sub_field) {
+        if($this->is_sub_field && $this->parent) {
             $prefix = "{$this->parent->browse_key}.";
+        }
+
+        return $prefix.data_get($this->browse_settings, 'key', $this->key);
+    }
+
+    public function getFullBrowseKeyAttribute()
+    {
+        $prefix = "";
+
+        if($this->is_sub_field && $this->parent) {
+            $prefix = "{$this->parent->browse_key}." . ($this->is_repeater_sub_field ? '*.' : '');
         }
 
         return $prefix.data_get($this->browse_settings, 'key', $this->key);
@@ -73,6 +86,28 @@ trait HasBrowseSettings
 
     /**
      * @param EloquentModel $model
+     * @return array
+     */
+    public function getMediaBrowseValue(EloquentModel $model)
+    {
+        $value = [];
+        $mediaCollection = $this->media_collection;
+
+        if($this->is_sub_field && $this->parent) {
+
+        }
+
+//        route('laradmin.serve', [
+//            'mediaId' => $media->id,
+//            'fileName' => $media->name,
+//            'pc' => $this->getTemplateOption('preview_conversion', null)
+//        ])
+
+        return $value;
+    }
+
+    /**
+     * @param EloquentModel $model
      * @return array|bool|string
      */
     public function getBrowseValue(EloquentModel $model)
@@ -89,20 +124,24 @@ trait HasBrowseSettings
             }
         }
 
-        $modelValue = data_get($model, $this->browse_key);
+        if($this->is_media) {
+            return $this->getMediaBrowseValue($model);
+        }
+
+        $modelValue = data_get($model, $this->full_browse_key);
 
         switch ($this->type) {
 
             case 'select':
             case 'radio':
                 if($this->is_relationship && $modelValue) {
-                    $labels = "";
+                    $labels = [];
 
                     foreach ($this->relation_labels as $label) {
-                        $labels .= $modelValue->getAttribute($label).', ';
+                        $labels[] = $modelValue->getAttribute($label);
                     }
 
-                    return trim($labels, ', ');
+                    return [$labels];
                 }
 
                 return $modelValue;
@@ -110,26 +149,21 @@ trait HasBrowseSettings
             case 'time':
             case 'date':
             case 'datetime':
-                if($this->type === 'time') {
-                    $format = "H:i";
-                } else {
-                    $format = "d/m/Y";
+                if(is_array($modelValue) && array_key_exists('date', $modelValue)) {
+                    $modelValue = Carbon::parse($modelValue['date'], 'UTC');
                 }
 
-                try {
-                    $modelValue = \Carbon\Carbon::parse($modelValue);
-                    $modelValue->tz(config('app.timezone'));
-                } catch (\Exception $e) {}
-
-                if(isset($this->browse_settings['date_format']) && $this->browse_settings['date_format']) {
-                    $format = addslashes($this->browse_settings['date_format']);
+                if(is_string($modelValue)) {
+                    $modelValue = Carbon::parse($modelValue);
                 }
 
-                if($modelValue instanceof \DateTime) {
-                    $modelValue = $modelValue->format($format);
+                if(! $modelValue instanceof Carbon) {
+                    return null;
                 }
 
-                return $modelValue;
+                $modelValue->timezone('UTC');
+
+                return $modelValue->toIso8601String();
 
             case 'select_multiple':
             case 'checkboxes':
@@ -142,15 +176,14 @@ trait HasBrowseSettings
 
                     return $modelValue
                         ->map(function($model) {
-                            $labels = "";
+                            $labels = [];
 
                             foreach ($this->relation_labels as $label) {
-                                $labels .= $model->getAttribute($label).', ';
+                                $labels[] = $model->getAttribute($label);
                             }
 
-                            return trim($labels, ', ');
-                        })
-                        ->implode(' <b>|</b> ');
+                            return $labels;
+                        });
                 }
 
                 return $model->getAttribute($this->key);

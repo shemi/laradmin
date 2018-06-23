@@ -4,6 +4,7 @@ namespace Shemi\Laradmin\Managers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Macroable;
+use ReflectionFunction;
 use ReflectionMethod;
 use Shemi\Laradmin\Contracts\Managers\ManagerContract;
 
@@ -55,10 +56,12 @@ class DynamicsManager implements ManagerContract
             $key = $index;
 
             if((is_array($item) || is_object($item))) {
+                $defaultLabel = $labelIndex === "data_index" ? $index : ($labelIndex === "data_value" ? $item : null);
+
                 $label = data_get(
                     $item,
                     $labelIndex,
-                    $labelIndex === "data_value" ? $item : null
+                    $defaultLabel
                 );
 
                 $key = data_get(
@@ -66,6 +69,10 @@ class DynamicsManager implements ManagerContract
                     $keyIndex,
                     $key
                 );
+            }
+            elseif($labelIndex === "data_index" && (! $keyIndex || $keyIndex === "data_value")) {
+                $label = $index;
+                $key = $item;
             }
 
             $return[] = compact('label', 'key');
@@ -104,9 +111,19 @@ class DynamicsManager implements ManagerContract
             return false;
         }
 
-        $method = new ReflectionMethod($this, $function);
+        $numberOfRequiredParameters = 0;
 
-        return $method->getNumberOfRequiredParameters() <= count($params);
+        if(method_exists($this, $function)) {
+            $method = new ReflectionMethod($this, $function);
+            $numberOfRequiredParameters = $method->getNumberOfRequiredParameters();
+        }
+
+        elseif (static::hasMacro($function)) {
+            $function = new ReflectionFunction(static::$macros[$function]);
+            $numberOfRequiredParameters = $function->getNumberOfRequiredParameters();
+        }
+
+        return $numberOfRequiredParameters <= count($params);
     }
 
     public function extract($dynamic)
@@ -122,6 +139,8 @@ class DynamicsManager implements ManagerContract
 
         if($params) {
             $params = explode(',', $params);
+        } else {
+            $params = [];
         }
 
         if($keys) {

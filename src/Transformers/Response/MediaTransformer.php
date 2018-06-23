@@ -35,7 +35,7 @@ class MediaTransformer extends Transformer
         $this->model = $model;
 
         if(! $model instanceof HasMediaContract) {
-            throw new \Exception("The model must implements HasMediaContract");
+            throw new \Exception("The model must implements \"".HasMediaContract::class."\"");
         }
 
         $value = $this->model->getMedia($this->field->media_collection);

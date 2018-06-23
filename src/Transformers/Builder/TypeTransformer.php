@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Transformers\Builder;
 
+use Shemi\Laradmin\Models\Contracts\Buildable;
 use Shemi\Laradmin\Models\Type;
 
 class TypeTransformer extends Transformer
@@ -51,8 +52,8 @@ class TypeTransformer extends Transformer
         $return['panels'] = (array) [];
 
         if($type->exists) {
-            $return['panels'] = $type->panels->map(function($panel) {
-                return PanelTransformer::transform($panel);
+            $return['panels'] = $type->panels->map(function(Buildable $panel) {
+                return $panel->toBuilder();
             });
         }
 

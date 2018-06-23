@@ -46,6 +46,10 @@ class ModelTransformer extends Transformer
         $this->model = $model;
         $this->internal = $internal;
 
+        if($this->field->is_password && ! $model->exists) {
+            return $this->field->default_value;
+        }
+
         if($this->field->is_password || in_array($this->modelKey, $model->getHidden())) {
             return null;
         }

@@ -41,7 +41,7 @@ class JsVarsManager implements ManagerContract
 
     public function render()
     {
-        $json = json_encode($this->object, JSON_UNESCAPED_UNICODE);
+        $json = attr_json_encode($this->object);
 
         return new HtmlString("<script>{$this->namespace} = {$json}</script>");
     }

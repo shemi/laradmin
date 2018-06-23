@@ -11,6 +11,8 @@ use \Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\Http\Controllers\CrudController;
 use Shemi\Laradmin\Http\Controllers\ExportController;
 use Shemi\Laradmin\Http\Controllers\ImportController;
+use Shemi\Laradmin\Models\Contracts\Buildable as BuildableContract;
+use Shemi\Laradmin\Models\Traits\Buildable;
 use Shemi\Laradmin\Transformers\Builder\TypeTransformer;
 
 /**
@@ -41,8 +43,11 @@ use Shemi\Laradmin\Transformers\Builder\TypeTransformer;
  * @property string $default_sort
  * @property string $default_sort_direction
  */
-class Type extends Model
+class Type extends Model implements BuildableContract
 {
+
+    use Buildable;
+
     protected $_fields;
 
     protected $_panels;
@@ -180,6 +185,8 @@ class Type extends Model
 
         return $newFields;
     }
+
+
 
     public static function extractBrowseColumns(Collection $fields)
     {
@@ -344,9 +351,11 @@ class Type extends Model
         return $allTypes;
     }
 
-    public function toBuilderArray()
+    public function toBuilder()
     {
-        return TypeTransformer::transform($this);
+        return $this->builderMode(function () {
+            return TypeTransformer::transform($this);
+        });
     }
 
     public function refresh()

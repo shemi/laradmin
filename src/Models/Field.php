@@ -6,6 +6,9 @@ use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
 
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
+use Shemi\Laradmin\Managers\DynamicsManager;
+use Shemi\Laradmin\Models\Contracts\Buildable as BuildableContract;
+use Shemi\Laradmin\Models\Traits\Buildable;
 use Shemi\Laradmin\Models\Traits\HasBrowseSettings;
 use Shemi\Laradmin\Models\Traits\InteractsWithFormField;
 use Shemi\Laradmin\Models\Traits\InteractsWithMedia;
@@ -44,14 +47,15 @@ use Shemi\Laradmin\Transformers\Response\ModelTransformer;
  * @property boolean $read_only
  * @property Collection $raw_fields
  */
-class Field extends Model
+class Field extends Model implements BuildableContract
 {
 
     use InteractsWithRelationship,
         InteractsWithMedia,
         HasBrowseSettings,
         HasTemplateOptions,
-        InteractsWithFormField;
+        InteractsWithFormField,
+        Buildable;
 
     const OBJECT_TYPE = 'field';
 
@@ -243,8 +247,24 @@ class Field extends Model
             });
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException
+     * @throws \Exception
+     */
     public function getOptionsAttribute($value)
     {
+        if($this->isInBuilderMode()) {
+            return $value ?: [];
+        }
+
+        $dynamicsManager = laradmin()->dynamics();
+
+        if(is_string($value) && $dynamicsManager->validate($value)) {
+            return $dynamicsManager->call($value, true);
+        }
+
         if(is_array($value)) {
             return $value;
         }
@@ -270,6 +290,25 @@ class Field extends Model
     public function getDefaultValue()
     {
         return FieldDefaultValueTransformer::transform($this);
+    }
+
+    /**
+     * @param $value
+     * @return array
+     * @throws \Exception
+     * @throws \Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException
+     */
+    public function getDefaultValueAttribute($value)
+    {
+        if(! $this->isInBuilderMode() && is_string($value)) {
+            $dynamics = laradmin()->dynamics();
+
+            if($dynamics->validate($value)) {
+                return $dynamics->call($value);
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -319,7 +358,9 @@ class Field extends Model
 
     public function toBuilder()
     {
-        return FieldTransformer::transform($this);
+        return $this->builderMode(function() {
+            return FieldTransformer::transform($this);
+        });
     }
 
     /**

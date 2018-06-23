@@ -6,7 +6,7 @@
             <p  v-if="! isInEditMode"
                 class="la-editable-text"
                 @click.prevent="toggleEditMode">
-                <la-field-renderer :form="form"
+                <la-field-renderer :value="value"
                                    :type="type"
                                    class="value"
                                    :empty-string="emptyString"
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-
+    import ParentForm from '../../Mixins/ParentForm';
     import MixinsLoader from '../../Helpers/MixinsLoader';
     import LaFieldRenderer from '../FieldRenderer/FieldRenderer';
 
@@ -38,11 +38,10 @@
 
         name: 'la-editable',
 
-        mixins: MixinsLoader.load('editable', []),
+        mixins: MixinsLoader.load('editable', [ParentForm]),
 
         props: {
-            form: {
-                type: Object,
+            value: {
                 required: true
             },
             formKey: {
@@ -94,15 +93,7 @@
         },
 
         computed: {
-            value() {
-                let value = this.form[this.formKey];
 
-                switch (this.type) {
-
-                }
-
-                return value;
-            }
         },
 
         components: {

@@ -121,14 +121,13 @@
                                         custom-key="{{ $column->browse_key.$index }}"
                                         {{ $column->sortable ? 'sortable' : '' }}>
 
-                            @switch($column->type)
-                                @case('image')
-                                    <div v-html="props.row.{{ $column->browse_key }}" class="image is-64x64"></div>
-                                    @break
-
-                                @default
-                                    <div class="trim" v-html="props.row.{{ $column->browse_key }}"></div>
-                            @endswitch
+                            <la-field-renderer :value="props.row.{{ $column->browse_key }}"
+                                               type="{{ $column->type }}"
+                                               empty-string=""
+                                               :template-options="{{ attr_json_encode($column->template_options) }}"
+                                               :browse-settings="{{ attr_json_encode($column->browse_settings) }}"
+                                               form-key="{{ $column->browse_key }}">
+                            </la-field-renderer>
 
                         </b-table-column>
                     @endforeach

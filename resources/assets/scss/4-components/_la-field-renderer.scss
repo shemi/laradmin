@@ -1,0 +1,11 @@
+.la-field-renderer {
+
+  .list {
+	li + li{
+      margin-top: 0.2em;
+      padding-top: 0.2em;
+      border-top: 1px solid $grey-lighter;
+    }
+  }
+
+}

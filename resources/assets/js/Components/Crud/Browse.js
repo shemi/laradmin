@@ -5,6 +5,7 @@ import {LaTable, LaTableColumn} from '../Table';
 import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
 import SimpleRouter from '../../Mixins/SimpleRouter';
+import LaFieldRenderer from  '../FieldRenderer/FieldRenderer';
 
 export default {
     mixins: MixinsLoader.load(
@@ -146,7 +147,8 @@ export default {
 
     components: {
         LaTable,
-        LaTableColumn
+        LaTableColumn,
+        LaFieldRenderer
     }
 
 }

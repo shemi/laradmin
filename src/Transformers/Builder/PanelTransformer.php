@@ -2,7 +2,7 @@
 
 namespace Shemi\Laradmin\Transformers\Builder;
 
-use Shemi\Laradmin\Models\Field;
+use Shemi\Laradmin\Models\Contracts\Buildable;
 use Shemi\Laradmin\Models\Panel;
 
 class PanelTransformer extends Transformer
@@ -44,8 +44,8 @@ class PanelTransformer extends Transformer
         $return['fields'] = (array) [];
 
         if ($panel->fields->isNotEmpty()) {
-            $return['fields'] = $panel->fields->map(function ($field) {
-                return FieldTransformer::transform($field);
+            $return['fields'] = $panel->fields->map(function (Buildable $field) {
+                return $field->toBuilder();
             });
         }
 

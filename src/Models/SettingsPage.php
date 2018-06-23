@@ -5,6 +5,8 @@ namespace Shemi\Laradmin\Models;
 use Closure;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Data\Model;
+use Shemi\Laradmin\Models\Contracts\Buildable as BuildableContract;
+use Shemi\Laradmin\Models\Traits\Buildable;
 use Shemi\Laradmin\Transformers\Builder\SettingsPageTransformer;
 
 /**
@@ -20,8 +22,10 @@ use Shemi\Laradmin\Transformers\Builder\SettingsPageTransformer;
  * @property Collection $main_panels
  */
 
-class SettingsPage extends Model
+class SettingsPage extends Model implements BuildableContract
 {
+
+    use Buildable;
 
     protected $location = "options";
 
@@ -209,9 +213,11 @@ class SettingsPage extends Model
     /**
      * @return mixed
      */
-    public function toBuilderArray()
+    public function toBuilder()
     {
-        return SettingsPageTransformer::transform($this);
+        return $this->builderMode(function () {
+            return SettingsPageTransformer::transform($this);
+        });
     }
 
     public function refresh()

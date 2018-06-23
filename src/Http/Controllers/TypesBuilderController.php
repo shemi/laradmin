@@ -119,7 +119,7 @@ class TypesBuilderController extends Controller
         }
 
         app('laradmin')->jsVars()->set([
-            'model' => $model->toBuilderArray(),
+            'model' => $model->toBuilder(),
             'builderData' => compact('panels', 'fields')
         ]);
 
@@ -183,6 +183,7 @@ class TypesBuilderController extends Controller
         $type->name = $data['name'];
         $type->slug = $slug;
         $type->model = $data['model'];
+        $type->icon = $data['icon'];
         $type->controller = $data['controller'];
         $type->panels = $data['panels'];
         $type->records_per_page = $data['records_per_page'];

@@ -10,7 +10,7 @@
     <div class="card-content">
         <div class="content">
             @foreach($panel->fieldsFor($viewType) as $field)
-                <la-editable :form="form"
+                <la-editable :value="{{ $field->form_prefix.$field->key }}"
                              type="{{ $field->type }}"
                              empty-string="---"
                              label="{{ $field->label }}"

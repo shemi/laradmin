@@ -121,7 +121,7 @@ class SettingsBuilderController extends Controller
         }
 
         app('laradmin')->jsVars()->set([
-            'model' => $model->toBuilderArray(),
+            'model' => $model->toBuilder(),
             'builderData' => compact('panels', 'fields')
         ]);
 

@@ -8,6 +8,8 @@ use Shemi\Laradmin\Data\Model;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Shemi\Laradmin\FormPanels\FormPanel;
 use Shemi\Laradmin\Managers\FormPanelsManager;
+use Shemi\Laradmin\Models\Contracts\Buildable as BuildableContract;
+use Shemi\Laradmin\Models\Traits\Buildable;
 use Shemi\Laradmin\Transformers\Builder\PanelTransformer;
 
 /**
@@ -23,8 +25,10 @@ use Shemi\Laradmin\Transformers\Builder\PanelTransformer;
  * @property array $style
  * @property Collection $fields
  */
-class Panel extends Model
+class Panel extends Model implements BuildableContract
 {
+
+    use Buildable;
 
     const OBJECT_TYPE = 'panel';
 
@@ -209,7 +213,9 @@ class Panel extends Model
 
     public function toBuilder()
     {
-        return PanelTransformer::transform($this);
+        return $this->builderMode(function () {
+            return PanelTransformer::transform($this);
+        });
     }
 
     /**

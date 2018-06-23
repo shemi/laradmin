@@ -4,7 +4,9 @@ namespace Shemi\Laradmin\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Shemi\Laradmin\Contracts\Repositories\QueryRepository as QueryRepositoryContract;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
@@ -18,6 +20,9 @@ class QueryRepository implements QueryRepositoryContract
     const SEARCH_TERM_REQUEST_KEY = 'search';
 
     const FILTERS_REQUEST_KEY = 'filters';
+
+    const CUSTOM_ORDER_TABLE_ALIAS = 'la_order';
+    const CUSTOM_ORDER_KEY = 'la_order_field';
 
     /**
      * @var Type
@@ -199,7 +204,14 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function order()
     {
-        $this->query->orderBy($this->getOrderBy(), $this->getOrderDirection());
+        $this->query->orderBy($key = $this->getOrderBy(), $this->getOrderDirection());
+
+        if($key === static::CUSTOM_ORDER_KEY) {
+            $this->query->orderBy(
+                "{$this->model->getTable()}.{$this->model->getKeyName()}",
+                $this->getOrderDirection()
+            );
+        }
 
         return $this;
     }
@@ -323,23 +335,32 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function addOrderJoin(Field $field, Field $parent)
     {
+        $tableAlias = static::CUSTOM_ORDER_TABLE_ALIAS;
+        $keyAlias = static::CUSTOM_ORDER_KEY;
+
         $relationClass = $parent->getRelationClass($this->model);
         $relationKey = $relationClass->getExistenceCompareKey();
         $relationKey = explode('.', $relationKey);
         $relationTable = array_shift($relationKey);
-        $relationKey = "la_order.".implode('.', $relationKey);
-        $orderingKey = "la_order.{$field->key} AS la_order_field";
+        $parentForeignKey = implode('.', $relationKey);
+        $relationKey = "{$tableAlias}.{$parentForeignKey}";
+        $orderingKey = "la_order.{$field->key} AS {$keyAlias}";
 
 
         $this->query
             ->addSelect($orderingKey)
-            ->leftJoin(
-                $relationTable . ' AS la_order',
-                $relationKey,
-                $relationClass->getQualifiedParentKeyName()
-            );
+            ->join(
+                DB::raw(
+                    "(SELECT `{$parentForeignKey}`, MAX(`{$field->key}`) AS `{$field->key}` " .
+                    "FROM `{$relationTable}` " .
+                    "GROUP BY `{$parentForeignKey}`) {$tableAlias}"
+                ),
+                function(JoinClause $join) use ($relationClass, $relationKey, $tableAlias) {
+                    $join->on($relationKey, '=', $relationClass->getQualifiedParentKeyName());
+                },
+                null, null, 'left');
 
-        return "la_order_field";
+        return $keyAlias;
     }
 
     protected function getOrderDirection()

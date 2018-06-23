@@ -2,6 +2,7 @@
 
 namespace Shemi\Laradmin\Models\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Shemi\Laradmin\Models\SettingsPage;
 use Spatie\MediaLibrary\Media;
@@ -70,6 +71,11 @@ trait InteractsWithMedia
         }
         
         return $this->key;
+    }
+
+    public function getMediaParentModel(Model $model)
+    {
+
     }
 
 }
