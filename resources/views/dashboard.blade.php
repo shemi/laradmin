@@ -2,18 +2,18 @@
 
 @section('content')
 
-    <section class="section">
-
-        @foreach(app('laradmin')->widgets()->rows() as $widgets)
-            <div class="columns">
-                @foreach($widgets as $key => $widget)
-                    <div class="column {{ $widget->getCssClasses() }}">
-                        {!! $widget->render() !!}
-                    </div>
-                @endforeach
-            </div>
-        @endforeach
-
-    </section>
+    <la-dashboard class="section" inline-template>
+        <div>
+            @foreach(app('laradmin')->widgets()->rows() as $widgets)
+                <div class="columns">
+                    @foreach($widgets as $key => $widget)
+                        <div class="column {{ $widget->getCssClasses() }}">
+                            {!! $widget->render() !!}
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+    </la-dashboard>
 
 @endsection

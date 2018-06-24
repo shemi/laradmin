@@ -98,17 +98,17 @@
 
             <b-table :data="data.data"
                      :loading="loading"
-
                      striped
                      checkable
                      mobile-cards
+                     hoverable
                      paginated
                      backend-pagination
                      :total="data.total"
                      :per-page="{{ $type->records_per_page }}"
                      backend-sorting
-                     default-sort="{{ $type->default_sort }}"
-                     default-sort-direction="{{ $type->default_sort_direction }}"
+                     :default-sort="query.order_by || '{{ $type->default_sort }}'"
+                     :default-sort-direction="query.order || '{{ $type->default_sort_direction }}'"
                      @sort="onSort"
                      :current-page="query.page"
                      @page-change="onPageChange"

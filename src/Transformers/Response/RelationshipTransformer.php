@@ -69,7 +69,7 @@ class RelationshipTransformer extends Transformer
     public function asRelationCollection(Collection $collection)
     {
         if(in_array($this->field->type, ['checkboxes'])) {
-            return $collection->pluck($this->field->relation_key);
+            return $collection->pluck($this->field->getRelationKeyName($this->model));
         }
 
         if($this->field->is_support_sub_fields) {

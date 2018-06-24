@@ -72,9 +72,12 @@ trait InteractsWithRelationship
 
     public function getRelationKeyName(EloquentModel $model = null)
     {
-        $model = $this->getRelationModelClass($model);
+        if($this->relation_key) {
+            return $this->relation_key;
+        }
 
-        return $this->relation_key ?: $model->getKeyName();
+        return $this->getRelationModelClass($model)
+            ->getKeyName();
     }
 
     public function getRelationImageAttribute()

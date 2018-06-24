@@ -6,6 +6,11 @@ abstract class Transformer
 {
 
     /**
+     * @var array $only
+     */
+    protected $only;
+
+    /**
      * @return MediaTransformer
      */
     protected function getMediaTransformer()
@@ -35,6 +40,21 @@ abstract class Transformer
     protected function getModelValueTransformer()
     {
         return new ModelTransformer();
+    }
+
+    /**
+     * @param array $keys
+     * @return $this
+     */
+    public function only($keys)
+    {
+        if(! isset($this->only)) {
+            $this->only = [];
+        }
+
+        $this->only = array_merge($this->only, (array) $keys);
+
+        return $this;
     }
 
 }

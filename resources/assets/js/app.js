@@ -17,6 +17,7 @@ import VueClip from 'vue-clip'
 import Multiselect from 'vue-multiselect/src/index';
 import Vddl from './Plugins/vddl/install';
 import LaIconInput from './Components/IconInput/IconInput.vue';
+import LaDashboard from './Components/Dashboard/Dashboard';
 
 import './Filters/Slugify';
 import './Filters/Date';
@@ -54,7 +55,8 @@ const app = new Vue({
         Crud,
         Settings,
         BrowseSettingsBuilders,
-        SettingsBuilderCreateEdit
+        SettingsBuilderCreateEdit,
+        LaDashboard
     },
 
     beforeDestroy() {

@@ -51,7 +51,7 @@ trait HasBrowseSettings
         $prefix = "";
 
         if($this->is_sub_field && $this->parent) {
-            $prefix = "{$this->parent->browse_key}." . ($this->is_repeater_sub_field ? '*.' : '');
+            $prefix = "{$this->parent->full_browse_key}." . ($this->is_repeater_sub_field ? '*.' : '');
         }
 
         return $prefix.data_get($this->browse_settings, 'key', $this->key);
@@ -86,12 +86,11 @@ trait HasBrowseSettings
 
     /**
      * @param EloquentModel $model
-     * @return array
+     * @return object|array
      */
     public function getMediaBrowseValue(EloquentModel $model)
     {
-        $value = [];
-        $mediaCollection = $this->media_collection;
+        $value = (object) [];
 
         if($this->is_sub_field && $this->parent) {
 

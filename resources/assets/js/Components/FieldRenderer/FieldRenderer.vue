@@ -29,6 +29,13 @@
                 </li>
             </ul>
         </div>
+        <div v-if="displayType === 'images'" class="images">
+            <p :class="imageCssClasses"
+               v-for="(image, index) in transformedValue"
+               :key="index">
+                <img :src="image.uri" :alt="image.alt">
+            </p>
+        </div>
     </div>
 
 </template>
@@ -37,9 +44,16 @@
     import { camelCase, upperFirst, isArray, compact, take, takeRight } from 'lodash';
     import moment from 'moment-timezone';
     import flatpickr from 'flatpickr';
+    import MixinsLoader from '../../Helpers/MixinsLoader';
+    import DefaultImage from '../../Mixins/DefaultImage';
 
     export default {
         name: 'la-field-renderer',
+
+        mixins: MixinsLoader.load(
+            'fieldRenderer',
+            [DefaultImage]
+        ),
 
         props: {
             value: {
@@ -56,6 +70,10 @@
             emptyString: {
                 type: String,
                 default: ""
+            },
+            imageSize: {
+                type: String,
+                default: "128x128"
             },
             templateOptions: {
                 type: Object,
@@ -107,6 +125,10 @@
                 case 'repeater':
                     this.displayType = 'tags';
                     break;
+                case 'image':
+                case 'gallery':
+                    this.displayType = 'images';
+                    break;
                 default:
                     this.displayType = 'string';
             }
@@ -132,11 +154,13 @@
                     transformMethod = `transform${type}Value`,
                     value = this.value;
 
-                if(! value || (isArray(value) && value.length <= 0)) {
-                    return this.emptyString;
-                }
-
                 if(typeof this[transformMethod] !== 'function') {
+                    if(! value || (isArray(value) && value.length <= 0)) {
+                        this.changeDisplayType('string');
+
+                        return this.emptyString;
+                    }
+
                     type = typeof value;
 
                     if(type === 'object' && isArray(value)) {
@@ -178,7 +202,7 @@
                         itemValue = item;
                     }
 
-                    else if(item.label) {
+                    else if(item && item.label) {
                         itemValue = item.label;
                     }
 
@@ -247,7 +271,7 @@
 
             transformSelectObject(value) {
                 if(! isArray(value)) {
-                    if(value.label) {
+                    if(value && value.label) {
                         return [value.label];
                     }
 
@@ -265,6 +289,23 @@
 
             transformCheckboxesValue(value) {
                 return this.transformSelectObject(value);
+            },
+
+            transformGalleryValue(value) {
+
+            },
+
+            transformImageValue(value) {
+                if(! value || ! value.uri) {
+                    return [{
+                        'alt': 'Default Image',
+                        'uri': this.getDefaultImageUri(this.imageSize)
+                    }];
+                }
+
+                this.changeDisplayType('images');
+
+                return [value];
             },
 
             changeDisplayType(type) {
@@ -299,7 +340,22 @@
                 }
 
                 return 'local';
+            },
+
+            imageCssClasses() {
+                if(! this.imageSize) {
+                    return ['image'];
+                }
+
+                let size = this.imageSize;
+
+                if(size.indexOf("x") < 0) {
+                    size = `${size || 128}x${size || 128}`;
+                }
+
+                return ['image', 'is-' + this.imageSize.toLowerCase()]
             }
+
         }
 
     }

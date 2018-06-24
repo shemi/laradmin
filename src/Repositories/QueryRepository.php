@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Shemi\Laradmin\Contracts\Repositories\QueryRepository as QueryRepositoryContract;
 use Shemi\Laradmin\Models\Field;
 use Shemi\Laradmin\Models\Type;
+use Shemi\Laradmin\Transformers\Response\BrowseModelTransformer;
 
 class QueryRepository implements QueryRepositoryContract
 {
@@ -263,11 +264,9 @@ class QueryRepository implements QueryRepositoryContract
         $results = $this->query
             ->paginate($this->type->records_per_page);
 
-        $hasPrimaryKeyField = $this->hasPrimaryKeyField();
-
         $results->getCollection()
-            ->transform(function ($model) use ($hasPrimaryKeyField) {
-                return $this->transformModel($model, $hasPrimaryKeyField);
+            ->transform(function ($model) {
+                return $this->transformModel($model);
             });
 
         return $results;
@@ -275,28 +274,21 @@ class QueryRepository implements QueryRepositoryContract
 
     public function get()
     {
-        $hasPrimaryKeyField = $this->hasPrimaryKeyField();
-
         return $this->query->get()
-            ->transform(function ($model) use ($hasPrimaryKeyField) {
-                return $this->transformModel($model, $hasPrimaryKeyField);
+            ->transform(function ($model) {
+                return $this->transformModel($model);
             });
     }
 
-    protected function transformModel($model, $hasPrimaryKeyField)
+    /**
+     * @param $model
+     * @return array
+     * @throws \Exception
+     */
+    protected function transformModel($model)
     {
-        $return = [];
-
-        /** @var Field $column */
-        foreach ($this->type->browse_columns as $column) {
-            array_set($return, $column->browse_key, $column->getBrowseValue($model));
-        }
-
-        if (! $hasPrimaryKeyField) {
-            $return[$this->primaryKey] = $model->getKey();
-        }
-
-        return $return;
+        return (new BrowseModelTransformer)
+            ->transform($this->type->browse_columns, $model);
     }
 
     protected function getFilter($for = null)

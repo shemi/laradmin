@@ -1,0 +1,32 @@
+.la-latest-widget {
+
+  .latest-label-row {
+	display: flex;
+
+	&.is-row-0 {
+	  margin-bottom: 0.2em;
+
+	  * {
+		@extend .is-3;
+	  }
+	}
+
+	.label {
+	  flex-grow: 0;
+	  flex-shrink: 0;
+	  width: 100px;
+	}
+
+	.la-field-renderer {
+	  flex-grow: 1;
+	  flex-shrink: 1;
+	}
+
+	.list {
+	  margin: 0 !important;
+	  list-style: none !important;
+	}
+
+  }
+
+}
