@@ -1,12 +1,17 @@
 <template>
 
     <div class="la-field-renderer" :class="['value-type-'+type]">
-        <span v-if="displayType === 'string'">{{ transformedValue }}</span>
+        <div v-if="displayType === 'string'"
+             :title="transformedValue">
+            {{ transformedValue | truncate(100) }}
+        </div>
+
         <div v-if="displayType === 'tags'">
             <b-taglist>
                 <b-tag v-for="(tag, index) in transformedValue"
+                       :title="tag"
                        :key="index">
-                    {{ tag }}
+                    {{ tag | truncate(50) }}
                 </b-tag>
                 <a class="tag is-link is-info"
                    v-if="hasMore"
@@ -15,11 +20,12 @@
                 </a>
             </b-taglist>
         </div>
+
         <div v-if="displayType === 'list'">
             <ul class="list">
                 <li v-for="(item, index) in transformedValue"
                     :key="index">
-                    {{ item }}
+                    {{ item | truncate(100) }}
                 </li>
                 <li class="more-link" v-if="hasMore">
                     <a class="is-link is-info"
@@ -29,6 +35,7 @@
                 </li>
             </ul>
         </div>
+
         <div v-if="displayType === 'images'" class="images">
             <p :class="imageCssClasses"
                v-for="(image, index) in transformedValue"
@@ -36,6 +43,25 @@
                 <img :src="image.uri" :alt="image.alt">
             </p>
         </div>
+
+        <div v-if="displayType === 'files'" class="files">
+            <ul class="list">
+                <li v-for="(file, index) in transformedValue"
+                    :key="index">
+                    <a :href="file.uri" :title="file.name" target="_blank">
+                        <b-icon icon="paperclip"></b-icon>
+                        <span>{{ file.name | truncate(35) }}</span>
+                    </a>
+                </li>
+                <li class="more-link" v-if="hasMore">
+                    <a class="is-link is-info"
+                       @click.prevent="toggleShowMore">
+                        {{ showingMore ? 'Less' : (fullValue.length - maxArrayLength) + ' More' }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 </template>
@@ -91,7 +117,6 @@
                 hasMore: false,
                 showingMore: false,
                 maxArrayLength: 3,
-                maxStringWords: 10,
                 compactValue: null,
                 fullValue: null,
                 transformedValue: this.emptyString
@@ -128,6 +153,10 @@
                 case 'image':
                 case 'gallery':
                     this.displayType = 'images';
+                    break;
+                case 'file':
+                case 'files':
+                    this.displayType = 'files';
                     break;
                 default:
                     this.displayType = 'string';
@@ -292,10 +321,12 @@
             },
 
             transformGalleryValue(value) {
-
+                return value;
             },
 
             transformImageValue(value) {
+                this.changeDisplayType('images');
+
                 if(! value || ! value.uri) {
                     return [{
                         'alt': 'Default Image',
@@ -303,7 +334,31 @@
                     }];
                 }
 
-                this.changeDisplayType('images');
+                return [value];
+            },
+
+            transformFilesValue(value) {
+                if(! value || ! isArray(value) || value.length <= 0) {
+                    this.changeDisplayType('string');
+
+                    return this.emptyString;
+                }
+
+                this.compactValue = take(value, this.maxArrayLength);
+                this.fullValue = value;
+                this.hasMore = this.compactValue.length < value.length;
+
+                this.changeDisplayType('files');
+
+                return this.compactValue;
+            },
+
+            transformFileValue(value) {
+                if(! value || ! value.uri) {
+                    this.changeDisplayType('string');
+
+                    return this.emptyString;
+                }
 
                 return [value];
             },
@@ -356,6 +411,31 @@
                 return ['image', 'is-' + this.imageSize.toLowerCase()]
             }
 
+        },
+
+        filters: {
+            truncate(text, length, clamp) {
+                text = text || '';
+                clamp = clamp || '...';
+                length = length || 30;
+
+                if (text.length <= length) {
+                    return text;
+                }
+
+                let tcText = text.slice(0, length - clamp.length);
+                let last = tcText.length - 1;
+
+
+                while (last > 0 && tcText[last] !== ' ' && tcText[last] !== clamp[0]) {
+                    last -= 1;
+                }
+
+                last = last || length - clamp.length;
+                tcText =  tcText.slice(0, last);
+
+                return tcText + clamp;
+            }
         }
 
     }

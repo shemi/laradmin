@@ -25,6 +25,13 @@
 	.list {
 	  margin: 0 !important;
 	  list-style: none !important;
+
+	  li {
+		white-space: nowrap;
+		width: 100%;
+		word-break: keep-all;
+	  }
+
 	}
 
   }

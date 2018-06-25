@@ -1,10 +1,17 @@
 .la-field-renderer {
 
   .list {
-	li + li{
-      margin-top: 0.2em;
-      padding-top: 0.2em;
-      border-top: 1px solid $grey-lighter;
+	li {
+      white-space: nowrap;
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      + li{
+        margin-top: 0.2em;
+        padding-top: 0.2em;
+        border-top: 1px solid $grey-lighter;
+      }
     }
   }
 
