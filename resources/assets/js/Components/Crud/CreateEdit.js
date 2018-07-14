@@ -3,7 +3,7 @@ import MixinsLoader from '../../Helpers/MixinsLoader';
 import LaForm from '../../Forms/LaForm';
 import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
-import {LaRepeater, LaRepeaterRow} from '../Repeater/index';
+import {LaRepeater} from '../Repeater/index';
 import {LaRelationship, LaRelationshipRow} from '../Relationship/index';
 import LaFilesUpload from '../FilesUpload/FilesUpload.vue';
 import LaImageUpload from '../ImageUpload/ImageUpload.vue';
@@ -81,7 +81,6 @@ export default {
 
     components: {
         LaRepeater,
-        LaRepeaterRow,
         LaFilesUpload,
         LaRelationship,
         LaRelationshipRow,

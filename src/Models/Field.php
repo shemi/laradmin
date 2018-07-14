@@ -155,7 +155,7 @@ class Field extends Model implements BuildableContract
             return false;
         }
 
-        if($this->is_repeater_sub_field || in_array($this->type, static::$forcedHiddenLabelTypes)) {
+        if(in_array($this->type, static::$forcedHiddenLabelTypes)) {
             return false;
         }
 

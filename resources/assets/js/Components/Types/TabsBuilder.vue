@@ -25,6 +25,7 @@
                     <b-icon v-if="tab.icon" :icon="tab.icon"></b-icon>
                     <span>{{ tab.title }}</span>
                 </a>
+
             </vddl-draggable>
 
             <vddl-placeholder :tag="'li'">

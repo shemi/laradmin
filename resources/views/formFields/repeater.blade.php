@@ -11,14 +11,12 @@
                  label="{{ $field->getTemplateOption('repeater_items_label', $field->label) }}"
                  label-singular="{{ $field->getTemplateOption('repeater_item_label', str_singular($field->label)) }}"
                  add-button-text="{{ $field->getTemplateOption('repeater_add_text', 'Add ' . str_singular($field->label)) }}"
+                 collapse-field-key="{{ $field->getSubFields()->first()->key }}"
                  :form.sync="{{ trim($field->form_prefix, '.') }}">
 
         <template slot-scope="props">
             @foreach($field->getSubFields() as $repeaterField)
-                <la-repeater-row field="{{ $repeaterField->key }}"
-                                 label="{{ $repeaterField->label }}">
-                    {{ $repeaterField->render($fieldsType, $fieldsData) }}
-                </la-repeater-row>
+                {{ $repeaterField->render($fieldsType, $fieldsData) }}
             @endforeach
         </template>
 

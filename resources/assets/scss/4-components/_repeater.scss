@@ -1,10 +1,87 @@
 .fa-repeater {
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid $grey-lighter;
 
-  .actions-cell,
-  .index-cell {
-	width: 55px;
-	vertical-align: middle;
-	text-align: center;
+  .fa-repeater-block {
+    transition: all 0.3s;
+  }
+
+  .fa-repeater-blocks-list-enter-active {
+    opacity: 1;
+  }
+
+  .fa-repeater-blocks-list-enter,
+  .fa-repeater-blocks-list-leave-active {
+    opacity: 0;
+  }
+
+  .fa-repeater-blocks-footer {
+	margin-top: 1em;
+  }
+
+  .card-header-number {
+    @extend .card-header-title;
+    flex-grow: 0;
+
+    .number {
+      margin: 0;
+      padding: 0;
+      height: auto;
+      line-height: 2em;
+      display: inline-block;
+      min-width: 2em;
+      font-size: 1.1rem;
+      cursor: move;
+      cursor: -webkit-grabbing;
+    }
+  }
+
+  .card-header-title {
+    cursor: pointer;
+
+    .label-action {
+      flex-grow: 1;
+      position: relative;
+    }
+
+    .label {
+      margin: 0;
+    }
+
+    .actions {
+      position: absolute;
+      top: 85%;
+      left: 0;
+      line-height: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      .action {
+        font-size: 0.8em;
+        text-transform: uppercase;
+        font-weight: 400;
+
+        + .action:before {
+          content: ' | ';
+          color: black;
+          font-weight: 900;
+        }
+
+      }
+
+    }
+
+    &:hover {
+      .actions {
+        opacity: 1;
+      }
+    }
+  }
+
+  .ghost {
+    opacity: .5;
+    background: $grey-lighter;
   }
 
 }
