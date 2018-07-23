@@ -219,22 +219,34 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function load()
     {
-        $columns = collect([]);
+        $columns = [];
 
         /** @var Field $column */
         foreach ($this->type->browse_columns as $column) {
+            $field = null;
+
             if ($column->is_relationship) {
-                $columns->push($column->key);
+                $field = $column;
             }
 
             if ($column->is_sub_field && $column->parent->is_relationship) {
-                $columns->push($column->parent->key);
+                $field = $column->parent;
+            }
+
+            if($field) {
+                $columns[$field->key] = function($query){};
+
+                if($field->relation_order_key) {
+                    $columns[$field->key] = function($query) use ($field) {
+                        $query->orderBy($field->relation_order_key);
+                    };
+                }
             }
         }
 
         $this->type->browse_columns->first(function (Field $field) use ($columns) {
             if ($field->is_media) {
-                $columns->push('media');
+                $columns['media'] = function($query){};
 
                 return true;
             }
@@ -242,8 +254,8 @@ class QueryRepository implements QueryRepositoryContract
             return false;
         });
 
-        if ($columns->isNotEmpty()) {
-            $this->query->with($columns->unique()->toArray());
+        if(count(array_keys($columns)) > 0) {
+            $this->query->with($columns);
         }
 
         return $this;

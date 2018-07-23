@@ -26,6 +26,7 @@ use Shemi\Laradmin\Transformers\Response\RelationshipTransformer;
  * @property array $relation_image
  * @property string|null $relation_image_conversion
  * @property boolean $is_ajax_powered_relationship
+ * @property boolean $relation_order_key
  * @property string $key
  * @property string $type
  */
@@ -99,6 +100,11 @@ trait InteractsWithRelationship
     public function getRelationImageConversionAttribute()
     {
         return data_get($this->relation_image, 'conversion', null);
+    }
+
+    public function getRelationOrderKeyAttribute()
+    {
+        return data_get($this->relationship, 'order_key', null);
     }
 
     public function getRelationshipTypeSlugAttribute()

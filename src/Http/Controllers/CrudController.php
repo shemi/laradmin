@@ -219,6 +219,12 @@ class CrudController extends Controller
             'id' => $model->getKey()
         ]);
 
+        $model = app(TypeModelQueryRepository::class)
+            ->find($model->getKey(), $type);
+
+        $model = app(TransformTypeModelDataRepository::class)
+            ->transform($type, $model);
+
         return $this->response(compact('model', 'redirect'));
     }
 
@@ -298,8 +304,11 @@ class CrudController extends Controller
             return $this->responseInternalError($exception->getMessage());
         }
 
+        $model = app(TypeModelQueryRepository::class)
+            ->find($model->getKey(), $type);
+
         $model = app(TransformTypeModelDataRepository::class)
-            ->transform($type, $model->refresh());
+            ->transform($type, $model);
 
         $redirect = false;
 

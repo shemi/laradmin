@@ -151,6 +151,7 @@ class RepeaterField extends FormFormField
                 'repeater_items_label' => null,
                 'repeater_item_label' => null,
                 'repeater_add_text' => null,
+                'is_draggable' => true
             ]
         ]);
     }
@@ -163,11 +164,11 @@ class RepeaterField extends FormFormField
 
             $schema->object(null, function(Blueprint $schema) {
 
-
-
                 $schema->array('exclude', function(Blueprint $schema) {
                     $schema->string();
                 })->required();
+
+                $schema->string('order_key');
 
                 $schema->string('type')
                     ->enum(
@@ -191,6 +192,7 @@ class RepeaterField extends FormFormField
             $schema->string('repeater_items_label')->nullable()->required();
             $schema->string('repeater_item_label')->nullable()->required();
             $schema->string('repeater_add_text')->nullable()->required();
+            $schema->boolean('is_draggable')->required();
         });
     }
 

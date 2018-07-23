@@ -39,21 +39,49 @@ class TypeModelQueryRepository implements TypeModelQueryRepositoryContract
 
         $query = $this->model->newQueryWithoutScopes();
 
-        $relationshipFields = $this->getRelationshipFields();
-
-        if($relationshipFields->isNotEmpty()) {
-            $query->with($relationshipFields->pluck('key')->toArray());
-        }
+        $this->load($query);
 
         return $query->findOrFail($id);
     }
 
+    protected function load(&$query)
+    {
+        $columns = [];
+
+        /** @var Field $field */
+        foreach ($this->getRelationshipFields() as $field) {
+            $columns[$field->key] = function($query) use ($field) {
+                if($field->relation_order_key) {
+                    $query->orderBy($field->relation_order_key);
+                }
+            };
+
+        }
+
+        $this->fields->first(function (Field $field) use ($columns) {
+            if ($field->is_media) {
+                $columns['media'] = function($query){};
+
+                return true;
+            }
+
+            return false;
+        });
+
+        if(count(array_keys($columns)) > 0) {
+            $query->with($columns);
+        }
+
+        return $this;
+    }
 
     protected function getRelationshipFields()
     {
-        return $this->fields->reject(function(Field $field) {
+        $fields = $this->fields->reject(function(Field $field) {
             return ! $field->is_relationship || ! $field->getRelationClass($this->model);
         });
+
+        return $fields;
     }
 
     /**

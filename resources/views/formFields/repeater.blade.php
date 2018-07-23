@@ -12,6 +12,7 @@
                  label-singular="{{ $field->getTemplateOption('repeater_item_label', str_singular($field->label)) }}"
                  add-button-text="{{ $field->getTemplateOption('repeater_add_text', 'Add ' . str_singular($field->label)) }}"
                  collapse-field-key="{{ $field->getSubFields()->first()->key }}"
+                 :draggable="{{ $field->is_draggable ? 'true' : 'false' }}"
                  :form.sync="{{ trim($field->form_prefix, '.') }}">
 
         <template slot-scope="props">

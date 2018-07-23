@@ -234,6 +234,8 @@ trait HasJsonSchema
                     $schema->boolean('ajax_powered')
                         ->title("determines if the field options will load asynchronously");
 
+                    $schema->string('order_key');
+
                     $schema->oneOf('label', ['array', 'string'])
                         ->title("The option label")
                         ->required();

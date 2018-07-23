@@ -32,8 +32,15 @@
       display: inline-block;
       min-width: 2em;
       font-size: 1.1rem;
-      cursor: move;
-      cursor: -webkit-grabbing;
+    }
+  }
+
+  &.has-drag-enabled {
+    .card-header-number {
+      .number {
+        cursor: move;
+        cursor: -webkit-grabbing;
+      }
     }
   }
 

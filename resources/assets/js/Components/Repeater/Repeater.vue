@@ -1,6 +1,6 @@
 <template>
 
-    <div class="fa-repeater">
+    <div class="fa-repeater" :class="{'has-drag-enabled': draggable}">
 
         <div class="fa-repeater-blocks">
 

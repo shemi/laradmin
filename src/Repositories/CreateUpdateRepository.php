@@ -326,7 +326,7 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
             }
         }
 
-        foreach ($rows as $row) {
+        foreach ($rows as $index => $row) {
             $exists = false;
 
             if($id = array_get($row, $primaryKey)) {
@@ -339,7 +339,14 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
                 $model = app($type->model);
             }
 
-            $this->createUpdateSubModel($field, $model, $relation, $row, $type);
+            $this->createUpdateSubModel(
+                $field,
+                $model,
+                $relation,
+                $row,
+                $type,
+                $index + 1
+            );
         }
 
     }
@@ -350,27 +357,42 @@ class CreateUpdateRepository implements CreateUpdateRepositoryContract
      * @param $relation
      * @param $data
      * @param Type|null $type
+     * @param null $order
      * @return Model
      * @throws CreateUpdateUnableToSaveModelException
      * @throws SyncMediaException
      */
-    protected function createUpdateSubModel(Field $field, Model $model, $relation, $data, Type $type = null)
+    protected function createUpdateSubModel(Field $field, Model $model, $relation, $data, Type $type = null, $order = null)
     {
         $inst = new static();
         $exists = $model->exists;
         $model = $inst->initCreateOrUpdate($data, $model, $type, $field->getSubFields(), true);
+        $pivot = [];
+
+        if(! is_null($order) && $field->relation_order_key) {
+            $orderKey = $field->relation_order_key;
+
+            if(starts_with($orderKey, 'pivot_')) {
+                $orderKey = str_replace('pivot_', '', $orderKey);
+                $pivot[$orderKey] = $orderKey;
+            } else {
+                $model->{$orderKey} = $order;
+            }
+        }
 
         try {
             if ($relation instanceof BelongsToMany) {
                 $inst->saveModel();
 
                 if(! $exists) {
-                    $this->model->{$field->key}()->attach($model->getKey());
+                    $this->model->{$field->key}()
+                        ->attach($model->getKey(), $pivot);
                 }
             }
 
             else {
-                $this->model->{$field->key}()->save($model);
+                $this->model->{$field->key}()
+                    ->save($model, $pivot);
             }
         }
 

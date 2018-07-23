@@ -18,6 +18,7 @@ namespace Shemi\Laradmin\Models\Traits;
  * @property string $template_position
  * @property integer $max_length
  * @property boolean $is_horizontal
+ * @property boolean $is_draggable
 */
 
 trait HasTemplateOptions
@@ -25,7 +26,7 @@ trait HasTemplateOptions
 
     public static $uninheritableOptions = [
         'show_if', 'max_length', 'placeholder',
-        'type', 'icon'
+        'type', 'icon', 'is_draggable'
     ];
 
     static public $forceGroupedTypes = ['checkboxes'];
@@ -85,6 +86,21 @@ trait HasTemplateOptions
         }
 
         return $this->getTemplateOption('horizontal', false);
+    }
+
+    public function getIsDraggableAttribute()
+    {
+        $value = $this->getTemplateOption('is_draggable', true);
+
+        if(is_null($value) && ! $this->is_relationship) {
+            return true;
+        }
+
+        if($this->is_relationship && ! $this->relation_order_key) {
+            return false;
+        }
+
+        return (boolean) $value;
     }
 
     public function canInheritFromParent()
