@@ -114,6 +114,10 @@ class UploadsController extends Controller
 
         $conversion = $request->input("pc", '');
 
+        if(config("filesystems.disks.{$media->disk}.driver", 'local') !== 'local') {
+            return response()->redirectTo($media->getTemporaryUrl(Carbon::now()->addMinutes(5), $conversion));
+        }
+        
         return response()->file($media->getPath($conversion));
     }
 
