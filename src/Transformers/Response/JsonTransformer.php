@@ -73,7 +73,8 @@ class JsonTransformer extends Transformer
         }
 
         if($this->field->is_repeater_like) {
-            $this->rows = new Collection(array_values($data));
+
+            $this->rows = $data instanceof Collection ? $data : new Collection(array_values($data));
         } else {
             if(! Arr::isAssoc($data)) {
                 $this->rows = new Collection(array_first($data));
