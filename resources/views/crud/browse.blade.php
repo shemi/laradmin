@@ -132,21 +132,20 @@
                         </b-table-column>
                     @endforeach
 
-                    <b-table-column label="Actions" width="220">
-                        @if(Laradmin::user()->can('update ' . $type->slug))
-                            <a :href="'{{ $editRoute }}'" class="button has-text-black">
-                                Edit
+                    <b-table-column label="" class="la-actions-cell">
+                        @if(Laradmin::user()->can('view ' . $type->slug))
+                            <a :href="'{{ $editRoute }}'">
+                                <b-icon icon="eye"></b-icon>
                             </a>
                         @endif
-                        @if(Laradmin::user()->can('view ' . $type->slug))
-                            <a :href="'{{ $editRoute }}'" class="button has-text-black">
-                                View
+                        @if(Laradmin::user()->can('update ' . $type->slug))
+                            <a :href="'{{ $editRoute }}'">
+                                <b-icon icon="pencil-square-o"></b-icon>
                             </a>
                         @endif
                         @if(Laradmin::user()->can('delete ' . $type->slug))
-                            <a class="button is-danger"
-                               @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
-                                Delete
+                            <a @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
+                                <b-icon icon="trash"></b-icon>
                             </a>
                         @endif
                     </b-table-column>
