@@ -11,7 +11,7 @@
                  :filterable-fields="{{ json_encode($type->filterable_fields->pluck('key'), JSON_UNESCAPED_UNICODE) }}"
                  inline-template>
 
-        <section class="section">
+        <section class="page-section">
 
             <div class="level">
                 <div class="level-left">

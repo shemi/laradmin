@@ -25,6 +25,16 @@ class LinksManager implements ManagerContract
         return $this->typeLink($type, 'destroyMany');
     }
 
+    public function create(Type $type)
+    {
+        return $this->typeLink($type, 'create');
+    }
+
+    public function isCreate()
+    {
+        return ends_with(request()->route()->getName(), 'create');
+    }
+
     public function typeLink(Type $type, $action, $modelOrKey = null)
     {
         if($modelOrKey === null) {

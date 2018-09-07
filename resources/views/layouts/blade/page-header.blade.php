@@ -3,16 +3,19 @@
 @endphp
 
 @if($pageTitle)
-    <section class="hero is-dark is-bold">
-        <div class="hero-body">
-            <div class="container is-fluid">
-
-                <h1 class="title">
-                    {{ $pageTitle }}
-                </h1>
-
+    <div class="page-title container is-fluid">
+        <h1 class="title">
+            {{ $pageTitle }}
+        </h1>
+        @isset($type)
+            <div class="title-actions">
+                @if(! laradmin()->links()->isCreate() && laradmin()->user()->can('create ' . $type->slug))
+                    <a href="{{ laradmin()->links()->create($type) }}"
+                       class="action button is-small">
+                        <span>@lang('New ' . str_singular($type->name))</span>
+                    </a>
+                @endif
             </div>
-        </div>
-
-    </section>
+        @endisset
+    </div>
 @endif

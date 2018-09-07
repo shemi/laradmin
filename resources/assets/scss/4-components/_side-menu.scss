@@ -1,6 +1,5 @@
 .side-menu {
   height: 100%;
-  background-color: $white-ter;
   box-shadow: 2px 0 3px rgba($black, 0.1);
   overflow-x: hidden;
   overflow-y: auto;
@@ -17,10 +16,17 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
+        color: rgba(white, 0.5);
+        transition: color 0.2s ease;
 
         &:not(.is-active):hover {
           background-color: transparent;
-          color: rgba($primary, 0.5);
+          color: rgba(white, 0.8);
+        }
+
+        &.is-active {
+          background-color: transparent;
+          color: white;
         }
 
       }
@@ -56,7 +62,7 @@
       margin: 0;
       padding: 0.75em 0 0;
       border: 0;
-      background-color: rgba($grey-light, 0.2);
+      background-color: rgba($black, 0.2);
 
       a.is-active {
         background-color: transparent;

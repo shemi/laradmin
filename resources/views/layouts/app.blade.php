@@ -5,7 +5,7 @@
 @endphp
 
 <!doctype html>
-<html lang="en" class="{{ $hasNavbar ? 'has-navbar-fixed-top' : '' }}">
+<html lang="en" >
 
 <head>
     <meta charset="utf-8">

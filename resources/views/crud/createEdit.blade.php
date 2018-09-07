@@ -16,7 +16,7 @@
                 <div class="columns">
 
                     <div class="column is-three-quarters">
-                        <section class="section">
+                        <section class="page-section">
                             @include('laradmin::components.forms.globalFormErrors', ['key' => 'form'])
 
                             @foreach($type->main_panels as $panel)
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="column">
-                        <section class="section">
+                        <section class="page-section">
                             @foreach($type->side_panels as $panel)
 
                                 @if($panel->fieldsFor($viewType)->isEmpty())

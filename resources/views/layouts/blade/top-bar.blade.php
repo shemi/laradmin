@@ -1,16 +1,5 @@
-<top-bar class="navbar has-shadow is-fixed-top" inline-template>
+<top-bar class="navbar has-shadow" inline-template>
     <nav>
-        <div class="navbar-brand">
-            <a class="navbar-item la-logo" href="{{ route('laradmin.dashboard') }}">
-                @include('laradmin::layouts.blade.logo')
-            </a>
-
-            <button class="button navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
 
         <div class="navbar-menu is-active" :class="{'is-active': isMobileMenuOpen}">
             <div class="navbar-end">

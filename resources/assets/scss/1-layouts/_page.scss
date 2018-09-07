@@ -1,31 +1,94 @@
 html, body {
+  overflow: hidden;
+
   @include scrollbars(0.8rem, $grey-light);
 }
 
 .page {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
 
   .content-area {
     position: relative;
-    min-height: calc(100vh - #{$navbar-height});
-  }
-
-  .side-menu-holder {
-    position: fixed;
-    width: $side-menu-width;
-    left: 0;
-    top: $navbar-height;
-    bottom: 0;
-
-    @include scrollbars(0.3rem, $grey-lighter);
-  }
-
-  .main-content {
-    padding-left: $side-menu-width;
     background-color: $white-ter;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+
+    > .main-content {
+      overflow: auto;
+    }
+
+    .page-title {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+
+      .title {
+        font-weight: 100;
+        margin: 0;
+      }
+
+      .title-actions {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  .side-bar {
+    width: $side-menu-width;
+    flex-grow: 0;
+    flex-shrink: 1;
+    background-color: $grey-darker;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+
+    .side-menu-holder {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+      @include scrollbars(0.3rem, $black);
+
+    }
+
+    .navbar-brand {
+      flex-grow: 0;
+      flex-shrink: 0;
+      background-color: $black-ter;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: $navbar-height;
+
+      .la-logo {
+        padding: 0;
+        max-height: $navbar-height;
+        max-width: $side-menu-width;
+        color: white;
+        font-size: 1.9em;
+      }
+
+    }
+
+    .side-menu {
+      flex-grow: 0;
+      flex-shrink: 1;
+      overflow: auto;
+    }
   }
 
   .main-content-container {
     padding: 0 3rem;
   }
-
 }

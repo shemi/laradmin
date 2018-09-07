@@ -9,15 +9,22 @@
 
     <div id="app" class="page">
 
-        <header class="top-bar">
-            @include('laradmin::layouts.blade.top-bar')
-        </header>
-
-        <div class="content-area">
+        <aside class="side-bar">
             <div class="side-menu-holder">
+                <div class="navbar-brand">
+                    <a class="navbar-item la-logo" href="{{ route('laradmin.dashboard') }}">
+                        @include('laradmin::layouts.blade.logo')
+                    </a>
+                </div>
+
                 @include('laradmin::layouts.blade.side-menu')
             </div>
+        </aside>
 
+        <div class="content-area">
+            <header class="top-bar">
+                @include('laradmin::layouts.blade.top-bar')
+            </header>
             <main class="main-content">
                 <div{{ $mainComponent }}>
                     <div>

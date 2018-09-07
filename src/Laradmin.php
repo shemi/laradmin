@@ -48,7 +48,8 @@ class Laradmin
 
     public function user()
     {
-        return Auth::guard(config('laradmin.guard'))->user();
+        return Auth::guard(config('laradmin.guard'))
+            ->user();
     }
 
     public function getUserType()
