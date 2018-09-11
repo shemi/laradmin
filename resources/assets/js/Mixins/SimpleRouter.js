@@ -1,4 +1,4 @@
-import queryString from 'query-string-object';
+import queryString from '../Plugins/query-string-object';
 
 export default {
 
@@ -10,7 +10,6 @@ export default {
             this.broadcastHashChange();
 
             window.addEventListener('hashchange', e => {
-                console.log('ss');
                 this.broadcastHashChange();
             });
         },

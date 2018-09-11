@@ -118,9 +118,22 @@ class TypesBuilderController extends Controller
             $fields[$formField->getCodename()] = $formField->getBuilderData();
         }
 
+        $filters = [];
+
+        foreach (app('laradmin')->filters()->all() as $filter) {
+            $filters[] = [
+                'key' => $filter->getName(),
+                'label' => $filter->getLabel()
+            ];
+        }
+
         app('laradmin')->jsVars()->set([
             'model' => $model->toBuilder(),
-            'builderData' => compact('panels', 'fields')
+            'builderData' => compact(
+                'panels',
+                'fields',
+                'filters'
+            )
         ]);
 
         return view('laradmin::typeBuilder.createEdit', compact('model'));
@@ -138,14 +151,11 @@ class TypesBuilderController extends Controller
             'model' => 'required|string',
             'controller' => 'required|string',
             'icon' => 'string|nullable',
-            'support_export' => 'nullable|boolean',
-            'export_controller' => 'required_if:support_export,true',
-            'support_import' => 'nullable|boolean',
-            'import_controller' => 'required_if:support_import,true',
-            'records_per_page' => 'required|numeric',
             'panels' => 'required|array',
             'default_sort' => 'nullable',
-            'default_sort_direction' => 'nullable|in:DESC,ASC'
+            'records_per_page' => 'required|numeric',
+            'default_sort_direction' => 'nullable|in:DESC,ASC',
+            'filters' => 'array'
         ]);
 
         $errors = [];
@@ -156,14 +166,6 @@ class TypesBuilderController extends Controller
 
         if($this->validateClassExistsAndExtends($data['model'], Model::class)) {
             $errors['model'] = ['The model class most be subclass of "' . Model::class . '"'];
-        }
-
-        if($data['support_export'] && $this->validateClassExistsAndExtends($data['export_controller'], BaseController::class)) {
-            $errors['export_controller'] = ['The export controller class most be subclass of "' . BaseController::class . '"'];
-        }
-
-        if($data['support_import'] && $this->validateClassExistsAndExtends($data['import_controller'], BaseController::class)) {
-            $errors['import_controller'] = ['The import controller class most be subclass of "' . BaseController::class . '"'];
         }
 
         foreach ($this->validatePanelsJsonSchema($data['panels']) as $path => $error) {
@@ -187,12 +189,9 @@ class TypesBuilderController extends Controller
         $type->controller = $data['controller'];
         $type->panels = $data['panels'];
         $type->records_per_page = $data['records_per_page'];
-        $type->support_export = (boolean) $data['support_export'];
-        $type->export_controller = $data['export_controller'];
-        $type->support_import = (boolean) $data['support_import'];
-        $type->import_controller = $data['import_controller'];
         $type->default_sort = $data['default_sort'];
         $type->default_sort_direction = $data['default_sort_direction'];
+        $type->filters = collect($data['filters'])->pluck('key')->all();
 
         $data['saved'] = $type->save();
 

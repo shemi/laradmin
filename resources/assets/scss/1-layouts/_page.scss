@@ -13,7 +13,7 @@ html, body {
 
   .content-area {
     position: relative;
-    background-color: $white-ter;
+    background-color: #f7f7f7;
     flex-grow: 1;
     flex-shrink: 1;
     overflow: hidden;
@@ -24,6 +24,7 @@ html, body {
 
     > .main-content {
       overflow: auto;
+      flex-grow: 1;
     }
 
     .page-title {

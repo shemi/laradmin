@@ -99,26 +99,19 @@ class QueryRepository implements QueryRepositoryContract
 
     protected function filter()
     {
-        if ($this->type->filterable_fields->isEmpty() || ! $this->hasFilters()) {
+        if ($this->type->filters()->isEmpty() || ! $this->hasFilters()) {
             return $this;
         }
 
-        $this->query->where(function ($query) {
-            /** @var Field $field */
-            foreach ($this->type->filterable_fields as $index => $field) {
-                $filterKeys = $this->getFilter($field->key);
+        foreach ($this->type->filters() as $filter) {
+            $value = $this->getFilter($filter->getName());
 
-                if (empty($filterKeys)) {
-                    continue;
-                }
-
-                $relationModel = $field->getRelationModelClass($this->model);
-
-                $query->whereHas($field->key, function ($query) use ($field, $filterKeys, $relationModel) {
-                    $query->whereIn($relationModel->getKeyName(), $filterKeys);
-                });
+            if(is_null($value)) {
+                continue;
             }
-        });
+
+            $filter->apply($this->request, $this->query, $filter->transformValue($value));
+        }
 
         return $this;
     }
@@ -307,12 +300,12 @@ class QueryRepository implements QueryRepositoryContract
     {
         $key = $for ? static::FILTERS_REQUEST_KEY . '.' . $for : static::FILTERS_REQUEST_KEY;
 
-        return array_filter(array_values((array) $this->request->input($key, [])));
+        return $this->request->input($key);
     }
 
     protected function hasFilters()
     {
-        return ! empty($this->getFilter());
+        return $this->request->has(static::FILTERS_REQUEST_KEY);
     }
 
     protected function getOrderBy()

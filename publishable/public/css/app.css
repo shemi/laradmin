@@ -17718,7 +17718,7 @@ html body, body body {
 
 .page .content-area {
   position: relative;
-  background-color: whitesmoke;
+  background-color: #f7f7f7;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -17742,6 +17742,9 @@ html body, body body {
 
 .page .content-area > .main-content {
   overflow: auto;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 .page .content-area .page-title {
@@ -17905,6 +17908,79 @@ html body, body body {
 
 .types-create-edit .panels-area .panels-area-header .title {
   color: white;
+}
+
+.crud-browse .la-crud-table-controls .tabs {
+  margin-bottom: 0;
+}
+
+.crud-browse .la-crud-table-controls .level {
+  background-color: white;
+  padding: 1em 0.75em;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.crud-browse .la-crud-table-controls .filters .dropdown-content {
+  padding: 0 0 0.375rem;
+  min-width: 250px;
+}
+
+.crud-browse .la-crud-table-controls .filters .field .label {
+  background-color: #f7f7f7;
+  padding: 0.375rem 1rem;
+}
+
+.crud-browse .la-crud-table-controls .filters .field > .control {
+  padding: 0 1rem;
+}
+
+.crud-browse .la-crud-table-controls .filters .field + .field {
+  margin-left: 0;
+}
+
+.crud-browse .la-crud-table-controls .filters .field .autocomplete .dropdown-menu {
+  left: 1rem;
+  right: 1rem;
+  min-width: 0;
+  width: auto;
+}
+
+.crud-browse .la-crud-table-controls .filters .field .autocomplete .dropdown-menu .dropdown-content {
+  min-width: auto;
+  border: 1px solid #dbdbdb;
+  -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+          box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+.crud-browse .la-crud-table-controls .filters .clearable-autocomplete {
+  position: relative;
+}
+
+.crud-browse .la-crud-table-controls .filters .clearable-autocomplete .input, .crud-browse .la-crud-table-controls .filters .clearable-autocomplete .taginput .taginput-container.is-focusable, .taginput .crud-browse .la-crud-table-controls .filters .clearable-autocomplete .taginput-container.is-focusable {
+  padding-right: 2.5em;
+}
+
+.crud-browse .la-crud-table-controls .filters .clearable-autocomplete .clear-autocomplete {
+  position: absolute;
+  display: block;
+  line-height: 1;
+  font-size: 0.9em;
+  right: 2rem;
+  z-index: 4;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  color: #6146d7;
+  cursor: pointer;
+}
+
+.crud-browse .la-crud-table-controls .filters .clearable-autocomplete .clear-autocomplete .icon {
+  width: auto;
+  height: auto;
+}
+
+.crud-browse .la-crud-table-controls .filters .clearable-autocomplete .clear-autocomplete:hover {
+  color: #ff3860;
 }
 
 .top-bar .logo {
@@ -20183,6 +20259,14 @@ html body, body body {
   margin-top: 0.2em;
   padding-top: 0.2em;
   border-top: 1px solid #dbdbdb;
+}
+
+.la-field-renderer.value-type-image {
+  text-align: center;
+}
+
+.la-field-renderer.value-type-image .image {
+  margin: 0 auto;
 }
 
 .la-latest-widget .latest-label-row {

@@ -38,12 +38,24 @@ class CrudController extends Controller
         $primaryKey = $model->getKeyName();
 
         $linksManager = app('laradmin')->links();
-
         $editRoute = $linksManager->edit($type, $primaryKey);
-
         $deleteRoute = $linksManager->destroy($type, $primaryKey);
-
         $deleteManyRoute = $linksManager->destroyMany($type);
+
+        $controlsData = [
+            'filters' => [],
+            'actions' => [],
+//            'softDeletes' => $model->
+        ];
+
+        $filters = $type->filters();
+
+        foreach ($filters as $filter) {
+            $controlsData['filters'][$filter->getName()] = $filter->toArray($request);
+        }
+
+        app('laradmin')->jsVars()
+            ->set('controls', $controlsData);
 
         return view(
             'laradmin::crud.browse',

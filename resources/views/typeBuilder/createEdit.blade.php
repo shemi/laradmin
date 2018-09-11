@@ -125,39 +125,27 @@
                                     <div class="columns">
 
                                         <div class="column">
-                                            <b-field :type="form.errors.has('support_export') ? 'is-danger' : ''"
-                                                     :message="form.errors.has('support_export') ? form.errors.get('support_export') : ''"
-                                                     label="@lang('laradmin::type-builder.builder.support_export')">
-                                                <b-switch v-model="form.support_export"></b-switch>
+                                            <b-field :type="form.errors.has('filters') ? 'is-danger' : ''"
+                                                     label="Filters">
+                                                <b-taginput
+                                                        v-model="form.filters"
+                                                        :data="filteredFilters"
+                                                        autocomplete
+                                                        :allow-new="false"
+                                                        field="label"
+                                                        icon="filter"
+                                                        placeholder="Add a filter"
+                                                        @typing="getFilteredFilters">
+                                                </b-taginput>
                                             </b-field>
+
+                                            {{--<b-field :type="form.errors.has('support_export') ? 'is-danger' : ''"--}}
+                                                     {{--:message="form.errors.has('support_export') ? form.errors.get('support_export') : ''"--}}
+                                                     {{--label="@lang('laradmin::type-builder.builder.support_export')">--}}
+                                                {{--<b-switch v-model="form.support_export"></b-switch>--}}
+                                            {{--</b-field>--}}
                                         </div>
 
-                                        <div class="column" v-show="form.support_export">
-                                            <b-field :type="form.errors.has('export_controller') ? 'is-danger' : ''"
-                                                     label="@lang('laradmin::type-builder.builder.export_controller')"
-                                                     :message="form.errors.has('export_controller') ? form.errors.get('export_controller') : ''">
-                                                <b-input type="text" v-model="form.export_controller">
-                                            </b-field>
-                                        </div>
-                                    </div>
-
-                                    <div class="columns">
-
-                                        <div class="column">
-                                            <b-field :type="form.errors.has('support_import') ? 'is-danger' : ''"
-                                                     :message="form.errors.has('support_import') ? form.errors.get('support_import') : ''"
-                                                     label="@lang('laradmin::type-builder.builder.support_import')">
-                                                <b-switch v-model="form.support_import"></b-switch>
-                                            </b-field>
-                                        </div>
-
-                                        <div class="column" v-show="form.support_import">
-                                            <b-field :type="form.errors.has('import_controller') ? 'is-danger' : ''"
-                                                     label="@lang('laradmin::type-builder.builder.import_controller')"
-                                                     :message="form.errors.has('import_controller') ? form.errors.get('import_controller') : ''">
-                                                <b-input type="text" v-model="form.import_controller">
-                                            </b-field>
-                                        </div>
                                     </div>
 
                                 </div>

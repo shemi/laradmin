@@ -21,7 +21,8 @@ export default {
             isLoading: true,
             form: new LaForm(window.laradmin.model),
             panels: window.laradmin.builderData.panels,
-            isIconSelectModalActive: false
+            isIconSelectModalActive: false,
+            filteredFilters: window.laradmin.builderData.filters,
         }
     },
 
@@ -34,6 +35,15 @@ export default {
     },
 
     methods: {
+
+        getFilteredFilters(text) {
+            this.filteredFilters = window.laradmin.builderData.filters.filter((option) => {
+                return option.label
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0;
+            })
+        },
 
         save() {
             let method = window.laradmin.model.exists ? 'put' : 'post';

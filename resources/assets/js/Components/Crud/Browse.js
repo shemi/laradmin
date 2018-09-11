@@ -6,6 +6,7 @@ import deleteMixin from '../../Mixins/Delete';
 import ServerError from '../../Mixins/ServerError';
 import SimpleRouter from '../../Mixins/SimpleRouter';
 import LaFieldRenderer from  '../FieldRenderer/FieldRenderer';
+import Filters from '../Filters/index';
 
 export default {
     mixins: MixinsLoader.load(
@@ -22,7 +23,7 @@ export default {
             selected: {},
             search: "",
             searchClock: null,
-            filtersData: {},
+            controls: window.laradmin.controls,
             query: {
                 order_by: null,
                 order: null,
@@ -41,13 +42,8 @@ export default {
     },
 
     created() {
-        for(let key of this.filterableFields) {
+        for(let key of Object.keys(this.controls.filters)) {
             this.$set(this.query.filters, key, null);
-            this.$set(this.filtersData, key, {
-                data: {},
-                loaded: false,
-                loading: false
-            });
         }
     },
 
@@ -59,6 +55,10 @@ export default {
 
         fetchData() {
             this.loading = true;
+            //
+            // var stack = new Error().stack;
+            // console.log("PRINTING CALL STACK");
+            // console.log( stack );
 
             LaHttp.get(`/${this.typeSlug}/query`, this.query)
                 .then(res => {
@@ -103,14 +103,6 @@ export default {
             this.pushState(this.query);
         },
 
-        onExport() {
-            this.$dialog.alert('SOON!');
-        },
-
-        onImport() {
-            this.$dialog.alert('SOON!');
-        },
-
         afterDelete(res, typeName, many = false) {
             if(many) {
                 this.checkedRows = [];
@@ -124,22 +116,22 @@ export default {
             this.pushState(this.query);
         },
 
-        fetchFilterData(fieldKey) {
-            if(this.filtersData[fieldKey]['loaded']) {
+        fetchFilterData(filter) {
+            if(this.controls.filters[filter]['loaded']) {
                 return;
             }
 
-            this.$set(this.filtersData[fieldKey], 'loading', true);
+            this.$set(this.controls.filters[filter], 'loading', true);
 
-            LaHttp.get(`relationship-all/${this.typeSlug}/${fieldKey}`)
+            LaHttp.get(`filters/${this.typeSlug}/${filter}`)
                 .then(({data}) => {
-                    this.$set(this.filtersData[fieldKey], 'data', data.data);
-                    this.$set(this.filtersData[fieldKey], 'loading', false);
-                    this.$set(this.filtersData[fieldKey], 'loaded', true);
+                    this.$set(this.controls.filters[filter], 'data', data.data);
+                    this.$set(this.controls.filters[filter], 'loading', false);
+                    this.$set(this.controls.filters[filter], 'loaded', true);
                 })
                 .catch(err => {
                     this.alertServerError(err);
-                    this.$set(this.filtersData[fieldKey], 'loading', false);
+                    this.$set(this.controls.filters[filter], 'loading', false);
                 });
         }
 
@@ -148,7 +140,8 @@ export default {
     components: {
         LaTable,
         LaTableColumn,
-        LaFieldRenderer
+        LaFieldRenderer,
+        ...Filters
     }
 
 }

@@ -15,4 +15,13 @@
     }
   }
 
+  &.value-type-image {
+    text-align: center;
+
+    .image {
+      margin: 0 auto;
+    }
+
+  }
+
 }

@@ -1,0 +1,87 @@
+.crud-browse {
+
+  .la-crud-table-controls {
+
+	.tabs {
+	  margin-bottom: 0;
+	}
+
+	.level {
+	  background-color: white;
+	  padding: 1em 0.75em;
+	  border-bottom: $table-cell-border;
+	}
+
+	.filters {
+
+	  .dropdown-content {
+		padding: 0 0 0.375rem;
+		min-width: 250px;
+	  }
+
+	  .field {
+		.label {
+		  background-color: #f7f7f7;
+		  padding: 0.375rem 1rem;
+		}
+
+		> .control {
+		  padding: 0 1rem;
+		}
+
+		+ .field {
+		  margin-left: 0;
+		}
+
+		.autocomplete .dropdown-menu {
+		  left: 1rem;
+		  right: 1rem;
+		  min-width: 0;
+		  width: auto;
+
+		  .dropdown-content {
+			min-width: auto;
+			border: $table-cell-border;
+			box-shadow: $box-shadow;
+		  }
+		}
+	  }
+
+	  .clearable-autocomplete {
+		position: relative;
+
+		.input {
+		  padding-right: 2.5em;
+		}
+
+		.clear-autocomplete {
+		  position: absolute;
+		  display: block;
+		  line-height: 1;
+		  font-size: 0.9em;
+		  right: 2rem;
+		  z-index: 4;
+		  top: 50%;
+		  transform: translateY(-50%);
+		  color: $primary;
+		  cursor: pointer;
+
+		  .icon {
+			width: auto;
+			height: auto;
+		  }
+
+		  &:hover {
+			color: $danger;
+		  }
+
+		}
+	  }
+
+
+
+	}
+
+  }
+
+}

@@ -32,6 +32,10 @@ class TypeTransformer extends Transformer
         'default_sort_direction'
     ];
 
+    protected $extractMap = [
+        'filters'
+    ];
+
     public static function transform(Type $type)
     {
         if(! static::$inst) {
@@ -47,6 +51,17 @@ class TypeTransformer extends Transformer
 
         foreach ($this->map as $key) {
             $return[$key] = $type->{$key};
+        }
+
+        foreach ($this->extractMap as $key) {
+            $return[$key] = [];
+
+            foreach ($type->{$key}() as $object) {
+                $return[$key][] = [
+                    'label' => $object->getLabel(),
+                    'key' => $object->getName()
+                ];
+            }
         }
 
         $return['panels'] = (array) [];

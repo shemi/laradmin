@@ -12,7 +12,6 @@ use Shemi\Laradmin\Console\Commands\RolesCommand;
 use Shemi\Laradmin\Facades\Laradmin as LaradminFacade;
 use Shemi\Laradmin\Http\Middleware\CanAccessBackend;
 use Shemi\Laradmin\Http\Middleware\RedirectIfAuthenticated;
-use Shemi\Laradmin\Http\Middleware\RedirectIfCantAdmin;
 
 class LaradminServiceProvider extends ServiceProvider
 {
@@ -36,8 +35,6 @@ class LaradminServiceProvider extends ServiceProvider
 
         $this->loadHelpers();
 
-        LaradminFacade::init();
-
         if ($this->app->runningInConsole()) {
             $this->registerPublishableResources();
         }
@@ -60,8 +57,6 @@ class LaradminServiceProvider extends ServiceProvider
         }
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/laradmin.php');
-
-        LaradminFacade::jsVars()->init();
 
         if ($this->app->runningInConsole()) {
             $this->commands([

@@ -36,8 +36,14 @@
             </ul>
         </div>
 
+        <div v-if="displayType === 'image'" class="image">
+            <p class="image is-48x48" v-if="transformedValue[0]">
+                <img :src="transformedValue[0].uri" :alt="transformedValue[0].alt">
+            </p>
+        </div>
+
         <div v-if="displayType === 'images'" class="images">
-            <p :class="imageCssClasses"
+            <p class="image is-48x48"
                v-for="(image, index) in transformedValue"
                :key="index">
                 <img :src="image.uri" :alt="image.alt">
@@ -116,7 +122,7 @@
                 displayType: 'string',
                 hasMore: false,
                 showingMore: false,
-                maxArrayLength: 3,
+                maxArrayLength: 1,
                 compactValue: null,
                 fullValue: null,
                 transformedValue: this.emptyString
@@ -151,6 +157,8 @@
                     this.displayType = 'tags';
                     break;
                 case 'image':
+                    this.displayType = 'image';
+                    break;
                 case 'gallery':
                     this.displayType = 'images';
                     break;
@@ -325,7 +333,7 @@
             },
 
             transformImageValue(value) {
-                this.changeDisplayType('images');
+                this.changeDisplayType(this.type === 'image' ? 'image' : 'images');
 
                 if(! value || ! value.uri) {
                     return [{
@@ -395,20 +403,6 @@
                 }
 
                 return 'local';
-            },
-
-            imageCssClasses() {
-                if(! this.imageSize) {
-                    return ['image'];
-                }
-
-                let size = this.imageSize;
-
-                if(size.indexOf("x") < 0) {
-                    size = `${size || 128}x${size || 128}`;
-                }
-
-                return ['image', 'is-' + this.imageSize.toLowerCase()]
             }
 
         },

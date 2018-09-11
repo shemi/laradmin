@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Route;
 use Shemi\Laradmin\Contracts\Managers\ManagerContract;
-use Shemi\Laradmin\Exceptions\InvalidArgumentException;
 use Shemi\Laradmin\Exceptions\InvalidManagerException;
 use Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException;
 use Shemi\Laradmin\Managers\DynamicsManager;
+use Shemi\Laradmin\Managers\FiltersManager;
 use Shemi\Laradmin\Managers\FormFieldsManager;
 use Shemi\Laradmin\Managers\FormPanelsManager;
 use Shemi\Laradmin\Managers\JsVarsManager;
@@ -17,7 +17,6 @@ use Shemi\Laradmin\Managers\LinksManager;
 use Shemi\Laradmin\Managers\RolesManager;
 use Shemi\Laradmin\Managers\WidgetsManager;
 use Shemi\Laradmin\Models\Type;
-use Shemi\Laradmin\Models\User;
 
 /**
  * Class Laradmin
@@ -30,6 +29,7 @@ use Shemi\Laradmin\Models\User;
  * @method JsVarsManager jsVars
  * @method RolesManager roles
  * @method DynamicsManager dynamics
+ * @method FiltersManager filters
  *
  */
 
@@ -38,6 +38,10 @@ class Laradmin
     const VERSION = "0.7.2";
 
     protected $managers = [];
+
+    protected $booted = false;
+
+    protected $appProvider;
 
     public function init()
     {
@@ -117,6 +121,7 @@ class Laradmin
             RolesManager::class,
             JsVarsManager::class,
             DynamicsManager::class,
+            FiltersManager::class
         ];
 
         foreach ($managers as $manager) {
