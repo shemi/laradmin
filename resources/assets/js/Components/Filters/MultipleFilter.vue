@@ -9,6 +9,9 @@
                 field="key"
                 placeholder="search"
                 attached
+                :loading="loading"
+                :keep-first="true"
+                :open-on-focus="true"
                 @input="onChange"
                 @focus="fetch">
 
