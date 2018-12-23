@@ -3,6 +3,7 @@
 namespace Shemi\Laradmin;
 
 use Illuminate\Support\ServiceProvider;
+use Shemi\Laradmin\Actions\Action;
 use Shemi\Laradmin\Facades\Laradmin as LaradminFacade;
 use Shemi\Laradmin\Filters\Filter;
 use Shemi\Laradmin\Widgets\Widget;
@@ -23,6 +24,7 @@ abstract class LaradminApplicationServiceProvider extends ServiceProvider
         LaradminFacade::jsVars()->init();
         $this->registerWidgets();
         $this->registerFilters();
+        $this->registerActions();
     }
 
     /**
@@ -60,6 +62,19 @@ abstract class LaradminApplicationServiceProvider extends ServiceProvider
             }
 
             LaradminFacade::filters()->register($filter);
+        }
+    }
+
+    protected function registerActions()
+    {
+        $actions = $this->actions();
+
+        foreach ($actions as $action) {
+            if(! $action instanceof Action) {
+                $action = app($action);
+            }
+
+            LaradminFacade::actions()->register($action);
         }
     }
 

@@ -52,5 +52,4 @@ class SwitchField extends FormFormField
     {
         return Setting::TYPE_BOOLEAN;
     }
-
 }

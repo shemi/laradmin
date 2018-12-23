@@ -1,9 +1,15 @@
 <template>
 
-    <div class="la-field-renderer" :class="['value-type-'+type]">
+    <div class="la-field-renderer" :class="['value-type-'+type, 'value-display-type-'+displayType]">
         <div v-if="displayType === 'string'"
              :title="transformedValue">
             {{ transformedValue | truncate(100) }}
+        </div>
+
+        <div v-if="displayType === 'boolean'" :title="transformedValue ? 'True' : 'False'">
+            <span :class="['tag', ('is-' + (transformedValue ? 'success' : 'danger'))]">
+                {{ transformedValue ? 'True' : 'False' }}
+            </span>
         </div>
 
         <div v-if="displayType === 'tags'">
@@ -136,11 +142,10 @@
                     this.fullValue = null;
                     this.hasMore = false;
                     this.transformedValue = this.emptyString;
-                    this.displayType = 'string';
                     this.showingMore = false;
 
                     this.$nextTick(() => {
-                        this.transformedValue = this.transformValue();
+                        this.init();
                     });
                 },
                 deep: true
@@ -148,33 +153,40 @@
         },
 
         mounted() {
-            switch (this.type) {
-                case 'select_multiple':
-                case 'checkboxes':
-                case 'tags':
-                case 'relationship':
-                case 'repeater':
-                    this.displayType = 'tags';
-                    break;
-                case 'image':
-                    this.displayType = 'image';
-                    break;
-                case 'gallery':
-                    this.displayType = 'images';
-                    break;
-                case 'file':
-                case 'files':
-                    this.displayType = 'files';
-                    break;
-                default:
-                    this.displayType = 'string';
-            }
-
-
-            this.transformedValue = this.transformValue();
+            this.$nextTick(() => {
+                this.init();
+            })
         },
 
         methods: {
+            init() {
+                switch (this.type) {
+                    case 'select_multiple':
+                    case 'checkboxes':
+                    case 'tags':
+                    case 'relationship':
+                    case 'repeater':
+                        this.displayType = 'tags';
+                        break;
+                    case 'switch':
+                        this.displayType = 'boolean';
+                        break;
+                    case 'image':
+                        this.displayType = 'image';
+                        break;
+                    case 'gallery':
+                        this.displayType = 'images';
+                        break;
+                    case 'file':
+                    case 'files':
+                        this.displayType = 'files';
+                        break;
+                    default:
+                        this.displayType = 'string';
+                }
+
+                this.transformedValue = this.transformValue();
+            },
 
             toggleShowMore() {
                 this.showingMore = ! this.showingMore;
@@ -190,7 +202,7 @@
                 let type = upperFirst(camelCase(this.type)),
                     transformMethod = `transform${type}Value`,
                     value = this.value;
-
+                
                 if(typeof this[transformMethod] !== 'function') {
                     if(! value || (isArray(value) && value.length <= 0)) {
                         this.changeDisplayType('string');
@@ -205,7 +217,6 @@
                     }
 
                     type = upperFirst(camelCase(type));
-
                     transformMethod = `transform${type}Value`;
 
                     if(typeof this[transformMethod] === 'function') {
@@ -332,6 +343,10 @@
                 return value;
             },
 
+            transformSwitchValue(value) {
+                return !! value;
+            },
+
             transformImageValue(value) {
                 this.changeDisplayType(this.type === 'image' ? 'image' : 'images');
 
@@ -412,6 +427,10 @@
                 text = text || '';
                 clamp = clamp || '...';
                 length = length || 30;
+
+                if(typeof text !== 'string') {
+                    return "";
+                }
 
                 if (text.length <= length) {
                     return text;

@@ -23,6 +23,7 @@ export default {
             panels: window.laradmin.builderData.panels,
             isIconSelectModalActive: false,
             filteredFilters: window.laradmin.builderData.filters,
+            filteredActions: window.laradmin.builderData.actions,
         }
     },
 
@@ -38,6 +39,15 @@ export default {
 
         getFilteredFilters(text) {
             this.filteredFilters = window.laradmin.builderData.filters.filter((option) => {
+                return option.label
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0;
+            })
+        },
+
+        getFilteredActions(text) {
+            this.filteredActions = window.laradmin.builderData.actions.filter((option) => {
                 return option.label
                     .toString()
                     .toLowerCase()

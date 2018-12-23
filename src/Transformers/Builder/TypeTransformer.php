@@ -33,7 +33,8 @@ class TypeTransformer extends Transformer
     ];
 
     protected $extractMap = [
-        'filters'
+        'filters',
+        'actions'
     ];
 
     public static function transform(Type $type)

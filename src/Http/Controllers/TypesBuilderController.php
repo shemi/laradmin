@@ -127,12 +127,22 @@ class TypesBuilderController extends Controller
             ];
         }
 
+        $actions = [];
+
+        foreach (app('laradmin')->actions()->all() as $action) {
+            $actions[] = [
+                'key' => $action->getName(),
+                'label' => $action->getLabel()
+            ];
+        }
+
         app('laradmin')->jsVars()->set([
             'model' => $model->toBuilder(),
             'builderData' => compact(
                 'panels',
                 'fields',
-                'filters'
+                'filters',
+                'actions'
             )
         ]);
 
@@ -155,7 +165,8 @@ class TypesBuilderController extends Controller
             'default_sort' => 'nullable',
             'records_per_page' => 'required|numeric',
             'default_sort_direction' => 'nullable|in:DESC,ASC',
-            'filters' => 'array'
+            'filters' => 'array',
+            'actions' => 'array'
         ]);
 
         $errors = [];
@@ -192,6 +203,7 @@ class TypesBuilderController extends Controller
         $type->default_sort = $data['default_sort'];
         $type->default_sort_direction = $data['default_sort_direction'];
         $type->filters = collect($data['filters'])->pluck('key')->all();
+        $type->actions = collect($data['actions'])->pluck('key')->all();
 
         $data['saved'] = $type->save();
 

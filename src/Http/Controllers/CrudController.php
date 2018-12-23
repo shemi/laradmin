@@ -5,12 +5,14 @@ namespace Shemi\Laradmin\Http\Controllers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Shemi\Laradmin\Actions\Action;
 use Shemi\Laradmin\Contracts\Repositories\CreateUpdateRepository;
 use Shemi\Laradmin\Contracts\Repositories\TransformTypeModelDataRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeModelQueryRepository;
 use Shemi\Laradmin\Contracts\Repositories\TypeRequestValidatorRepository;
 use Laradmin;
 use Shemi\Laradmin\Exceptions\CreateUpdateException;
+use Shemi\Laradmin\Filters\Filter;
 use Shemi\Laradmin\Models\Type;
 use Shemi\Laradmin\Repositories\QueryRepository;
 
@@ -50,8 +52,24 @@ class CrudController extends Controller
 
         $filters = $type->filters();
 
+        /** @var Filter $filter */
         foreach ($filters as $filter) {
+            if(! $filter->canFilter($this->user())) {
+                continue;
+            }
+
             $controlsData['filters'][$filter->getName()] = $filter->toArray($request);
+        }
+
+        $actions = $type->actions();
+
+        /** @var Action $action */
+        foreach ($actions as $action) {
+            if(! $action->canRun($this->user())) {
+                continue;
+            }
+
+            $controlsData['actions'][] = $action->toArray($request);
         }
 
         app('laradmin')->jsVars()
@@ -344,17 +362,16 @@ class CrudController extends Controller
         $type = $this->getTypeBySlug($request);
 
         $this->validate($request, [
-            'ids' => 'required|array'
+            QueryRepository::ALL_MATCHING_KEY => 'required|boolean',
+            QueryRepository::WHERE_PRIMARY_KEYS_KEY => 'required|array'
         ]);
 
         if(! $this->userCanDelete($type, $request)) {
             return $this->responseUnauthorized($request);
         }
 
-        /** @var Model $model */
-        $model = app($type->model);
         /** @var Collection $models */
-        $models = $model->whereIn($model->getKeyName(), $request->input('ids'))->get();
+        $models = QueryRepository::asCollection($request, $type);
 
         try {
             $models->each->delete();

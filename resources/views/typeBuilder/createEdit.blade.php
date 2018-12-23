@@ -148,6 +148,27 @@
 
                                     </div>
 
+                                    <div class="columns">
+
+                                        <div class="column">
+                                            <b-field :type="form.errors.has('actions') ? 'is-danger' : ''"
+                                                     label="Actions">
+                                                <b-taginput
+                                                        v-model="form.actions"
+                                                        :data="filteredActions"
+                                                        autocomplete
+                                                        :allow-new="false"
+                                                        field="label"
+                                                        icon="play"
+                                                        placeholder="Add Action"
+                                                        @typing="getFilteredActions">
+                                                </b-taginput>
+                                            </b-field>
+
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             </div>

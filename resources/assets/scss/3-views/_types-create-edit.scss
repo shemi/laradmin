@@ -6,7 +6,7 @@
 	}
 
 	.panels-area-header {
-	  @extend .hero.is-twitter.is-bold;
+	  @extend .hero, .is-twitter, .is-bold;
 	  padding: 1em;
 	  margin: 0;
 

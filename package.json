@@ -21,7 +21,7 @@
     "bulma": "^0.7.1",
     "flatpickr": "^4.5.0",
     "jsoneditor": "^5.14.1",
-    "laravel-mix": "^2.1",
+    "laravel-mix": "^4.0.12",
     "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.20",
@@ -40,10 +40,10 @@
     "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "browser-sync": "^2.23.7",
-    "browser-sync-webpack-plugin": "^1.2.0",
+    "browser-sync": "^2.26.3",
+    "browser-sync-webpack-plugin": "^2.0.1",
+    "sass": "^1.15.2",
+    "sass-loader": "^7.1.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2"
   }

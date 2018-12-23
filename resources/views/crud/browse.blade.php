@@ -32,6 +32,7 @@
                          :default-sort-direction="query.order || '{{ $type->default_sort_direction }}'"
                          @sort="onSort"
                          :current-page="query.page"
+                         @check="onTableCheckChanged"
                          @page-change="onPageChange"
                          :checked-rows.sync="checkedRows">
 
@@ -54,22 +55,24 @@
                             </b-table-column>
                         @endforeach
 
-                        <b-table-column label="" class="la-actions-cell">
-                            @if(Laradmin::user()->can('view ' . $type->slug))
-                                <a :href="'{{ $editRoute }}'">
-                                    <b-icon icon="eye"></b-icon>
-                                </a>
-                            @endif
-                            @if(Laradmin::user()->can('update ' . $type->slug))
-                                <a :href="'{{ $editRoute }}'">
-                                    <b-icon icon="pencil-square-o"></b-icon>
-                                </a>
-                            @endif
-                            @if(Laradmin::user()->can('delete ' . $type->slug))
-                                <a @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
-                                    <b-icon icon="trash"></b-icon>
-                                </a>
-                            @endif
+                        <b-table-column label="" class="la-actions-cell" width="148" numeric>
+                            <p class="buttons">
+                                @if(Laradmin::user()->can('view ' . $type->slug))
+                                    <a class="button" :href="'{{ $editRoute }}'">
+                                        <b-icon icon="eye"></b-icon>
+                                    </a>
+                                @endif
+                                @if(Laradmin::user()->can('update ' . $type->slug))
+                                    <a class="button" :href="'{{ $editRoute }}'">
+                                        <b-icon icon="pencil-square-o"></b-icon>
+                                    </a>
+                                @endif
+                                @if(Laradmin::user()->can('delete ' . $type->slug))
+                                    <a class="button is-danger" @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
+                                        <b-icon icon="trash"></b-icon>
+                                    </a>
+                                @endif
+                            </p>
                         </b-table-column>
 
                     </template>

@@ -1,5 +1,4 @@
 <template>
-
     <div class="la-fields-list">
         <div>
 
@@ -47,7 +46,6 @@
 
         </div>
     </div>
-
 </template>
 
 <script>
@@ -147,7 +145,7 @@
         },
 
         beforeCreate() {
-            this.$options.components.LaField = require('./Field.vue')
+            this.$options.components.LaField = require('./Field.vue').default
         },
 
         components: {

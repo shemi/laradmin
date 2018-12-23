@@ -1,7 +1,6 @@
 <template>
 
-    <vddl-nodrag class="no-drag la-field"
-                 :class="{'is-open': isOpen}">
+    <vddl-nodrag class="no-drag la-field" :class="{'is-open': isOpen}">
 
         <div class="level la-field-header" @click.prevent="toggleOpen">
             <div class="level-left">
@@ -113,7 +112,6 @@
     import JsonEditor from '../JsonEditor/JsonEditor.vue';
     import MonacoEditor from '../Monaco/Monaco';
 
-
     export default {
 
         name: 'la-field',
@@ -141,10 +139,10 @@
         },
 
         beforeCreate() {
-            this.$options.components.LaOptionsSet = require('./OptionsSet.vue');
-            this.$options.components.LaOption = require('./Option.vue');
-            this.$options.components.LaValidationSet = require('./ValidationSet.vue');
-            this.$options.components.laFieldsList = require('./FieldsList.vue');
+            this.$options.components.LaOptionsSet = require('./OptionsSet.vue').default;
+            this.$options.components.LaOption = require('./Option.vue').default;
+            this.$options.components.LaValidationSet = require('./ValidationSet.vue').default;
+            this.$options.components.laFieldsList = require('./FieldsList.vue').default;
         },
 
         created() {

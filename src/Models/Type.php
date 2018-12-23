@@ -37,6 +37,7 @@ use Shemi\Laradmin\Transformers\Builder\TypeTransformer;
  * @property Collection $side_panels
  * @property Collection $main_panels
  * @property Collection $filters
+ * @property Collection $actions
  * @property boolean $support_export
  * @property string $export_controller
  * @property boolean $support_import
@@ -64,7 +65,8 @@ class Type extends Model implements BuildableContract
         'records_per_page',
         'default_sort',
         'default_sort_direction',
-        'filters'
+        'filters',
+        'actions'
     ];
 
     /**
@@ -368,6 +370,27 @@ class Type extends Model implements BuildableContract
         }
 
         return $filters;
+    }
+
+    public function actions()
+    {
+        if(! is_array($this->actions)) {
+            $this->actions = [];
+        }
+
+        $actions = collect([]);
+
+        foreach ($this->actions as $action) {
+            if(empty($action)) {
+                continue;
+            }
+
+            if(app('laradmin')->actions()->has($action)) {
+                $actions->push(app('laradmin')->actions()->get($action));
+            }
+        }
+
+        return $actions;
     }
 
     public function toBuilder()

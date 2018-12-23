@@ -1,4 +1,5 @@
 import LaHttp from '../Forms/LaHttp';
+import {map} from "lodash";
 
 export default {
 
@@ -19,13 +20,19 @@ export default {
         },
 
         onDeleteSelected(items, uri, typeName, primaryKey) {
+            let length = items.length;
+
             if(items.length <= 0) {
                 return;
             }
 
+            if(this.selectAllMatching) {
+                length = this.data.total;
+            }
+
             this.$dialog.confirm({
-                title: `Deleting ${items.length} ${typeName}`,
-                message: `Are you sure you want to <strong>delete</strong> ${items.length} ${typeName}? This action cannot be undone.`,
+                title: `Deleting ${length} ${typeName}`,
+                message: `Are you sure you want to <strong>delete</strong> ${length} ${typeName}? This action cannot be undone.`,
                 confirmText: `Delete ${items.length} ${typeName}`,
                 type: 'is-danger',
                 hasIcon: true,
@@ -36,29 +43,28 @@ export default {
         },
 
         deleteItems(items, uri, typeName, primaryKey) {
-            const ids = [];
-            let item;
+            const la_primary_keys = map(this.checkedRows, primaryKey);
+            let query = this.query || {};
 
-            if(typeof items[0] === 'object') {
-                for(item of items) {
-                    ids.push(item[primaryKey || 'id']);
-                }
-            }
+            LaHttp.client().post(uri, {
+                ...query,
+                la_primary_keys,
+                la_select_all_matching: this.selectAllMatching
+            })
+            .then(({data}) => {
+                this.afterDelete(data, typeName, true);
+            })
+            .catch((err) => {
+                let data = err.response ? err.response.data : err;
 
-            LaHttp.planeDelete(uri, {ids})
-                .then(({data}) => {
-                    this.afterDelete(data, typeName, true);
-                }).catch((err) => {
-                    let data = err.response ? err.response.data : err;
-
-                    this.$dialog.alert({
-                        title: `Action Canceled.`,
-                        message: `The server respond width status code: <b>${data.code}</b>.
-                                      <br> message: <code>${data.message}</code>`,
-                        confirmText: 'OK',
-                        type: 'is-danger',
-                        hasIcon: true
-                    });
+                this.$dialog.alert({
+                    title: `Action Canceled.`,
+                    message: `The server respond width status code: <b>${data.code}</b>.
+                                  <br> message: <code>${data.message}</code>`,
+                    confirmText: 'OK',
+                    type: 'is-danger',
+                    hasIcon: true
+                });
             });
 
         },

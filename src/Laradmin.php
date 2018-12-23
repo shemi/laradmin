@@ -8,6 +8,7 @@ use Route;
 use Shemi\Laradmin\Contracts\Managers\ManagerContract;
 use Shemi\Laradmin\Exceptions\InvalidManagerException;
 use Shemi\Laradmin\Exceptions\ManagerDoesNotExistsException;
+use Shemi\Laradmin\Managers\ActionsManager;
 use Shemi\Laradmin\Managers\DynamicsManager;
 use Shemi\Laradmin\Managers\FiltersManager;
 use Shemi\Laradmin\Managers\FormFieldsManager;
@@ -121,7 +122,8 @@ class Laradmin
             RolesManager::class,
             JsVarsManager::class,
             DynamicsManager::class,
-            FiltersManager::class
+            FiltersManager::class,
+            ActionsManager::class
         ];
 
         foreach ($managers as $manager) {

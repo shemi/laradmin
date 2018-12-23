@@ -118,6 +118,18 @@ Route::group(
             "middleware" => "laradmin.user.admin"
         ]);
 
+        Route::post('actions/{type}/{action}/apply', [
+            "uses" => "{$namespacePrefix}ActionsController@apply",
+            "as" => "actions.apply",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
+        Route::get('actions/download', [
+            "uses" => "{$namespacePrefix}ActionsController@download",
+            "as" => "actions.download",
+            "middleware" => "laradmin.user.admin"
+        ]);
+
         /** @var \Shemi\Laradmin\Models\Type $type */
         foreach (\Shemi\Laradmin\Models\Type::all() as $type) {
 
@@ -127,7 +139,7 @@ Route::group(
                 "middleware" => "laradmin.user.admin"
             ]);
 
-            Route::delete("/{$type->slug}/destroy-many", [
+            Route::post("/{$type->slug}/destroy-many", [
                 "uses" => "{$type->controller}@destroyMany",
                 "as" => "{$type->slug}.destroyMany",
                 "middleware" => "laradmin.user.admin"

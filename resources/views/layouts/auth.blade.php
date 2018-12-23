@@ -22,7 +22,7 @@ $bodyClass = isset($bodyClass) ? ' '.$bodyClass : '';
             @if(! config('laradmin.style.login_bg'))
                 <div class="credit">
                     Photo by
-                    <a target="_blank" href="https://unsplash.com/@andy_brunner">Andy Brunner</a>
+                    <a target="_blank" href="https://unsplash.com/@ajrobbie">AJ Robbie</a>
                     on
                     <a target="_blank" href="https://unsplash.com">Unsplash</a>
                 </div>

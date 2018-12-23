@@ -17,6 +17,10 @@ class LaHttp {
         return `${this.apiBaseUri}/${path}`;
     }
 
+    client() {
+        return this.axios;
+    }
+
     /**
      * Helper method for making GET HTTP requests.
      */
@@ -78,8 +82,6 @@ class LaHttp {
 
         return new Promise((resolve, reject) => {
             form.startProcessing();
-
-            console.log(self.uri(uri));
 
             this.axios[method](self.uri(uri), form.toJson())
                 .then(response => {

@@ -7,6 +7,7 @@ import ServerError from '../../Mixins/ServerError';
 import SimpleRouter from '../../Mixins/SimpleRouter';
 import LaFieldRenderer from  '../FieldRenderer/FieldRenderer';
 import Filters from '../Filters/index';
+import {map} from 'lodash';
 
 export default {
     mixins: MixinsLoader.load(
@@ -24,6 +25,7 @@ export default {
             search: "",
             searchClock: null,
             controls: window.laradmin.controls,
+            selectAllMatching: false,
             query: {
                 order_by: null,
                 order: null,
@@ -53,17 +55,111 @@ export default {
 
     methods: {
 
+        applyAction(action, primaryKey) {
+            const la_primary_keys = map(this.checkedRows, primaryKey);
+
+            if(action.destructive) {
+                const count = this.selectAllMatching ? this.data.total : la_primary_keys.length;
+                const message = action.destructive.message.replace(/\{count\}/gm, count);
+
+                this.$dialog.confirm({
+                    message,
+                    confirmText: action.destructive.ok,
+                    cancelText: action.destructive.cancel,
+                    type: 'is-danger',
+                    hasIcon: true,
+                    onConfirm: () => this.runAction(action, la_primary_keys)
+                })
+            } else {
+                this.runAction(action, la_primary_keys);
+            }
+        },
+
+        runAction(action, la_primary_keys = []) {
+            this.loading = true;
+
+            LaHttp.client().post(LaHttp.uri(`/actions/${this.typeSlug}/${action.name}/apply`), {
+                ...this.query,
+                la_primary_keys,
+                la_select_all_matching: this.selectAllMatching
+            })
+            .then((res) => {
+                let data = res.data.data;
+
+                if(data.redirect) {
+                    this.loading = false;
+                    window.location.href = data.data.redirect;
+                }
+
+                if(data.download) {
+                    this.loading = false;
+                    const tempLink = document.createElement('a');
+
+                    tempLink.style.display = 'none';
+                    tempLink.href = data.download.url;
+                    tempLink.setAttribute('download', data.download.filename);
+
+                    if (typeof tempLink.download === 'undefined') {
+                        tempLink.setAttribute('target', '_blank');
+                    }
+
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+
+                    document.body.removeChild(tempLink);
+
+                    return;
+                }
+
+                this.$dialog.confirm({
+                    message: data.message,
+                    confirmText: 'OK',
+                    type: 'is-' + data.type,
+                    canCancel: false,
+                    hasIcon: true,
+                    onConfirm: () => this.fetchData()
+                })
+            })
+            .catch(({response}) => {
+                this.loading = false;
+
+                this.$dialog.confirm({
+                    message: response.data.data.message,
+                    confirmText: 'OK',
+                    type: 'is-danger',
+                    canCancel: false,
+                    hasIcon: true,
+                })
+            });
+        },
+
+        onTableCheckChanged() {
+            if(! this.selectAllMatching) {
+                return;
+            }
+
+            this.selectAllMatching = false;
+        },
+
+        onSelectAllMatchingChanged() {
+            this.$nextTick(() => {
+                if(this.selectAllMatching) {
+                    this.checkedRows = this.data.data;
+                } else {
+                    this.checkedRows = [];
+                }
+            })
+        },
+
         fetchData() {
             this.loading = true;
-            //
-            // var stack = new Error().stack;
-            // console.log("PRINTING CALL STACK");
-            // console.log( stack );
 
             LaHttp.get(`/${this.typeSlug}/query`, this.query)
                 .then(res => {
                     this.data = res.data.data;
                     this.loading = false;
+
+                    this.onSelectAllMatchingChanged();
                 })
                 .catch(err => {
                     this.alertServerError(err);

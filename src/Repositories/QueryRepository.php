@@ -24,6 +24,8 @@ class QueryRepository implements QueryRepositoryContract
 
     const CUSTOM_ORDER_TABLE_ALIAS = 'la_order';
     const CUSTOM_ORDER_KEY = 'la_order_field';
+    const WHERE_PRIMARY_KEYS_KEY = 'la_primary_keys';
+    const ALL_MATCHING_KEY = 'la_select_all_matching';
 
     /**
      * @var Type
@@ -84,6 +86,21 @@ class QueryRepository implements QueryRepositoryContract
             ->order()
             ->load()
             ->paginate();
+    }
+
+    /**
+     * @param Request $request
+     * @param Type $type
+     * @return \Illuminate\Support\Collection
+     */
+    public static function asCollection(Request $request, Type $type)
+    {
+        return (new static($request, $type))
+            ->whereIn()
+            ->filter()
+            ->search()
+            ->load()
+            ->get(false);
     }
 
     public static function customQuery(Type $type, callable $callback)
@@ -196,6 +213,19 @@ class QueryRepository implements QueryRepositoryContract
         return $this;
     }
 
+    public function whereIn()
+    {
+        $ids = (array) $this->getPrimaryKeys();
+
+        if($this->isAllMatching()) {
+            return $this;
+        }
+
+        $this->query->whereIn($this->primaryKey, $ids);
+
+        return $this;
+    }
+
     protected function order()
     {
         $this->query->orderBy($key = $this->getOrderBy(), $this->getOrderDirection());
@@ -277,12 +307,17 @@ class QueryRepository implements QueryRepositoryContract
         return $results;
     }
 
-    public function get()
+    public function get($transform = true)
     {
-        return $this->query->get()
-            ->transform(function ($model) {
-                return $this->transformModel($model);
-            });
+        $collection = $this->query->get();
+
+        if(! $transform) {
+            return $collection;
+        }
+
+        return $collection->transform(function ($model) {
+            return $this->transformModel($model);
+        });
     }
 
     /**
@@ -306,6 +341,16 @@ class QueryRepository implements QueryRepositoryContract
     protected function hasFilters()
     {
         return $this->request->has(static::FILTERS_REQUEST_KEY);
+    }
+
+    protected function isAllMatching()
+    {
+        return in_array($this->request->input(static::ALL_MATCHING_KEY), ['yes', '1', true, 'true', 1], true);
+    }
+
+    protected function getPrimaryKeys()
+    {
+        return $this->request->input(static::WHERE_PRIMARY_KEYS_KEY) ?: [];
     }
 
     protected function getOrderBy()
