@@ -12,6 +12,7 @@
                     <div class="actions">
                         <a class="action has-text-primary">{{ isActive ? 'Close' : 'Open' }}</a>
                         <a class="action has-text-danger" @click.prevent.stop="$emit('delete-row', index)">Delete</a>
+                        <a class="action has-text-info" @click.prevent.stop="$emit('clone-row', index)">Clone</a>
                     </div>
                 </div>
             </div>

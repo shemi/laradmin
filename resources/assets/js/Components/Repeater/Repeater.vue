@@ -12,6 +12,7 @@
                                      :index="index"
                                      :collapse-field-key="collapseFieldKey"
                                      @delete-row="deleteRow"
+                                     @clone-row="cloneRow"
                                      :key="row.jsId">
 
                         <slot :row="row" :index="index"></slot>
@@ -154,6 +155,14 @@
                 this.deleteHistory.push(rowClone);
 
                 this.$delete(this.value, index);
+            },
+
+            cloneRow(index) {
+                let rowClone = cloneDeep(this.value[index]);
+                rowClone.laResentCreated = true;
+                rowClone.jsId = Helpers.makeId();
+
+                this.value.push(rowClone);
             }
         },
 
