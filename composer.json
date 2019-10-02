@@ -11,16 +11,16 @@
 
   "require": {
     "php" : ">=7.0",
-    "illuminate/bus": "~5.5.0|~5.6.0",
+    "illuminate/bus": "~5.5.0|~5.6.0|~5.7.0",
     "league/flysystem": "^1.0.8",
-    "illuminate/console": "~5.5.0|~5.6.0",
-    "illuminate/database": "~5.5.0|~5.6.0",
-    "illuminate/support": "~5.5.0|~5.6.0",
+    "illuminate/console": "~5.5.0|~5.6.0|~5.7.0",
+    "illuminate/database": "~5.5.0|~5.6.0|~5.7.0",
+    "illuminate/support": "~5.5.0|~5.6.0|~5.7.0",
     "spatie/laravel-permission": "^2.4",
     "spatie/laravel-medialibrary": "^6.0",
     "easybook/slugger": "1.*",
     "justinrainbow/json-schema": "^5.2",
-    "illuminate/contracts": "~5.5|~5.6"
+    "illuminate/contracts": "~5.5|~5.6|~5.7.0"
   },
   "require-dev": {
     "mockery/mockery": "~1.0",
