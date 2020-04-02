@@ -39,6 +39,7 @@ use Shemi\Laradmin\Transformers\Builder\TypeTransformer;
  * @property Collection $filters
  * @property Collection $actions
  * @property boolean $support_export
+ * @property boolean $soft_deletes
  * @property string $export_controller
  * @property boolean $support_import
  * @property string $import_controller

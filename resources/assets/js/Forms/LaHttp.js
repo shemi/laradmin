@@ -73,6 +73,13 @@ class LaHttp {
     }
 
     /**
+     * Helper method for making POST HTTP requests.
+     */
+    planePost(uri, params) {
+        return this.axios.post(this.uri(uri), {params});
+    }
+
+    /**
      * Send the form to the back-end server.
      *
      * This function will clear old errors, update "busy" status, etc.

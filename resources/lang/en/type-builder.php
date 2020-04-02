@@ -25,6 +25,7 @@ return [
         'columns' => 'Browse Columns',
         'add_column' => 'Add Column',
         'support_export' => 'Support Export',
+        'soft_deletes' => 'Support Soft Deletes',
         'export_controller' => 'Export Controller',
         'support_import' => 'Support Import',
         'import_controller' => 'Import Controller',

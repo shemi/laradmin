@@ -2,12 +2,14 @@
 
     <div class="tabs">
         <ul>
-            <li class="is-active">
+            <li @click="setQueryState()" :class="{'is-active': !isTrash}">
                 <a>{{ trans('Index') }}</a>
             </li>
-            <li>
-                <a>{{ trans('Trashed') }}</a>
-            </li>
+            @if($type->soft_deletes)
+                <li @click="setQueryState(true)" :class="{'is-active': isTrash}">
+                    <a>{{ trans('Trashed') }}</a>
+                </li>
+            @endif
         </ul>
     </div>
 
@@ -70,6 +72,17 @@
                         </a>
                     </p>
                 @endif
+                <template v-if="isTrash">
+                    @if(Laradmin::user()->can('restore ' . $type->slug))
+                        <p class="control">
+                            <a class="button is-info"
+                               :disabled="! selectAllMatching && checkedRows.length <= 0"
+                               @click.prevent="onRestoreSelected(checkedRows, '{{ $restoreManyRoute }}', '{{ str_plural($type->name) }}', '{{ $primaryKey }}')">
+                                <b-icon icon="undo" size="small"></b-icon>
+                            </a>
+                        </p>
+                    @endif
+                </template>
             </div>
         </div>
     </div>

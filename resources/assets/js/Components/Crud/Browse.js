@@ -26,12 +26,14 @@ export default {
             searchClock: null,
             controls: window.laradmin.controls,
             selectAllMatching: false,
+            isTrash: false,
             query: {
                 order_by: null,
                 order: null,
                 filters: {},
                 page: 1,
-                search: ""
+                search: "",
+                trashedOnly: 0
             },
             data: {
                 data: []
@@ -41,6 +43,10 @@ export default {
 
     mounted() {
         this.usePushState();
+
+        if (this.query.trashedOnly) {
+            this.isTrash = true;
+        }
     },
 
     created() {
@@ -54,6 +60,17 @@ export default {
     },
 
     methods: {
+
+        setQueryState(trashed = false) {
+            this.isTrash = trashed;
+            this.query.trashedOnly = trashed ? 1 : 0;
+            this.query.page = 1;
+            this.data = {
+                data: []
+            };
+
+            this.pushState(this.query);
+        },
 
         applyAction(action, primaryKey) {
             const la_primary_keys = map(this.checkedRows, primaryKey);
@@ -207,6 +224,19 @@ export default {
             this.$toast.open(
                 (many && res.data.deleted ? res.data.deleted + ' ' : '') +
                 `${typeName} deleted!`
+            );
+
+            this.pushState(this.query);
+        },
+
+        afterRestore(res, typeName, many = false) {
+            if(many) {
+                this.checkedRows = [];
+            }
+
+            this.$toast.open(
+                (many && res.data.restored ? res.data.restored + ' ' : '') +
+                `${typeName} restored!`
             );
 
             this.pushState(this.query);

@@ -166,7 +166,8 @@ class TypesBuilderController extends Controller
             'records_per_page' => 'required|numeric',
             'default_sort_direction' => 'nullable|in:DESC,ASC',
             'filters' => 'array',
-            'actions' => 'array'
+            'actions' => 'array',
+            'soft_deletes' => 'nullable'
         ]);
 
         $errors = [];
@@ -204,6 +205,7 @@ class TypesBuilderController extends Controller
         $type->default_sort_direction = $data['default_sort_direction'];
         $type->filters = collect($data['filters'])->pluck('key')->all();
         $type->actions = collect($data['actions'])->pluck('key')->all();
+        $type->soft_deletes = $data['soft_deletes'];
 
         $data['saved'] = $type->save();
 

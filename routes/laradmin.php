@@ -145,7 +145,19 @@ Route::group(
                 "middleware" => "laradmin.user.admin"
             ]);
 
+            Route::post("/{$type->slug}/restore-many", [
+                "uses" => "{$type->controller}@restoreMany",
+                "as" => "{$type->slug}.restoreMany",
+                "middleware" => "laradmin.user.admin"
+            ]);
+
             Route::resource($type->slug, $type->controller, [
+                "middleware" => "laradmin.user.admin"
+            ]);
+
+            Route::post("/$type->slug/restore/{id}", [
+                "uses" => "{$type->controller}@restore",
+                "as" => "{$type->slug}.restore",
                 "middleware" => "laradmin.user.admin"
             ]);
 

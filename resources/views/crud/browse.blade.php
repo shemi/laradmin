@@ -41,8 +41,8 @@
                             <b-table-column field="{{ $column->browse_key }}"
                                             label="{{ $column->browse_label }}"
                                             custom-key="{{ $column->browse_key.$index }}"
-                                            {{ $column->type === 'image' ? 'centered ' : '' }}
-                                            {{ $column->sortable ? 'sortable' : '' }}>
+                                    {{ $column->type === 'image' ? 'centered ' : '' }}
+                                    {{ $column->sortable ? 'sortable' : '' }}>
 
                                 <la-field-renderer :value="props.row.{{ $column->browse_key }}"
                                                    type="{{ $column->type }}"
@@ -57,21 +57,30 @@
 
                         <b-table-column label="" class="la-actions-cell" width="148" numeric>
                             <p class="buttons">
-                                @if(Laradmin::user()->can('view ' . $type->slug))
-                                    <a class="button" :href="'{{ $editRoute }}'">
-                                        <b-icon icon="eye"></b-icon>
-                                    </a>
-                                @endif
-                                @if(Laradmin::user()->can('update ' . $type->slug))
-                                    <a class="button" :href="'{{ $editRoute }}'">
-                                        <b-icon icon="pencil-square-o"></b-icon>
-                                    </a>
-                                @endif
+                                <template v-if="! isTrash">
+                                    @if(Laradmin::user()->can('view ' . $type->slug))
+                                        <a class="button" :href="'{{ $editRoute }}'">
+                                            <b-icon icon="eye"></b-icon>
+                                        </a>
+                                    @endif
+                                    @if(Laradmin::user()->can('update ' . $type->slug))
+                                        <a class="button" :href="'{{ $editRoute }}'">
+                                            <b-icon icon="pencil-square-o"></b-icon>
+                                        </a>
+                                    @endif
+                                </template>
                                 @if(Laradmin::user()->can('delete ' . $type->slug))
                                     <a class="button is-danger" @click.prevent="onDelete('{{ $deleteRoute }}', '{{ str_singular($type->name) }}')">
                                         <b-icon icon="trash"></b-icon>
                                     </a>
                                 @endif
+                                <template v-if="isTrash">
+                                    @if(Laradmin::user()->can('restore ' . $type->slug))
+                                        <a class="button is-info" @click.prevent="onRestore('{{ $restoreRoute }}', '{{ str_singular($type->name) }}')">
+                                            <b-icon icon="undo"></b-icon>
+                                        </a>
+                                    @endif
+                                </template>
                             </p>
                         </b-table-column>
 

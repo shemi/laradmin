@@ -169,6 +169,20 @@
 
                                     </div>
 
+                                    <div class="columns">
+
+                                        <div class="column">
+                                            <b-field :type="form.errors.has('soft_deletes') ? 'is-danger' : ''"
+                                                    label="@lang('laradmin::type-builder.builder.soft_deletes')"
+                                            >
+                                                <b-checkbox v-model="form.soft_deletes">
+                                                    @lang('laradmin::type-builder.builder.soft_deletes')
+                                                </b-checkbox>
+                                            </b-field>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                             </div>

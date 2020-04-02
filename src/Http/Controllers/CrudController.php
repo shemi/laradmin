@@ -40,9 +40,11 @@ class CrudController extends Controller
         $primaryKey = $model->getKeyName();
 
         $linksManager = app('laradmin')->links();
+        $restoreRoute = $linksManager->restore($type, $primaryKey);
         $editRoute = $linksManager->edit($type, $primaryKey);
         $deleteRoute = $linksManager->destroy($type, $primaryKey);
         $deleteManyRoute = $linksManager->destroyMany($type);
+        $restoreManyRoute = $linksManager->restoreMany($type);
 
         $controlsData = [
             'filters' => [],
@@ -84,7 +86,9 @@ class CrudController extends Controller
                 'primaryKey',
                 'editRoute',
                 'deleteRoute',
-                'deleteManyRoute'
+                'restoreRoute',
+                'deleteManyRoute',
+                'restoreManyRoute'
             )
         );
     }
@@ -357,13 +361,24 @@ class CrudController extends Controller
         return $this->user()->can("delete {$type->slug}");
     }
 
+    /**
+     * @param Type $type
+     * @param Request $request
+     * @return boolean
+     */
+    protected function userCanRestore(Type $type, Request $request)
+    {
+        return $this->user()->can("restore {$type->slug}");
+    }
+
     public function destroyMany(Request $request)
     {
         $type = $this->getTypeBySlug($request);
 
         $this->validate($request, [
             QueryRepository::ALL_MATCHING_KEY => 'required|boolean',
-            QueryRepository::WHERE_PRIMARY_KEYS_KEY => 'required|array'
+            QueryRepository::WHERE_PRIMARY_KEYS_KEY => 'required|array',
+            QueryRepository::IS_TRASH => 'nullable',
         ]);
 
         if(! $this->userCanDelete($type, $request)) {
@@ -374,7 +389,15 @@ class CrudController extends Controller
         $models = QueryRepository::asCollection($request, $type);
 
         try {
-            $models->each->delete();
+            if ($type->soft_deletes && $request->input(QueryRepository::IS_TRASH)) {
+                $models->each(function ($model) {
+                    if ($model->trashed()) {
+                        $model->forceDelete();
+                    }
+                });
+            } else {
+                $models->each->delete();
+            }
         } catch (\Exception $e) {
             return $this->responseWithError($e->getMessage());
         }
@@ -382,6 +405,67 @@ class CrudController extends Controller
         return $this->response([
             'redirect' => null,
             'deleted' => $models->count()
+        ]);
+    }
+
+    public function restoreMany(Request $request)
+    {
+        $type = $this->getTypeBySlug($request);
+
+        $this->validate($request, [
+            QueryRepository::ALL_MATCHING_KEY => 'required|boolean',
+            QueryRepository::WHERE_PRIMARY_KEYS_KEY => 'required|array',
+            QueryRepository::IS_TRASH => 'nullable',
+        ]);
+
+        if(! $this->userCanRestore($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
+        /** @var Collection $models */
+        $models = QueryRepository::asCollection($request, $type);
+
+        try {
+            $models->each(function ($model) {
+                if ($model->trashed()) {
+                    $model->restore();
+                }
+            });
+        } catch (\Exception $e) {
+            return $this->responseWithError($e->getMessage());
+        }
+
+        return $this->response([
+            'redirect' => null,
+            'restored' => $models->count()
+        ]);
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  int $id
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id, Request $request)
+    {
+        $type = $this->getTypeBySlug($request);
+
+        if(! $this->userCanRestore($type, $request)) {
+            return $this->responseUnauthorized($request);
+        }
+
+        if (! $type->soft_deletes) {
+            return $this->responseUnauthorized($request);
+        }
+
+        $model = app($type->model)->withTrashed()->findOrFail($id);
+
+        $model->restore();
+
+        return $this->response([
+            'redirect' => route("laradmin.{$type->slug}.index")
         ]);
     }
 
@@ -400,9 +484,19 @@ class CrudController extends Controller
             return $this->responseUnauthorized($request);
         }
 
-        $model = app($type->model)->findOrFail($id);
+        $model = app($type->model);
 
-        $model->delete();
+        if ($type->soft_deletes) {
+            $model = $model->withTrashed();
+        }
+
+        $model = $model->findOrFail($id);
+
+        if ($type->soft_deletes && $model->trashed()) {
+            $model->forceDelete();
+        } else {
+            $model->delete();
+        }
 
         return $this->response([
             'redirect' => route("laradmin.{$type->slug}.index")
