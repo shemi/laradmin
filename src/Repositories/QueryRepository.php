@@ -18,6 +18,8 @@ class QueryRepository implements QueryRepositoryContract
     const ORDER_BY_REQUEST_KEY = 'order_by';
     const ORDER_DIRECTION_REQUEST_KEY = 'order';
 
+    const TRASHED_ONLY = 'trashedOnly';
+
     const SEARCH_TERM_REQUEST_KEY = 'search';
 
     const FILTERS_REQUEST_KEY = 'filters';
@@ -26,6 +28,7 @@ class QueryRepository implements QueryRepositoryContract
     const CUSTOM_ORDER_KEY = 'la_order_field';
     const WHERE_PRIMARY_KEYS_KEY = 'la_primary_keys';
     const ALL_MATCHING_KEY = 'la_select_all_matching';
+    const IS_TRASH = 'trash';
 
     /**
      * @var Type
@@ -67,7 +70,9 @@ class QueryRepository implements QueryRepositoryContract
         $this->request = $request;
         $this->type = $type;
         $this->model = app($type->model);
+
         $this->query = $this->model::select($this->model->getTable() . '.*');
+
         $this->primaryKey = $this->model->getKeyName();
         $this->whereFields = collect([]);
         $this->whereHasFields = collect([]);
@@ -83,6 +88,7 @@ class QueryRepository implements QueryRepositoryContract
         return (new static($request, $type))
             ->filter()
             ->search()
+            ->trashed()
             ->order()
             ->load()
             ->paginate();
@@ -97,6 +103,7 @@ class QueryRepository implements QueryRepositoryContract
     {
         return (new static($request, $type))
             ->whereIn()
+            ->trashed()
             ->filter()
             ->search()
             ->load()
@@ -225,6 +232,16 @@ class QueryRepository implements QueryRepositoryContract
 
         return $this;
     }
+
+    protected function trashed()
+    {
+        if ($this->getTrashedOnly() && $this->type->soft_deletes) {
+            $this->query->onlyTrashed();
+        }
+
+        return $this;
+    }
+
 
     protected function order()
     {
@@ -410,6 +427,14 @@ class QueryRepository implements QueryRepositoryContract
         return $this->request->input(
             static::ORDER_DIRECTION_REQUEST_KEY,
             $this->type->default_sort_direction
+        );
+    }
+
+    protected function getTrashedOnly()
+    {
+        return $this->request->input(
+            static::TRASHED_ONLY,
+            0
         );
     }
 

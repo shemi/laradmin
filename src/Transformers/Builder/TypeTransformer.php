@@ -14,6 +14,7 @@ class TypeTransformer extends Transformer
 
     protected $map = [
         'name',
+        'soft_deletes',
         'model',
         'slug',
         'public',

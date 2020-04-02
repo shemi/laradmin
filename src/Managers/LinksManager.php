@@ -9,6 +9,10 @@ use Shemi\Laradmin\Models\Type;
 
 class LinksManager implements ManagerContract
 {
+    public function restore(Type $type, $model = null)
+    {
+        return $this->typeLink($type, 'restore', $model);
+    }
 
     public function edit(Type $type, $model = null)
     {
@@ -23,6 +27,11 @@ class LinksManager implements ManagerContract
     public function destroyMany(Type $type)
     {
         return $this->typeLink($type, 'destroyMany');
+    }
+
+    public function restoreMany(Type $type)
+    {
+        return $this->typeLink($type, 'restoreMany');
     }
 
     public function create(Type $type)
