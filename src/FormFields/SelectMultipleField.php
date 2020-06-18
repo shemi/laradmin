@@ -22,6 +22,37 @@ class SelectMultipleField extends FormFormField
         ));
     }
 
+    public function transformResponse(Field $field, $data)
+    {
+        if(!$data || $field->is_relationship) {
+            return $data;
+        }
+
+        $newData = [];
+        $options = collect($field->options);
+
+        if($options->isEmpty()) {
+            return $data;
+        }
+
+        foreach ($data as $key) {
+            $option = $options->first(function($item) use ($key) {
+                return isset($item['key']) && $item['key'] === $key;
+            });
+
+            if(! $option) {
+                continue;
+            }
+
+            $newData[] = [
+                'key' => $option['key'],
+                'label' => $option['label']
+            ];
+        }
+
+        return $newData;
+    }
+    
     public function transformRequest(Field $field, $data)
     {
         return collect($data)
