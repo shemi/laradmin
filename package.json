@@ -22,7 +22,7 @@
     "flatpickr": "^4.5.0",
     "jsoneditor": "^5.14.1",
     "laravel-mix": "^4.0.12",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.19",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.20",
     "qs": "^6.5.2",
