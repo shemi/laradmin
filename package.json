@@ -25,7 +25,7 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.20",
-    "qs": "^6.5.2",
+    "qs": "^6.5.3",
     "query-string-object": "^0.2.5",
     "querystring-browser": "^1.0.4",
     "tinymce": "^4.7.13",
