@@ -21,7 +21,7 @@
     "bulma": "^0.7.1",
     "flatpickr": "^4.5.0",
     "jsoneditor": "^5.14.1",
-    "laravel-mix": "^4.0.12",
+    "laravel-mix": "^6.0.49",
     "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.20",
@@ -43,8 +43,8 @@
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.0.1",
     "sass": "^1.15.2",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^13.2.0",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^7.1.0"
   }
 }
